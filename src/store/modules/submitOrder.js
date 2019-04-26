@@ -24,6 +24,9 @@ const mutations = {
   },
   currentOrderDataMut(state, info) {
     state.currentOrder = info
+  },
+  currentOrderRemarkDataMut(state, info) {
+    state.currentOrder.remark = info
   }
 }
 
@@ -35,7 +38,7 @@ const actions = {
     })
   }, 
   getOrderDataAction({state, commit}) {
-    getFetch('/order/1', {}, false).then(response => {
+    getFetch('/order/oE7971YVuGnNbxnL3Fc-26Y5SdLA1231', {}, false).then(response => {
       var result = response.result || {}
       commit('changeOrderDataMut', result)
     })
@@ -50,6 +53,14 @@ const actions = {
   showOrderDetailAction({state, commit}, {order}) {
     commit('currentOrderDataMut', order)
     wx.navigateTo({url: '/pages/orderDetail/main'})
+  },
+  createOrderDetailAction({state, commit}, {order}) {
+    commit('currentOrderDataMut', order)
+    wx.navigateTo({url: '/pages/submitOrder/main'})
+  },
+  addRemarkDataAction({state, commit}, {remark}) {
+    commit('currentOrderRemarkDataMut', remark)
+    wx.navigateTo({url: '/pages/submitOrder/main'})
   }
  // this.getCategoryMenuDataAction({categoryId, index})
 }

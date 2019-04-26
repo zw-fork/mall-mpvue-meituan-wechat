@@ -13,44 +13,6 @@
           </div>
           <i class="icon mt-arrow-right-o" :style="{fontSize: 28 + 'rpx', color: '#999'}"></i>
         </div>
-        <div class="line-sp"></div>
-        <div class="delivery-time">
-          <i class="icon mt-clock-s"></i>
-          <div class="content">
-            <span class="c-l">{{arrivalInfo.date_type_tip}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="pick" v-if="tabIndex === 1">
-        <span class="title">商家地址</span>
-        <span class="address">{{pcikData.address}}</span>
-        <div class="map">
-          <span class="distance">距您{{pcikData.distance}}</span>
-          <div class="line"></div>
-          <span class="btn" @click="openMap">查看地图</span>
-        </div>
-        <div class="time">
-          <div class="l">
-            <span class="l-t">自取时间</span>
-            <div class="l-b">
-              <span>22：49</span>
-              <i class="icon mt-arrow-right-o"></i>
-            </div>
-          </div>
-          <div class="line"></div>
-          <div class="r">
-            <span class="r-t">预留电话</span>
-            <div class="r-b">
-              <span>{{pcikData.phone}}</span>
-              <i class="icon mt-arrow-right-o"></i>
-            </div>
-          </div>
-        </div>
-        <div class="protocol">
-          <i class="icon mt-selected-square-o"></i>
-          <span>同意</span>
-          <text @click="protocol">《到店自取用户协议》</text>
-        </div>
       </div>
     </div>
     <div class="item-list">
@@ -60,7 +22,7 @@
         <text class="tag">商家自配</text>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in foodList" :key="index">
+        <div class="item" v-for="(item, index) in order.itemList" :key="index">
           <img :src="item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -91,7 +53,7 @@
       <div class="b-mid" @click="remarkClick">
         <span class="mid-l">备注</span>
         <div class="mid-r">
-          <span>{{remark_field.hint}}</span>
+          <span>{{currentOrder.remark? currentOrder.remark:'请输入口味、偏好等要求'}}</span>
           <i class="icon mt-arrow-right-o"></i>
         </div>
       </div>
@@ -114,27 +76,23 @@ import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
 export default {
   data() {
     return {
+      order : {},
       itemData: {},
       addressInfo: {},
-      arrivalInfo: {},
-      foodList: [],
-      privacy_service: {},
-      remark_field: {},
-      tabIndex: 0,
-      pcikData: {},
-      tablewareArr: []
+      itemList: [],
+      tabIndex: 0
     }
   },
   computed: {
-    ...mapState('shoppingCart', ['shopInfo', 'reduceFee']),
     ...mapState("user", ["user"]),
+    ...mapState("submitOrder", ["currentOrder"]),
     deliveryFee() {
-      return this.shopInfo.support_pay
+      return this.currentOrder.shopInfo.support_pay
     },
     realFee() {
-      var totalPrice = 0
-      this.shopInfo.selectedArr.map(item => totalPrice += parseFloat(item.totalPrice))
-      return parseFloat(totalPrice - this.reduceFee).toFixed(1)
+      var totalPrice = 0 
+      this.currentOrder.shopInfo.selectedArr.map(item => totalPrice += parseFloat(item.totalPrice))
+      return (parseFloat(totalPrice) +  this.currentOrder.shopInfo.support_pay).toFixed(2)
     }
   },
   components: {
@@ -178,23 +136,20 @@ export default {
       })
     },
     payClick() {
-      var order = {
-      }
-      order.orderNo = 123456
-      order.itemList = this.foodList
-      this.postOrderDataAction({order})
-      wx.navigateTo({url: '/pages/orderDetail/main'})
+      var order = this.order
+      this.currentOrder.deliveryFee = this.deliveryFee
+      this.currentOrder.addressInfo = this.addressInfo
+      this.currentOrder.realFee = this.realFee
+      this.postOrderDataAction({order : this.currentOrder})
+      wx.navigateTo({url: '/pages/error/main'})
     }
   },
   mounted() {
-    this.itemData = orderData.delivery.data
     this.addressInfo = this.user.addressModel
-    this.arrivalInfo = this.itemData.expected_arrival_info
-    this.privacy_service = this.itemData.privacy_service
-    this.remark_field = this.itemData.remark_field
-    this.pcikData = orderData.pick.data.address_info
-    this.tablewareArr = this.itemData.diners_option.map(item => item.description)
-    this.foodList = this.shopInfo.selectedArr
+    this.itemList = this.currentOrder.shopInfo.selectedArr
+    this.order.itemList = this.currentOrder.shopInfo.selectedArr
+    this.order.shopInfo = this.currentOrder.shopInfo
+    this.order.addressInfo = this.user.addressModel
   }
 }
 </script>

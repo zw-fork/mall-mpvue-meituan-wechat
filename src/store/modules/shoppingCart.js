@@ -131,12 +131,11 @@ const actions = {
     spus.datas.list[index].sequence -= 1
     if (spus.datas.list[index].sequence <= 0) spus.datas.list[index].sequence = 0
     commit('changeSpusDataMut', spus)
-
     var foods = state.foods
     var foodsIndex = spus.index
     var selectedFood = foods[foodsIndex]
     selectedFood.count = selectedFood.count - 1
-    selectedFood.totalPrice = selectedFood.totalPrice - item.min_price - (item.min_price > 0 ? 1 : 0)
+    selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
     commit('changeFoodsDataMut', foods)
   },
   closeShoppingCartAction({state, commit}) {

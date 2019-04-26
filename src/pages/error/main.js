@@ -1,10 +1,12 @@
-/** Created by guangqiang on 2018-09-17 23:03:07 */
+/** Created by guangqiang on 2018-09-19 20:13:22 */
+
 import Vue from 'vue'
 import App from './index'
+
 import store from '@/store'
 
 const app = new Vue({
-    store,
-    ...App
-  })
+  store,
+  ...App
+})
 app.$mount()

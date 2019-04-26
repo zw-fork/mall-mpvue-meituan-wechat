@@ -2,24 +2,28 @@
   <div class="container">
     <div class="content-c">
       <div class="input-c">
-        <textarea placeholder="请输入备注，最多50个字哦" placeholder-style="font-size: 28rpx"/>
+        <textarea v-model="remark" placeholder="请输入备注，最多50个字哦" placeholder-style="font-size: 28rpx"/>
         <span>0 / 50</span>
       </div>
-      <div class="tag-c">
-        <div class="tag" v-for="(item, index) in tags" :key="index">
-          <span>{{item}}</span>
-        </div>
-      </div>
     </div>
-    <div class="submit">完成</div>
+    <div class="submit" @click="addRemark">完成</div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+
 export default {
   data() {
     return {
+      remark: undefined,
       tags: ['不吃辣', '少放葱', '多放辣', '不是蒜', '不吃香菜', '不吃葱']
+    }
+  },
+  methods: {
+    ...mapActions("submitOrder", ["addRemarkDataAction"]),
+    addRemark() {
+      this.addRemarkDataAction({remark: this.remark})
     }
   }
 }

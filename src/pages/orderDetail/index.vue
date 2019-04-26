@@ -18,8 +18,8 @@
     </div>
     <div class="item-list">
       <div class="section">
-        <img :src="shopInfo.pic_url" >
-        <span>{{shopInfo.shopName}}</span>
+        <img :src="currentOrder.shopInfo.pic_url" >
+        <span>{{currentOrder.shopInfo.shopName}}</span>
         <text class="tag">商家自配</text>
       </div>
       <div class="list">
@@ -46,7 +46,7 @@
         <sep-line></sep-line> 
         <div class="totle-price">
           <span class="m">小计</span>
-          <span class="r">￥{{currentOrder.total}}</span>
+          <span class="r">￥{{realFee}}</span>
         </div>
       </div>
     </div>
@@ -121,14 +121,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('shoppingCart', ['shopInfo', 'reduceFee']),
     ...mapState("user", ["user"]),
     ...mapState("submitOrder", ["currentOrder"]),
     deliveryFee() {
-      return this.currentOrder.postage
+      return this.currentOrder.deliveryFee
     },
     realFee() {
-      return this.currentOrder.total
+      return this.currentOrder.realFee
     }
   },
   components: {

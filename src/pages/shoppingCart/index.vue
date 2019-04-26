@@ -364,6 +364,7 @@ export default {
   methods: {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
+    ...mapActions("submitOrder", ["createOrderDetailAction"]),
      //滚动条滚到底部或右边的时候触发
   lower(e) {
     wx.showLoading({title: '加载中...', mask: true})
@@ -380,7 +381,26 @@ export default {
       var price = 0
       this.foods.map(item => price += item.totalPrice)
       if (price < this.shopInfo.min_price) return;
-      this.closeShoppingCartAction()
+      this.closeShoppingCartAction1()
+    },
+    closeShoppingCartAction1() {
+          var array = this.foods
+    var selectedArr = []
+    array.map((item, index) => {
+      if (item.spus) {
+        item.spus.datas.list.map((itm, idx) => {
+          if (itm.sequence > 0) {
+            var price = itm.min_price * itm.sequence
+            itm.totalPrice = parseFloat(price).toFixed(1)
+            selectedArr.push(itm)
+          }
+        })
+      }
+    })
+     var order = {}
+     order.shopInfo = this.shopInfo
+     order.shopInfo.selectedArr = selectedArr
+      this.createOrderDetailAction({order})
     },
     categoryClick(item, index) {
       this.tagIndex = index;
