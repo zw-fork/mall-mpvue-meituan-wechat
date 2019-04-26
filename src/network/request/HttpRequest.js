@@ -119,19 +119,21 @@ async function handleLogin(callback) {
 
 const networkLog = (url, params, res, beforeRequest, isSuccess) => {
   const pages = getCurrentPages()
-  const currentPage = pages[pages.length - 1]
-  const route = currentPage.route
-  const networkType = wx.getStorageSync('networkType')
-  const afterRequest = new Date().getTime()
-  const timeDif = afterRequest - beforeRequest
-  var networkArr = wx.getStorageSync('networkArr') || []
-  if (networkArr.length >= 30) {
-    wx.removeStorageSync('networkArr')
-    networkArr = []
+  if (pages.length > 0) {
+    const currentPage = pages[pages.length - 1]
+    const route = currentPage.route
+    const networkType = wx.getStorageSync('networkType')
+    const afterRequest = new Date().getTime()
+    const timeDif = afterRequest - beforeRequest
+    var networkArr = wx.getStorageSync('networkArr') || []
+    if (networkArr.length >= 30) {
+      wx.removeStorageSync('networkArr')
+      networkArr = []
+    }
+    var time = timestampToCommonDate(new Date().getTime())
+    networkArr = _array.unshift(networkArr, {url, params, res, time, route, timeDif, networkType, isSuccess})
+    wx.setStorageSync('networkArr', networkArr)
   }
-  var time = timestampToCommonDate(new Date().getTime())
-  networkArr = _array.unshift(networkArr, {url, params, res, time, route, timeDif, networkType, isSuccess})
-  wx.setStorageSync('networkArr', networkArr)
 }
 
 const HttpUtils = {

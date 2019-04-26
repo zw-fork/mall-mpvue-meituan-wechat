@@ -3,7 +3,7 @@ import {formatYMD} from '@/utils/formatTime'
 import {_array} from '@/utils/arrayExtension'
 import {shoppingCart} from '@/pages/shoppingCart/data'
 import {deepClone} from '@/utils/deepClone'
-
+import {getFetch} from '@/network/request/HttpExtension'
 const state = {
   shopInfo: {},
   foods: [],
@@ -48,27 +48,28 @@ const mutations = {
 
 const actions = {
   getMenuDataAction({state, commit}) {
-    var res = shoppingCart.menuData.data
-
-    var shopInfo = res.poi_info || {}
-    shopInfo.prompt_text = res.shopping_cart.prompt_text
-    shopInfo.activity_info = JSON.parse(res.shopping_cart.activity_info.policy)
-    commit('changeShopInfoDataMut', shopInfo)
-
-    var foods = res.food_spu_tags
-    foods = foods.map(item => {
-      item.count = 0
-      item.totalPrice = 0
-      return item
+    wx.showLoading({title: '加载中...', mask: true})
+    getFetch('/shop/1', {}, false).then(response => {
+      var res = shoppingCart.menuData.data
+      var shopInfo = response.result || {}
+      shopInfo.prompt_text = res.shopping_cart.prompt_text
+      shopInfo.activity_info = JSON.parse(res.shopping_cart.activity_info.policy)
+      getFetch('/category/list/1', {}, false).then(response => {
+        var categoryList = response.result || {}
+        if (categoryList.length > 0) {
+          getFetch('/goods/1', {}, false).then(response => {
+            var goods = response.result || {}
+            var spus = {title: categoryList[0].name, index: 0, datas: goods}
+            categoryList[0].spus = spus
+            commit('changeSpusDataMut', spus)
+          })
+        } 
+        commit('changeShopInfoDataMut', shopInfo)
+        commit('changeFoodsDataMut', categoryList)
+        wx.hideLoading()
+      })
     })
-    commit('changeFoodsDataMut', foods)
-
-    var arr = state.foods[0].spus.map(item => {
-      item.sequence = 0
-      return item
-    })
-    var spus = {title: foods[0].name, index: 0, list: arr}
-    commit('changeSpusDataMut', spus)
+    
   },
   getCommentDataAction({state, commit}) {
     var res = shoppingCart.commentData.data
@@ -96,32 +97,39 @@ const actions = {
     
     commit('changeCommentDataMut', commentData)
   },
-  getCategoryMenuDataAction({state, commit}, {index}) {
-    var spus = {}
-    spus.title = state.foods[index].name
-    spus.index = index
-    spus.list = state.foods[index].spus.map(item => {
-      if (!item.sequence) item.sequence = 0
-      return item
+  getCategoryMenuDataAction({state, commit}, {index, categoryId}) {
+    getFetch('/goods/' + categoryId, {}, false).then(response => {
+      var spus = {}
+      var goods = response.result || {}
+      spus.title = state.foods[index].name
+      spus.index = index
+      spus.datas = goods
+      spus.datas.list = goods.list.map(item => {
+        if (!item.sequence) item.sequence = 0
+        return item
+      })
+      foods[index].spus = spus
+      commit('changeFoodsDataMut', foods)
+      commit('changeSpusDataMut', spus)
     })
-    commit('changeSpusDataMut', spus)
+   
   },
   addItemAction({state, commit}, {item, index}) {
     var spus = state.spus
-    spus.list[index].sequence += 1
+    spus.datas.list[index].sequence += 1
     commit('changeSpusDataMut', spus)
 
     var foods = state.foods
     var foodsIndex = spus.index
     var selectedFood = foods[foodsIndex]
     selectedFood.count += 1
-    selectedFood.totalPrice += item.min_price + (item.min_price > 0 ? 1 : 0 )
+    selectedFood.totalPrice += item.min_price
     commit('changeFoodsDataMut', foods)
   },
   reduceItemAction({state, commit}, {item, index}) {
     var spus = state.spus
-    spus.list[index].sequence -= 1
-    if (spus.list[index].sequence <= 0) spus.list[index].sequence = 0
+    spus.datas.list[index].sequence -= 1
+    if (spus.datas.list[index].sequence <= 0) spus.datas.list[index].sequence = 0
     commit('changeSpusDataMut', spus)
 
     var foods = state.foods
@@ -135,13 +143,15 @@ const actions = {
     var array = state.foods
     var selectedArr = []
     array.map((item, index) => {
-      item.spus.map((itm, idx) => {
-        if (itm.sequence > 0) {
-          var price = itm.min_price * itm.sequence
-          itm.totalPrice = parseFloat(price).toFixed(1)
-          selectedArr.push(itm)
-        }
-      })
+      if (item.spus) {
+        item.spus.datas.list.map((itm, idx) => {
+          if (itm.sequence > 0) {
+            var price = itm.min_price * itm.sequence
+            itm.totalPrice = parseFloat(price).toFixed(1)
+            selectedArr.push(itm)
+          }
+        })
+      }
     })
     var shopInfo = state.shopInfo
     shopInfo.selectedArr = selectedArr

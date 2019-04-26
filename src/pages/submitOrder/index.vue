@@ -3,7 +3,6 @@
     <div class="header-c">
       <div class="tab-c">
         <div class="left" :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}" @click="deliveryClick">外卖配送</div>
-        <div class="right" :style="{'background-color': tabIndex === 1? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 1 ? 'bold' : ''}" @click="pickClick">到店自取</div>
       </div>
       <div class="delivery" v-if="tabIndex === 0">
         <div class="address-c" @click="addressClick">
@@ -19,9 +18,7 @@
           <i class="icon mt-clock-s"></i>
           <div class="content">
             <span class="c-l">{{arrivalInfo.date_type_tip}}</span>
-            <span class="c-r">{{arrivalInfo.select_view_time}}</span>
           </div>
-          <i class="icon mt-arrow-right-o" :style="{fontSize: 28 + 'rpx', color: '#999'}"></i>
         </div>
       </div>
       <div class="pick" v-if="tabIndex === 1">
@@ -79,60 +76,18 @@
           <span>展开更多</span>
           <i class="icon mt-arrow-down-o"></i>
         </div>
-        <div class="package-cast">
-          <span>包装费</span>
-          <span>￥{{foodList.length}}</span>
-        </div>
         <div class="delivery-cast">
-          <span>配送费</span>
+          <span>服务费</span>
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line> 
-        <div class="discount">
-          <div class="item" v-for="(item, index) in itemData.discounts" :key="index">
-            <img :src="item.icon_url">
-            <span class="name">{{item.name}}</span>
-            <span class="info">{{item.info}}</span>
-          </div>
-        </div>
-        <div class="red-packet" @click="redPacketClick">
-          <span class="l">美团红包</span>
-          <div class="r">
-            <span>4张可用</span>
-            <i class="icon mt-arrow-right-o"></i>
-          </div>
-        </div>
-        <div class="coupon" @click="couponClick">
-          <span class="l">商家代金券</span>
-          <div class="r">
-            <span>10张可用</span>
-            <i class="icon mt-arrow-right-o"></i>
-          </div>
-        </div>
-        <sep-line></sep-line> 
         <div class="totle-price">
-          <span class="l" v-if="reduceFee > 0">已优惠￥{{reduceFee}}</span>
           <span class="m">小计</span>
           <span class="r">￥{{realFee}}</span>
         </div>
       </div>
     </div>
-    <div class="privacy-c">
-      <div class="top">
-        <div class="t-l">
-          <i class="icon mt-lock-o" :style="{color: '#434343', 'font-size': 32 + 'rpx'}"></i>
-          <span>{{privacy_service.privacy_title}}</span>
-          <i class="icon mt-help-o" :style="{color: '#999', 'font-size': 24 + 'rpx'}"></i>
-        </div>
-        <switch bindchange="switch2Change"/>
-      </div>
-      <span>{{privacy_service.privacy_close_desc}}</span>
-    </div>
     <div class="bottom-c">
-      <div class="b-top">
-        <span>支付方式</span>
-        <span>在线支付</span>
-      </div>
       <div class="b-mid" @click="remarkClick">
         <span class="mid-l">备注</span>
         <div class="mid-r">
@@ -140,25 +95,11 @@
           <i class="icon mt-arrow-right-o"></i>
         </div>
       </div>
-      <div class="b-btm">
-        <span class="b-l">餐具数量</span>
-        <div class="b-r">
-          <i class="icon mt-leaf-o" :style="{color: '#00CB91', 'font-size': 38 + 'rpx'}"></i>
-          <span class="s-l">一起为环保助力</span>
-          <picker class="picker" mode="selector" :range="tablewareArr">
-            <div>
-              <span class="s-r">未选择</span>
-              <i class="icon mt-arrow-right-o" :style="{color: '#999', 'font-size': 28 + 'rpx'}"></i>
-            </div>
-          </picker>
-        </div>
-      </div>
     </div>
     <div class="pay-btn" @click="payClick">
       <div class="top">
         <span class="s-l">微信支付</span>
         <span class="s-m">￥{{realFee}}</span>
-        <span class="s-r">已优惠￥{{reduceFee}}</span>
       </div>
     </div>
   </div>
@@ -186,6 +127,7 @@ export default {
   },
   computed: {
     ...mapState('shoppingCart', ['shopInfo', 'reduceFee']),
+    ...mapState("user", ["user"]),
     deliveryFee() {
       return this.shopInfo.support_pay
     },
@@ -199,6 +141,7 @@ export default {
     sepLine
   },
   methods: {
+    ...mapActions("submitOrder", ["postOrderDataAction"]),
     addressClick() {
       wx.navigateTo({url: '/pages/addressList/main'})
     },
@@ -235,12 +178,17 @@ export default {
       })
     },
     payClick() {
+      var order = {
+      }
+      order.orderNo = 123456
+      order.itemList = this.foodList
+      this.postOrderDataAction({order})
       wx.navigateTo({url: '/pages/orderDetail/main'})
     }
   },
   mounted() {
     this.itemData = orderData.delivery.data
-    this.addressInfo = this.itemData.address_info
+    this.addressInfo = this.user.addressModel
     this.arrivalInfo = this.itemData.expected_arrival_info
     this.privacy_service = this.itemData.privacy_service
     this.remark_field = this.itemData.remark_field
@@ -768,14 +716,14 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 166rpx;
+    height: 100rpx;
     background-color: #4EAA31;
     justify-content: center;
     .top {
       display: flex;
       height: 50rpx;
       align-items: center;
-      margin-top: 30rpx;
+      margin-top:20rpx;
       .s-l {
         font-size: 32rpx;
         color: white;

@@ -26,31 +26,16 @@
     <div class="my-address">
       <div class="header">
         <i class="icon mt-myhome-o"></i>
-        <span>我的收获地址</span>
+        <span>我的收货地址</span>
       </div>
       <div class="list-c">
         <div class="item" v-for="(item, index) in myAddress" :key="index">
           <span class="i-t">{{item.address}}</span>
           <div class="i-b">
             <span class="b-l">{{item.name}}</span>
-            <span class="b-m">{{item.gender}}</span>
+            <span class="b-m">{{item.gender === 1? '先生' : '女士'}}</span>
             <span class="b-r">{{item.phone}}</span>
           </div>
-        </div>
-      </div>
-      <div class="footer">
-        <span>展开全部4个地址</span>
-        <i class="icon mt-arrow-down-o"></i>
-      </div>
-    </div>
-    <div class="nearby-address">
-      <div class="header">
-        <i class="icon mt-location-o"></i>
-        <span>附近地址</span>
-      </div>
-      <div class="list-c">
-        <div class="item" v-for="(item, index) in nearbyAddress" :key="index">
-          <span>{{item.name}}</span>
         </div>
       </div>
     </div>
@@ -63,24 +48,31 @@
 
 <script>
 import {addressData} from './data'
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       cityData: {},
-      myAddress: [],
       nearbyAddress: []
     }
   },
+  computed: {
+    ...mapState("address", ["myAddress"]),
+    ...mapActions("address", ["getAddressDataAction"]),
+  },
   methods: {
+    ...mapActions("address", ["getAddressDataAction"]),
     addAddress() {
        wx.navigateTo({url: '/pages/addAddress/main'})
     }
   },
   mounted() {
     this.cityData = addressData.cityData.data
-    this.myAddress = addressData.myAddress.data
     this.nearbyAddress = addressData.nearbyAddress.data.mapPoiVo
+  },
+  created() {
+    this.getAddressDataAction()
   }
 }
 </script>

@@ -4,7 +4,7 @@
       <div class="header-c">
         <div class="header-l" @click="addressClick">
           <i class="icon mt-location-o" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
-          <span>上海市漕河泾开发区</span>
+          <span>{{user.addressModel.address}}</span>
           <i class="icon mt-arrow-right-o" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
         </div>
         <div class="header-r" @click="searchClick">
@@ -117,6 +117,7 @@
 
 <script>
 import {queryHomeHeadCategory} from '@/action/action'
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {homeData} from './data'
 
 export default {
@@ -147,6 +148,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions("user", ["getUserDataAction"]),
     categoryClick() {
       wx.navigateTo({url: '/pages/categoryList/main'})
     },
@@ -160,7 +162,11 @@ export default {
       wx.navigateTo({url: '/pages/shoppingCart/main'})
     }
   },
+  computed: {
+    ...mapState("user", ["user"]),
+  },
   mounted() {
+    this.getUserDataAction()
     var categoryData = homeData.headData.data.primary_filter;
     categoryData.map((item, index) => {
       if (index < 10) {
@@ -177,9 +183,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ @import 'src/style/mixin';
 .container {
   .content {
-    display: flex;
+    display: fixed;
     flex-direction: column;
     position: relative;
     .header-c {

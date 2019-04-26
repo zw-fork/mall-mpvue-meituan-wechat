@@ -6,18 +6,16 @@
           <img class="shop-logo" :src="shopInfo.pic_url">
         </div>
         <div class="h-r">
+          <span class="r-m">地址: {{shopInfo.address}}</span>
           <div class="r-t">
-            <span class="t-l">{{shopInfo.min_price_tip}}</span>
+            <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
-            <span class="t-m">{{shopInfo.delivery_time_tip}}</span>
-            <div class="s-r"></div>
-            <span class="t-r">{{shopInfo.distance}}</span>
-          </div>
-          <span class="r-m">公告：{{shopInfo.bulletin}}</span>
-          <div class="r-b">
-            <span class="b-l">减</span>
-            <span class="b-r">{{shopInfo.prompt_text}}</span>
+            <span class="t-m">配送时间: 09:50-23:20</span>
             <i class="icon mt-arrow-right-o"></i>
+          </div>
+          <div class="r-m">
+            <span class="b-r">公告：{{shopInfo.bulletin}}</span>
+            <i class="icon mt-arrow-right-o" style="float:right;"></i>
           </div>
         </div>
       </div>
@@ -36,11 +34,11 @@
           <text class="count" v-if="item.count > 0">{{item.count}}</text>
         </div>
       </scroll-view>
-      <scroll-view class="list-r" :scroll-y="true">
+      <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
         <div class="section">
           <span class="title">{{spus.title}}</span>
         </div>
-        <div class="item-list" v-for="(item, index) in spus.list" :key="index">
+        <div class="item-list" v-for="(item, index) in spus.datas.list" :key="index">
           <div class="item" @click="itemClick(item, index)">
             <div class="item-l">
               <img :src="item.picture">
@@ -48,14 +46,14 @@
             <div class="item-r">
               <span class="title">{{item.name}}</span>
               <span class="sub-title">{{item.description}}</span>
-              <span class="sale-num">{{item.month_saled_content}} {{item.praise_content}}</span>
+              <span class="sale-num" v-if="false">{{item.month_saled_content}} {{item.praise_content}}</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
-                <div class="sku" v-if="item.attrs.length" @click.stop="skuClick(item, index)">
+                <!-- <div class="sku" v-if="item.attrs && item.attrs.length" @click.stop="skuClick(item, index)">
                   <span>选规格</span>
                   <span class="count" v-if="item.sequence > 0">{{item.sequence}}</span>
-                </div>
-                <div class="add-item" v-else>
+                </div> -->
+                <div class="add-item">
                   <div class="add-l" @click.stop="reduceClick(item, index)" v-if="item.sequence > 0">
                     <i class="icon mt-reduce-o"></i>
                     <span>{{item.sequence}}</span>
@@ -64,9 +62,6 @@
                     <i class="icon mt-add-o"></i>
                   </div>
                 </div>
-              </div>
-              <div class="tags-c">
-                <img class="tags" :src="itm.picture_url" v-for="(itm, idx) in item.product_label_picture_list" :key="idx">
               </div>
             </div>
           </div>
@@ -213,7 +208,7 @@
         </div>
       </div>
       <div class="cart-c">
-        <img mode='widthFix' :src="productCount > 0 ? 'http://ovyjkveav.bkt.clouddn.com/18-9-28/55877074.jpg' : 'http://ovyjkveav.bkt.clouddn.com/18-9-25/77715001.jpg'">
+        <img mode='widthFix' :src="productCount > 0 ? 'http://elm.cangdu.org/img/164ad0b6a3917599.jpg' : 'http://elm.cangdu.org/img/1698f9e6ed529211.png'">
         <span v-if="productCount > 0">{{productCount}}</span>
       </div>
     </div>
@@ -369,6 +364,18 @@ export default {
   methods: {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
+     //滚动条滚到底部或右边的时候触发
+  lower(e) {
+    wx.showLoading({title: '加载中...', mask: true})
+    console.log(this.spus.datas.list)
+    setTimeout(() => {
+          this.spus.datas.list = [
+          ...this.spus.datas.list,
+          ...this.spus.datas.list
+        ]
+          wx.hideLoading()
+        }, 1000)
+  },
     orderClick() {
       var price = 0
       this.foods.map(item => price += item.totalPrice)
@@ -377,7 +384,8 @@ export default {
     },
     categoryClick(item, index) {
       this.tagIndex = index;
-      this.getCategoryMenuDataAction({index})
+      var categoryId = item.categoryId
+      this.getCategoryMenuDataAction({categoryId, index})
     },
     menuClick() {
       this.left = 40 + 'rpx'
@@ -439,7 +447,7 @@ export default {
       this.selectSkuAction({item, index: item.preIndex})
     }
   },
-  mounted() {
+  created() {
     this.getMenuDataAction()
   }
 }
@@ -573,6 +581,7 @@ export default {
     display: flex;
     position: fixed;
     top: 220rpx;
+    width:100%;
     bottom: 200rpx;
     .list-l {
       display: flex;

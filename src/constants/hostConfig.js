@@ -34,7 +34,7 @@ const host = {
     envVersion: 'develop'
   },
   prd: {
-    API_URL: 'https://wx.waimai.meituan.com',
+    API_URL: 'http://digcampus.natapp1.cc/',
     XIAMI_URL: 'https://api-m.mtime.cn',
     MSITE_URL: 'https://api.douban.com',
     VENILOG_URL: 'https://api.douban.com',

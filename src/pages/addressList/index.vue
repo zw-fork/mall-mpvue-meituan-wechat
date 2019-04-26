@@ -1,14 +1,13 @@
 <template>
   <div class="container">
     <div class="list-c">
-      <div class="item" v-for="(item, index) in itemList" :key="index">
+      <div class="item" v-for="(item, index) in myAddress" :key="index">
         <div class="i-l">
-          <span class="address">{{item.address}} {{item.house_number}}</span>
           <div class="user-info">
-            <span class="s-l">{{item.name}}</span>
-            <span class="s-m">{{item.gender}}</span>
+            <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
             <span class="s-r">{{item.phone}}</span>
           </div>
+          <span class="address">{{item.address}} {{item.house_number}}</span>
         </div>
         <i class="icon mt-edit-o"></i>
       </div>
@@ -22,19 +21,20 @@
 
 <script>
 import {addressList} from './data'
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+
 export default {
-  data() {
-    return {
-      itemList: []
-    }
+  computed: {
+    ...mapState("address", ["myAddress"])
   },
   methods: {
+    ...mapActions("address", ["getAddressDataAction"]),
     addClick() {
       wx.navigateTo({url: '/pages/addAddress/main'})
     }
   },
-  mounted() {
-    this.itemList = addressList.data
+  created() {
+    this.getAddressDataAction()
   }
 }
 </script>
@@ -49,36 +49,34 @@ export default {
       align-items: center;
       justify-content: space-between;
       background-color: white;
-      padding: 30rpx;
+      padding: 20rpx;
       border-top: 2rpx solid $spLine-color;
       .i-l {
         display: flex;
         flex-direction: column;
         .address {
-          font-size: 32rpx;
+          font-size: 24rpx;
           color: $textBlack-color;
         }
         .user-info {
           display: flex;
-          margin-top: 10rpx;
+          font-weight:bold;
+          font-size: 30rpx;
           .s-l {
-            font-size: 32rpx;
-            color: $textDarkGray-color;
+            color: $textBlack-color;
           }
           .s-m {
-            font-size: 32rpx;
-            color: $textDarkGray-color;
+            color: $textBlack-color;
             margin-left: 20rpx;
           }
           .s-r {
-            font-size: 32rpx;
-            color: $textDarkGray-color;
+            color: $textBlack-color;
             margin-left: 60rpx;
           }
         }
       }
       i{
-        font-size: 32rpx;
+        font-size: 30rpx;
         color: $textDarkGray-color;
       }
     }

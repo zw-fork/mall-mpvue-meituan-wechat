@@ -3,6 +3,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import shoppingCart from './modules/shoppingCart'
+import address from './modules/address'
+import user from './modules/user'
+import submitOrder from './modules/submitOrder'
 
 Vue.use(Vuex)
 
@@ -11,6 +14,18 @@ const store = new Vuex.Store({
     shoppingCart: {
       namespaced: true,
       ...shoppingCart
+    },
+    address: {
+      namespaced: true,
+      ...address
+    },
+    user: {
+      namespaced: true,
+      ...user
+    },
+    submitOrder: {
+      namespaced: true,
+      ...submitOrder
     }
   }
 })

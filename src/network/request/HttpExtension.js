@@ -37,7 +37,9 @@ const fetchData = (isCache, requestType) => (url, params, isLoading, source, cal
     let promise = HttpUtils.fetch(url, params, requestType, isLoading)
     if (callback && typeof callback === 'function') {
       promise.then(response => {
-        return callback(response)
+        if (response.code == 200) {
+          return callback(response)
+        }
       })
     }
     return promise
