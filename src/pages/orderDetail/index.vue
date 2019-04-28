@@ -67,9 +67,9 @@
                   <div class="item_style">
                         <p class="item_left" style="word-break:keep-all;">送货地址：</p>
                         <div class="item_right">
-                            <p>{{currentOrder.consignee}}</p>
-                            <p>{{currentOrder.phone}}</p>
-                            <p>{{currentOrder.address}}</p>
+                            <p>{{currentOrder.addressInfo.name}}</p>
+                            <p>{{currentOrder.addressInfo.phone}}</p>
+                            <p>{{currentOrder.addressInfo.address}}</p>
                         </div>
                     </div>
       </div>
@@ -99,7 +99,7 @@
                          <div class="item_style">
                        <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
                         <div class="item_right" style="display: inline">
-                            <p>2019-11-11 12::13</p>
+                            <p>{{currentOrder.createTime}}</p>
                         </div>
                     </div>
       </div>
@@ -202,13 +202,13 @@ export default {
         background-color: white;
         .btn {
           display: flex;
-          border: 2rpx solid $spLine-color;
+          border: 2rpx solid $blue-color;
           margin: 20rpx;
           border-radius: 4rpx;
           span {
             font-size: 26rpx;
-            color: $textBlack-color;
-            margin: 12rpx 20rpx;
+            color: $blue-color;
+            margin: 6rpx 10rpx;
           }
         }
       }

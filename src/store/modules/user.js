@@ -4,23 +4,26 @@ import {_array} from '@/utils/arrayExtension'
 import {shoppingCart} from '@/pages/shoppingCart/data'
 import {deepClone} from '@/utils/deepClone'
 import {getFetch} from '@/network/request/HttpExtension'
+import { getUserInfoWechat } from "@/action/action";
+
 const state = {
-  user: {
-    addressModel: {}
+  userInfo: {
   }
 }
 
 const mutations = {
-  changeUserDataMut(state, info) {
-    state.user = info
+  changeUserInfoMut(state, info) {
+    state.userInfo = info
   }
 }
 
 const actions = {
-  getUserDataAction({state, commit}) {
-    getFetch('/wechat/oE7971YVuGnNbxnL3Fc-26Y5SdLA1231', {}, false).then(response => {
-      var user = response.result || {}
-      commit('changeUserDataMut', user)
+  getUserInfo({state, commit}, {jsonData}) {
+    getUserInfoWechat(jsonData).then(response => { 
+      commit('changeUserInfoMut', response.result)
+      wx.switchTab({
+        url: '/pages/home/main'
+      })
     })
   }
 }

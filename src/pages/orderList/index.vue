@@ -1,27 +1,27 @@
 <template>
   <div class="container">
     <div class="list-c">
-      <div class="item" v-for="(item, index) in result.list" :key="index">
-        <div class="shop-info" @click="headerClick">
+      <div class="item" v-for="(item, index) in result.list" :key="index" @click="orderDetail(item)">
+        <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
-           <div class="order_title">
-              <div class="order-name">
+           <div class="order_title" @click="headerClick">
+              <div class="order-name" style="margin-bottom:-15rpx;">
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
               </div>
-              <span class="order-time" style="color: #999;font-size: 25rpx;margin-left:10rpx;">2019-04-08 23:33</span>
+              <span class="order-time" style="color: #999;font-size: 25rpx;margin-left:10rpx;padding:-20rpx;">2019-04-08 23:33</span>
            </div>
           <p class="order-status" style="position: absolute;right: 0;">{{item.status_description}}已完成</p>
         </div>
-        <div class="googs-c" @click="orderDetail(item)">
+        <div class="googs-c" >
           <div class="goods" style="float:left;">
             <span class="s-l">{{item.itemList[0].name}}再来一单再来一单再来一单再来一单再来一单</span>
             <span class="s-m">等{{item.itemList.length}}件商品</span>
-            <span class="s-r amount">￥{{item.total}}</span>
+            <span class="s-r amount">￥{{item.realFee}}</span>
             </div>
         </div>
-        <div class="bottom-c" @click="headerClick">
-          <div class="btn">
+        <div class="bottom-c">
+          <div class="btn" @click="headerClick">
             <span>再来一单</span>
           </div>
         </div>
@@ -73,19 +73,18 @@ export default {
       margin-top: 20rpx;
       .shop-info {
         display: flex;
-        height: 120rpx;
+        height: 100rpx;
         background-color: white;
         align-items: center;
         border-bottom: 2rpx solid $spLine-color;
         margin-left: 30rpx;
-        margin-bottom: 10rpx;
         .order_title {
            align-items: center;
            justify-content: flex-start;
         }
         img {
-          width: 80rpx;
-          height: 80rpx;
+          width: 60rpx;
+          height: 60rpx;
         }
         .shop-name {
           font-size: 32rpx;
@@ -114,8 +113,9 @@ export default {
         .goods {
           display: flex;
           align-items: center;
-          margin-left: 120rpx;
+          margin-left: 100rpx;
           margin-right: 20rpx;
+          margin-bottom:10rpx;
           .s-l {
             font-size: 28rpx;
             color: $textDarkGray-color;
@@ -166,13 +166,13 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          border: 2rpx solid $spLine-color;
+          border: 2rpx solid $blue-color;
           margin: 20rpx;
           border-radius: 4rpx;
           span {
             font-size: 28rpx;
-            color: $textBlack-color;
-            margin: 16rpx 24rpx;
+            color: $blue-color;
+            margin: 6rpx 10rpx;
           }
         }
       }

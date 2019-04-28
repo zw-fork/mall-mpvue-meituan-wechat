@@ -28,7 +28,8 @@ const PATH = {
   SHARE_STATISTIC: '/cc/v1/me/footprints',
   CANCEL_ORDER: '/tc/v1/me/orders',
   POST_FORM_ID: '/xc/api/v1/miniapps',
-  MINIAPP_LIGIN: '/uc/v1/auth/login/wx-miniapp'
+  MINIAPP_LIGIN: '/uc/v1/auth/login/wx-miniapp',
+  GET_USERINFO_WECHAT: '/wechat/userinfo'
 }
 
 export {PATH}

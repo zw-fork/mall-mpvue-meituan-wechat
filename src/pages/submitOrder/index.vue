@@ -140,6 +140,7 @@ export default {
       this.currentOrder.deliveryFee = this.deliveryFee
       this.currentOrder.addressInfo = this.addressInfo
       this.currentOrder.realFee = this.realFee
+      this.currentOrder.itemList = this.itemList
       this.postOrderDataAction({order : this.currentOrder})
       wx.navigateTo({url: '/pages/error/main'})
     }

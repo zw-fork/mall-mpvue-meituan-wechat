@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/index/main",
+
     "pages/home/main",
     "pages/shoppingCart/main",
     "pages/submitOrder/main",
@@ -17,7 +19,6 @@
     "pages/remark/main",
     "pages/citySearch/main",
     "pages/citys/main",
-    "pages/index/main",
     "pages/addressList/main",
     "pages/protocol/main",
     "pages/feedback/main",
@@ -27,10 +28,11 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "达邻购",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
+    "hideTabBar": true,
     "color": "#999",
     "selectedColor": "#000",
     "backgroundColor": "#fff",

@@ -1,113 +1,129 @@
-<template>
-  <div class="container" @click="clickHandle('test click', $event)">
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
+<template id="dialog">
+  <div class="modalMask" v-if="isModel">
+    <div class="modalDialog">
+      <div class="modalContent">
+        <p class="contentTip">应用需进行微信授权!</p>    
+      </div>
+      <div class="modalFooter">
+        <button style="width:100%; margin:0 auto;" class="btnConfirm" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">确定</button>
       </div>
     </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-    <span class="counter" @click="push">去往Vuex示例页面dadad</span>
   </div>
 </template>
 
 <script>
-import card from "@/components/card";
-import { getCityLocation } from "@/action/action";
-export default {
+
+import { getCityLocation,getOpenidWechat,getUserInfoWechat } from "@/action/action";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+
+ export default {
   data() {
     return {
+      isModel: false,
       motto: "Hello World",
       userInfo: {}
     };
   },
-
-  components: {
-    card
-  },
-
   methods: {
-    bindViewTap() {
-      const url = "../logs/main";
-      wx.navigateTo({ url });
+    ...mapActions("user", ["getUserInfo"]),
+
+    bindGetUserInfo: function(e) {
+      var that = this
+      if (e.target.userInfo){
+        that.login()
+      }
     },
-    getUserInfo() {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: res => {
-              this.userInfo = res.userInfo;
+    login() {
+        var that = this
+        wx.login({
+          success: function (res_login) {
+            if (res_login.code){
+                wx.getUserInfo({
+                  success:function(res){
+                    console.log(res)
+                    var jsonData = {
+                      code: res_login.code,
+                      encryptedData: res.encryptedData,
+                      iv: res.iv
+                    };
+                    that.getUserInfo({jsonData});
+                  }
+                })
             }
-          });
-        }
-      });
+          }
+        })
     },
     clickHandle(msg, ev) {
       console.log("clickHandle:", msg, ev);
     },
-    push() {
-      wx.navigateTo({ url: '../citys/main' });
-    }
   },
-
   mounted() {
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo();
-    getCityLocation({ type: "guess" }).then(res => {
-    });
-  },
-  created() {
-
+    var that = this
+    wx.getSetting({
+      success: function (res) {
+        if (res.authSetting['scope.userInfo']) {
+          that.login()
+        } 
+        else {
+          that.isModel = true
+        }
+      }
+    })
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: $theme-color;
-}
+.modalMask {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: #000;
+      opacity: 0.5;
+      overflow: hidden;
+      z-index: 9000;
+      color: #fff;
+    }
+    .modalDialog {
+      box-sizing: border-box;
+      width: 260px;
+      // height: 330px;
+      overflow: hidden;
+      position: fixed;
+      top: 60%;
+      left: 0;
+      z-index: 9999;
+      background: #fff;
+      margin: -180px 120rpx;
+      border-radius: 8px;
+      .modalContent {
+        box-sizing: border-box;
+        display: flex;
+        padding: 20px 23px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        .contentTip{
+          text-align: center;
+          font-size: 20px;
+          color: #333333;
+        }
+      }
+      .modalFooter {
+        display: flex;
+        height: 50px;
+        border-top: 1px solid #E5E5E5;
+        line-height: 50px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .btnConfirm {
+        font-size: 20px;
+        color: #508CEE;
+      }
+    }
 
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-
-.counter {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 5px 10px;
-  color: blue;
-  border: 1px solid blue;
-}
 </style>

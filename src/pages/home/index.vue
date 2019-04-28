@@ -4,7 +4,7 @@
       <div class="header-c">
         <div class="header-l" @click="addressClick">
           <i class="icon mt-location-o" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
-          <span>{{user.addressModel.address}}</span>
+          <span>{{userInfo.addressModel.address}}</span>
           <i class="icon mt-arrow-right-o" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
         </div>
         <div class="header-r" @click="searchClick">
@@ -112,6 +112,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -148,7 +149,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions("user", ["getUserDataAction"]),
     categoryClick() {
       wx.navigateTo({url: '/pages/categoryList/main'})
     },
@@ -160,13 +160,26 @@ export default {
     },
     shoppingCartClick() {
       wx.navigateTo({url: '/pages/shoppingCart/main'})
+    },
+        logoutClick() {
+      wx.showModal({
+          title: '确认退出？',
+          content: '退出登录后将无法查看订单，重新登录即可查看',
+          confirmColor: '#FFC24A',
+          success: function(res) {
+            if (res.confirm) {
+              resolve('ok')
+            } else if (res.cancel) {
+              resolve('cancle')
+            }
+        }
+      })
     }
   },
   computed: {
-    ...mapState("user", ["user"]),
+    ...mapState("user", ["userInfo"]),
   },
   mounted() {
-    this.getUserDataAction()
     var categoryData = homeData.headData.data.primary_filter;
     categoryData.map((item, index) => {
       if (index < 10) {

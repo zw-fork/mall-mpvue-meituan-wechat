@@ -35,11 +35,14 @@ const shareStatistic = params => postFetch(PATH.SHARE_STATISTIC, params, false)
 const cancelOrder = params => putFetch(`${PATH.CANCEL_ORDER}/${params.id}/cancel`, params, false)
 const miniAppLogin = params => postFetch(`${PATH.MINIAPP_LIGIN}?scene=bind`, params, false)
 
+const getUserInfoWechat = params => getFetch(`${PATH.GET_USERINFO_WECHAT}`, params, false)
+
 const postFormId = () => {}
 
 export {
   movieList,
   movieDetail,
   getCityLocation,
+  getUserInfoWechat,
   queryHomeHeadCategory
 }
