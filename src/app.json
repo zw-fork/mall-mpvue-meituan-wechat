@@ -27,9 +27,10 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#ff0066",
     "navigationBarTitleText": "达邻购",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#99ff66"
   },
   "tabBar": {
     "hideTabBar": true,

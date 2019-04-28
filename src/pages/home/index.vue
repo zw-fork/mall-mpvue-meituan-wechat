@@ -216,6 +216,7 @@ export default {
       .header-l {
         display: flex;
         align-items: center;
+        max-width: 70%;
         span {
           font-size: 28rpx;
           color: $textBlack-color;
