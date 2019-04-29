@@ -23,6 +23,7 @@
          <span class="c-l" :style="{'font-weight': pageIndex === 0 ? 'bold' : null}" @click="menuClick">菜单</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold' : null}" @click="commentClick">评价</span>
          <span class="c-r" :style="{'font-weight': pageIndex === 2 ? 'bold' : null}" @click="shopClick">商家</span>
+         <span class="c-main"  @click="goHome">首页</span>
          <div class="line" :style="lineStyle"></div>
        </div>
     </div>
@@ -465,6 +466,11 @@ export default {
       this.changeItemModalMut(false)
       var item = this.previewInfo
       this.selectSkuAction({item, index: item.preIndex})
+    },
+    goHome() {
+      wx.switchTab({
+        url: '/pages/home/main'
+      })
     }
   },
   created() {
@@ -484,7 +490,7 @@ export default {
   onShareAppMessage: function () {
     return {
       title: this.shopInfo.shopName,
-      path: '/pages/index/main?shopId=123'
+      path: '/pages/index/main?shopId=' + this.shopInfo.shopId
     }
   }
 }
@@ -602,6 +608,12 @@ export default {
         font-size: 32rpx;
         color: $textBlack-color;
         margin-left: 80rpx;
+      }
+      .c-main {
+        position: absolute;
+        font-size: 32rpx;
+        color: $textBlack-color;
+        right: 30rpx;
       }
       .line {
         position: absolute;

@@ -137,7 +137,9 @@ export default {
       this.currentOrder.realFee = this.realFee
       this.currentOrder.itemList = this.itemList
       this.postOrderDataAction({order : this.currentOrder})
-      wx.navigateTo({url: '/pages/error/main'})
+       wx.switchTab({
+        url: '/pages/orderList/main'
+      })
     }
   },
   mounted() {
