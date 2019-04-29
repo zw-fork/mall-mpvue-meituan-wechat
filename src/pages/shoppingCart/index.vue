@@ -480,6 +480,12 @@ export default {
       })
 
     }
+  },
+  onShareAppMessage: function () {
+    return {
+      title: this.shopInfo.shopName,
+      path: '/pages/index/main?shopId=123'
+    }
   }
 }
 </script>

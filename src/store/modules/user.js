@@ -31,6 +31,37 @@ const actions = {
         })
       }
     })
+  },
+  wxLogin({state, commit}, {shopId}) {
+    wx.login({
+      success: function (res_login) {
+        if (res_login.code){
+            wx.getUserInfo({
+              success:function(res){
+                console.log(res)
+                var jsonData = {
+                  code: res_login.code,
+                  encryptedData: res.encryptedData,
+                  iv: res.iv,
+                  shopId: shopId
+                };
+                getUserInfoWechat(jsonData).then(response => { 
+                  commit('changeUserInfoMut', response.result)
+                  if (jsonData.shopId) {
+                    wx.redirectTo({
+                      url: '/pages/shoppingCart/main?shopId=' + jsonData.shopId
+                    })
+                  } else {
+                    wx.switchTab({
+                      url: '/pages/home/main'
+                    })
+                  }
+                })
+              }
+            })
+        }
+      }
+    })
   }
 }
 

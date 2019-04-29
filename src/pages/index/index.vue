@@ -26,35 +26,17 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
     };
   },
   methods: {
-    ...mapActions("user", ["getUserInfo"]),
+    ...mapActions("user", ["getUserInfo", "wxLogin"]),
 
     bindGetUserInfo: function(e) {
       var that = this
       if (e.target.userInfo){
         this.isModel = false
-        that.login()
+        that.wxLogin({shopId: that.shopId})
       }
     },
     login() {
-        var that = this
-        wx.login({
-          success: function (res_login) {
-            if (res_login.code){
-                wx.getUserInfo({
-                  success:function(res){
-                    console.log(res)
-                    var jsonData = {
-                      code: res_login.code,
-                      encryptedData: res.encryptedData,
-                      iv: res.iv,
-                      shopId: that.$mp.query.shopId
-                    };
-                    that.getUserInfo({jsonData});
-                  }
-                })
-            }
-          }
-        })
+      this.wxLogin({shopId: this.shopId})
     },
     clickHandle(msg, ev) {
       console.log("clickHandle:", msg, ev);
@@ -62,12 +44,12 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
   },
   onLoad(options) 
   {
-    var shopId=options.shopId;
+    this.shopId=options.shopId;
     var that = this
     wx.getSetting({
       success: function (res) {
         if (res.authSetting['scope.userInfo']) {
-          that.login()
+          that.wxLogin({shopId: that.shopId})
         } 
         else {
           that.isModel = true
