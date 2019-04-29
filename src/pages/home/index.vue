@@ -12,53 +12,12 @@
           <span>请输入收货地址</span>
         </div>
       </div>
-      <swiper class="category-c" indicator-dots="true" indicator-color="#999" indicator-active-color="#FFC24A">
-        <div v-for="(item, index) in categoryArr" :key="index">
-          <swiper-item>
-            <div class="grid-c">
-              <div class="item" v-for="(itx, idx) in item.items" :key="idx" @click="categoryClick">
-                <img class="item-img" :src="itx.url">
-                <span class="item-title">{{itx.name}}</span>
-              </div>
-            </div>
-          </swiper-item>
-        </div>
-      </swiper>
-      <swiper class="ad-c" indicator-dots="true" indicator-color="#999" indicator-active-color="#FFC24A" autoplay="true">
-        <block v-for="(item, index) in topBannerData" :key="index">
-          <swiper-item>
-            <img class="ad-img" :src="item.banner_pic_url">
-          </swiper-item>
-        </block>
-      </swiper>
-      <div class="b-banner">
-        <div class="recommended" @click="categoryClick">
-          <img :src="bottomBanner.banner_pic_url">
-        </div>
-        <div class="hot-sale">
-          <div class="item" v-for="(item, index) in bottomBanner.products" :key="index" @click="shoppingCartClick">
-            <div class="img-c">
-              <img :src="item.picture">
-              <div class="name-c">
-                <span class="name">{{item.name}}</span>
-              </div>
-            </div>
-            <span class="price">{{item.price}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="section">
+      <div class="section" v-if="false">
         <div class="l"></div>
         <span class="m">附近商家</span>
         <div class="r"></div>
       </div>
       <div class="category-list">
-        <div class="filter-bar">
-          <div class="item" v-for="(item, index) in filterList" :key="index">
-            <span>{{item.title}}</span>
-            <i class="icon" :class="item.icon"></i>
-          </div>
-        </div>
         <div class="item-list">
           <div class="header">
             <div class="item" v-for="(item, index) in tags" :key="index">
@@ -349,6 +308,7 @@ export default {
       display: flex;
       align-items: center;
       margin: 20rpx;
+      margin-top: 50%;
       justify-content: center;
       box-sizing: border-box;
       .l {

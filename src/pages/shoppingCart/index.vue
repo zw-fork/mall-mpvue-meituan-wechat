@@ -11,7 +11,7 @@
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
             <span class="t-m">配送时间: 09:50-23:20</span>
-            <i class="icon mt-arrow-right-o"></i>
+            <i class="icon mt-arrow-right-o" style="position:absolute; right:0rpx;"></i>
           </div>
           <div class="r-m">
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
@@ -203,12 +203,12 @@
             <span class="l-r">支持自取</span>
           </div>
         </div>
-        <div class="m-r" :style="{'background-color': btnTitle === '去结算' ? '#F0D179' : '#2F2F2F'}" @click="orderClick">
-          <span :style="{color: btnTitle === '去结算' ? '#333' : '#666'}">{{btnTitle}}</span>
+        <div class="m-r" :style="{'background-color': btnTitle === '去结算' ? '#F0D179' : '#969696'}" @click="orderClick">
+          <span :style="{color: btnTitle === '去结算' ? '#333' : '#ffffff'}">{{btnTitle}}</span>
         </div>
       </div>
       <div class="cart-c">
-        <img mode='widthFix' :src="productCount > 0 ? 'http://elm.cangdu.org/img/164ad0b6a3917599.jpg' : 'http://elm.cangdu.org/img/1698f9e6ed529211.png'">
+        <img mode='widthFix' :src="productCount > 0 ? '/static/images/shopping_cart.png' : '/static/images/1.png'">
         <span v-if="productCount > 0">{{productCount}}</span>
       </div>
     </div>
@@ -469,6 +469,17 @@ export default {
   },
   created() {
     this.getMenuDataAction()
+  },
+  onLoad(options) 
+  {
+    var that = this
+    var shopId=options.shopId;
+    if (shopId) {
+      wx.setNavigationBarTitle({
+          title: that.shopInfo.shopName
+      })
+
+    }
   }
 }
 </script>
@@ -487,7 +498,7 @@ export default {
     .header {
       display: flex;
       align-items: center;
-      background-color: #333;
+      background-color: #ff0066;
       height: 150rpx;
       .h-l {
         display: flex;
@@ -602,7 +613,7 @@ export default {
     position: fixed;
     top: 220rpx;
     width:100%;
-    bottom: 200rpx;
+    bottom: 150rpx;
     .list-l {
       display: flex;
       flex-direction: column;
@@ -1161,7 +1172,7 @@ export default {
     flex-direction: column;
     position: fixed;
     bottom: 0;
-    height: 200rpx;
+    height: 150rpx;
     background-color: #333;
     z-index: 990;
     width: 100%;
@@ -1179,7 +1190,7 @@ export default {
     .c-m {
       display: flex;
       justify-content: center;
-      height: 88rpx;
+      height: 100rpx;
       margin-left: 140rpx;
       .l {
         display: flex;
@@ -1197,6 +1208,7 @@ export default {
         .m-l {
           display: flex;
           align-items: center;
+          background-color: #2F2F2F;
           .l-l {
             font-size: 24rpx;
             color: $textDarkGray-color;
@@ -1218,7 +1230,7 @@ export default {
         align-items: center;
         justify-content: center;
         width: 200rpx;
-        height: 88rpx;
+        height: 100rpx;
         background-color: #2F2F2F;
         span {
           font-size: 32rpx;
@@ -1230,11 +1242,11 @@ export default {
     .cart-c {
       position: absolute;
       left: 20rpx;
-      top: 20rpx;
+      bottom: -1rpx;
       z-index: 991;
       img {
-        width: 100rpx;
-        height: 100rpx;
+        width: 88rpx;
+        height: 88rpx;
         background-size: cover;
       }
       span {

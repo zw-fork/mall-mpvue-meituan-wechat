@@ -19,6 +19,7 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
  export default {
   data() {
     return {
+      shopId: undefined,
       isModel: false,
       motto: "Hello World",
       userInfo: {}
@@ -30,6 +31,7 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
     bindGetUserInfo: function(e) {
       var that = this
       if (e.target.userInfo){
+        this.isModel = false
         that.login()
       }
     },
@@ -44,7 +46,8 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
                     var jsonData = {
                       code: res_login.code,
                       encryptedData: res.encryptedData,
-                      iv: res.iv
+                      iv: res.iv,
+                      shopId: that.$mp.query.shopId
                     };
                     that.getUserInfo({jsonData});
                   }
@@ -57,7 +60,9 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
       console.log("clickHandle:", msg, ev);
     },
   },
-  mounted() {
+  onLoad(options) 
+  {
+    var shopId=options.shopId;
     var that = this
     wx.getSetting({
       success: function (res) {

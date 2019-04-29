@@ -35,10 +35,6 @@
         </div>
       </div>
       <div class="footer">
-        <div class="fold">
-          <span>展开更多</span>
-          <i class="icon mt-arrow-down-o"></i>
-        </div>
         <div class="delivery-cast">
           <span>服务费</span>
           <span>￥{{deliveryFee}}</span>
@@ -171,9 +167,6 @@ export default {
       })
     },
     payClick() {
-      var order = {
-      }
-      order.orderNo = 123456
       order.itemList = this.foodList
       this.postOrderDataAction({order})
       wx.navigateTo({url: '/pages/orderDetail/main'})

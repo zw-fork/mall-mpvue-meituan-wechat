@@ -8,8 +8,8 @@
         <div class="address-c" @click="addressClick">
           <i class="icon mt-location-s"></i>
           <div class="address">
-            <span class="address-info">{{addressInfo.address}} {{addressInfo.house_number}}</span>
-            <span class="user-info">{{addressInfo.name}} {{addressInfo.gender}}  {{addressInfo.phone}}</span>
+            <span class="address-info" v-if="userInfo.addressModel">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
+            <span class="user-info" v-if="userInfo.addressModel">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
           </div>
           <i class="icon mt-arrow-right-o" :style="{fontSize: 28 + 'rpx', color: '#999'}"></i>
         </div>
@@ -17,12 +17,12 @@
     </div>
     <div class="item-list">
       <div class="section">
-        <img :src="itemData.poi_icon" >
-        <span>{{itemData.poi_name}}</span>
+        <img :src="currentOrder.shopInfo.pic_url" >
+        <span>{{currentOrder.shopInfo.shopName}}</span>
         <text class="tag">商家自配</text>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in order.itemList" :key="index">
+        <div class="item" v-for="(item, index) in itemList" :key="index">
           <img :src="item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -34,10 +34,6 @@
         </div>
       </div>
       <div class="footer">
-        <div class="fold">
-          <span>展开更多</span>
-          <i class="icon mt-arrow-down-o"></i>
-        </div>
         <div class="delivery-cast">
           <span>服务费</span>
           <span>￥{{deliveryFee}}</span>
@@ -84,7 +80,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("user", ["user"]),
+    ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["currentOrder"]),
     deliveryFee() {
       return this.currentOrder.shopInfo.support_pay
@@ -136,7 +132,6 @@ export default {
       })
     },
     payClick() {
-      var order = this.order
       this.currentOrder.deliveryFee = this.deliveryFee
       this.currentOrder.addressInfo = this.addressInfo
       this.currentOrder.realFee = this.realFee
@@ -146,11 +141,7 @@ export default {
     }
   },
   mounted() {
-    this.addressInfo = this.user.addressModel
     this.itemList = this.currentOrder.shopInfo.selectedArr
-    this.order.itemList = this.currentOrder.shopInfo.selectedArr
-    this.order.shopInfo = this.currentOrder.shopInfo
-    this.order.addressInfo = this.user.addressModel
   }
 }
 </script>

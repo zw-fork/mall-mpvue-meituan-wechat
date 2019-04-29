@@ -21,9 +21,15 @@ const actions = {
   getUserInfo({state, commit}, {jsonData}) {
     getUserInfoWechat(jsonData).then(response => { 
       commit('changeUserInfoMut', response.result)
-      wx.switchTab({
-        url: '/pages/home/main'
-      })
+      if (jsonData.shopId) {
+        wx.redirectTo({
+          url: '/pages/shoppingCart/main?shopId=' + jsonData.shopId
+        })
+      } else {
+        wx.switchTab({
+          url: '/pages/home/main'
+        })
+      }
     })
   }
 }
