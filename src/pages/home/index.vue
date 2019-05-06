@@ -12,59 +12,24 @@
           <span>请输入收货地址</span>
         </div>
       </div>
-      <div class="section" v-if="false">
-        <div class="l"></div>
-        <span class="m">附近商家</span>
-        <div class="r"></div>
-      </div>
       <div class="category-list">
         <div class="item-list">
-          <div class="header">
-            <div class="item" v-for="(item, index) in tags" :key="index">
-              <span>{{item}}</span>
-            </div>
-          </div>
-          <div class="item" v-for="(item, index) in shopsList" :key="index" @click="shoppingCartClick">
+          <div class="item" v-for="(item, index) in shopsList" :key="index" @click="shoppingCartClick(item.shopId)">
             <div class="item-l">
               <img :src="item.pic_url">
               <img class="tag" :src="item.poi_promotion_pic">
             </div>
             <div class="item-r">
               <div class="r-t">
-                <span class="shop-name">{{item.name}}</span>
-                <div class="t-c">
-                  <div class="c-l">
-                    <div class="l-l">
-                      <i class="icon mt-star-s" v-for="(itx, idx) in stars" :key="idx"></i>
-                    </div>
-                    <span class="l-m">{{item.wm_poi_score}}</span>
-                    <span class="l-r">{{item.month_sales_tip}}</span>
-                  </div>
-                  <div class="c-r">
-                    <span class="r-l">{{item.delivery_time_tip}}</span>
-                    <div class="r-m"></div>
-                    <span class="r-r">{{item.distance}}</span>
-                  </div>
-                </div>
+                <span class="shop-name">{{item.shopName}}</span>
               </div>
               <div class="r-m">
-                <span class="m-l">{{item.min_price_tip}}</span>
+                <span class="m-l">起送 ¥{{item.min_price}}</span>
                 <div class="m-m"></div>
-                <span class="m-r">{{item.shipping_fee_tip}}</span>
-                <div class="m-m"></div>
-                <span class="m-r">{{item.average_price_tip}}</span>
+                <span class="m-r">配送时间: 08:11-01:22</span>
               </div>
-              <div class="r-b">
-                <span class="b-l">支持自取</span>
-                <span class="b-r">极速配送</span>
-              </div>
-              <div class="activity-c">
-                <div class="ac-item" v-for="(itm, idx) in item.discounts2" :key="idx">
-                  <div class="ac">
-                    <img class="ac-l" :src="itm.icon_url">
-                    <span class="ac-r">{{itm.info}}</span>
-                  </div>
-                </div>
+              <div class="r-m">
+                <span class="m-l">地址：{{item.address}}</span>
               </div>
             </div>
           </div>
@@ -78,14 +43,12 @@
 <script>
 import {queryHomeHeadCategory} from '@/action/action'
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import {homeData} from './data'
+import {getFetch} from '@/network/request/HttpExtension'
 
 export default {
   data() {
     return {
       categoryArr: [{items: []}, {items: []}],
-      topBannerData: [],
-      bottomBanner: {},
       shopsList: [],
       filterList: [
         {
@@ -108,6 +71,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions("shoppingCart", ["postOrderDataAction"]),
     categoryClick() {
       wx.navigateTo({url: '/pages/categoryList/main'})
     },
@@ -117,8 +81,8 @@ export default {
     searchClick() {
       wx.navigateTo({url: '/pages/searchList/main'})
     },
-    shoppingCartClick() {
-      wx.navigateTo({url: '/pages/shoppingCart/main'})
+    shoppingCartClick(shopId) {
+      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
     },
         logoutClick() {
       wx.showModal({
@@ -139,17 +103,9 @@ export default {
     ...mapState("user", ["userInfo"]),
   },
   mounted() {
-    var categoryData = homeData.headData.data.primary_filter;
-    categoryData.map((item, index) => {
-      if (index < 10) {
-        this.categoryArr[0].items.push(item)
-      } else {
-         this.categoryArr[1].items.push(item)
-      }
+    getFetch('/shop/list/' + this.userInfo.addressModel.communityId, {}, false).then(response => {
+      this.shopsList = response.result.list
     })
-    this.topBannerData = homeData.topBannerData.data.top_banner_list
-    this.bottomBanner = homeData.bannerData.data.rcmd_board_v9.mid_ad_banner.platinum_banner
-    this.shopsList = homeData.homeList.data.poilist
   }
 };
 </script>
@@ -330,6 +286,7 @@ export default {
     }
     .category-list {
       display: flex;
+      margin-top: 80rpx;
       flex-direction: column;
       .filter-bar {
         display: flex;

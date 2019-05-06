@@ -2,17 +2,17 @@
   <div class="container">
     <div class="list-c">
       <div class="item" v-for="(item, index) in myAddress" :key="index">
-        <div class="i-l">
+        <div class="i-l" @click="updateDefaultAddress2(item.id)">
           <div class="user-info">
             <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
             <span class="s-r">{{item.phone}}</span>
           </div>
           <span class="address">{{item.address}} {{item.house_number}}</span>
         </div>
-        <i class="icon mt-edit-o"></i>
+        <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
       </div>
     </div>
-    <div class="add-btn" @click="addClick">
+    <div class="add-btn" @click="addClick(item.id)">
       <i class="icon mt-add-o"></i>
       <span>新增收货地址</span>
     </div>
@@ -25,16 +25,26 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {
   computed: {
-    ...mapState("address", ["myAddress"])
+    ...mapState("address", ["myAddress"]),
+    ...mapState("user", ["userInfo"]),
   },
   methods: {
     ...mapActions("address", ["getAddressDataAction"]),
-    addClick() {
-      wx.navigateTo({url: '/pages/addAddress/main'})
+    ...mapActions("user", ["updateDefaultAddress"]),
+    addClick(id) {
+      wx.navigateTo({url: '/pages/addAddress/main?id=' + id})
+    },
+    updateDefaultAddress2(addressId) {
+      var wechat = {}
+      wechat.openid = this.userInfo.openid
+      wechat.addressModel = {}
+      wechat.addressModel.id = addressId
+      this.updateDefaultAddress({wechat})
     }
   },
-  created() {
-    this.getAddressDataAction()
+  mounted() {
+    var openid = this.userInfo.openid
+    this.getAddressDataAction({'openid': openid})
   }
 }
 </script>

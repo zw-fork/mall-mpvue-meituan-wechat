@@ -1,9 +1,5 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
-import {formatYMD} from '@/utils/formatTime'
-import {_array} from '@/utils/arrayExtension'
-import {shoppingCart} from '@/pages/shoppingCart/data'
-import {deepClone} from '@/utils/deepClone'
-import {getFetch} from '@/network/request/HttpExtension'
+import {postFetch} from '@/network/request/HttpExtension'
 import { getUserInfoWechat } from "@/action/action";
 
 const state = {
@@ -30,6 +26,14 @@ const actions = {
           url: '/pages/home/main'
         })
       }
+    })
+  },
+  updateDefaultAddress({state, commit}, {wechat}) {
+    var params = {'wechat': wechat}  
+    postFetch('/wechat/updateDefaultAddress', wechat, false).then(response => {
+        var user = response.result || {}
+        commit('changeUserInfoMut', user)
+        wx.navigateBack({delta: 1})
     })
   },
   wxLogin({state, commit}, {shopId}) {

@@ -2,14 +2,15 @@
   <div class="container">
     <div class="header-c">
       <div class="tab-c">
-        <div class="left" :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}" @click="deliveryClick">外卖配送</div>
+        <div class="left" :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}" @click="deliveryClick">小区配送</div>
       </div>
       <div class="delivery" v-if="tabIndex === 0">
         <div class="address-c" @click="addressClick">
           <i class="icon mt-location-s"></i>
           <div class="address">
-            <span class="address-info" v-if="userInfo.addressModel">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
-            <span class="user-info" v-if="userInfo.addressModel">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
+             <span class="address-info" v-if="!userInfo.addressModel.address">请添加配送地址...</span>
+            <span class="address-info" v-if="userInfo.addressModel.address">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
+            <span class="user-info" v-if="userInfo.addressModel.name">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
           </div>
           <i class="icon mt-arrow-right-o" :style="{fontSize: 28 + 'rpx', color: '#999'}"></i>
         </div>
@@ -18,7 +19,7 @@
     <div class="item-list">
       <div class="section">
         <img :src="currentOrder.shopInfo.pic_url" >
-        <span>{{currentOrder.shopInfo.shopName}}</span>
+        <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
         <text class="tag">商家自配</text>
       </div>
       <div class="list">
@@ -108,6 +109,12 @@ export default {
     remarkClick() {
       wx.navigateTo({url: '/pages/remark/main'})
     },
+    goShop() {
+      var shopId = this.currentOrder.shopInfo.shopId
+      wx.navigateTo({
+          url: '/pages/shoppingCart/main?shopId=' + shopId
+      })
+    },
     deliveryClick() {
       this.tabIndex = 0;
     },
@@ -132,14 +139,22 @@ export default {
       })
     },
     payClick() {
-      this.currentOrder.deliveryFee = this.deliveryFee
-      this.currentOrder.addressInfo = this.addressInfo
-      this.currentOrder.realFee = this.realFee
-      this.currentOrder.itemList = this.itemList
-      this.postOrderDataAction({order : this.currentOrder})
-       wx.switchTab({
-        url: '/pages/orderList/main'
+      if (this.userInfo.addressModel.address) {
+        this.currentOrder.deliveryFee = this.deliveryFee
+        this.currentOrder.addressInfo = this.addressInfo
+        this.currentOrder.realFee = this.realFee
+        this.currentOrder.itemList = this.itemList
+        this.postOrderDataAction({order : this.currentOrder})
+        wx.switchTab({
+          url: '/pages/orderList/main'
+        })
+      } else {
+        wx.showToast({
+        title: '请填写配送地址!',
+        icon: 'none',
+        duration: 1500
       })
+      }  
     }
   },
   mounted() {

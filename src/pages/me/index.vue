@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div class="header-c">
-      <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJvoc0l3Oe4lWTMtUvLd7UYm9IvSWNjM6S5ibZBu3OE5XbCEqgPw9llpibmkyqEX9GbLKOCfTIe6wWQ/132" alt="">
+      <img :src="userInfo.avatarUrl" alt="">
       <div class="info-c">
-        <span class="name">光强</span>
+        <span class="name">{{userInfo.nickname}}</span>
         <span class="phone">15214313256</span>
       </div>
     </div>
@@ -22,6 +22,9 @@
 </template>
 
 <script>
+
+import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
+
 export default {
   data() {
     return {
@@ -64,7 +67,7 @@ export default {
     }
   },
   computed: {
-
+    ...mapState("user", ["userInfo"]),
   },
   methods: {
     itemClick(e) {

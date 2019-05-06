@@ -2,7 +2,7 @@
   <div class="container">
     <div class="name">
       <span>联系人：</span>
-      <input placeholder="请填写收货人的姓名" placeholder-style="font-size: 24rpx" auto-focus/>
+      <input placeholder="请填写收货人的姓名" placeholder-style="font-size: 24rpx" auto-focus v-model="item.name"/>
     </div>
     <div class="sex">
       <div class="l"></div>
@@ -17,13 +17,14 @@
     </div>
     <div class="phone">
       <span>手机号：</span>
-      <input placeholder="请填写收货人手机号码" placeholder-style="font-size: 24rpx" auto-focus/>
+      <input placeholder="请填写收货人手机号码" placeholder-style="font-size: 24rpx" v-model="item.phone"/>
     </div>
     <div class="address">
       <span class="l">收货地址：</span>
       <div class="m">
-        <i class="icon mt-location-o"></i>
-        <span>点击选择</span>
+        <i class="icon mt-location-o" v-if="!item.address"></i>
+        <span v-if="!item.address">点击选择</span>
+        <span v-else>{{item.address}}</span>
       </div>
       <div class="r">
         <i class="icon mt-arrow-right-o"></i>
@@ -31,17 +32,47 @@
     </div>
     <div class="house-num">
       <span>门牌号：</span>
-      <input placeholder="详细地址，例：16号楼5楼301室" placeholder-style="font-size: 24rpx" auto-focus/>
+      <input placeholder="详细地址，例：16号楼5楼301室" placeholder-style="font-size: 24rpx" v-model="item.house_number"/>
     </div>
-    <div class="submit">
+    <div class="submit" @click="saveAddress">
       <span>保存地址</span>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+
 export default {
-  
+   data() {
+    return {
+      item : {}
+    }},
+  computed: {
+    ...mapState("address", ["myAddress"]),
+  },
+    methods: {
+       ...mapActions("address", ["saveOrUpdateAddress"]),
+       saveAddress() {
+         var address = this.item
+        this.saveOrUpdateAddress({address})
+       }
+    },
+   onLoad(options) 
+  {
+    var id=options.id;
+    if (id) {
+      var addr = this.myAddress
+        for (var index in addr) {
+          if (addr[index].id == id) {
+            this.item = Object.assign({}, addr[index])
+            break
+          } 
+        }
+    }
+   
+    
+  }
 }
 </script>
 

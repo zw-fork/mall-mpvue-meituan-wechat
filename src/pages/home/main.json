@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "仿美团外卖"
+  "navigationBarBackgroundColor": "#ff0066",
+  "navigationBarTextStyle": "white"
 }

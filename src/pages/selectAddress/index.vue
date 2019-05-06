@@ -70,9 +70,6 @@ export default {
   mounted() {
     this.cityData = addressData.cityData.data
     this.nearbyAddress = addressData.nearbyAddress.data.mapPoiVo
-  },
-  created() {
-    this.getAddressDataAction()
   }
 }
 </script>

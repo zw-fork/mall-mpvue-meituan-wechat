@@ -20,9 +20,8 @@
         </div>
       </div>
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex === 0 ? 'bold' : null}" @click="menuClick">菜单</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold' : null}" @click="commentClick">评价</span>
-         <span class="c-r" :style="{'font-weight': pageIndex === 2 ? 'bold' : null}" @click="shopClick">商家</span>
+         <span class="c-l" :style="{'font-weight': pageIndex === 0 ? 'bold' : null}" @click="menuClick">商品</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold' : null}" @click="shopClick">商家</span>
          <span class="c-main"  @click="goHome">首页</span>
          <div class="line" :style="lineStyle"></div>
        </div>
@@ -39,7 +38,7 @@
         <div class="section">
           <span class="title">{{spus.title}}</span>
         </div>
-        <div class="item-list" v-for="(item, index) in spus.datas.list" :key="index">
+        <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
           <div class="item" @click="itemClick(item, index)">
             <div class="item-l">
               <img :src="item.picture">
@@ -69,91 +68,7 @@
         </div>
       </scroll-view>
     </div>
-    <div class="comment-c" v-else-if="pageIndex === 1">
-      <scroll-view class="comment-sc" :scroll-y="true">
-        <div class="comment-header">
-          <div class="h-l">
-            <span class="score">{{commentInfo.quality_score}}</span>
-            <span class="title">商家评分</span>
-          </div>
-          <div class="h-m">
-            <div class="m-t">
-              <span class="title">口味</span>
-              <div class="star-c">
-                <i class="icon mt-star-s" v-for="(itx, idx) in stars" :key="idx"></i>
-              </div>
-              <span class="score">{{commentInfo.food_score}}</span>
-            </div>
-            <div class="m-b">
-              <span class="title">包装</span>
-              <div class="star-c">
-                <i class="icon mt-star-s" v-for="(itx, idx) in stars" :key="idx"></i>
-              </div>
-              <span class="score">{{commentInfo.pack_score}}</span>
-            </div>
-          </div>
-          <div class="line"></div>
-          <div class="h-r">
-            <span class="score">{{commentInfo.delivery_score}}</span>
-            <span class="title">配送评分</span>
-          </div>
-        </div>
-        <div class="comment-tags">
-          <div class="tag-item" v-for="(item, index) in commentInfo.commentMolds" :key="index">
-            <span>{{item}}</span>
-          </div>
-        </div>
-        <div class="comment-list">
-          <div class="item-c" v-for="(item, index) in commentInfo.comments" :key="index">
-            <div class="item-l">
-              <img :src="item.user_pic_url.length > 0 ? item.user_pic_url : 'http://ovyjkveav.bkt.clouddn.com/18-9-26/85572180.jpg'">
-            </div>
-            <div class="item-r">
-              <div class="h-r">
-                <div class="r-t">
-                  <span class="name">{{item.user_name}}</span>
-                  <span class="date">{{item.comment_time}}</span>
-                </div>
-                <div class="r-b">
-                  <div class="b-l">
-                    <i class="icon mt-star-s" v-for="(itx, idx) in stars" :key="idx"></i>
-                  </div>
-                  <span class="b-r">{{item.ship_time}}分钟送达</span>
-                </div>
-              </div>
-              <div class="r-comtent">
-                <span>{{item.comment}}</span>
-              </div>
-              <div class="r-imgs">
-                <div class="single" v-if="item.comment_pics.length === 1">
-                  <img :src="itm.url" v-for="(itm, idx) in item.comment_pics" :key="idx">
-                </div>
-                <div class="double" v-if="item.comment_pics.length === 2 || item.comment_pics.length === 3">
-                  <img class="comment-img" :src="itm.url" v-for="(itm, idx) in item.comment_pics" :key="idx">
-                </div>
-                <div class="four" v-if="item.comment_pics.length === 4">
-                  <img class="comment-img" :src="itm.url" v-for="(itm, idx) in item.comment_pics" :key="idx">
-                </div>
-              </div>
-              <div class="food-name">
-                <div class="name-t" v-if="item.praise_food_tip.length > 0">
-                  <i class="icon mt-praise-o"></i>
-                  <span>{{item.praise_food_tip}}}</span>
-                </div>
-                <div class="name-b" v-if="item.comment_labels.length > 0">
-                  <i class="icon mt-discount-o"></i>
-                  <span>{{item.commentTags}}</span>
-                </div>
-              </div>
-              <div class="reply-c" v-if="item.add_comment_list.length">
-                <span>{{item.poi_reply_contents}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </scroll-view>
-    </div>
-    <div class="shop-info" v-else-if="pageIndex === 2">
+    <div class="shop-info" v-else-if="pageIndex === 1">
       <div class="address">
         <i class="icon mt-location-o"></i>
         <span>上海市闵行区龙茗路1888号</span>
@@ -192,16 +107,13 @@
       </div>
     </div>
     <div class="footer-c" v-if="pageIndex === 0">
-      <div class="c-t">
-        <span>{{reduceTip}}</span>
-      </div>
       <div class="c-m">
         <div class="l">
           <span class="price" v-if="totalPrice > 0 || productCount > 0">￥<span>{{totalPrice}}</span></span>
           <div class="m-l">
             <span class="l-l">另需配送费￥{{shopInfo.support_pay}}</span>
             <div class="l-m"></div>
-            <span class="l-r">支持自取</span>
+            <span class="l-r">小区内配送</span>
           </div>
         </div>
         <div class="m-r" :style="{'background-color': btnTitle === '去结算' ? '#F0D179' : '#969696'}" @click="orderClick">
@@ -292,6 +204,7 @@ import {jointStyle} from "@/utils/style";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {formatYMD} from '@/utils/formatTime'
 import {_array} from '@/utils/arrayExtension'
+import {getFetch} from '@/network/request/HttpExtension'
 
 export default {
   data() {
@@ -323,31 +236,10 @@ export default {
       var content = this.shopInfo.prompt_text
       var price = 0
       this.foods.map(item => price += item.totalPrice)
-      if (price <= 0) return content
       if (price < this.shopInfo.min_price) {
-        var value = parseFloat(this.shopInfo.min_price - price).toFixed(1)
+        var value = parseFloat(this.shopInfo.min_price - price).toFixed(2)
         return `还差 ${value}元 就能起送`
       }
-      var activity_info = this.shopInfo.activity_info
-      for (let i = 0; i < activity_info.length; i++) {
-        const item = activity_info[i];
-        if (price < item.priceLower) {
-          var str = parseFloat(item.priceLower - price).toFixed(1)
-          if (i === 0) {
-            this.changeReduceFeeDataMut(0.0)
-            return `再买 ${str}元 可减 ${item.reduce}元 [去凑单]`
-          } else {
-            var perItem = activity_info[i - 1];
-            this.changeReduceFeeDataMut(perItem.reduce)
-            return `已减${perItem.reduce}元 再买 ${str}元 可减 ${item.reduce}元 [去凑单]`
-          }
-        } else {
-          continue
-        }
-      }
-      var lastItem = activity_info[activity_info.length - 1]
-      this.changeReduceFeeDataMut(lastItem.priceLower)
-      return `已满 ${lastItem.priceLower} 可减 ${lastItem.reduce}`
     },
     btnTitle() {
       var content = `${this.shopInfo.min_price}元起送`
@@ -368,15 +260,17 @@ export default {
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
      //滚动条滚到底部或右边的时候触发
   lower(e) {
-    wx.showLoading({title: '加载中...', mask: true})
-    console.log(this.spus.datas.list)
-    setTimeout(() => {
-          this.spus.datas.list = [
-          ...this.spus.datas.list,
-          ...this.spus.datas.list
+    if (this.spus.page>0) {
+      wx.showLoading({title: '加载中...', mask: true})
+      getFetch('/goods/' + this.spus.categoryId, {'page' : this.spus.page}, false).then(response => {
+        this.spus.datas = [
+            ...this.spus.datas,
+            ...response.result.list
         ]
-          wx.hideLoading()
-        }, 1000)
+        this.spus.page =  response.result.nextPage
+        wx.hideLoading()
+      })
+    }
   },
     orderClick() {
       var price = 0
@@ -389,7 +283,7 @@ export default {
     var selectedArr = []
     array.map((item, index) => {
       if (item.spus) {
-        item.spus.datas.list.map((itm, idx) => {
+        item.spus.datas.map((itm, idx) => {
           if (itm.sequence > 0) {
             var price = itm.min_price * itm.sequence
             itm.totalPrice = parseFloat(price).toFixed(1)
@@ -412,14 +306,9 @@ export default {
       this.left = 40 + 'rpx'
       this.pageIndex = 0
     },
-    commentClick() {
+    shopClick() {
       this.left = 182 + 'rpx'
       this.pageIndex = 1
-      this.getCommentDataAction()
-    },
-    shopClick() {
-      this.left = 325 + 'rpx'
-      this.pageIndex = 2
     },
     skuClick(item, index) {
       this.selectSkuAction({item, index})
@@ -473,18 +362,12 @@ export default {
       })
     }
   },
-  created() {
-    this.getMenuDataAction()
-  },
   onLoad(options) 
   {
     var that = this
     var shopId=options.shopId;
     if (shopId) {
-      wx.setNavigationBarTitle({
-          title: that.shopInfo.shopName
-      })
-
+      this.getMenuDataAction({shopId : shopId})
     }
   },
   onShareAppMessage: function () {
@@ -506,7 +389,6 @@ export default {
   .header-c {
     display: flex;
     flex-direction: column;
-    position: fixed;
     .header {
       display: flex;
       align-items: center;
@@ -631,7 +513,7 @@ export default {
     position: fixed;
     top: 220rpx;
     width:100%;
-    bottom: 150rpx;
+    bottom: 100rpx;
     .list-l {
       display: flex;
       flex-direction: column;
@@ -1190,7 +1072,7 @@ export default {
     flex-direction: column;
     position: fixed;
     bottom: 0;
-    height: 150rpx;
+    height: 100rpx;
     background-color: #333;
     z-index: 990;
     width: 100%;

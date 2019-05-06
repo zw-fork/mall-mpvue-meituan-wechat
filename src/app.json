@@ -26,11 +26,12 @@
     "pages/orderDetail/main"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#ff0066",
+    "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "达邻购",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#99ff66"
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": true,
+    "onReachBottomDistance": 50
   },
   "tabBar": {
     "hideTabBar": true,
