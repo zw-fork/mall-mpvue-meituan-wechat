@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower">
-      <div class="item" v-for="(item, index) in result.list" :key="index" @click="orderDetail(item)">
+      <div class="item" v-for="(item, index) in orderList.datas" :key="index" @click="orderDetail(item)">
         <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
            <div class="order_title" @click="headerClick">
@@ -9,13 +9,13 @@
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
               </div>
-              <span class="order-time" style="color: #999;font-size: 25rpx;margin-left:10rpx;padding:-20rpx;">2019-04-08 23:33</span>
+              <span class="order-time" style="color: #999;font-size: 25rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
            </div>
           <p class="order-status" style="position: absolute;right: 0;">{{item.status_description}}已完成</p>
         </div>
         <div class="googs-c" >
           <div class="goods" style="float:left;">
-            <span class="s-l">{{item.itemList[0].name}}再来一单再来一单再来一单再来一单再来一单</span>
+            <span class="s-l">{{item.itemList[0].name}}</span>
             <span class="s-m">等{{item.itemList.length}}件商品</span>
             <span class="s-r amount">￥{{item.realFee}}</span>
             </div>
@@ -31,22 +31,29 @@
 </template>
 
 <script>
-import {orderList} from './data'
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import {getFetch} from '@/network/request/HttpExtension'
 
 export default {
   data() {
     return {
-      orderList: [],
     }
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction"]),
     lower(e) {
-    wx.showLoading({title: '加载中...', mask: true})
-    setTimeout(() => {
-          wx.hideLoading()
-        }, 1000)
+       if (this.orderList.page>0) {
+      wx.showLoading({title: '加载中...', mask: true})
+       var openid = this.userInfo.openid
+      getFetch('/order/' + openid, {'page' : this.orderList.page}, false).then(response => {
+        this.orderList.datas = [
+            ...this.orderList.datas,
+            ...response.result.list
+        ]
+        this.orderList.page =  response.result.nextPage
+        wx.hideLoading()
+      })
+    }
   },
     headerClick() {
       wx.navigateTo({url: '/pages/shoppingCart/main'})
@@ -56,13 +63,12 @@ export default {
     }
   },
   mounted() {
-    this.orderList = orderList.data.digestlist
+    var openid = this.userInfo.openid
+    this.getOrderDataAction({'uid': openid, 'page' : this.orderList.page})
   },
   computed: {
-    ...mapState("submitOrder", ["result"]),
-  },
-  created() {
-    this.getOrderDataAction()
+    ...mapState("submitOrder", ["orderList"]),
+    ...mapState("user", ["userInfo"]),
   }
 }
 </script>

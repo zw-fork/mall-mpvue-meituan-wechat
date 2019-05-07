@@ -10,6 +10,10 @@ const state = {
     shopInfo: {},
     OrderItemModel: []
   },
+  orderList: {
+    page: 1,
+    datas: []
+  },
   currentOrder: {
 
   }
@@ -20,7 +24,8 @@ const mutations = {
     state.user = info
   },
   changeOrderDataMut(state, info) {
-    state.result = info
+    state.orderList.datas = info.list
+    state.orderList.page = info.nextPage
   },
   currentOrderDataMut(state, info) {
     state.currentOrder = info
@@ -31,21 +36,21 @@ const mutations = {
 }
 
 const actions = {
-  getUserDataAction({state, commit}) {
-    getFetch('/wechat/oE7971YVuGnNbxnL3Fc-26Y5SdLA1231', {}, false).then(response => {
+  getUserDataAction({state, commit}, {uid}) {
+    getFetch('/wechat/' + uid, {}, false).then(response => {
       var user = response.result || {}
       commit('changeUserDataMut', user)
     })
   }, 
-  getOrderDataAction({state, commit}) {
-    getFetch('/order/oE7971YVuGnNbxnL3Fc-26Y5SdLA1231', {}, false).then(response => {
+  getOrderDataAction({state, commit}, {uid, page}) {
+    getFetch('/order/' + uid, {'page' : page}, false).then(response => {
       var result = response.result || {}
       commit('changeOrderDataMut', result)
     })
   },
-  postOrderDataAction({state, commit}, {order}) {
+  postOrderDataAction({state, commit}, {order, uid}) {
     var params = {'order': order}  
-    postFetch('/order/oE7971YVuGnNbxnL3Fc-26Y5SdLA1231', order, false).then(response => {
+    postFetch('/order/' + uid, order, false).then(response => {
         var user = response.result || {}
         commit('changeUserDataMut', user)
       })

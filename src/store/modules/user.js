@@ -124,7 +124,6 @@ const actions = {
                 success: function(res) {
                   wx.chooseLocation({
                     success: function(res) {
-                      debugger
                       console.log(res)
                     }
                   })
@@ -150,8 +149,7 @@ const actions = {
                 scale:18,
                 success: function(res) {
                   wx.chooseLocation({
-                    success: function(res) {
-                      debugger
+                    success: function(res) {                      
                       console.log(res)
                     }
                   })
@@ -174,7 +172,6 @@ const actions = {
           success: function(res) {
             wx.chooseLocation({
               success: function(res) {
-                debugger
                 console.log(res)
               }
             })
