@@ -4,7 +4,7 @@
       <div class="header-c">
         <div class="header-l" @click="addressClick">
           <i class="icon mt-location-o" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
-          <span>{{userInfo.addressModel.address}}</span>
+          <span>{{userInfo.addressModel.address? userInfo.addressModel.address : '请选择小区...'}}</span>
           <i class="icon mt-arrow-right-o" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
         </div>
         <div class="header-r" @click="searchClick">
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="category-list">
-        <div class="item-list">
+        <scroll-view class="item-list" :scroll-y="true" @scrolltolower="lower" @scrolltoupper="upper">
           <div class="item" v-for="(item, index) in shopsList" :key="index" @click="shoppingCartClick(item.shopId)">
             <div class="item-l">
               <img :src="item.pic_url">
@@ -33,7 +33,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </scroll-view>
       </div>
     </div>
 
@@ -72,6 +72,18 @@ export default {
   },
   methods: {
     ...mapActions("shoppingCart", ["postOrderDataAction"]),
+    ...mapActions("user", ["wxLocation"]),
+      lower(e) {
+    wx.showLoading({title: '加载中...', mask: true})
+    setTimeout(() => {
+          wx.hideLoading()
+        }, 1000)
+  },     upper(e) {
+    wx.showLoading({title: '加载中1...', mask: true})
+    setTimeout(() => {
+          wx.hideLoading()
+        }, 1000)
+  },
     categoryClick() {
       wx.navigateTo({url: '/pages/categoryList/main'})
     },
@@ -79,7 +91,8 @@ export default {
       wx.navigateTo({url: '/pages/selectAddress/main'})
     },
     searchClick() {
-      wx.navigateTo({url: '/pages/searchList/main'})
+      this.wxLocation()
+    //  wx.navigateTo({url: '/pages/searchList/main'})
     },
     shoppingCartClick(shopId) {
       wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
@@ -103,9 +116,14 @@ export default {
     ...mapState("user", ["userInfo"]),
   },
   mounted() {
-    getFetch('/shop/list/' + this.userInfo.addressModel.communityId, {}, false).then(response => {
-      this.shopsList = response.result.list
-    })
+    var communityId = this.userInfo.addressModel.communityId
+    if (communityId) {
+      getFetch('/shop/list/' + communityId, {}, false).then(response => {
+        this.shopsList = response.result.list
+      })
+    } else {
+      wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
+    }
   }
 };
 </script>
@@ -131,7 +149,7 @@ export default {
       .header-l {
         display: flex;
         align-items: center;
-        max-width: 70%;
+        max-width: 100%;
         span {
           font-size: 28rpx;
           color: $textBlack-color;
@@ -319,7 +337,10 @@ export default {
       }
       .item-list {
         display: flex;
-        flex-direction: column;
+        position: fixed;
+        top: 70rpx;
+        bottom: 0rpx;
+        width:100%;
         background-color: white;
         .header {
           display: flex;

@@ -49,10 +49,6 @@
               <span class="sale-num" v-if="false">{{item.month_saled_content}} {{item.praise_content}}</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
-                <!-- <div class="sku" v-if="item.attrs && item.attrs.length" @click.stop="skuClick(item, index)">
-                  <span>选规格</span>
-                  <span class="count" v-if="item.sequence > 0">{{item.sequence}}</span>
-                </div> -->
                 <div class="add-item">
                   <div class="add-l" @click.stop="reduceClick(item, index)" v-if="item.sequence > 0">
                     <i class="icon mt-reduce-o"></i>

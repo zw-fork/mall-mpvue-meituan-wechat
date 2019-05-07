@@ -3,15 +3,14 @@
     <div class="header-c">
       <div class="header-l">
         <i class="icon mt-location-o" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
-        <span>{{cityData.result}}</span>
-        <i class="icon mt-arrow-down-o" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
+        <span>成都市</span>
       </div>
       <div class="header-r">
         <div class="search-bar">
           <i class="icon mt-search-o"></i>
-          <input placeholder="请输入收货地址" placeholder-style="font-size: 24rpx" @input="search"/>
+          <input placeholder="请输入小区" placeholder-style="font-size: 24rpx" @input="search"/>
           <div class="cancle" v-if="keyword" @click="cancle">
-            <i class="icon qb-icon-cancle-o"></i>
+            <i class="icon qb-icon-cancle-o"></i>                                
           </div>
         </div>
       </div>
@@ -47,14 +46,12 @@
 </template>
 
 <script>
-import {addressData} from './data'
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      cityData: {},
-      nearbyAddress: []
+      keyword: true
     }
   },
   computed: {
@@ -68,8 +65,6 @@ export default {
     }
   },
   mounted() {
-    this.cityData = addressData.cityData.data
-    this.nearbyAddress = addressData.nearbyAddress.data.mapPoiVo
   }
 }
 </script>
@@ -110,7 +105,6 @@ export default {
         height: 70rpx;
         border-radius: 8rpx;
         padding-left: 20rpx;
-        margin-left: 30rpx;
         i {
           margin-right: 10rpx;
           color: #999999;
