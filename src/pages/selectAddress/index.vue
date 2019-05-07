@@ -14,12 +14,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="location-c">
-      <span class="c-l">上海市闵行区漕河泾开发区</span>
-      <div class="c-r">
-        <i class="icon mt-relocation-o"></i>
-        <span>重新定位</span>
+      <div class="header-l" style="margin: 0 10rpx;">
+        <span>搜索</span>
       </div>
     </div>
     <div class="my-address">
@@ -30,11 +26,6 @@
       <div class="list-c">
         <div class="item" v-for="(item, index) in myAddress" :key="index">
           <span class="i-t">{{item.address}}</span>
-          <div class="i-b">
-            <span class="b-l">{{item.name}}</span>
-            <span class="b-m">{{item.gender === 1? '先生' : '女士'}}</span>
-            <span class="b-r">{{item.phone}}</span>
-          </div>
         </div>
       </div>
     </div>
@@ -77,7 +68,7 @@ export default {
     align-items: center;
     height: 100rpx;
     background-color: white;
-    padding: 0 30rpx;
+    padding: 0 10rpx;
     border-bottom: 2rpx solid $spLine-color;
     position: fixed;
     top: 0;
@@ -184,12 +175,12 @@ export default {
     .list-c {
       display: flex;
       flex-direction: column;
-      margin-left: 70rpx;
+      margin-left: 40rpx;
       margin-right: 20rpx;
       .item {
         display: flex;
         flex-direction: column;
-        height: 120rpx;
+        height: 100rpx;
         background-color: white;
         justify-content: center;
         border-bottom: 2rpx solid $spLine-color;

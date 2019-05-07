@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="list-c">
+    <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower">
       <div class="item" v-for="(item, index) in result.list" :key="index" @click="orderDetail(item)">
         <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </scroll-view>
   </div>
 </template>
 
@@ -42,6 +42,12 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction"]),
+    lower(e) {
+    wx.showLoading({title: '加载中...', mask: true})
+    setTimeout(() => {
+          wx.hideLoading()
+        }, 1000)
+  },
     headerClick() {
       wx.navigateTo({url: '/pages/shoppingCart/main'})
     },
@@ -64,8 +70,11 @@ export default {
 <style lang="scss" scoped>
 .container {
   .list-c {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    position: fixed;
+    top: 0rpx;
+    bottom: 0rpx;
+    width:100%;
     .item {
       display: flex;
       flex-direction: column;

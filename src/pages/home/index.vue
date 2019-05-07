@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="category-list">
-        <scroll-view class="item-list" :scroll-y="true" @scrolltolower="lower" @scrolltoupper="upper">
+        <scroll-view class="item-list" :scroll-y="true" @scrolltoupper="upper">
           <div class="item" v-for="(item, index) in shopsList" :key="index" @click="shoppingCartClick(item.shopId)">
             <div class="item-l">
               <img :src="item.pic_url">
@@ -73,17 +73,21 @@ export default {
   methods: {
     ...mapActions("shoppingCart", ["postOrderDataAction"]),
     ...mapActions("user", ["wxLocation"]),
-      lower(e) {
-    wx.showLoading({title: '加载中...', mask: true})
-    setTimeout(() => {
+    lower(e) {
+    },     
+    upper(e) {
+      wx.showLoading({title: '加载中...', mask: true})
+      var communityId = this.userInfo.addressModel.communityId
+      if (communityId) {
+        getFetch('/shop/list/' + communityId, {}, false).then(response => {
+          this.shopsList = response.result.list
           wx.hideLoading()
-        }, 1000)
-  },     upper(e) {
-    wx.showLoading({title: '加载中1...', mask: true})
-    setTimeout(() => {
-          wx.hideLoading()
-        }, 1000)
-  },
+        })
+      } else {
+        wx.hideLoading()
+        wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
+      }
+    },
     categoryClick() {
       wx.navigateTo({url: '/pages/categoryList/main'})
     },
@@ -336,7 +340,7 @@ export default {
         }
       }
       .item-list {
-        display: flex;
+        display: block;
         position: fixed;
         top: 70rpx;
         bottom: 0rpx;

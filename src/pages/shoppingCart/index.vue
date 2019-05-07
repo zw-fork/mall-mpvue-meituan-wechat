@@ -558,7 +558,7 @@ export default {
       }
     }
     .list-r {
-      display: flex;
+      display:block;
       flex-direction: column;
       flex: 1;
       background-color: white;
