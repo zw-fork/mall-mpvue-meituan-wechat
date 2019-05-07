@@ -105,7 +105,6 @@
 
 <script>
 import sepLine from "@/components/sep-line";
-import {orderData} from './data'
 import {openLocation} from '@/utils/wxapi'
 import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
 
@@ -130,7 +129,6 @@ export default {
     sepLine
   },
   methods: {
-    ...mapActions("submitOrder", ["postOrderDataAction"]),
     addressClick() {
       wx.navigateTo({url: '/pages/addressList/main'})
     },
@@ -165,11 +163,6 @@ export default {
           })
         }
       })
-    },
-    payClick() {
-      order.itemList = this.foodList
-      this.postOrderDataAction({order})
-      wx.navigateTo({url: '/pages/orderDetail/main'})
     }
   },
   mounted() {

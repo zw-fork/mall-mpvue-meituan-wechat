@@ -71,7 +71,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions("shoppingCart", ["postOrderDataAction"]),
     ...mapActions("user", ["wxLocation"]),
     lower(e) {
     },     

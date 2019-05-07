@@ -48,11 +48,12 @@ const actions = {
       commit('changeOrderDataMut', result)
     })
   },
-  postOrderDataAction({state, commit}, {order, uid}) {
+  postOrderDataAction({state, commit}, {order}) {
     var params = {'order': order}  
-    postFetch('/order/' + uid, order, false).then(response => {
+    postFetch('/order/' + order.uid, order, false).then(response => {
         var user = response.result || {}
         commit('changeUserDataMut', user)
+        commit('currentOrderDataMut', {})
       })
   },
   showOrderDetailAction({state, commit}, {order}) {

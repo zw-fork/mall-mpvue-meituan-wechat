@@ -96,7 +96,7 @@ export default {
     sepLine
   },
   methods: {
-    ...mapActions("submitOrder", ["postOrderDataAction"]),
+    ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
     addressClick() {
       wx.navigateTo({url: '/pages/addressList/main'})
     },
@@ -144,7 +144,9 @@ export default {
         this.currentOrder.addressInfo = this.addressInfo
         this.currentOrder.realFee = this.realFee
         this.currentOrder.itemList = this.itemList
+        this.currentOrder.uid = this.userInfo.openid
         this.postOrderDataAction({order : this.currentOrder})
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'page' : 1})
         wx.switchTab({
           url: '/pages/orderList/main'
         })
