@@ -23,7 +23,7 @@
         <text class="tag">商家自配</text>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in itemList" :key="index">
+        <div class="item" v-for="(item, index) in currentOrder.itemList" :key="index">
           <img :src="item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -88,7 +88,7 @@ export default {
     },
     realFee() {
       var totalPrice = 0 
-      this.currentOrder.shopInfo.selectedArr.map(item => totalPrice += parseFloat(item.totalPrice))
+      this.currentOrder.itemList.map(item => totalPrice += parseFloat(item.totalPrice))
       return (parseFloat(totalPrice) +  this.currentOrder.shopInfo.support_pay).toFixed(2)
     }
   },
@@ -141,9 +141,8 @@ export default {
     payClick() {
       if (this.userInfo.addressModel.address) {
         this.currentOrder.deliveryFee = this.deliveryFee
-        this.currentOrder.addressInfo = this.addressInfo
+        this.currentOrder.addressInfo = this.userInfo.addressModel
         this.currentOrder.realFee = this.realFee
-        this.currentOrder.itemList = this.itemList
         this.currentOrder.uid = this.userInfo.openid
         this.postOrderDataAction({order : this.currentOrder})
     //    this.getOrderDataAction({'uid': this.userInfo.openid, 'page' : 1})
@@ -155,9 +154,6 @@ export default {
       })
       }  
     }
-  },
-  mounted() {
-    this.itemList = this.currentOrder.shopInfo.selectedArr
   }
 }
 </script>

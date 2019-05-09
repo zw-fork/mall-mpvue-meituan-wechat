@@ -300,7 +300,7 @@ export default {
     })
      var order = {}
      order.shopInfo = this.shopInfo
-     order.shopInfo.selectedArr = selectedArr
+     order.itemList = selectedArr
       this.createOrderDetailAction({order})
     },
     categoryClick(item, index) {
