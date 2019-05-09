@@ -20,6 +20,16 @@ const actions = {
       var addressList = response.result.list || {}
       commit('changeMyAddressDataMut', addressList)
     })
+  },
+  deleteUserAddressDataAction({state, commit}, {addressId}) {
+    getFetch('/address/delete/' + addressId, {}, false).then(response => {
+      for (var index in state.myAddress) {
+        if (addressId == state.myAddress[index].id) {
+          state.myAddress.splice(index,1)
+          break;
+        }
+      }
+    })
   }
 }
 

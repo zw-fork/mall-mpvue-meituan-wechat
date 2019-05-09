@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="list-c">
-      <div class="item" @touchstart="showDeleteButton" @touchend="clearLoop(item.id)" v-for="(item, index) in myAddress" :key="index" v-if="item.communityId==communityId || !communityId">
-        <div class="i-l">
+      <div class="item" v-for="(item, index) in myAddress" :key="index" v-if="item.communityId==communityId || !communityId">
+        <div class="i-l" @touchstart="showDeleteButton(item.id)" @touchend="clearLoop(item.id)">
           <div class="user-info">
             <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
             <span class="s-r">{{item.phone}}</span>
@@ -12,7 +12,7 @@
         <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
       </div>
     </div>
-    <div class="add-btn" @click="addClick(item.id)">
+    <div class="add-btn" @click="addClick()">
       <i class="icon mt-add-o"></i>
       <span>新增收货地址</span>
     </div>
@@ -36,9 +36,9 @@ export default {
     ...mapState("user", ["userInfo"]),
   },
   methods: {
-    ...mapActions("address", ["getAddressDataAction"]),
+    ...mapActions("address", ["getAddressDataAction", "deleteUserAddressDataAction"]),
     ...mapActions("user", ["updateDefaultAddress"]),
-    showDeleteButton() {
+    showDeleteButton(addressId) {
     var that = this
     this.Loop=setTimeout(function(){
       that.showModal = true
@@ -48,7 +48,7 @@ export default {
           confirmColor: '#FFC24A',
           success: function(res) {
             if (res.confirm) {
-             
+             that.deleteUserAddressDataAction({addressId})
             }
         }
       })
@@ -64,7 +64,11 @@ clearLoop(addressId) {
     return false;
 },
     addClick(id) {
-      wx.navigateTo({url: '/pages/addAddress/main?id=' + id})
+      if (id) {
+        wx.navigateTo({url: '/pages/addAddress/main?id=' + id})
+      } else {
+        wx.navigateTo({url: '/pages/addAddress/main'})
+      }
     },
     updateDefaultAddress2(addressId) {
       var wechat = {}
