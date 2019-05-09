@@ -39,7 +39,7 @@
           <span class="title">{{spus.title}}</span>
         </div>
         <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
-          <div class="item" @click="itemClick(item, index)">
+          <div class="item">
             <div class="item-l">
               <img :src="item.picture">
             </div>

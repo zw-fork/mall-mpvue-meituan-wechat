@@ -8,7 +8,6 @@ const state = {
   shopInfo: {
     categoryModelList:[]
   },
-  foods: [],
   spus: {
     datas : {
       list: []
@@ -25,9 +24,6 @@ const state = {
 const mutations = {
   changeShopInfoDataMut(state, info) {
     state.shopInfo = info
-  },
-  changeFoodsDataMut(state, info) {
-    state.foods = info
   },
   changeSpusDataMut(state, info) {
     state.spus = info;
@@ -161,15 +157,14 @@ const actions = {
     spus.datas[index].sequence -= 1
     if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
     commit('changeSpusDataMut', spus)
-    var foods = state.foods
+    var foods = state.shopInfo.categoryModelList
     var foodsIndex = spus.index
     var selectedFood = foods[foodsIndex]
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
-    commit('changeFoodsDataMut', foods)
   },
   closeShoppingCartAction({state, commit}) {
-    var array = state.foods
+    var array = state.shopInfo.categoryModelList
     var selectedArr = []
     array.map((item, index) => {
       if (item.spus) {
