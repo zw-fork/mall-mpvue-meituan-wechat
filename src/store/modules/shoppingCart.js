@@ -5,7 +5,9 @@ import {shoppingCart} from '@/pages/shoppingCart/data'
 import {deepClone} from '@/utils/deepClone'
 import {getFetch} from '@/network/request/HttpExtension'
 const state = {
-  shopInfo: {},
+  shopInfo: {
+    categoryModelList:[]
+  },
   foods: [],
   spus: {
     datas : {
@@ -61,6 +63,9 @@ const actions = {
     })
   },
   getMenuDataAction({state, commit}, {shopId}) {
+    if (state.shopInfo && state.shopInfo.shopId == shopId) {
+      return;
+    }
     wx.showLoading({title: '加载中...', mask: true})
     getFetch('/shop/' + shopId, {}, false).then(response => {
       var res = shoppingCart.menuData.data
@@ -73,14 +78,13 @@ const actions = {
             var goods = response.result || {}
             var spus = {title: shopInfo.categoryModelList[0].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[0].categoryId}
             shopInfo.categoryModelList[0].spus = spus
+            commit('changeShopInfoDataMut', shopInfo)
             commit('changeSpusDataMut', spus)
           })
-          commit('changeFoodsDataMut', shopInfo.categoryModelList)
         } else {
-          commit('changeFoodsDataMut', [])
+          commit('changeShopInfoDataMut', shopInfo)
           commit('changeSpusDataMut',  {title: '', index: 0, datas: {}, page: 1})
         }
-        commit('changeShopInfoDataMut', shopInfo)
         wx.setNavigationBarTitle({
           title: shopInfo.shopName
         })
@@ -122,34 +126,35 @@ const actions = {
     commit('changeCommentDataMut', commentData)
   },
   getCategoryMenuDataAction({state, commit}, {index, categoryId}) {
-    getFetch('/goods/' + categoryId, {}, false).then(response => {
-      var spus = {}
-      var goods = response.result || {}
-      spus.title = state.foods[index].name
-      spus.page = response.result.nextPage
-      spus.categoryId = categoryId
-      spus.index = index
-      spus.datas = goods.list.map(item => {
-        if (!item.sequence) item.sequence = 0
-        return item
+    if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
+      getFetch('/goods/' + categoryId, {}, false).then(response => {
+        var spus = {}
+        var goods = response.result || {}
+        spus.title = state.shopInfo.categoryModelList[index].name
+        spus.page = response.result.nextPage
+        spus.categoryId = categoryId
+        spus.index = index
+        spus.datas = goods.list.map(item => {
+          if (!item.sequence) item.sequence = 0
+          return item
+        })
+        state.shopInfo.categoryModelList[index].spus = spus
+        commit('changeSpusDataMut', spus)
       })
-      foods[index].spus = spus
-      commit('changeFoodsDataMut', foods)
-      commit('changeSpusDataMut', spus)
-    })
-   
+    } else {
+      commit('changeSpusDataMut', state.shopInfo.categoryModelList[index].spus)
+    } 
   },
   addItemAction({state, commit}, {item, index}) {
     var spus = state.spus
     spus.datas[index].sequence += 1
     commit('changeSpusDataMut', spus)
 
-    var foods = state.foods
+    var foods = state.shopInfo.categoryModelList
     var foodsIndex = spus.index
     var selectedFood = foods[foodsIndex]
     selectedFood.count += 1
     selectedFood.totalPrice += item.min_price
-    commit('changeFoodsDataMut', foods)
   },
   reduceItemAction({state, commit}, {item, index}) {
     var spus = state.spus

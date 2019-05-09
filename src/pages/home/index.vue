@@ -127,7 +127,21 @@ export default {
     } else {
       wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
     }
-  }
+  },
+  onLoad(options) 
+  {
+    var communityId=getApp().globalData.communityId;
+    if (communityId) {
+      getFetch('/shop/list/' + communityId, {}, false).then(response => {
+        this.shopsList = response.result.list
+        if (response.result.list.length===0) {
+          wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
+        }
+      })
+    } else {
+      wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
+    }
+  },
 };
 </script>
 

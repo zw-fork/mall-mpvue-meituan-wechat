@@ -8,51 +8,68 @@
       <div class="header-r">
         <div class="search-bar">
           <i class="icon mt-search-o"></i>
-          <input placeholder="请输入小区" placeholder-style="font-size: 24rpx" @input="search"/>
+          <input placeholder="请输入小区" placeholder-style="font-size: 24rpx" v-model="addressModel.address"/>
           <div class="cancle" v-if="keyword" @click="cancle">
             <i class="icon qb-icon-cancle-o"></i>                                
           </div>
         </div>
       </div>
-      <div class="header-l" style="margin: 0 10rpx;">
+      <div class="header-l" style="margin: 0 10rpx;" @click="getCommunity">
         <span>搜索</span>
       </div>
     </div>
     <div class="my-address">
-      <div class="header">
-        <i class="icon mt-myhome-o"></i>
-        <span>我的收货地址</span>
-      </div>
       <div class="list-c">
-        <div class="item" v-for="(item, index) in myAddress" :key="index">
-          <span class="i-t">{{item.address}}</span>
+        <div class="item" v-for="(item, index) in communityList" :key="index" @click="updateShop(item)">
+          <span class="i-t">{{item.address}}({{item.district}})</span>
         </div>
       </div>
-    </div>
-    <div class="footer-c" @click="addAddress">
-      <i class="icon mt-add-o"></i>
-      <span>新增收货地址</span>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import {postFetch} from '@/network/request/HttpExtension'
 
 export default {
   data() {
     return {
-      keyword: true
+      keyword: true,
+      communityList: [],
+      addressModel: {}
     }
   },
   computed: {
     ...mapState("address", ["myAddress"]),
+    ...mapState("user", ["userInfo"]),
     ...mapActions("address", ["getAddressDataAction"]),
   },
   methods: {
     ...mapActions("address", ["getAddressDataAction"]),
     addAddress() {
        wx.navigateTo({url: '/pages/addAddress/main'})
+    },
+    updateShop(item) {
+      this.userInfo.addressModel.communityId=item.id
+      getApp().globalData.communityId=item.id
+      getApp().globalData.community=item
+      this.userInfo.addressModel = item
+      wx.switchTab({
+        url: '/pages/home/main',
+        success: function (e) {
+        var page = getCurrentPages().pop();
+        if (page == undefined || page == null) return;
+        page.onLoad();
+      } 
+      })
+    },
+    getCommunity() {
+      wx.showLoading({title: '加载中...', mask: true})
+      postFetch('/address/list', this.addressModel, false).then(response => {
+        this.communityList = response.result
+        wx.hideLoading()
+      })
     }
   },
   mounted() {
@@ -156,7 +173,7 @@ export default {
     flex-direction: column;
     background-color: white;
     border-bottom: 2rpx solid $spLine-color;
-    padding-top: 30rpx;
+    padding-top: 100rpx;
     .header {
       display: flex;
       align-items: center;

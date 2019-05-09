@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="list-c">
-      <div class="item" v-for="(item, index) in myAddress" :key="index">
-        <div class="i-l" @click="updateDefaultAddress2(item.id)">
+      <div class="item" @touchstart="showDeleteButton" @touchend="clearLoop(item.id)" v-for="(item, index) in myAddress" :key="index" v-if="item.communityId==communityId || !communityId">
+        <div class="i-l">
           <div class="user-info">
             <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
             <span class="s-r">{{item.phone}}</span>
@@ -24,6 +24,13 @@ import {addressList} from './data'
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+     communityId: undefined,
+     showModal: false,
+     Loop: undefined
+    }
+  },
   computed: {
     ...mapState("address", ["myAddress"]),
     ...mapState("user", ["userInfo"]),
@@ -31,6 +38,31 @@ export default {
   methods: {
     ...mapActions("address", ["getAddressDataAction"]),
     ...mapActions("user", ["updateDefaultAddress"]),
+    showDeleteButton() {
+    var that = this
+    this.Loop=setTimeout(function(){
+      that.showModal = true
+              wx.showModal({
+          title: '删除？',
+          content: '确定要删除当前选中的地址？',
+          confirmColor: '#FFC24A',
+          success: function(res) {
+            if (res.confirm) {
+             
+            }
+        }
+      })
+    },500);
+    return false;
+},
+clearLoop(addressId) {
+    clearTimeout(this.Loop);
+    if(!this.showModal){
+      this.updateDefaultAddress2(addressId)
+    }
+    this.showModal = false
+    return false;
+},
     addClick(id) {
       wx.navigateTo({url: '/pages/addAddress/main?id=' + id})
     },
@@ -45,6 +77,10 @@ export default {
   mounted() {
     var openid = this.userInfo.openid
     this.getAddressDataAction({'openid': openid})
+  },
+  onLoad(options) 
+  {
+    this.communityId=options.communityId;
   }
 }
 </script>

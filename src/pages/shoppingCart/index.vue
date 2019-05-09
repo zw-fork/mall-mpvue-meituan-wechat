@@ -28,7 +28,7 @@
     </div>
     <div class="list-c" v-if="pageIndex === 0">
       <scroll-view class="list-l" :scroll-y="true">
-        <div class="l-item" :class="{active: index === tagIndex}" v-for="(item, index) in foods" :key="index" @click="categoryClick(item, index)">
+        <div class="l-item" :class="{active: index === tagIndex}" v-for="(item, index) in shopInfo.categoryModelList" :key="index" @click="categoryClick(item, index)">
           <img :src="item.icon" v-if="item.icon.length > 0">
           <span>{{item.name}}</span>
           <text class="count" v-if="item.count > 0">{{item.count}}</text>
@@ -212,7 +212,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("shoppingCart", ["shopInfo", "foods", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
+    ...mapState("shoppingCart", ["shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
     lineStyle() {
       let left = this.left
       let style = {left};
@@ -220,18 +220,24 @@ export default {
     },
     totalPrice() {
       var price = 0
-      this.foods.map(item => price += item.totalPrice)
+      if (this.shopInfo.categoryModelList) {
+        this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
+      }
       return parseFloat(price).toFixed(1);
     },
     productCount() {
       var count = 0
-      this.foods.map(item => count += item.count)
+      if (this.shopInfo.categoryModelList) {
+         this.shopInfo.categoryModelList.map(item => count += item.count)
+      }
       return count
     },
     reduceTip() {
       var content = this.shopInfo.prompt_text
       var price = 0
-      this.foods.map(item => price += item.totalPrice)
+       if (this.shopInfo.categoryModelList) {
+         this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
+       }
       if (price < this.shopInfo.min_price) {
         var value = parseFloat(this.shopInfo.min_price - price).toFixed(2)
         return `还差 ${value}元 就能起送`
@@ -240,7 +246,9 @@ export default {
     btnTitle() {
       var content = `${this.shopInfo.min_price}元起送`
       var price = 0
-      this.foods.map(item => price += item.totalPrice)
+      if (this.shopInfo.categoryModelList) {
+         this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
+      }
       if (price <= 0) return content
       if (price < this.shopInfo.min_price) {
         var value = parseFloat(this.shopInfo.min_price - price).toFixed(1)
@@ -270,12 +278,14 @@ export default {
   },
     orderClick() {
       var price = 0
-      this.foods.map(item => price += item.totalPrice)
+      if (this.shopInfo.categoryModelList) {
+         this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
+      }
       if (price < this.shopInfo.min_price) return;
       this.closeShoppingCartAction1()
     },
     closeShoppingCartAction1() {
-          var array = this.foods
+          var array = this.shopInfo.categoryModelList
     var selectedArr = []
     array.map((item, index) => {
       if (item.spus) {

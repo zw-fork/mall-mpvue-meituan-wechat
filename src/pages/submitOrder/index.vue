@@ -5,11 +5,11 @@
         <div class="left" :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}" @click="deliveryClick">小区配送</div>
       </div>
       <div class="delivery" v-if="tabIndex === 0">
-        <div class="address-c" @click="addressClick">
+        <div class="address-c" @click="addressClick(currentOrder.shopInfo.communityId)">
           <i class="icon mt-location-s"></i>
           <div class="address">
-             <span class="address-info" v-if="!userInfo.addressModel.address">请添加配送地址...</span>
-            <span class="address-info" v-if="userInfo.addressModel.address">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
+             <span class="address-info" v-if="!userInfo.addressModel.house_number">请添加配送地址...</span>
+            <span class="address-info" v-if="userInfo.addressModel.house_number">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
             <span class="user-info" v-if="userInfo.addressModel.name">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
           </div>
           <i class="icon mt-arrow-right-o" :style="{fontSize: 28 + 'rpx', color: '#999'}"></i>
@@ -97,8 +97,8 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
-    addressClick() {
-      wx.navigateTo({url: '/pages/addressList/main'})
+    addressClick(communityId) {
+      wx.navigateTo({url: '/pages/addressList/main?communityId=' + communityId})
     },
     redPacketClick() {
       wx.navigateTo({url: '/pages/redPacket/main'})
