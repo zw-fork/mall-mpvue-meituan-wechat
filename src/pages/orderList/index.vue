@@ -4,7 +4,7 @@
       <div class="item" v-for="(item, index) in orderList.datas" :key="index" @click="orderDetail(item)">
         <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
-           <div class="order_title" @click="headerClick">
+           <div class="order_title" @click="headerClick(item.shopInfo.shopId)">
               <div class="order-name" style="margin-bottom:-15rpx;">
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="bottom-c">
-          <div class="btn" @click="headerClick">
+          <div class="btn" @click="headerClick(item.shopInfo.shopId)">
             <span>再来一单</span>
           </div>
         </div>
@@ -55,8 +55,8 @@ export default {
       })
     }
   },
-    headerClick() {
-      wx.navigateTo({url: '/pages/shoppingCart/main'})
+    headerClick(shopId) {
+      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
     },
     orderDetail(item) {      
       this.showOrderDetailAction({order: item}) 
