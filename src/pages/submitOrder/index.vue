@@ -146,10 +146,7 @@ export default {
         this.currentOrder.itemList = this.itemList
         this.currentOrder.uid = this.userInfo.openid
         this.postOrderDataAction({order : this.currentOrder})
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'page' : 1})
-        wx.switchTab({
-          url: '/pages/orderList/main'
-        })
+    //    this.getOrderDataAction({'uid': this.userInfo.openid, 'page' : 1})
       } else {
         wx.showToast({
         title: '请填写配送地址!',
