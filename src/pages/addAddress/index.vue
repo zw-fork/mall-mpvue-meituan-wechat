@@ -6,12 +6,12 @@
     </div>
     <div class="sex">
       <div class="l"></div>
-      <div class="m">
-        <i class="icon mt-selected-o"></i>
+      <div class="m" @click="updateSex(1)">
+        <i :class="clazzA" :style="styleA"></i>
         <span>先生</span>
       </div>
-      <div class="r">
-        <i class="icon mt-unselected-o"></i>
+      <div class="r" @click="updateSex(0)">
+        <i :class="clazzB" :style="styleB"></i>
         <span>女士</span>
       </div>
     </div>
@@ -22,12 +22,8 @@
     <div class="address">
       <span class="l">收货地址：</span>
       <div class="m">
-        <i class="icon mt-location-o" v-if="!item.address"></i>
         <span v-if="!item.address">点击选择</span>
         <span v-else>{{item.address}}</span>
-      </div>
-      <div class="r">
-        <i class="icon mt-arrow-right-o"></i>
       </div>
     </div>
     <div class="house-num">
@@ -46,20 +42,50 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
    data() {
     return {
-      item : {}
+      active : false,
+      clazzA : 'icon mt-selected-o',
+      styleA : 'color: #F9D173',
+      clazzB : 'icon mt-unselected-o',
+      styleB : 'color: #333',
+      item : {
+        gender : 1
+      }
     }},
   computed: {
     ...mapState("address", ["myAddress"]),
+    ...mapState("shoppingCart", ["shopInfo"]),
+    selectedStyle() {
+      return this.item.gender? 'color: #F9D173;' : 'color: #333;'
+    }
   },
     methods: {
        ...mapActions("address", ["saveOrUpdateAddress"]),
        saveAddress() {
-         var address = this.item
-        this.saveOrUpdateAddress({address})
+        this.saveOrUpdateAddress({addressModel : this.item})
+       },
+       updateSex(sex) {
+         if (sex != this.item.gender) {
+           this.item.gender = sex
+            if (sex) {
+              this.clazzA = 'icon mt-selected-o'
+              this.styleA = 'color: #F9D173;font-size: 32rpx;'
+              this.clazzB = 'icon mt-unselected-o'
+              this.styleB = 'color: #333;font-size: 38rpx'
+            } else {
+              this.clazzB = 'icon mt-selected-o'
+              this.styleB = 'color: #F9D173;font-size: 32rpx;'
+              this.clazzA = 'icon mt-unselected-o'
+              this.styleA = 'color: #333;font-size: 38rpx'
+            }
+         }
        }
     },
    onLoad(options) 
   {
+    if (this.shopInfo) {
+      this.item.address = this.shopInfo.address
+      this.item.communityId = this.shopInfo.communityId
+    }
     var id=options.id;
     if (id) {
       var addr = this.myAddress
@@ -77,6 +103,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input {
+ font-size: 28rpx;
+}
 .container {
   background-color: white;
   position: fixed;
@@ -172,8 +201,7 @@ export default {
         color: $textGray-color;
       }
       span {
-        font-size: 24rpx;
-        color: $textDarkGray-color;
+        font-size: 28rpx;
         margin-left: 10rpx;
         margin-top: 10rpx;
       }

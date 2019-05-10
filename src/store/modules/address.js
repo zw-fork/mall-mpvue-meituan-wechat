@@ -3,7 +3,7 @@ import {formatYMD} from '@/utils/formatTime'
 import {_array} from '@/utils/arrayExtension'
 import {shoppingCart} from '@/pages/shoppingCart/data'
 import {deepClone} from '@/utils/deepClone'
-import {getFetch} from '@/network/request/HttpExtension'
+import {getFetch,postFetch} from '@/network/request/HttpExtension'
 const state = {
   myAddress: []
 }
@@ -30,7 +30,11 @@ const actions = {
         }
       }
     })
-  }
+  },
+  saveOrUpdateAddress({state, commit}, {addressModel}) {
+    postFetch('/address/save', addressModel, false).then(response => {
+    })
+  },
 }
 
 const getters = {

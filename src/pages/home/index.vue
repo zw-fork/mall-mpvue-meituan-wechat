@@ -4,7 +4,7 @@
       <div class="header-c">
         <div class="header-l" @click="addressClick">
           <i class="icon mt-location-o" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
-          <span>{{userInfo.addressModel.address? userInfo.addressModel.address : '请选择小区...'}}</span>
+          <span>{{userInfo.addressModel? userInfo.addressModel.address : '请选择小区...'}}</span>
           <i class="icon mt-arrow-right-o" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
         </div>
         <div class="header-r" @click="searchClick">
@@ -33,6 +33,9 @@
               </div>
             </div>
           </div>
+          <div v-if="shopsList != undefined && shopsList.length < 1" class="item" style="display: flex;justify-content: center;align-items: center;top:40%">
+            当前地址无商铺信息!
+          </div>
         </scroll-view>
       </div>
     </div>
@@ -48,26 +51,7 @@ import {getFetch} from '@/network/request/HttpExtension'
 export default {
   data() {
     return {
-      categoryArr: [{items: []}, {items: []}],
-      shopsList: [],
-      filterList: [
-        {
-          title: '综合排序',
-          icon: 'mt-arrow-down-o'
-        },
-        {
-          title: '销量最高'
-        },
-        {
-          title: '速度最快'
-        },
-        {
-          title: '筛选',
-          icon: 'mt-filter-o'
-        },
-      ],
-      tags: ['满减优惠', '点评高分', '新商家', '美团专送'],
-      stars: [1, 2, 3, 4, 5]
+      shopsList: undefined
     };
   },
   methods: {
@@ -84,7 +68,6 @@ export default {
         })
       } else {
         wx.hideLoading()
-        wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
       }
     },
     categoryClick() {
@@ -99,49 +82,40 @@ export default {
     },
     shoppingCartClick(shopId) {
       wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
-    },
-        logoutClick() {
-      wx.showModal({
-          title: '确认退出？',
-          content: '退出登录后将无法查看订单，重新登录即可查看',
-          confirmColor: '#FFC24A',
-          success: function(res) {
-            if (res.confirm) {
-              resolve('ok')
-            } else if (res.cancel) {
-              resolve('cancle')
-            }
-        }
-      })
     }
   },
   computed: {
     ...mapState("user", ["userInfo"]),
   },
   mounted() {
-    var communityId = this.userInfo.addressModel.communityId
-    if (communityId) {
-      getFetch('/shop/list/' + communityId, {}, false).then(response => {
-        this.shopsList = response.result.list
-      })
-    } else {
-      wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
+    var addressModel = this.userInfo.addressModel
+    if (addressModel) {
+      var communityId = addressModel.communityId
+      if (communityId) {
+        getFetch('/shop/list/' + communityId, {}, false).then(response => {
+          this.shopsList = response.result.list
+        })
+      } 
     }
   },
   onLoad(options) 
   {
-    var communityId=getApp().globalData.communityId;
-    if (communityId) {
+    this.shopsList = undefined
+    var addressModel = this.userInfo.addressModel
+    if (addressModel) {
+      var communityId=addressModel.communityId;
+      if (communityId) {
       getFetch('/shop/list/' + communityId, {}, false).then(response => {
         this.shopsList = response.result.list
-        if (response.result.list.length===0) {
-          wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
-        }
       })
-    } else {
-      wx.showToast({ title: '当前地址无商铺信息!', icon: 'none', duration: 4000 })
+      return;
     }
+    }
+    this.shopsList = []
   },
+  onShow(options) {
+    
+  }
 };
 </script>
 

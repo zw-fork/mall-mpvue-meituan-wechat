@@ -145,7 +145,6 @@ export default {
         this.currentOrder.realFee = this.realFee
         this.currentOrder.uid = this.userInfo.openid
         this.postOrderDataAction({order : this.currentOrder})
-    //    this.getOrderDataAction({'uid': this.userInfo.openid, 'page' : 1})
       } else {
         wx.showToast({
         title: '请填写配送地址!',

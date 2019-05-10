@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower">
-      <div class="item" v-for="(item, index) in orderList.datas" :key="index" @click="orderDetail(item)">
+      <div class="item" v-for="(item, index) in orderList.datas" :key="index">
         <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
            <div class="order_title" @click="headerClick(item.shopInfo.shopId)">
@@ -11,9 +11,10 @@
               </div>
               <span class="order-time" style="color: #999;font-size: 25rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
            </div>
-          <p class="order-status" style="position: absolute;right: 0;">{{item.status_description}}已完成</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">未支付</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付</p>
         </div>
-        <div class="googs-c" >
+        <div class="googs-c" @click="orderDetail(item)">
           <div class="goods" style="float:left;">
             <span class="s-l">{{item.itemList[0].name}}</span>
             <span class="s-m">等{{item.itemList.length}}件商品</span>
@@ -59,7 +60,7 @@ export default {
       wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
     },
     orderDetail(item) {      
-      this.showOrderDetailAction({order: item}) 
+      this.showOrderDetailAction({order: item})
     }
   },
   mounted() {
@@ -68,7 +69,7 @@ export default {
   },
   computed: {
     ...mapState("submitOrder", ["orderList"]),
-    ...mapState("user", ["userInfo"]),
+    ...mapState("user", ["userInfo"])
   }
 }
 </script>

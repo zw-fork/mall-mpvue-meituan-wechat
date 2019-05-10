@@ -62,6 +62,9 @@ const actions = {
     if (state.shopInfo && state.shopInfo.shopId == shopId) {
       return;
     }
+    state.shopInfo = {
+      categoryModelList:[]
+    }
     wx.showLoading({title: '加载中...', mask: true})
     getFetch('/shop/' + shopId, {}, false).then(response => {
       var res = shoppingCart.menuData.data

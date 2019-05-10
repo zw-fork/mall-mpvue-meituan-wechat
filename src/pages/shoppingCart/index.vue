@@ -15,7 +15,6 @@
           </div>
           <div class="r-m">
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
-            <i class="icon mt-arrow-right-o" style="float:right;"></i>
           </div>
         </div>
       </div>
@@ -29,7 +28,6 @@
     <div class="list-c" v-if="pageIndex === 0">
       <scroll-view class="list-l" :scroll-y="true">
         <div class="l-item" :class="{active: index === tagIndex}" v-for="(item, index) in shopInfo.categoryModelList" :key="index" @click="categoryClick(item, index)">
-          <img :src="item.icon" v-if="item.icon.length > 0">
           <span>{{item.name}}</span>
           <text class="count" v-if="item.count > 0">{{item.count}}</text>
         </div>

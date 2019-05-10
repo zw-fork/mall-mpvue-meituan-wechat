@@ -51,15 +51,15 @@ export default {
        wx.navigateTo({url: '/pages/addAddress/main'})
     },
     updateShop(item) {
-      this.userInfo.addressModel.communityId=item.id
-      getApp().globalData.communityId=item.id
       getApp().globalData.community=item
       this.userInfo.addressModel = item
       wx.switchTab({
         url: '/pages/home/main',
         success: function (e) {
         var page = getCurrentPages().pop();
-        if (page == undefined || page == null) return;
+        if (page == undefined || page == null) {
+          return;
+        }
         page.onLoad();
       } 
       })

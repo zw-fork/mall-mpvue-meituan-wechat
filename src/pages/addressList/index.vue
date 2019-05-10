@@ -12,7 +12,7 @@
         <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
       </div>
     </div>
-    <div class="add-btn" @click="addClick()">
+    <div class="add-btn" @click="addClick()" v-if="shopInfo.communityId">
       <i class="icon mt-add-o"></i>
       <span>新增收货地址</span>
     </div>
@@ -34,6 +34,7 @@ export default {
   computed: {
     ...mapState("address", ["myAddress"]),
     ...mapState("user", ["userInfo"]),
+    ...mapState("shoppingCart", ["shopInfo"]),
   },
   methods: {
     ...mapActions("address", ["getAddressDataAction", "deleteUserAddressDataAction"]),

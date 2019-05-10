@@ -3,7 +3,7 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-            <span class="address-info">支付成功</span>
+            <span class="address-info">{{currentOrder.status}}</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
