@@ -33,6 +33,11 @@ const actions = {
   },
   saveOrUpdateAddress({state, commit}, {addressModel}) {
     postFetch('/address/save', addressModel, false).then(response => {
+      getFetch('/address/' + addressModel.openid, {}, false).then(response => {
+        var addressList = response.result.list || {}
+        commit('changeMyAddressDataMut', addressList)
+        wx.navigateBack()
+      })
     })
   },
 }

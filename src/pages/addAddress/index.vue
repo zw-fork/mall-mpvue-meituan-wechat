@@ -53,6 +53,7 @@ export default {
     }},
   computed: {
     ...mapState("address", ["myAddress"]),
+    ...mapState("user", ["userInfo"]),
     ...mapState("shoppingCart", ["shopInfo"]),
     selectedStyle() {
       return this.item.gender? 'color: #F9D173;' : 'color: #333;'
@@ -61,6 +62,7 @@ export default {
     methods: {
        ...mapActions("address", ["saveOrUpdateAddress"]),
        saveAddress() {
+        this.item.openid = this.userInfo.openid
         this.saveOrUpdateAddress({addressModel : this.item})
        },
        updateSex(sex) {

@@ -152,7 +152,13 @@ const actions = {
     var foods = state.shopInfo.categoryModelList
     var foodsIndex = spus.index
     var selectedFood = foods[foodsIndex]
+    if (!selectedFood.count) {
+      selectedFood.count = 0
+    }
     selectedFood.count += 1
+    if (!selectedFood.totalPrice) {
+      selectedFood.totalPrice = 0
+    }
     selectedFood.totalPrice += item.min_price
   },
   reduceItemAction({state, commit}, {item, index}) {
