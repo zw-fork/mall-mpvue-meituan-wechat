@@ -370,8 +370,9 @@ export default {
   {
     var that = this
     var shopId=options.shopId;
-    if (shopId) {
-      this.getMenuDataAction({shopId : shopId})
+    if (shopId != this.shopInfo.shopId) {
+      this.tagIndex = 0
+      this.getMenuDataAction({shopId : shopId, index: this.tagIndex})
     }
   },
   onShareAppMessage: function () {

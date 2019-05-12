@@ -1,8 +1,4 @@
 /** Created by guangqiang on 2018-09-28 23:17:03 */
-import {formatYMD} from '@/utils/formatTime'
-import {_array} from '@/utils/arrayExtension'
-import {shoppingCart} from '@/pages/shoppingCart/data'
-import {deepClone} from '@/utils/deepClone'
 import {getFetch, postFetch} from '@/network/request/HttpExtension'
 const state = {
   result: {},
@@ -56,6 +52,7 @@ const actions = {
         getFetch('/order/' + order.uid, {'page' : 1}, false).then(response => {
           var result = response.result || {}
           commit('changeOrderDataMut', result)
+          this.state.shoppingCart.shopInfo = {}
           wx.switchTab({
             url: '/pages/orderList/main'
           })

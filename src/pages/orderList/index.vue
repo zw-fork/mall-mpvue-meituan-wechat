@@ -70,6 +70,9 @@ export default {
   computed: {
     ...mapState("submitOrder", ["orderList"]),
     ...mapState("user", ["userInfo"])
+  },
+   onPullDownRefresh: function () {
+    console.log('onPullDownRefresh')
   }
 }
 </script>

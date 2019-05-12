@@ -53,7 +53,7 @@ export default {
             }
         }
       })
-    },500);
+    },800);
     return false;
 },
 clearLoop(addressId) {

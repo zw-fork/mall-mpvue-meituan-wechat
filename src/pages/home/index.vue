@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="category-list">
-        <scroll-view class="item-list" :scroll-y="true" @scrolltoupper="upper">
+        <scroll-view class="item-list" :scroll-y="true" @scrolltoupper="upper" upper-threshold="50">
           <div class="item" v-for="(item, index) in shopsList" :key="index" @click="shoppingCartClick(item.shopId)">
             <div class="item-l">
               <img :src="item.pic_url">
@@ -39,7 +39,6 @@
         </scroll-view>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -58,7 +57,7 @@ export default {
     ...mapActions("user", ["wxLocation"]),
     lower(e) {
     },     
-    upper(e) {
+    upper1(e) {
       wx.showLoading({title: '加载中...', mask: true})
       var communityId = this.userInfo.addressModel.communityId
       if (communityId) {
@@ -69,6 +68,9 @@ export default {
       } else {
         wx.hideLoading()
       }
+    },
+    upper(e) {
+      wx.startPullDownRefresh()
     },
     categoryClick() {
       wx.navigateTo({url: '/pages/categoryList/main'})
@@ -113,8 +115,13 @@ export default {
     }
     this.shopsList = []
   },
-  onShow(options) {
-    
+  onPullDownRefresh: function () {
+     var communityId = this.userInfo.addressModel.communityId
+      if (communityId) {
+        getFetch('/shop/list/' + communityId, {}, false).then(response => {
+          this.shopsList = response.result.list
+        })
+      }
   }
 };
 </script>

@@ -25,6 +25,11 @@ const mutations = {
   changeShopInfoDataMut(state, info) {
     state.shopInfo = info
   },
+  cleanShopping(state) {    
+    state.shopInfo =  {
+      categoryModelList:[]
+    }
+  },
   changeSpusDataMut(state, info) {
     state.spus = info;
   },
@@ -58,7 +63,7 @@ const actions = {
       commit('changeSpusDataMut', spus)
     })
   },
-  getMenuDataAction({state, commit}, {shopId}) {
+  getMenuDataAction({state, commit}, {shopId, index}) {
     if (state.shopInfo && state.shopInfo.shopId == shopId) {
       return;
     }
@@ -72,11 +77,14 @@ const actions = {
       if (shopInfo.shopId) {
         shopInfo.prompt_text = res.shopping_cart.prompt_text
         shopInfo.activity_info = JSON.parse(res.shopping_cart.activity_info.policy)
-        if (shopInfo.categoryModelList.length > 0 && shopInfo.categoryModelList[0].categoryId) {
-          getFetch('/goods/' + shopInfo.categoryModelList[0].categoryId, {page: 1}, false).then(response => {
+        if (shopInfo.categoryModelList.length > 0) {
+          if (shopInfo.categoryModelList.length <= index) {
+            index = 0
+          }
+          getFetch('/goods/' + shopInfo.categoryModelList[index].categoryId, {page: 1}, false).then(response => {
             var goods = response.result || {}
-            var spus = {title: shopInfo.categoryModelList[0].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[0].categoryId}
-            shopInfo.categoryModelList[0].spus = spus
+            var spus = {title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId}
+            shopInfo.categoryModelList[index].spus = spus
             commit('changeShopInfoDataMut', shopInfo)
             commit('changeSpusDataMut', spus)
           })
