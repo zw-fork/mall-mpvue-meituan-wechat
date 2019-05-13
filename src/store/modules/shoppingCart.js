@@ -102,6 +102,11 @@ const actions = {
         }
         wx.hideLoading()
       })
+    } else {
+      var shopInfo = state.shopInfo
+      wx.setNavigationBarTitle({
+        title: shopInfo.shopName
+      })
     } 
   },
   getCommentDataAction({state, commit}) {
