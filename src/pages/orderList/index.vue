@@ -9,10 +9,13 @@
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
               </div>
-              <span class="order-time" style="color: #999;font-size: 25rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
+              <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
            </div>
           <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">未支付</p>
-          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付，等待商家配送</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==3">配送中</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==0">已取消</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==4">已完成</p>
         </div>
         <div class="googs-c" @click="orderDetail(item)">
           <div class="goods" style="float:left;">
@@ -134,7 +137,8 @@ export default {
           align-items: center;
           margin-left: 100rpx;
           margin-right: 20rpx;
-          margin-bottom:10rpx;
+          margin-bottom:15rpx;
+          margin-top:15rpx;
           .s-l {
             font-size: 28rpx;
             color: $textDarkGray-color;

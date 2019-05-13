@@ -3,7 +3,11 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-            <span class="address-info">{{currentOrder.status}}</span>
+          <span class="address-info" v-if="currentOrder.status==0">已取消</span>
+          <span class="address-info" v-else-if="currentOrder.status==1">未支付</span>
+          <span class="address-info" v-else-if="currentOrder.status==2">已支付，等待商家配送</span>
+          <span class="address-info" v-else-if="currentOrder.status==3">配送中</span>
+          <span class="address-info" v-else-if="currentOrder.status==4">已完成</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
@@ -17,10 +21,10 @@
       </div>
     </div>
     <div class="item-list">
-      <div class="section">
+      <div class="section" @click="headerClick(currentOrder.shopInfo.shopId)">
         <img :src="currentOrder.shopInfo.pic_url" >
         <span>{{currentOrder.shopInfo.shopName}}</span>
-        <text class="tag">商家自配</text>
+        <i class="icon mt-arrow-right-o" style="display: inline"></i>
       </div>
       <div class="list">
         <div class="item" v-for="(item, index) in foodList" :key="index">
@@ -129,6 +133,9 @@ export default {
     sepLine
   },
   methods: {
+    headerClick(shopId) {
+      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
+    },
     addressClick() {
       wx.navigateTo({url: '/pages/addressList/main'})
     },
