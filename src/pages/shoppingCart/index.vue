@@ -372,7 +372,7 @@ export default {
     var shopId=options.shopId;
     if (shopId != this.shopInfo.shopId) {
       this.tagIndex = 0
-      this.getMenuDataAction({shopId : shopId, index: this.tagIndex})
+      this.getMenuDataAction({shopId : shopId, index: this.tagIndex, flag: false})
     }
   },
   onShareAppMessage: function () {
@@ -380,6 +380,10 @@ export default {
       title: this.shopInfo.shopName,
       path: '/pages/index/main?shopId=' + this.shopInfo.shopId
     }
+  },
+  onPullDownRefresh: function () {
+    var shopId=this.shopInfo.shopId
+    this.getMenuDataAction({'shopId' : shopId, index: 0, flag: true})
   }
 }
 </script>

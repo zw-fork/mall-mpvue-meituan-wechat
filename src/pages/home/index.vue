@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="category-list">
-        <scroll-view class="item-list" :scroll-y="true" @scrolltoupper="upper" upper-threshold="50">
+        <scroll-view class="item-list" :scroll-y="true">
           <div class="item" v-for="(item, index) in shopsList" :key="index" @click="shoppingCartClick(item.shopId)">
             <div class="item-l">
               <img :src="item.pic_url">
@@ -68,9 +68,6 @@ export default {
       } else {
         wx.hideLoading()
       }
-    },
-    upper(e) {
-      wx.startPullDownRefresh()
     },
     categoryClick() {
       wx.navigateTo({url: '/pages/categoryList/main'})

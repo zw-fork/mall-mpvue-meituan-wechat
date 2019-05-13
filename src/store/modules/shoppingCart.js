@@ -63,48 +63,46 @@ const actions = {
       commit('changeSpusDataMut', spus)
     })
   },
-  getMenuDataAction({state, commit}, {shopId, index}) {
-    if (state.shopInfo && state.shopInfo.shopId == shopId) {
-      return;
-    }
-    state.shopInfo = {
-      categoryModelList:[]
-    }
-    wx.showLoading({title: '加载中...', mask: true})
-    getFetch('/shop/' + shopId, {}, false).then(response => {
-      var res = shoppingCart.menuData.data
-      var shopInfo = response.result || {}
-      if (shopInfo.shopId) {
-        shopInfo.prompt_text = res.shopping_cart.prompt_text
-        shopInfo.activity_info = JSON.parse(res.shopping_cart.activity_info.policy)
-        if (shopInfo.categoryModelList.length > 0) {
-          if (shopInfo.categoryModelList.length <= index) {
-            index = 0
-          }
-          getFetch('/goods/' + shopInfo.categoryModelList[index].categoryId, {page: 1}, false).then(response => {
-            var goods = response.result || {}
-            var spus = {title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId}
-            shopInfo.categoryModelList[index].spus = spus
+  getMenuDataAction({state, commit}, {shopId, index, flag}) {
+    if ((state.shopInfo && state.shopInfo.shopId != shopId) || flag) {
+      state.shopInfo = {
+        categoryModelList:[]
+      }
+      wx.showLoading({title: '加载中...', mask: true})
+      getFetch('/shop/' + shopId, {}, false).then(response => {
+        var res = shoppingCart.menuData.data
+        var shopInfo = response.result || {}
+        if (shopInfo.shopId) {
+          shopInfo.prompt_text = res.shopping_cart.prompt_text
+          shopInfo.activity_info = JSON.parse(res.shopping_cart.activity_info.policy)
+          if (shopInfo.categoryModelList.length > 0) {
+            if (shopInfo.categoryModelList.length <= index) {
+              index = 0
+            }
+            getFetch('/goods/' + shopInfo.categoryModelList[index].categoryId, {page: 1}, false).then(response => {
+              var goods = response.result || {}
+              var spus = {title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId}
+              shopInfo.categoryModelList[index].spus = spus
+              commit('changeShopInfoDataMut', shopInfo)
+              commit('changeSpusDataMut', spus)
+            })
+          } else {
             commit('changeShopInfoDataMut', shopInfo)
-            commit('changeSpusDataMut', spus)
+            commit('changeSpusDataMut',  {title: '', index: 0, datas: {}, page: 1})
+          }
+          wx.setNavigationBarTitle({
+            title: shopInfo.shopName
           })
         } else {
-          commit('changeShopInfoDataMut', shopInfo)
-          commit('changeSpusDataMut',  {title: '', index: 0, datas: {}, page: 1})
+          wx.showToast({
+            title: '加载失败',
+            icon: 'loading',  
+            duration: 1500   
+           })
         }
-        wx.setNavigationBarTitle({
-          title: shopInfo.shopName
-        })
-      } else {
-        wx.showToast({
-          title: '加载失败',
-          icon: 'loading',  
-          duration: 1500   
-         })
-      }
-      wx.hideLoading()
-    })
-    
+        wx.hideLoading()
+      })
+    } 
   },
   getCommentDataAction({state, commit}) {
     var res = shoppingCart.commentData.data
