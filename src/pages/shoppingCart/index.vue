@@ -100,6 +100,37 @@
         </div>
       </div>
     </div>
+    <div class="screen_cover" v-show="showCart && productCount > 0"  @click="toggleCartList"></div>  
+    <div class="cart_food_list" v-if="showCart && productCount > 0" style="transition: opacity .5s">
+                <header>
+                                <h4>购物车</h4>
+                                <div @click="clearCart">
+                                    <span class="clear_cart">清空</span>
+                                </div>
+                            </header>
+                            <section class="cart_food_details" id="cartFood">
+                               <ul>
+                                    <li v-for="(item, index) in cartGoodsList1" :key="index" class="cart_food_li">
+                                        <div class="cart_list_num">
+                                            <p class="ellipsis">{{item.name}}</p>
+                                        </div>
+                                        <div class="cart_list_price">
+                                            <span>¥</span>
+                                            <span>{{item.min_price * item.sequence}}</span>
+                                        </div>
+                                        <section class="cart_list_control">
+                                            <span>
+                                                <i class="icon mt-reduce-o" style="color: #ccc"></i>
+                                            </span>
+                                            <span class="cart_num">{{item.sequence}}</span>
+                                            <div>
+                                            <i class="icon mt-add-o" style="color: #F9D173"></i>
+                                          </div>
+                                        </section>
+                                    </li>
+                                </ul>
+                            </section>                    
+    </div>
     <div class="footer-c" v-if="pageIndex === 0">
       <div class="c-m">
         <div class="l">
@@ -115,7 +146,7 @@
         </div>
       </div>
       <div class="cart-c">
-        <img mode='widthFix' :src="productCount > 0 ? '/static/images/shopping_cart.png' : '/static/images/1.png'">
+        <img mode='widthFix' :src="productCount > 0 ? '/static/images/shopping_cart.png' : '/static/images/1.png'" @click="toggleCartList()">
         <span v-if="productCount > 0">{{productCount}}</span>
       </div>
     </div>
@@ -203,14 +234,38 @@ import {getFetch} from '@/network/request/HttpExtension'
 export default {
   data() {
     return {
+      showCart: false,
       tagIndex: 0,
       pageIndex: 0,
       left: '40rpx',
-      stars: [1, 2, 3, 4]
+      stars: [1, 2, 3, 4],
+      cartGoodsList1 : []
+
     }
   },
   computed: {
     ...mapState("shoppingCart", ["shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
+    // cartGoodsList() {
+    //   var cartGoodsList = []
+    //   if (this.shopInfo.categoryModelList) {
+    //     for (var index in this.shopInfo.categoryModelList) {
+    //       var category = this.shopInfo.categoryModelList[index]
+    //       if (category.spus && category.spus.datas.length > 0) {
+    //         for (var i in category.spus.datas) {
+    //           var goods = category.spus.datas[i]
+    //           if (goods.sequence > 0) {
+    //             var cartGoods = {}
+    //             cartGoods.name = goods.name
+    //             cartGoods.min_price = goods.min_price
+    //             cartGoods.sequence = goods.sequence
+    //             cartGoodsList.push(goods)
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    //   return cartGoodsList
+    // },
     lineStyle() {
       let left = this.left
       let style = {left};
@@ -221,6 +276,25 @@ export default {
       if (this.shopInfo.categoryModelList) {
         this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
       }
+            var cartGoodsList = []
+      if (this.shopInfo.categoryModelList) {
+        for (var index in this.shopInfo.categoryModelList) {
+          var category = this.shopInfo.categoryModelList[index]
+          if (category.spus && category.spus.datas.length > 0) {
+            for (var i in category.spus.datas) {
+              var goods = category.spus.datas[i]
+              if (goods.sequence > 0) {
+                var cartGoods = {}
+                cartGoods.name = goods.name
+                cartGoods.min_price = goods.min_price
+                cartGoods.sequence = goods.sequence
+                cartGoodsList.push(goods)
+              }
+            }
+          }
+        }
+      }
+      this.cartGoodsList1 = cartGoodsList
       return parseFloat(price).toFixed(1);
     },
     productCount() {
@@ -274,6 +348,10 @@ export default {
       })
     }
   },
+    //控制购物列表是否显示
+            toggleCartList(){
+                this.cartGoodsList1.length ? this.showCart = !this.showCart : true;
+            },
     orderClick() {
       var price = 0
       if (this.shopInfo.categoryModelList) {
@@ -380,16 +458,97 @@ export default {
       title: this.shopInfo.shopName,
       path: '/pages/index/main?shopId=' + this.shopInfo.shopId
     }
-  },
-  onPullDownRefresh: function () {
-    var shopId=this.shopInfo.shopId
-    this.getMenuDataAction({'shopId' : shopId, index: 0, flag: true})
   }
 }
 </script>
 
 <style lang="scss" scoped>
+    .screen_cover{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0,0,0,.3);
+        z-index: 11;
+    }
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.cart_food_list {
+    position: fixed;
+    width: 100%;
+    padding-bottom: 1rem;
+    z-index: 12;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    header{
+            display: flex;
+            align-items: center;
+            padding: 10rpx 10rpx;
+            background-color: #eceff1;
+            justify-content: space-between;
+            align-items: center;
+        }
+    .cart_food_details{
+            background-color: #fff;
+            max-height: 550rpx;
+            overflow-y: auto;
+            .cart_food_li{
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 2rpx solid $spLine-color;
+                padding: 5rpx 40rpx;
+                height: 80rpx;
+                align-items: center;
+                font-size:32rpx;
+                color:#000;
+                .cart_list_num{
+                    width: 55%;
+                    p:nth-of-type(1){
+                        font-weight: bold;
+                    }
+                    p:nth-of-type(2){
+                    }
+                }
+                .cart_list_price{
+                    span:nth-of-type(1){
+	                    color: #666;
+                        font-family: Helvetica Neue,Tahoma;
 
+                    }
+                    span:nth-of-type(2){
+	                    color: #666;
+                        font-family: Helvetica Neue,Tahoma;
+                        font-weight: bold;
+                    }
+                }
+                .cart_list_control{
+                    display: flex;
+                    align-items: center;
+                    span{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    svg{
+                        fill: #3190e8;
+                    }
+                    .specs_reduce_icon{
+                        fill: #999;
+                    }
+                    .cart_num{
+                        min-width: 0.5rem;
+                        text-align: center;
+                        font-family: Helvetica Neue,Tahoma;
+                    }
+                }
+            }
+        }       
+}
 .container {
   display: flex;
   flex-direction: column;

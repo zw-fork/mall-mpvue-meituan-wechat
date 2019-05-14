@@ -6,12 +6,8 @@ import {deepClone} from '@/utils/deepClone'
 import {getFetch} from '@/network/request/HttpExtension'
 const state = {
   shopInfo: {
-    categoryModelList:[]
   },
   spus: {
-    datas : {
-      list: []
-    }
   },
   commentInfo: [],
   reduceFee: 0.0,
@@ -27,7 +23,6 @@ const mutations = {
   },
   cleanShopping(state) {    
     state.shopInfo =  {
-      categoryModelList:[]
     }
   },
   changeSpusDataMut(state, info) {
@@ -66,7 +61,6 @@ const actions = {
   getMenuDataAction({state, commit}, {shopId, index, flag}) {
     if ((state.shopInfo && state.shopInfo.shopId != shopId) || flag) {
       state.shopInfo = {
-        categoryModelList:[]
       }
       wx.showLoading({title: '加载中...', mask: true})
       getFetch('/shop/' + shopId, {}, false).then(response => {
@@ -159,8 +153,8 @@ const actions = {
     var spus = state.spus
     spus.datas[index].sequence += 1
     commit('changeSpusDataMut', spus)
-
-    var foods = state.shopInfo.categoryModelList
+    var shopInfo = state.shopInfo
+    var foods = shopInfo.categoryModelList
     var foodsIndex = spus.index
     var selectedFood = foods[foodsIndex]
     if (!selectedFood.count) {
