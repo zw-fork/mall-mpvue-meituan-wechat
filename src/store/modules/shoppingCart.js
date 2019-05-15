@@ -149,14 +149,10 @@ const actions = {
       commit('changeSpusDataMut', state.shopInfo.categoryModelList[index].spus)
     } 
   },
-  addItemAction({state, commit}, {item, index}) {
-    var spus = state.spus
-    spus.datas[index].sequence += 1
-    commit('changeSpusDataMut', spus)
+  addItemAction({state, commit}, {item, index, categoryIndex}) {
     var shopInfo = state.shopInfo
     var foods = shopInfo.categoryModelList
-    var foodsIndex = spus.index
-    var selectedFood = foods[foodsIndex]
+    var selectedFood = foods[categoryIndex]
     if (!selectedFood.count) {
       selectedFood.count = 0
     }
@@ -165,17 +161,17 @@ const actions = {
       selectedFood.totalPrice = 0
     }
     selectedFood.totalPrice += item.min_price
+    var spus = selectedFood.spus
+    spus.datas[index].sequence += 1
   },
-  reduceItemAction({state, commit}, {item, index}) {
-    var spus = state.spus
-    spus.datas[index].sequence -= 1
-    if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
-    commit('changeSpusDataMut', spus)
+  reduceItemAction({state, commit}, {item, index, categoryIndex}) {
     var foods = state.shopInfo.categoryModelList
-    var foodsIndex = spus.index
-    var selectedFood = foods[foodsIndex]
+    var selectedFood = foods[categoryIndex]
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
+    var spus = selectedFood.spus
+    spus.datas[index].sequence -= 1
+    if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
   },
   closeShoppingCartAction({state, commit}) {
     var array = state.shopInfo.categoryModelList

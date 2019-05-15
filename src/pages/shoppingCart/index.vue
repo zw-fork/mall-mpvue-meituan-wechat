@@ -48,11 +48,11 @@
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
                 <div class="add-item">
-                  <div class="add-l" @click.stop="reduceClick(item, index)" v-if="item.sequence > 0">
+                  <div class="add-l" @click.stop="reduceClick(item, index, spus.index)" v-if="item.sequence > 0">
                     <i class="icon mt-reduce-o"></i>
                     <span>{{item.sequence}}</span>
                   </div>
-                  <div class="add-r" @click.stop="addClick(item, index)">
+                  <div class="add-r" @click.stop="addClick(item, index, spus.index)">
                     <i class="icon mt-add-o"></i>
                   </div>
                 </div>
@@ -119,11 +119,11 @@
                                             <span>{{item.min_price * item.sequence}}</span>
                                         </div>
                                         <section class="cart_list_control">
-                                            <span @click.stop="reduceClick(item, item.index)">
+                                            <span @click.stop="reduceClick(item, item.index, item.categoryIndex)">
                                                 <i class="icon mt-reduce-o" style="color: #ccc;font-size: 48rpx;"></i>
                                             </span>
                                             <span class="cart_num">{{item.sequence}}</span>
-                                            <div>
+                                            <div @click.stop="addClick(item, item.index, item.categoryIndex)">
                                             <i class="icon mt-add-o" style="color: #F9D173;font-size: 52rpx;"></i>
                                           </div>
                                         </section>
@@ -270,7 +270,7 @@ export default {
                 cartGoods.name = goods.name
                 cartGoods.min_price = goods.min_price
                 cartGoods.sequence = goods.sequence
-                cartGoodsList.push(goods)
+                cartGoodsList.push(cartGoods)
               }
             }
           }
@@ -377,11 +377,11 @@ export default {
     skuClick(item, index) {
       this.selectSkuAction({item, index})
     },
-    addClick(item, index) {
-      this.addItemAction({item, index})
+    addClick(item, index, categoryIndex) {
+      this.addItemAction({item, index, categoryIndex})
     },
-    reduceClick(item, index) {
-      this.reduceItemAction({item, index})
+    reduceClick(item, index, categoryIndex) {
+      this.reduceItemAction({item, index, categoryIndex})
     },
     closeSku() {
       this.changeSkuModalMut(false)

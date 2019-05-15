@@ -48,15 +48,11 @@ const actions = {
     var params = {'order': order}  
     postFetch('/order/' + order.uid, order, false).then(response => {
         var user = response.result || {}
+        this.state.shoppingCart.shopInfo = {}
         commit('changeUserDataMut', user)
-        getFetch('/order/' + order.uid, {'page' : 1}, false).then(response => {
-          var result = response.result || {}
-          commit('changeOrderDataMut', result)
-          this.state.shoppingCart.shopInfo = {}
           wx.switchTab({
             url: '/pages/orderList/main'
           })
-        })
       })
   },
   showOrderDetailAction({state, commit}, {order}) {
