@@ -8,7 +8,7 @@
       <div class="header-r">
         <div class="search-bar">
           <i class="icon mt-search-o"></i>
-          <input placeholder="请输入小区" placeholder-style="font-size: 24rpx" v-model="addressModel.address"/>
+          <input placeholder="请输入小区" @keyup.enter="getCommunity" placeholder-style="font-size: 24rpx" v-model="addressModel.address"/>
           <div class="cancle" v-if="keyword" @click="cancle">
             <i class="icon qb-icon-cancle-o"></i>                                
           </div>
@@ -51,8 +51,10 @@ export default {
        wx.navigateTo({url: '/pages/addAddress/main'})
     },
     updateShop(item) {
+      debugger
       getApp().globalData.community=item
       this.userInfo.addressModel = item
+       this.userInfo.addressModel.communityId = item.id
       wx.switchTab({
         url: '/pages/home/main',
         success: function (e) {

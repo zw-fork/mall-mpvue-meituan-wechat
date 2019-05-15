@@ -84,9 +84,9 @@ export default {
     },
    onLoad(options) 
   {
-    if (this.shopInfo) {
-      this.item.address = this.shopInfo.address
-      this.item.communityId = this.shopInfo.communityId
+    if (this.shopInfo && this.userInfo.addressModel) {
+      this.item.address = this.shopInfo.addressModel.address
+      this.item.communityId = this.shopInfo.addressModel.communityId
     }
     var id=options.id;
     if (id) {

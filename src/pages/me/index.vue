@@ -17,6 +17,14 @@
         <i class='icon mt-arrow-right-o'></i>
       </div>
     </div>
+    <div>
+      <contact-button 
+  type="default-light" 
+  size="20"
+  session-from="weapp"
+>
+</contact-button>
+    </div>
     <div class="btn" @click="logoutClick">退出账号</div>
   </div>
 </template>

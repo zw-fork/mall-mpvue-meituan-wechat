@@ -101,7 +101,7 @@
       </div>
     </div>
     <div class="screen_cover" v-show="showCart && productCount > 0"  @click="toggleCartList"></div>  
-    <div class="cart_food_list" v-if="showCart && productCount > 0" style="transition: opacity .5s">
+    <div class="cart_food_list" v-if="showCart && productCount > 0">
                 <header>
                                 <h4>购物车</h4>
                                 <div @click="clearCart">
@@ -119,12 +119,12 @@
                                             <span>{{item.min_price * item.sequence}}</span>
                                         </div>
                                         <section class="cart_list_control">
-                                            <span>
-                                                <i class="icon mt-reduce-o" style="color: #ccc"></i>
+                                            <span @click.stop="reduceClick(item, item.index)">
+                                                <i class="icon mt-reduce-o" style="color: #ccc;font-size: 48rpx;"></i>
                                             </span>
                                             <span class="cart_num">{{item.sequence}}</span>
                                             <div>
-                                            <i class="icon mt-add-o" style="color: #F9D173"></i>
+                                            <i class="icon mt-add-o" style="color: #F9D173;font-size: 52rpx;"></i>
                                           </div>
                                         </section>
                                     </li>
@@ -245,27 +245,7 @@ export default {
   },
   computed: {
     ...mapState("shoppingCart", ["shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
-    // cartGoodsList() {
-    //   var cartGoodsList = []
-    //   if (this.shopInfo.categoryModelList) {
-    //     for (var index in this.shopInfo.categoryModelList) {
-    //       var category = this.shopInfo.categoryModelList[index]
-    //       if (category.spus && category.spus.datas.length > 0) {
-    //         for (var i in category.spus.datas) {
-    //           var goods = category.spus.datas[i]
-    //           if (goods.sequence > 0) {
-    //             var cartGoods = {}
-    //             cartGoods.name = goods.name
-    //             cartGoods.min_price = goods.min_price
-    //             cartGoods.sequence = goods.sequence
-    //             cartGoodsList.push(goods)
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return cartGoodsList
-    // },
+    ...mapState("user", ["userInfo"]),
     lineStyle() {
       let left = this.left
       let style = {left};
@@ -285,6 +265,8 @@ export default {
               var goods = category.spus.datas[i]
               if (goods.sequence > 0) {
                 var cartGoods = {}
+                cartGoods.index = i
+                cartGoods.categoryIndex = index
                 cartGoods.name = goods.name
                 cartGoods.min_price = goods.min_price
                 cartGoods.sequence = goods.sequence
@@ -439,8 +421,11 @@ export default {
       this.selectSkuAction({item, index: item.preIndex})
     },
     goHome() {
+      if (!this.userInfo.addressModel || this.userInfo.addressModel.communityId != this.shopInfo.addressModel.communityId) {
+        this.userInfo.addressModel = this.shopInfo.addressModel
+      }
       wx.switchTab({
-        url: '/pages/home/main'
+        url: '/pages/home/main',
       })
     }
   },
@@ -829,11 +814,11 @@ export default {
                   flex-direction: row;
                   align-items: center;
                   i {
-                    font-size: 36rpx;
+                    font-size: 50rpx;
                     color: $textGray-color;
                   }
                   span {
-                    font-size: 24rpx;
+                    font-size: 32rpx;
                     color: $textBlack-color;
                     margin: 0 20rpx;
                   }
@@ -841,7 +826,7 @@ export default {
                 .add-r {
                   i {
                     color: $theme-color;
-                    font-size: 40rpx;
+                    font-size: 54rpx;
                   }
                 }
               }

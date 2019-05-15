@@ -13,7 +13,7 @@
         <div class="delivery-time">
            <span class="c-l">微信支付微信支付微信支付微信支付微信支付微信支付微信支付微信支付微信支付微信支付</span>
         </div>
-        <div class="bottom-a" @click="headerClick">
+        <div class="bottom-a" @click="headerClick(currentOrder.shopInfo.shopId)">
           <div class="btn">
             <span>再来一单</span>
           </div>
@@ -66,7 +66,7 @@
                      <div class="line-sp"></div>
                   <div class="item_style">
                         <p class="item_left" style="word-break:keep-all;">送货地址：</p>
-                        <div class="item_right">
+                        <div class="item_right" v-if="currentOrder.addressInfo">
                             <p>{{currentOrder.addressInfo.name}}</p>
                             <p>{{currentOrder.addressInfo.phone}}</p>
                             <p>{{currentOrder.addressInfo.address}}</p>

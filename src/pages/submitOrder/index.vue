@@ -8,9 +8,9 @@
         <div class="address-c" @click="addressClick(currentOrder.shopInfo.communityId)">
           <i class="icon mt-location-s"></i>
           <div class="address">
-             <span class="address-info" v-if="!userInfo.addressModel.house_number">请添加配送地址...</span>
-            <span class="address-info" v-if="userInfo.addressModel.house_number">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
-            <span class="user-info" v-if="userInfo.addressModel.name">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
+             <span class="address-info" v-if="!userInfo.addressModel.house_number || userInfo.addressModel.communityId != currentOrder.shopInfo.communityId">请添加配送地址...</span>
+            <span class="address-info" v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
+            <span class="user-info" v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
           </div>
           <i class="icon mt-arrow-right-o" :style="{fontSize: 28 + 'rpx', color: '#999'}"></i>
         </div>
@@ -20,7 +20,7 @@
       <div class="section">
         <img :src="currentOrder.shopInfo.pic_url" >
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
-        <text class="tag">商家自配</text>
+        <i class="icon mt-arrow-right-o" style="display: inline"></i>
       </div>
       <div class="list">
         <div class="item" v-for="(item, index) in currentOrder.itemList" :key="index">
@@ -97,6 +97,7 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
+    ...mapActions("user", ["updateDefaultAddress"]),
     addressClick(communityId) {
       wx.navigateTo({url: '/pages/addressList/main?communityId=' + communityId})
     },
@@ -144,6 +145,10 @@ export default {
         this.currentOrder.addressInfo = this.userInfo.addressModel
         this.currentOrder.realFee = this.realFee
         this.currentOrder.uid = this.userInfo.openid
+        var wechat = {}
+        wechat.openid = this.userInfo.openid
+        wechat.addressModel = {}
+        wechat.addressModel.id = this.userInfo.addressModel.id
         this.postOrderDataAction({order : this.currentOrder})
       } else {
         wx.showToast({
