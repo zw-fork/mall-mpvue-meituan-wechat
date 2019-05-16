@@ -36,7 +36,7 @@
       </div>
       <div class="footer">
         <div class="delivery-cast">
-          <span>服务费</span>
+          <span>配送费</span>
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line> 

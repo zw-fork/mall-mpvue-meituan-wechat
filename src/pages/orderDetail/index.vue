@@ -3,17 +3,17 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-          <span class="address-info" v-if="currentOrder.status==0">已取消</span>
-          <span class="address-info" v-else-if="currentOrder.status==1">未支付</span>
-          <span class="address-info" v-else-if="currentOrder.status==2">已支付，等待商家配送</span>
-          <span class="address-info" v-else-if="currentOrder.status==3">配送中</span>
-          <span class="address-info" v-else-if="currentOrder.status==4">已完成</span>
+          <span class="address-info" v-if="orderDetail.status==0">已取消</span>
+          <span class="address-info" v-else-if="orderDetail.status==1">未支付</span>
+          <span class="address-info" v-else-if="orderDetail.status==2">已支付，等待商家配送</span>
+          <span class="address-info" v-else-if="orderDetail.status==3">配送中</span>
+          <span class="address-info" v-else-if="orderDetail.status==4">已完成</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
-           <span class="c-l">微信支付微信支付微信支付微信支付微信支付微信支付微信支付微信支付微信支付微信支付</span>
+           <span class="c-l">{{orderDetail.remark}}</span>
         </div>
-        <div class="bottom-a" @click="headerClick(currentOrder.shopInfo.shopId)">
+        <div class="bottom-a" @click="headerClick(orderDetail.shopInfo.shopId)">
           <div class="btn">
             <span>再来一单</span>
           </div>
@@ -21,9 +21,9 @@
       </div>
     </div>
     <div class="item-list">
-      <div class="section" @click="headerClick(currentOrder.shopInfo.shopId)">
-        <img :src="currentOrder.shopInfo.pic_url" >
-        <span>{{currentOrder.shopInfo.shopName}}</span>
+      <div class="section" @click="headerClick(orderDetail.shopInfo.shopId)">
+        <img :src="orderDetail.shopInfo.pic_url" >
+        <span>{{orderDetail.shopInfo.shopName}}</span>
         <i class="icon mt-arrow-right-o" style="display: inline"></i>
       </div>
       <div class="list">
@@ -39,8 +39,13 @@
         </div>
       </div>
       <div class="footer">
+        <!-- <div class="delivery-cast">
+          <span>备注</span>
+          <span class="line-clamp1" style="width:80%;margin-top:10rpx;">{{orderDetail.remark}}</span>
+        </div>
+         <sep-line></sep-line>  -->
         <div class="delivery-cast">
-          <span>服务费</span>
+          <span>配送费</span>
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line> 
@@ -66,10 +71,10 @@
                      <div class="line-sp"></div>
                   <div class="item_style">
                         <p class="item_left" style="word-break:keep-all;">送货地址：</p>
-                        <div class="item_right" v-if="currentOrder.addressInfo">
-                            <p>{{currentOrder.addressInfo.name}}</p>
-                            <p>{{currentOrder.addressInfo.phone}}</p>
-                            <p>{{currentOrder.addressInfo.address}}</p>
+                        <div class="item_right" v-if="orderDetail.addressInfo">
+                            <p>{{orderDetail.addressInfo.name}}</p>
+                            <p>{{orderDetail.addressInfo.phone}}</p>
+                            <p>{{orderDetail.addressInfo.address}}</p>
                         </div>
                     </div>
       </div>
@@ -85,21 +90,21 @@
         <div class="item_style">
                         <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
                         <div class="item_right" style="display: inline">
-                            <p>{{currentOrder.number}}</p>
+                            <p>{{orderDetail.number}}</p>
                         </div>
                     </div>
                      <div class="line-sp"></div>
                   <div class="item_style">
                        <p class="item_left" style="word-break:keep-all; display: inline">支付方式：</p>
                         <div class="item_right" style="display: inline">
-                            <p>{{currentOrder.paymentType === 1 ? '在线支付' : '其他'}} </p>
+                            <p>{{orderDetail.paymentType === 1 ? '在线支付' : '其他'}} </p>
                         </div>
                     </div>
                      <div class="line-sp"></div>
                          <div class="item_style">
                        <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
                         <div class="item_right" style="display: inline">
-                            <p>{{currentOrder.createTime}}</p>
+                            <p>{{orderDetail.createTime}}</p>
                         </div>
                     </div>
       </div>
@@ -121,12 +126,12 @@ export default {
   },
   computed: {
     ...mapState("user", ["user"]),
-    ...mapState("submitOrder", ["currentOrder"]),
+    ...mapState("submitOrder", ["orderDetail"]),
     deliveryFee() {
-      return this.currentOrder.deliveryFee
+      return this.orderDetail.deliveryFee
     },
     realFee() {
-      return this.currentOrder.realFee
+      return this.orderDetail.realFee
     }
   },
   components: {
@@ -173,13 +178,20 @@ export default {
     }
   },
   mounted() {
-    this.foodList = this.currentOrder.itemList
-    this.shopInfo = this.currentOrder.shopInfo
+    this.foodList = this.orderDetail.itemList
+    this.shopInfo = this.orderDetail.shopInfo
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.line-clamp1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .order_detail_style{
   background-color: #fff;
   font-size: 28rpx;
@@ -520,7 +532,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 20rpx;
+        margin: 0rpx 20rpx;
         span {
           font-size: 28rpx;
           color: $textBlack-color;

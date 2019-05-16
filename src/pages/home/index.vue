@@ -14,7 +14,7 @@
       </div>
       <div class="category-list">
         <scroll-view class="item-list" :scroll-y="true">
-          <div class="item" v-for="(item, index) in shopsList" :key="index" @click="shoppingCartClick(item.shopId)">
+          <div class="item" v-for="(item, index) in shopList" :key="index" @click="shoppingCartClick(item.shopId)">
             <div class="item-l">
               <img :src="item.pic_url">
               <img class="tag" :src="item.poi_promotion_pic">
@@ -33,7 +33,7 @@
               </div>
             </div>
           </div>
-          <div v-if="shopsList != undefined && shopsList.length < 1" class="item" style="display: flex;justify-content: center;align-items: center;top:40%">
+          <div v-if="shopList.length < 1" class="item" style="display: flex;justify-content: center;align-items: center;top:40%">
             当前地址无商铺信息!
           </div>
         </scroll-view>
@@ -50,11 +50,11 @@ import {getFetch} from '@/network/request/HttpExtension'
 export default {
   data() {
     return {
-      shopsList: undefined
     };
   },
   methods: {
     ...mapActions("user", ["wxLocation"]),
+    ...mapActions("shop", ["getShopListDataAction"]),
     lower(e) {
     },     
     upper1(e) {
@@ -62,7 +62,7 @@ export default {
       var communityId = this.userInfo.addressModel.communityId
       if (communityId) {
         getFetch('/shop/list/' + communityId, {}, false).then(response => {
-          this.shopsList = response.result.list
+          this.shopList = response.result.list
           wx.hideLoading()
         })
       } else {
@@ -85,15 +85,14 @@ export default {
   },
   computed: {
     ...mapState("user", ["userInfo"]),
+    ...mapState("shop", ["shopList"]),
   },
   mounted() {
     var addressModel = this.userInfo.addressModel
     if (addressModel) {
       var communityId = addressModel.communityId
       if (communityId) {
-        getFetch('/shop/list/' + communityId, {}, false).then(response => {
-          this.shopsList = response.result.list
-        })
+        this.getShopListDataAction({communityId})
       } 
     }
   },
@@ -104,20 +103,14 @@ export default {
     if (addressModel) {
       var communityId=addressModel.communityId;
       if (communityId) {
-      getFetch('/shop/list/' + communityId, {}, false).then(response => {
-        this.shopsList = response.result.list
-      })
-      return;
+        this.getShopListDataAction({communityId})
     }
     }
-    this.shopsList = []
   },
   onPullDownRefresh: function () {
      var communityId = this.userInfo.addressModel.communityId
       if (communityId) {
-        getFetch('/shop/list/' + communityId, {}, false).then(response => {
-          this.shopsList = response.result.list
-        })
+        this.getShopListDataAction({communityId})
       }
   }
 };

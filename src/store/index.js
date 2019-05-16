@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import shoppingCart from './modules/shoppingCart'
 import address from './modules/address'
 import user from './modules/user'
+import shop from './modules/shop'
 import submitOrder from './modules/submitOrder'
 
 Vue.use(Vuex)
@@ -26,7 +27,11 @@ const store = new Vuex.Store({
     submitOrder: {
       namespaced: true,
       ...submitOrder
-    }
+    },
+    shop: {
+      namespaced: true,
+      ...shop
+    },
   }
 })
 

@@ -43,28 +43,18 @@ export default {
   computed: {
     ...mapState("address", ["myAddress"]),
     ...mapState("user", ["userInfo"]),
-    ...mapActions("address", ["getAddressDataAction"]),
   },
   methods: {
     ...mapActions("address", ["getAddressDataAction"]),
+    ...mapActions("shop", ["getShopListDataAction"]),
     addAddress() {
        wx.navigateTo({url: '/pages/addAddress/main'})
     },
     updateShop(item) {
-      debugger
       getApp().globalData.community=item
       this.userInfo.addressModel = item
-       this.userInfo.addressModel.communityId = item.id
-      wx.switchTab({
-        url: '/pages/home/main',
-        success: function (e) {
-        var page = getCurrentPages().pop();
-        if (page == undefined || page == null) {
-          return;
-        }
-        page.onLoad();
-      } 
-      })
+      this.userInfo.addressModel.communityId = item.id
+      this.getShopListDataAction({communityId : item.id})
     },
     getCommunity() {
       wx.showLoading({title: '加载中...', mask: true})

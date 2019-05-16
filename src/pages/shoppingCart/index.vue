@@ -19,10 +19,9 @@
         </div>
       </div>
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex === 0 ? 'bold' : null}" @click="menuClick">商品</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold' : null}" @click="shopClick">商家</span>
-         <span class="c-main"  @click="goHome">首页</span>
-         <div class="line" :style="lineStyle"></div>
+         <span class="c-l" :style="{'font-weight': pageIndex === 0 ? lineStyle : null}" @click="menuClick">商品</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? lineStyle : null}" @click="shopClick">商家</span>
+         <span class="c-main"  @click="goHome">首页</span>  
        </div>
     </div>
     <div class="list-c" v-if="pageIndex === 0">
@@ -247,9 +246,7 @@ export default {
     ...mapState("shoppingCart", ["shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
     ...mapState("user", ["userInfo"]),
     lineStyle() {
-      let left = this.left
-      let style = {left};
-      return jointStyle(style);
+      return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
     },
     totalPrice() {
       var price = 0

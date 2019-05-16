@@ -1,6 +1,14 @@
 <template>
   <div class="container">
-    <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower">
+    <div class="header-c">
+       <div class="cate-c">
+         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(-1)">全部</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(1)">待支付</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 3 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(3)">配送中</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(4)">已完成</span>
+       </div>
+    </div>
+    <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
       <div class="item" v-for="(item, index) in orderList.datas" :key="index">
         <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
@@ -11,7 +19,7 @@
               </div>
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
            </div>
-          <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">未支付</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">待支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付，等待商家配送</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==3">配送中</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==0">已取消</p>
@@ -35,28 +43,53 @@
 </template>
 
 <script>
+import {jointStyle} from "@/utils/style";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {getFetch} from '@/network/request/HttpExtension'
 
 export default {
   data() {
     return {
+      pageIndex : -1,
+      scrollTop:0,
+      left: '40rpx',
+      status: undefined
     }
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction"]),
+    updateOrderList(status) {
+      this.scrollTop = 0
+      this.pageIndex = status
+      if (status == -1) {
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})
+      } else {
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'status':status}})
+      }
+    },
+    scroll(e) {
+      this.currentScroll = e.target.scrollTop
+    },
     lower(e) {
        if (this.orderList.page>0) {
-      wx.showLoading({title: '加载中...', mask: true})
+        this.scrollTop = this.currentScroll
+        wx.showLoading({title: '加载中...', mask: true})
        var openid = this.userInfo.openid
-      getFetch('/order/' + openid, {'page' : this.orderList.page}, false).then(response => {
-        this.orderList.datas = [
-            ...this.orderList.datas,
-            ...response.result.list
+       var data = {}
+       data.page = this.orderList.page
+       if (this.pageIndex && this.pageIndex>-1) {
+         data.status = this.pageIndex  
+       } 
+     getFetch('/order/' + this.userInfo.openid, data, false).then(response => {
+      var result = response.result || {}
+      this.orderList.datas = [
+        ...this.orderList.datas,
+        ...result.list
         ]
-        this.orderList.page =  response.result.nextPage
-        wx.hideLoading()
-      })
+      this.orderList.page = result.nextPage
+      wx.hideLoading()
+    })
+    
     }
   },
     headerClick(shopId) {
@@ -68,31 +101,73 @@ export default {
   },
   mounted() {
     var openid = this.userInfo.openid
-    this.getOrderDataAction({'uid': openid, 'page' : this.orderList.page})
+    this.getOrderDataAction({'uid': openid, 'data' : { 'page' : this.orderList.page}})
   },
   computed: {
     ...mapState("submitOrder", ["orderList"]),
-    ...mapState("user", ["userInfo"])
-  },
-   onPullDownRefresh: function () {
-    console.log('onPullDownRefresh')
+    ...mapState("user", ["userInfo"]),
+     lineStyle() {
+      return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .container {
+  .header-c {
+    display: flex;
+    flex-direction: column;
+    .cate-c {
+      display: flex;
+      height: 70rpx;
+      align-items: center;
+      border-bottom: 5rpx solid $spLine-color;
+      position: relative;
+      transition: all 0.2s;
+      .c-l {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        margin-left: 40rpx;
+      }
+      .c-m {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        margin-left: 80rpx;
+      }
+      .c-r {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        margin-left: 80rpx;
+      }
+      .c-main {
+        position: absolute;
+        font-size: 32rpx;
+        color: $textBlack-color;
+        right: 30rpx;
+      }
+      .line {
+        position: absolute;
+        width: 60rpx;
+        height: 10rpx;
+        background-color: $theme-color;
+        left: 40rpx;
+        bottom: 2rpx;
+        transition: left 0.2s;
+      }
+    }    
+  }
   .list-c {
     display: block;
     position: fixed;
-    top: 0rpx;
+    top: 70rpx;
     bottom: 0rpx;
     width:100%;
     .item {
       display: flex;
       flex-direction: column;
       background-color: white;
-      margin-top: 20rpx;
+      margin-top: 15rpx;
       .shop-info {
         display: flex;
         height: 100rpx;

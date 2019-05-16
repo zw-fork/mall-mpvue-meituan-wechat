@@ -12,6 +12,9 @@ const state = {
   },
   currentOrder: {
 
+  },
+  orderDetail: {
+
   }
 }
 
@@ -20,11 +23,17 @@ const mutations = {
     state.user = info
   },
   changeOrderDataMut(state, info) {
-    state.orderList.datas = info.list
+    state.orderList.datas = [
+      ...state.orderList.datas,
+      ...info.list
+    ]
     state.orderList.page = info.nextPage
   },
   currentOrderDataMut(state, info) {
     state.currentOrder = info
+  },
+  orderDetailDataMut(state, info) {
+    state.orderDetail = info
   },
   currentOrderRemarkDataMut(state, info) {
     state.currentOrder.remark = info
@@ -38,10 +47,12 @@ const actions = {
       commit('changeUserDataMut', user)
     })
   }, 
-  getOrderDataAction({state, commit}, {uid, page}) {
-    getFetch('/order/' + uid, {'page' : page}, false).then(response => {
+  getOrderDataAction({state, commit}, {uid, data}) {
+    wx.showLoading({title: '加载中...', mask: true})
+    getFetch('/order/' + uid, data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderDataMut', result)
+      wx.hideLoading()
     })
   },
   postOrderDataAction({state, commit}, {order}) {
@@ -56,16 +67,18 @@ const actions = {
       })
   },
   showOrderDetailAction({state, commit}, {order}) {
-    commit('currentOrderDataMut', order)
+    commit('orderDetailDataMut', order)
     wx.navigateTo({url: '/pages/orderDetail/main'})
   },
   createOrderDetailAction({state, commit}, {order}) {
+    order.remark = state.currentOrder.remark
     commit('currentOrderDataMut', order)
     wx.navigateTo({url: '/pages/submitOrder/main'})
   },
   addRemarkDataAction({state, commit}, {remark}) {
     commit('currentOrderRemarkDataMut', remark)
-    wx.navigateTo({url: '/pages/submitOrder/main'})
+   // wx.navigateTo({url: '/pages/submitOrder/main'})
+    wx.navigateBack()
   }
  // this.getCategoryMenuDataAction({categoryId, index})
 }
