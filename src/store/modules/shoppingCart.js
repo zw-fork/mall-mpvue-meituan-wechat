@@ -78,6 +78,35 @@ const actions = {
               var spus = {title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId}
               shopInfo.categoryModelList[index].spus = spus
               commit('changeShopInfoDataMut', shopInfo)
+              for (var index1 in goods.list) {
+                var itemList = this.state.submitOrder.orderDetail.itemList
+                if (itemList && itemList.length) {
+                  for (var i in itemList) {
+                    if (itemList[i].goodsId === goods.list[index1].goodsId && !goods.list[index1].sequence) {
+                      goods.list[index1].sequence = itemList[i].sequence
+                      itemList[i].status = true
+                    }
+                  }
+                }
+              }
+              for (var index2 in shopInfo.categoryModelList) {
+                var itemList = this.state.submitOrder.orderDetail.itemList
+                if (itemList && itemList.length) {
+                  for (var i in itemList) {
+                    if (itemList[i].categoryId === shopInfo.categoryModelList[index2].categoryId) {
+                      if (!shopInfo.categoryModelList[index2].count) {
+                        shopInfo.categoryModelList[index2].count = 0
+                      }
+                      shopInfo.categoryModelList[index2].count += itemList[i].sequence
+                      itemList[i].categoryIndex = index2
+                      if (!shopInfo.categoryModelList[index2].totalPrice) {
+                        shopInfo.categoryModelList[index2].totalPrice = 0
+                      }
+                      shopInfo.categoryModelList[index2].totalPrice +=  itemList[i].currentPrice * itemList[i].sequence
+                    }
+                  }
+                }
+              }
               commit('changeSpusDataMut', spus)
             })
           } else {
@@ -130,6 +159,7 @@ const actions = {
     commit('changeCommentDataMut', commentData)
   },
   getCategoryMenuDataAction({state, commit}, {index, categoryId}) {
+    wx.showLoading({title: '加载中...', mask: true})
     if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
       getFetch('/goods/' + categoryId, {}, false).then(response => {
         var spus = {}
@@ -144,9 +174,11 @@ const actions = {
         })
         state.shopInfo.categoryModelList[index].spus = spus
         commit('changeSpusDataMut', spus)
+        wx.hideLoading()
       })
     } else {
       commit('changeSpusDataMut', state.shopInfo.categoryModelList[index].spus)
+      wx.hideLoading()
     } 
   },
   addItemAction({state, commit}, {item, index, categoryIndex}) {
@@ -162,7 +194,9 @@ const actions = {
     }
     selectedFood.totalPrice += item.min_price
     var spus = selectedFood.spus
-    spus.datas[index].sequence += 1
+    if (!item.oldData) {
+      spus.datas[index].sequence += 1
+    }
   },
   reduceItemAction({state, commit}, {item, index, categoryIndex}) {
     var foods = state.shopInfo.categoryModelList
@@ -170,8 +204,10 @@ const actions = {
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
     var spus = selectedFood.spus
-    spus.datas[index].sequence -= 1
-    if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
+    if (!item.oldData) {
+      spus.datas[index].sequence -= 1
+      if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
+    }
   },
   closeShoppingCartAction({state, commit}) {
     var array = state.shopInfo.categoryModelList

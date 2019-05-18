@@ -12,7 +12,7 @@
       <div class="item" v-for="(item, index) in orderList.datas" :key="index">
         <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
-           <div class="order_title" @click="headerClick(item.shopInfo.shopId)">
+           <div class="order_title" @click="headerClick(item, false)">
               <div class="order-name" style="margin-bottom:-15rpx;">
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="bottom-c">
-          <div class="btn" @click="headerClick(item.shopInfo.shopId)">
+          <div class="btn" @click="headerClick(item, true)">
             <span>再来一单</span>
           </div>
         </div>
@@ -57,7 +57,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction"]),
+    ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction", "getOrderByIdAction"]),
+    ...mapMutations("submitOrder", ["orderDetailDataMut"]),
     updateOrderList(status) {
       this.scrollTop = 0
       this.pageIndex = status
@@ -92,11 +93,20 @@ export default {
     
     }
   },
-    headerClick(shopId) {
-      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
+    headerClick(item, flag) {
+      var update = false
+      if (flag) {
+        update = true
+        var openid = this.userInfo.openid
+        this.getOrderByIdAction({'uid': openid, 'data' : item})
+      } else {
+          var shopId = item.shopId
+      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update})
+      }
     },
     orderDetail(item) {      
       this.showOrderDetailAction({order: item})
+      wx.navigateTo({url: '/pages/orderDetail/main'})
     }
   },
   mounted() {
@@ -120,23 +130,23 @@ export default {
     flex-direction: column;
     .cate-c {
       display: flex;
-      height: 70rpx;
+      height: 60rpx;
       align-items: center;
       border-bottom: 5rpx solid $spLine-color;
       position: relative;
       transition: all 0.2s;
       .c-l {
-        font-size: 32rpx;
+        font-size: 30rpx;
         color: $textBlack-color;
         margin-left: 40rpx;
       }
       .c-m {
-        font-size: 32rpx;
+        font-size: 30rpx;
         color: $textBlack-color;
         margin-left: 80rpx;
       }
       .c-r {
-        font-size: 32rpx;
+        font-size: 30rpx;
         color: $textBlack-color;
         margin-left: 80rpx;
       }
@@ -146,21 +156,12 @@ export default {
         color: $textBlack-color;
         right: 30rpx;
       }
-      .line {
-        position: absolute;
-        width: 60rpx;
-        height: 10rpx;
-        background-color: $theme-color;
-        left: 40rpx;
-        bottom: 2rpx;
-        transition: left 0.2s;
-      }
     }    
   }
   .list-c {
     display: block;
     position: fixed;
-    top: 70rpx;
+    top: 60rpx;
     bottom: 0rpx;
     width:100%;
     .item {

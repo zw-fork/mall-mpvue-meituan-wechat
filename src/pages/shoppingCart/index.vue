@@ -245,6 +245,7 @@ export default {
   computed: {
     ...mapState("shoppingCart", ["shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
     ...mapState("user", ["userInfo"]),
+    ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
     },
@@ -264,6 +265,7 @@ export default {
                 var cartGoods = {}
                 cartGoods.index = i
                 cartGoods.categoryIndex = index
+                cartGoods.picture = goods.picture
                 cartGoods.name = goods.name
                 cartGoods.min_price = goods.min_price
                 cartGoods.sequence = goods.sequence
@@ -271,8 +273,29 @@ export default {
               }
             }
           }
+
         }
       }
+                      var itemList = this.orderDetail.itemList
+
+                 if (itemList && itemList.length) {
+                  for (var i in this.orderDetail.itemList) {
+                    if (!itemList[i].status) {
+                                    var goods = itemList[i]
+              if (goods.sequence > 0) {
+                var cartGoods = {}
+                cartGoods.index = goods.goodsId
+                cartGoods.oldData = true
+                cartGoods.picture = goods.picture
+                cartGoods.categoryIndex = goods.categoryIndex
+                cartGoods.name = goods.name
+                cartGoods.min_price = goods.currentPrice
+                cartGoods.sequence = goods.sequence
+                cartGoodsList.push(cartGoods)
+              }
+                    }
+                  }
+                }
       this.cartGoodsList1 = cartGoodsList
       return parseFloat(price).toFixed(1);
     },
@@ -318,9 +341,21 @@ export default {
     if (this.spus.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
       getFetch('/goods/' + this.spus.categoryId, {'page' : this.spus.page}, false).then(response => {
+        var goods = response.result.list
+                    for (var index1 in goods) {
+                var itemList = this.orderDetail.itemList
+                if (itemList && itemList.length) {
+                  for (var i in this.orderDetail.itemList) {
+                    if (itemList[i].goodsId === goods[index1].goodsId) {
+                      goods[index1].sequence = itemList[i].sequence
+                      itemList[i].status = true
+                    }
+                  }
+                }
+              }
         this.spus.datas = [
             ...this.spus.datas,
-            ...response.result.list
+            ...goods
         ]
         this.spus.page =  response.result.nextPage
         wx.hideLoading()
@@ -342,16 +377,10 @@ export default {
     closeShoppingCartAction1() {
           var array = this.shopInfo.categoryModelList
     var selectedArr = []
-    array.map((item, index) => {
-      if (item.spus) {
-        item.spus.datas.map((itm, idx) => {
-          if (itm.sequence > 0) {
-            var price = itm.min_price * itm.sequence
-            itm.totalPrice = parseFloat(price).toFixed(1)
-            selectedArr.push(itm)
-          }
-        })
-      }
+    this.cartGoodsList1.map((item, index) => {
+                  var price = item.min_price * item.sequence
+ item.totalPrice = parseFloat(price).toFixed(1)
+  selectedArr.push(item)
     })
      var order = {}
      order.shopInfo = this.shopInfo
@@ -375,9 +404,29 @@ export default {
       this.selectSkuAction({item, index})
     },
     addClick(item, index, categoryIndex) {
+      if (item.oldData) {
+                var itemList = this.orderDetail.itemList
+                if (itemList && itemList.length) {
+                  for (var i in this.orderDetail.itemList) {
+                    if (itemList[i].goodsId === index) {
+                      itemList[i].sequence += 1
+                    }
+                  }
+                }                    
+      }
       this.addItemAction({item, index, categoryIndex})
     },
     reduceClick(item, index, categoryIndex) {
+           if (item.oldData) {
+                var itemList = this.orderDetail.itemList
+                if (itemList && itemList.length) {
+                  for (var i in this.orderDetail.itemList) {
+                    if (itemList[i].goodsId === index) {
+                      itemList[i].sequence -= 1
+                    }
+                  }
+                }                    
+      }
       this.reduceItemAction({item, index, categoryIndex})
     },
     closeSku() {
@@ -430,10 +479,14 @@ export default {
   {
     var that = this
     var shopId=options.shopId;
+    var update = false
+    if (options.update) {
+      update = true
+    }
     if (shopId != this.shopInfo.shopId) {
       this.tagIndex = 0
     }
-    this.getMenuDataAction({shopId : shopId, index: this.tagIndex, flag: false})
+    this.getMenuDataAction({shopId : shopId, index: this.tagIndex, flag: update})
   },
   onShareAppMessage: function () {
     return {

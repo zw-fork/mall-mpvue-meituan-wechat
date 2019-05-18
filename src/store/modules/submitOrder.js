@@ -8,6 +8,7 @@ const state = {
   },
   orderList: {
     page: 1,
+    type: -1,
     datas: []
   },
   currentOrder: {
@@ -23,20 +24,20 @@ const mutations = {
     state.user = info
   },
   changeOrderDataMut(state, info) {
-    state.orderList.datas = [
-      ...state.orderList.datas,
-      ...info.list
-    ]
+    state.orderList.datas = info.list
     state.orderList.page = info.nextPage
   },
   currentOrderDataMut(state, info) {
     state.currentOrder = info
   },
-  orderDetailDataMut(state, info) {
+  changeOrderByIdDataMut(state, info) {
     state.orderDetail = info
   },
   currentOrderRemarkDataMut(state, info) {
     state.currentOrder.remark = info
+  },
+  changeOrderByIdDataMut(state, info) {
+    state.orderDetail = info
   }
 }
 
@@ -53,6 +54,15 @@ const actions = {
       var result = response.result || {}
       commit('changeOrderDataMut', result)
       wx.hideLoading()
+    })
+  },
+  getOrderByIdAction({state, commit}, {uid, data}) {
+    wx.showLoading({title: '加载中...', mask: true})
+    getFetch('/order/' + uid + '/' + data.number, data, false).then(response => {
+      var result = response.result || {}
+      commit('changeOrderByIdDataMut', result)
+      wx.hideLoading()
+      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true'})
     })
   },
   postOrderDataAction({state, commit}, {order}) {
