@@ -163,15 +163,26 @@ const actions = {
     if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
       getFetch('/goods/' + categoryId, {}, false).then(response => {
         var spus = {}
-        var goods = response.result || {}
+        var goods = response.result.list
         spus.title = state.shopInfo.categoryModelList[index].name
         spus.page = response.result.nextPage
         spus.categoryId = categoryId
         spus.index = index
-        spus.datas = goods.list.map(item => {
+        spus.datas = goods.map(item => {
           if (!item.sequence) item.sequence = 0
           return item
         })
+        for (var index1 in goods) {
+          var itemList = this.state.submitOrder.orderDetail.itemList
+          if (itemList && itemList.length) {
+            for (var i in this.state.submitOrder.orderDetail.itemList) {
+              if (itemList[i].goodsId === goods[index1].goodsId) {
+                goods[index1].sequence = itemList[i].sequence
+                itemList[i].status = true
+              }
+            }
+          }
+        }
         state.shopInfo.categoryModelList[index].spus = spus
         commit('changeSpusDataMut', spus)
         wx.hideLoading()

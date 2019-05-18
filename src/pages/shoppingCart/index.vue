@@ -264,6 +264,7 @@ export default {
               if (goods.sequence > 0) {
                 var cartGoods = {}
                 cartGoods.index = i
+                cartGoods.goodsId = goods.goodsId
                 cartGoods.categoryIndex = index
                 cartGoods.picture = goods.picture
                 cartGoods.name = goods.name
@@ -285,6 +286,7 @@ export default {
               if (goods.sequence > 0) {
                 var cartGoods = {}
                 cartGoods.index = goods.goodsId
+                cartGoods.goodsId = goods.goodsId
                 cartGoods.oldData = true
                 cartGoods.picture = goods.picture
                 cartGoods.categoryIndex = goods.categoryIndex
@@ -460,7 +462,7 @@ export default {
     var that = this
     var shopId=options.shopId;
     var update = false
-    if (options.update) {
+    if (options.update == 'true') {
       update = true
     }
     if (shopId != this.shopInfo.shopId) {

@@ -70,6 +70,7 @@ const actions = {
     postFetch('/order/' + order.uid, order, false).then(response => {
         var user = response.result || {}
         this.state.shoppingCart.shopInfo = {}
+        state.orderDetail = {}
         commit('changeUserDataMut', user)
           wx.switchTab({
             url: '/pages/orderList/main'

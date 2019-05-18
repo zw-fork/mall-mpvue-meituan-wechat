@@ -110,6 +110,7 @@ export default {
     }
   },
   mounted() {
+    this.scrollTop = 0
     var openid = this.userInfo.openid
     this.getOrderDataAction({'uid': openid, 'data' : { 'page' : this.orderList.page}})
   },
@@ -119,6 +120,14 @@ export default {
      lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
     }
+  },
+  onPullDownRefresh: function () {
+    this.scrollTop = 0
+      if (this.pageIndex == -1) {
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})
+      } else {
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'status':this.pageIndex}})
+      }
   }
 }
 </script>

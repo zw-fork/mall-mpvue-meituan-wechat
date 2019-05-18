@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     headerClick(shopId) {
-      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
+      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=true'})
     },
     addressClick() {
       wx.navigateTo({url: '/pages/addressList/main'})
