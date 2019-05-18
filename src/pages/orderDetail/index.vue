@@ -13,7 +13,7 @@
         <div class="delivery-time">
            <span class="c-l">{{orderDetail.remark}}</span>
         </div>
-        <div class="bottom-a" @click="headerClick(orderDetail.shopInfo.shopId)">
+        <div class="bottom-a" @click="headerClick(orderDetail, true)">
           <div class="btn">
             <span>再来一单</span>
           </div>
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="item-list">
-      <div class="section" @click="headerClick(orderDetail.shopInfo.shopId)">
+      <div class="section" @click="headerClick(orderDetail, false)">
         <img :src="orderDetail.shopInfo.pic_url" >
         <span>{{orderDetail.shopInfo.shopName}}</span>
         <i class="icon mt-arrow-right-o" style="display: inline"></i>
@@ -125,7 +125,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("user", ["user"]),
+    ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     deliveryFee() {
       return this.orderDetail.deliveryFee
@@ -138,8 +138,17 @@ export default {
     sepLine
   },
   methods: {
-    headerClick(shopId) {
-      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=true'})
+    ...mapActions("submitOrder", ["getOrderByIdAction"]),
+    headerClick(item, flag) {
+           var update = false
+      if (flag) {
+        update = true
+        var openid = this.userInfo.openid
+        this.getOrderByIdAction({'uid': openid, 'data' : item})
+      } else {
+          var shopId = item.shopId
+      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update})
+      }
     },
     addressClick() {
       wx.navigateTo({url: '/pages/addressList/main'})
