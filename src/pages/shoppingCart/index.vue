@@ -404,29 +404,9 @@ export default {
       this.selectSkuAction({item, index})
     },
     addClick(item, index, categoryIndex) {
-      if (item.oldData) {
-                var itemList = this.orderDetail.itemList
-                if (itemList && itemList.length) {
-                  for (var i in this.orderDetail.itemList) {
-                    if (itemList[i].goodsId === index) {
-                      itemList[i].sequence += 1
-                    }
-                  }
-                }                    
-      }
       this.addItemAction({item, index, categoryIndex})
     },
     reduceClick(item, index, categoryIndex) {
-           if (item.oldData) {
-                var itemList = this.orderDetail.itemList
-                if (itemList && itemList.length) {
-                  for (var i in this.orderDetail.itemList) {
-                    if (itemList[i].goodsId === index) {
-                      itemList[i].sequence -= 1
-                    }
-                  }
-                }                    
-      }
       this.reduceItemAction({item, index, categoryIndex})
     },
     closeSku() {

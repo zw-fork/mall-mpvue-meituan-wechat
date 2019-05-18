@@ -196,7 +196,16 @@ const actions = {
     var spus = selectedFood.spus
     if (!item.oldData) {
       spus.datas[index].sequence += 1
-    }
+    } else {
+        var itemList = this.state.submitOrder.orderDetail.itemList
+        if (itemList && itemList.length) {
+          for (var i in this.state.submitOrder.orderDetail.itemList) {
+            if (itemList[i].goodsId === index) {
+              itemList[i].sequence += 1
+            }
+          }
+        }                    
+}
   },
   reduceItemAction({state, commit}, {item, index, categoryIndex}) {
     var foods = state.shopInfo.categoryModelList
@@ -207,7 +216,16 @@ const actions = {
     if (!item.oldData) {
       spus.datas[index].sequence -= 1
       if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
-    }
+    } else {
+        var itemList = this.state.submitOrder.orderDetail.itemList
+        if (itemList && itemList.length) {
+          for (var i in this.state.submitOrder.orderDetail.itemList) {
+            if (itemList[i].goodsId === index) {
+              itemList[i].sequence -= 1
+            }
+          }
+        }                    
+}
   },
   closeShoppingCartAction({state, commit}) {
     var array = state.shopInfo.categoryModelList

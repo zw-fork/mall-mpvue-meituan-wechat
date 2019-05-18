@@ -30,7 +30,7 @@ const mutations = {
   currentOrderDataMut(state, info) {
     state.currentOrder = info
   },
-  changeOrderByIdDataMut(state, info) {
+  orderDetailDataMut(state, info) {
     state.orderDetail = info
   },
   currentOrderRemarkDataMut(state, info) {
