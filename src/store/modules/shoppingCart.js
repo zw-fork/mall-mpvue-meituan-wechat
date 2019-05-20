@@ -51,15 +51,6 @@ const mutations = {
 }
 
 const actions = {
-  getGoodsDataAction({state, commit}, {categoryId,page}) {
-    wx.showLoading({title: '加载中...', mask: true})
-    getFetch('/goods/list' + categoryId, {'page' : page, 'categoryId' : categoryId}, false).then(response => {
-      var goods = response.result || {}
-      var spus = {title: shopInfo.categoryModelList[0].name, index: 0, datas: goods.list, page: goods.nextPage}
-      shopInfo.categoryModelList[0].spus = spus
-      commit('changeSpusDataMut', spus)
-    })
-  },
   getMenuDataAction({state, commit}, {shopId, index, flag}) {
     if ((state.shopInfo && state.shopInfo.shopId != shopId) || flag) {
       state.shopInfo = {
@@ -75,7 +66,7 @@ const actions = {
             if (shopInfo.categoryModelList.length <= index) {
               index = 0
             }
-            getFetch('/goods/list', {page: 1, 'categoryId' :  shopInfo.categoryModelList[index].categoryId}, false).then(response => {
+            getFetch('/goods/'+shopId, {page: 1, 'categoryId' :  shopInfo.categoryModelList[index].categoryId}, false).then(response => {
               var goods = response.result || {}
               var spus = {title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId}
               shopInfo.categoryModelList[index].spus = spus
@@ -170,7 +161,7 @@ const actions = {
   getCategoryMenuDataAction({state, commit}, {index, categoryId}) {
     wx.showLoading({title: '加载中...', mask: true})
     if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
-      getFetch('/goods/list', {'categoryId' : categoryId}, false).then(response => {
+      getFetch('/goods/'+state.shopInfo.shopId, {'categoryId' : categoryId}, false).then(response => {
         var spus = {}
         var goods = response.result.list
         spus.title = state.shopInfo.categoryModelList[index].name

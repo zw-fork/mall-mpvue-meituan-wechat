@@ -225,13 +225,12 @@ export default {
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
         getGoods() {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/list', {'name' : this.name}, false).then(response => {
+      getFetch('/goods/'+this.shopInfo.shopId, {'name' : this.name}, false).then(response => {
         this.list.datas = response.result.list
         for (var index in this.list.datas) {
-           var goods = this.list.datas[index]
-           var oldGoods = this.cartMap[goods.goodsId]
+           var oldGoods = this.cartMap[this.list.datas[index].goodsId]
            if (oldGoods) {
-             this.list[index] = oldGoods
+             this.list.datas[index] = oldGoods
            }
         }
         this.list.page =  response.result.nextPage
@@ -242,20 +241,19 @@ export default {
   lower(e) {
     if (this.list.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/list', {'page' : this.list.page,'name' : this.name}, false).then(response => {
+      getFetch('/goods/'+this.shopInfo.shopId, {'page' : this.list.page,'name' : this.name}, false).then(response => {
         var goodsList = response.result.list
         for (var index in goodsList) {
-           var goods = goodsList[index]
-           var oldGoods = this.cartMap[goods.goodsId]
+           var oldGoods = this.cartMap[goodsList[index].goodsId]
            if (oldGoods) {
-             goods = oldGoods
+             goodsList[index] = oldGoods
            }
         }
+        this.list.page =  response.result.nextPage
         this.list.datas = [
             ...this.list.datas,
             ...goodsList
         ]
-        this.list.page =  response.result.nextPage
         wx.hideLoading()
       })
     }

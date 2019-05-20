@@ -323,18 +323,14 @@ export default {
   lower(e) {
     if (this.spus.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/list', {'page' : this.spus.page, 'categoryId' : this.spus.categoryId}, false).then(response => {
+      getFetch('/goods/'+this.shopInfo.shopId, {'page' : this.spus.page, 'categoryId' : this.spus.categoryId}, false).then(response => {
         var goods = response.result.list
                     for (var index1 in goods) {
-                var itemList = this.orderDetail.itemList
-                if (itemList && itemList.length) {
-                  for (var i in this.orderDetail.itemList) {
-                    if (itemList[i].goodsId === goods[index1].goodsId) {
-                      goods[index1].sequence = itemList[i].sequence
-                      itemList[i].status = true
-                    }
-                  }
-                }
+                      var g = this.cartMap[goods[index1].goodsId]
+                      if (g) {
+                        goods[index1].sequence = g.sequence
+                        this.cartMap[goods[index1].goodsId] = goods[index1]  
+                      }
               }
         this.spus.datas = [
             ...this.spus.datas,
