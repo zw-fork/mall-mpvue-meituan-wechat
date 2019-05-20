@@ -14,7 +14,9 @@ const state = {
   visibleSkuModal: false,
   visibleItemModal: false,
   skuInfo: {},
-  previewInfo: {}
+  previewInfo: {},
+  cartMap: {},
+  categoryMap: {}
 }
 
 const mutations = {
@@ -51,7 +53,7 @@ const mutations = {
 const actions = {
   getGoodsDataAction({state, commit}, {categoryId,page}) {
     wx.showLoading({title: '加载中...', mask: true})
-    getFetch('/goods/' + categoryId, {'page' : page}, false).then(response => {
+    getFetch('/goods/list' + categoryId, {'page' : page, 'categoryId' : categoryId}, false).then(response => {
       var goods = response.result || {}
       var spus = {title: shopInfo.categoryModelList[0].name, index: 0, datas: goods.list, page: goods.nextPage}
       shopInfo.categoryModelList[0].spus = spus
@@ -73,24 +75,14 @@ const actions = {
             if (shopInfo.categoryModelList.length <= index) {
               index = 0
             }
-            getFetch('/goods/' + shopInfo.categoryModelList[index].categoryId, {page: 1}, false).then(response => {
+            getFetch('/goods/list', {page: 1, 'categoryId' :  shopInfo.categoryModelList[index].categoryId}, false).then(response => {
               var goods = response.result || {}
               var spus = {title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId}
               shopInfo.categoryModelList[index].spus = spus
               commit('changeShopInfoDataMut', shopInfo)
-              for (var index1 in goods.list) {
-                var itemList = this.state.submitOrder.orderDetail.itemList
-                if (itemList && itemList.length) {
-                  for (var i in itemList) {
-                    if (itemList[i].goodsId === goods.list[index1].goodsId && !goods.list[index1].sequence) {
-                      goods.list[index1].sequence = itemList[i].sequence
-                      itemList[i].status = true
-                    }
-                  }
-                }
-              }
+              var itemList = this.state.submitOrder.orderDetail.itemList
               for (var index2 in shopInfo.categoryModelList) {
-                var itemList = this.state.submitOrder.orderDetail.itemList
+                state.categoryMap[shopInfo.categoryModelList[index2].categoryId] = shopInfo.categoryModelList[index2]
                 if (itemList && itemList.length) {
                   for (var i in itemList) {
                     if (itemList[i].categoryId === shopInfo.categoryModelList[index2].categoryId) {
@@ -106,6 +98,23 @@ const actions = {
                     }
                   }
                 }
+              }
+              for (const i in itemList) {
+                itemList[i].oldData = true
+                itemList[i].index = itemList[i].goodsId
+                state.cartMap[itemList[i].goodsId] = itemList[i]
+              }
+              for (const index1 in goods.list) {
+                if (itemList && itemList.length) {
+                  for (var i in itemList) {
+                    if (itemList[i].goodsId === goods.list[index1].goodsId && !goods.list[index1].sequence) {
+                      goods.list[index1].sequence = itemList[i].sequence
+                    }
+                  }
+                }
+                goods.list[index1].categoryIndex = index
+                goods.list[index1].index = parseInt(index1)
+                state.cartMap[goods.list[index1].goodsId] = goods.list[index1]
               }
               commit('changeSpusDataMut', spus)
             })
@@ -161,7 +170,7 @@ const actions = {
   getCategoryMenuDataAction({state, commit}, {index, categoryId}) {
     wx.showLoading({title: '加载中...', mask: true})
     if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
-      getFetch('/goods/' + categoryId, {}, false).then(response => {
+      getFetch('/goods/list', {'categoryId' : categoryId}, false).then(response => {
         var spus = {}
         var goods = response.result.list
         spus.title = state.shopInfo.categoryModelList[index].name
@@ -173,15 +182,12 @@ const actions = {
           return item
         })
         for (var index1 in goods) {
-          var itemList = this.state.submitOrder.orderDetail.itemList
-          if (itemList && itemList.length) {
-            for (var i in this.state.submitOrder.orderDetail.itemList) {
-              if (itemList[i].goodsId === goods[index1].goodsId) {
-                goods[index1].sequence = itemList[i].sequence
-                itemList[i].status = true
-              }
-            }
+          var data = state.cartMap[goods[index1].goodsId]
+          if (data) {
+            goods[index1].sequence = data.sequence 
           }
+          goods[index1].status = true
+          state.cartMap[goods[index1].goodsId] = goods[index1]       
         }
         state.shopInfo.categoryModelList[index].spus = spus
         commit('changeSpusDataMut', spus)
@@ -193,9 +199,7 @@ const actions = {
     } 
   },
   addItemAction({state, commit}, {item, index, categoryIndex}) {
-    var shopInfo = state.shopInfo
-    var foods = shopInfo.categoryModelList
-    var selectedFood = foods[categoryIndex]
+    var selectedFood = state.categoryMap[item.categoryId]
     if (!selectedFood.count) {
       selectedFood.count = 0
     }
@@ -207,35 +211,41 @@ const actions = {
     var spus = selectedFood.spus
     if (!item.oldData) {
       spus.datas[index].sequence += 1
-    } else {
-        var itemList = this.state.submitOrder.orderDetail.itemList
-        if (itemList && itemList.length) {
-          for (var i in this.state.submitOrder.orderDetail.itemList) {
-            if (itemList[i].goodsId === index) {
-              itemList[i].sequence += 1
-            }
-          }
-        }                    
+      spus.datas[index].index = index
+      spus.datas[index].categoryIndex = categoryIndex
+      state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
+    } 
+    else {
+      var goods = state.cartMap[item.goodsId]
+      if (goods) {
+        goods.sequence += 1
+      }else {
+        if (!item.sequence) {
+          item.sequence = 0
+        }
+        item.sequence += 1
+        state.cartMap[item.goodsId] = item
+      }                    
 }
   },
   reduceItemAction({state, commit}, {item, index, categoryIndex}) {
-    var foods = state.shopInfo.categoryModelList
-    var selectedFood = foods[categoryIndex]
+    var selectedFood = state.categoryMap[item.categoryId]
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
     var spus = selectedFood.spus
     if (!item.oldData) {
       spus.datas[index].sequence -= 1
+      spus.datas[index].index = index
+      spus.datas[index].categoryIndex = categoryIndex
+      state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
       if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
-    } else {
-        var itemList = this.state.submitOrder.orderDetail.itemList
-        if (itemList && itemList.length) {
-          for (var i in this.state.submitOrder.orderDetail.itemList) {
-            if (itemList[i].goodsId === index) {
-              itemList[i].sequence -= 1
-            }
-          }
-        }                    
+    } 
+    else {
+      var goods = state.cartMap[item.goodsId]
+      if (goods) {
+        goods.sequence -= 1
+        if ( goods.sequence < 0)  goods.sequence = 0
+      }                 
 }
   },
   closeShoppingCartAction({state, commit}) {

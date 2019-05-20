@@ -21,8 +21,13 @@
        <div class="cate-c">
          <span class="c-l" :style="{'font-weight': pageIndex === 0 ? lineStyle : null}" @click="menuClick">商品</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 1 ? lineStyle : null}" @click="shopClick">商家</span>
-         <span class="c-main"  @click="goHome">首页</span>  
+         <span class="c-m"  @click="goHome">首页</span>  
+        <div class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
+          <i class="icon mt-search-o"></i>
+          <span>搜索商品</span>
+        </div>
        </div>
+              
     </div>
     <div class="list-c" v-if="pageIndex === 0">
       <scroll-view class="list-l" :scroll-y="true">
@@ -243,7 +248,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("shoppingCart", ["shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
+    ...mapState("shoppingCart", ["cartMap", "shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
@@ -254,50 +259,26 @@ export default {
       if (this.shopInfo.categoryModelList) {
         this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
       }
-            var cartGoodsList = []
-      if (this.shopInfo.categoryModelList) {
-        for (var index in this.shopInfo.categoryModelList) {
-          var category = this.shopInfo.categoryModelList[index]
-          if (category.spus && category.spus.datas.length > 0) {
-            for (var i in category.spus.datas) {
-              var goods = category.spus.datas[i]
-              if (goods.sequence > 0) {
-                var cartGoods = {}
-                cartGoods.index = i
-                cartGoods.goodsId = goods.goodsId
-                cartGoods.categoryIndex = index
-                cartGoods.picture = goods.picture
-                cartGoods.name = goods.name
-                cartGoods.min_price = goods.min_price
-                cartGoods.sequence = goods.sequence
-                cartGoodsList.push(cartGoods)
-              }
-            }
-          }
-
+      var cartGoodsList = []
+      var goodsMap = this.cartMap
+      for (var key in goodsMap) {
+        if (goodsMap.hasOwnProperty(key)) {
+                  var goods = goodsMap[key]
+         if (goods.sequence > 0) {
+           var cartGoods = {}
+           cartGoods.index = goods.index
+           cartGoods.goodsId = goods.goodsId
+           cartGoods.categoryIndex = goods.categoryIndex
+           cartGoods.categoryId = goods.categoryId
+           cartGoods.picture = goods.picture
+           cartGoods.name = goods.name
+           cartGoods.oldData = goods.oldData
+           cartGoods.min_price = goods.currentPrice?goods.currentPrice:goods.min_price
+           cartGoods.sequence = goods.sequence
+           cartGoodsList.push(cartGoods)
+         }
         }
       }
-                      var itemList = this.orderDetail.itemList
-
-                 if (itemList && itemList.length) {
-                  for (var i in this.orderDetail.itemList) {
-                    if (!itemList[i].status) {
-                                    var goods = itemList[i]
-              if (goods.sequence > 0) {
-                var cartGoods = {}
-                cartGoods.index = goods.goodsId
-                cartGoods.goodsId = goods.goodsId
-                cartGoods.oldData = true
-                cartGoods.picture = goods.picture
-                cartGoods.categoryIndex = goods.categoryIndex
-                cartGoods.name = goods.name
-                cartGoods.min_price = goods.currentPrice
-                cartGoods.sequence = goods.sequence
-                cartGoodsList.push(cartGoods)
-              }
-                    }
-                  }
-                }
       this.cartGoodsList1 = cartGoodsList
       return parseFloat(price).toFixed(1);
     },
@@ -342,7 +323,7 @@ export default {
   lower(e) {
     if (this.spus.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/' + this.spus.categoryId, {'page' : this.spus.page}, false).then(response => {
+      getFetch('/goods/list', {'page' : this.spus.page, 'categoryId' : this.spus.categoryId}, false).then(response => {
         var goods = response.result.list
                     for (var index1 in goods) {
                 var itemList = this.orderDetail.itemList
@@ -455,7 +436,10 @@ export default {
       wx.switchTab({
         url: '/pages/home/main',
       })
-    }
+    },
+     searchClick() {
+      wx.navigateTo({url: '/pages/searchList/main'})
+    },
   },
   onLoad(options) 
   {
@@ -480,6 +464,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+      .header-r {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        background-color: #fff;
+        height: 60rpx;;
+        border-radius: 30rpx;
+        margin-left: 50rpx;
+        align-items: center;
+        i {
+          color: $textDarkGray-color;
+          font-size: 32rpx;
+          margin-left: 20rpx;
+        }
+        span {
+          color: $textDarkGray-color;
+          font-size: 24rpx;
+          margin-left: 10rpx;
+          margin-right:20rpx;
+        }
+      }
     .screen_cover{
         position: fixed;
         top: 0;
