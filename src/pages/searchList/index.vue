@@ -13,7 +13,7 @@
     </div>
     <div class="list-c" v-if="pageIndex === 0">
       <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
-        <div class="item-list" v-for="(item, index) in list" :key="index">
+        <div class="item-list" v-for="(item, index) in list.datas" :key="index">
           <div class="item">
             <div class="item-l">
               <img :src="item.picture">
@@ -144,13 +144,15 @@ export default {
       left: '40rpx',
       stars: [1, 2, 3, 4],
       cartGoodsList1 : [],
-      list:[],
+      list:{
+        datas : []
+      },
       name: undefined
 
     }
   },
   computed: {
-    ...mapState("shoppingCart", ["cartMap","shopInfo", "spus", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
+    ...mapState("shoppingCart", ["cartMap","shopInfo", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
@@ -224,39 +226,36 @@ export default {
         getGoods() {
       wx.showLoading({title: '加载中...', mask: true})
       getFetch('/goods/list', {'name' : this.name}, false).then(response => {
-        this.list = response.result.list
-        for (var index in this.list) {
-           var goods = this.list[index]
+        this.list.datas = response.result.list
+        for (var index in this.list.datas) {
+           var goods = this.list.datas[index]
            var oldGoods = this.cartMap[goods.goodsId]
            if (oldGoods) {
              this.list[index] = oldGoods
            }
         }
+        this.list.page =  response.result.nextPage
         wx.hideLoading()
       })
     },
      //滚动条滚到底部或右边的时候触发
   lower(e) {
-    if (this.spus.page>0) {
+    if (this.list.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/' + this.spus.categoryId, {'page' : this.spus.page}, false).then(response => {
-        var goods = response.result.list
-                    for (var index1 in goods) {
-                var itemList = this.orderDetail.itemList
-                if (itemList && itemList.length) {
-                  for (var i in this.orderDetail.itemList) {
-                    if (itemList[i].goodsId === goods[index1].goodsId) {
-                      goods[index1].sequence = itemList[i].sequence
-                      itemList[i].status = true
-                    }
-                  }
-                }
-              }
-        this.spus.datas = [
-            ...this.spus.datas,
-            ...goods
+      getFetch('/goods/list', {'page' : this.list.page,'name' : this.name}, false).then(response => {
+        var goodsList = response.result.list
+        for (var index in goodsList) {
+           var goods = goodsList[index]
+           var oldGoods = this.cartMap[goods.goodsId]
+           if (oldGoods) {
+             goods = oldGoods
+           }
+        }
+        this.list.datas = [
+            ...this.list.datas,
+            ...goodsList
         ]
-        this.spus.page =  response.result.nextPage
+        this.list.page =  response.result.nextPage
         wx.hideLoading()
       })
     }
