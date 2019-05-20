@@ -219,13 +219,36 @@ export default {
       }
     }
   },
+    onLoad(options) 
+  {
+    this.name = undefined,
+   this.list = {
+        datas : []
+      }
+  },
   methods: {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+        clearCart() {
+     var goodsMap = this.cartMap
+      for (var key in goodsMap) {
+         if (goodsMap.hasOwnProperty(key)) {
+           goodsMap[key].sequence = 0
+         }
+      }
+      if (this.shopInfo.categoryModelList) {
+        for (var index in this.shopInfo.categoryModelList) {
+          this.shopInfo.categoryModelList[index].totalPrice = 0
+           this.shopInfo.categoryModelList[index].count = 0
+        }
+       }
+       this.showCart = false
+    },
         getGoods() {
+          if (this.name && this.name.trim()) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/'+this.shopInfo.shopId, {'name' : this.name}, false).then(response => {
+      getFetch('/goods/'+this.shopInfo.shopId, {'name' : this.name.trim()}, false).then(response => {
         this.list.datas = response.result.list
         for (var index in this.list.datas) {
            var oldGoods = this.cartMap[this.list.datas[index].goodsId]
@@ -236,12 +259,14 @@ export default {
         this.list.page =  response.result.nextPage
         wx.hideLoading()
       })
+          }
+
     },
      //滚动条滚到底部或右边的时候触发
   lower(e) {
     if (this.list.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/'+this.shopInfo.shopId, {'page' : this.list.page,'name' : this.name}, false).then(response => {
+      getFetch('/goods/'+this.shopInfo.shopId, {'page' : this.list.page,'name' : this.name.trim()}, false).then(response => {
         var goodsList = response.result.list
         for (var index in goodsList) {
            var oldGoods = this.cartMap[goodsList[index].goodsId]

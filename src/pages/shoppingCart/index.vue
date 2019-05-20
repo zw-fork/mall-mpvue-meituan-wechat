@@ -319,6 +319,21 @@ export default {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    clearCart() {
+     var goodsMap = this.cartMap
+      for (var key in goodsMap) {
+         if (goodsMap.hasOwnProperty(key)) {
+           goodsMap[key].sequence = 0
+         }
+      }
+      if (this.shopInfo.categoryModelList) {
+        for (var index in this.shopInfo.categoryModelList) {
+          this.shopInfo.categoryModelList[index].totalPrice = 0
+           this.shopInfo.categoryModelList[index].count = 0
+        }
+       }
+       this.showCart = false
+    },
      //滚动条滚到底部或右边的时候触发
   lower(e) {
     if (this.spus.page>0) {
@@ -329,6 +344,7 @@ export default {
                       var g = this.cartMap[goods[index1].goodsId]
                       if (g) {
                         goods[index1].sequence = g.sequence
+                        goods[index1].oldData = true
                         this.cartMap[goods[index1].goodsId] = goods[index1]  
                       }
               }
@@ -442,6 +458,7 @@ export default {
     var that = this
     var shopId=options.shopId;
     var update = false
+    this.showCart = false
     if (options.update == 'true') {
       update = true
     }

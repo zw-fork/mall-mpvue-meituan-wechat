@@ -55,6 +55,8 @@ const actions = {
     if ((state.shopInfo && state.shopInfo.shopId != shopId) || flag) {
       state.shopInfo = {
       }
+      state.cartMap = {}
+      state.categoryMap = {}
       wx.showLoading({title: '加载中...', mask: true})
       getFetch('/shop/' + shopId, {}, false).then(response => {
         var res = shoppingCart.menuData.data
@@ -228,14 +230,16 @@ const actions = {
       spus.datas[index].sequence -= 1
       spus.datas[index].index = index
       spus.datas[index].categoryIndex = categoryIndex
-      state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
       if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
+      state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
     } 
     else {
       var goods = state.cartMap[item.goodsId]
       if (goods) {
         goods.sequence -= 1
-        if ( goods.sequence < 0)  goods.sequence = 0
+        if (goods.sequence < 0) {
+          goods.sequence = 0
+        }
       }                 
 }
   },
