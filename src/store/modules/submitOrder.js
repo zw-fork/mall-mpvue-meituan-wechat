@@ -74,7 +74,11 @@ const actions = {
           shopInfo : {}
         }
         commit('changeUserDataMut', user)
-          wx.switchTab({
+        getFetch('/order/' + order.uid, {'page' : 1}, false).then(response => {
+          var result = response.result || {}
+          commit('changeOrderDataMut', result)
+        })          
+        wx.switchTab({
             url: '/pages/orderList/main'
           })
       })

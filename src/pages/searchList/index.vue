@@ -221,6 +221,7 @@ export default {
   },
     onLoad(options) 
   {
+     this.showCart = false
     this.name = undefined,
    this.list = {
         datas : []

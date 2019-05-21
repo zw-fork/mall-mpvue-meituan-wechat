@@ -69,38 +69,13 @@
     <div class="shop-info" v-else-if="pageIndex === 1">
       <div class="address">
         <i class="icon mt-location-o"></i>
-        <span>上海市闵行区龙茗路1888号</span>
-        <i class="icon mt-phone-o"></i>
-      </div>
-      <div class="archive">
-        <i class="icon mt-security-o"></i>
-        <span>查看食品安全档案</span>
-        <i class="icon mt-arrow-right-o"></i>
+        <span>{{shopInfo.address}}</span>
+        <i class="icon mt-phone-o" @click.stop="clickCall()"></i>
       </div>
       <div class="delivery">
-        <div class="top">
-          <i class="icon mt-service-o"></i>
-          <span>配送服务：由美团快递提供配送服务</span>
-        </div>
         <div class="btm">
           <i class="icon mt-clock-s"></i>
           <span>配送时间：09:50-23:59</span>
-        </div>
-      </div>
-      <div class="service">
-        <div class="top">
-          <i class="icon mt-selected-o"></i>
-          <span class="l">商家服务：</span>
-          <span class="k">订</span>
-          <span class="v">跨天预订</span>
-          <span class="k" :style="{'margin-left': 10 + 'rpx'}">取</span>
-          <span class="v">到店自取（享优惠）</span>
-        </div>
-        <div class="discounts">
-          <div class="item" v-for="(item, index) in shopInfo.discounts2" :key="index">
-            <img :src="item.icon_url">
-            <span>{{item.info}}</span>
-          </div>
         </div>
       </div>
     </div>
@@ -243,7 +218,8 @@ export default {
       pageIndex: 0,
       left: '40rpx',
       stars: [1, 2, 3, 4],
-      cartGoodsList1 : []
+      cartGoodsList1 : [],
+      phoneList: ['10107888','22222222']
 
     }
   },
@@ -319,6 +295,16 @@ export default {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+        clickCall() {
+      var that = this
+      wx.showActionSheet({
+        title: "商家电话",
+        itemList: that.phoneList,
+        success(res) {
+          wx.makePhoneCall({phoneNumber: that.phoneList[res.tapIndex]})
+        }
+      })
+    },
     clearCart() {
      var goodsMap = this.cartMap
       for (var key in goodsMap) {
