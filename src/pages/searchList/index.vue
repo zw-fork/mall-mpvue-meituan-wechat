@@ -205,6 +205,10 @@ export default {
       }
     },
     btnTitle() {
+      if (this.shopInfo) {
+      if (this.shopInfo.statu != 1) {
+        return "打烊"
+      }
       var content = `${this.shopInfo.min_price}元起送`
       var price = 0
       if (this.shopInfo.categoryModelList) {
@@ -216,6 +220,9 @@ export default {
         return `还差${value}元`
       } else {
         return '去结算'
+      }
+      } else {
+        return ""
       }
     }
   },
@@ -289,12 +296,14 @@ export default {
                 this.cartGoodsList1.length ? this.showCart = !this.showCart : true;
             },
     orderClick() {
-      var price = 0
+      if (this.shopInfo) {
+              var price = 0
       if (this.shopInfo.categoryModelList) {
          this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
       }
-      if (price < this.shopInfo.min_price) return;
+      if (this.shopInfo.status != 1 || price < this.shopInfo.min_price) return;
       this.closeShoppingCartAction1()
+      }
     },
     closeShoppingCartAction1() {
           var array = this.shopInfo.categoryModelList

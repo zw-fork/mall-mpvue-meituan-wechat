@@ -10,7 +10,7 @@
           <div class="r-t">
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
-            <span class="t-m">配送时间: 09:50-23:20</span>
+            <span class="t-m">营业时间: 全天</span>
             <i class="icon mt-arrow-right-o" style="position:absolute; right:0rpx;"></i>
           </div>
           <div class="r-m">
@@ -75,7 +75,7 @@
       <div class="delivery">
         <div class="btm">
           <i class="icon mt-clock-s"></i>
-          <span>配送时间：09:50-23:59</span>
+          <span>营业时间: 全天</span>
         </div>
       </div>
     </div>
@@ -277,6 +277,10 @@ export default {
       }
     },
     btnTitle() {
+      if (this.shopInfo) {
+      if (this.shopInfo.status != 1) {
+        return "打烊"
+      }
       var content = `${this.shopInfo.min_price}元起送`
       var price = 0
       if (this.shopInfo.categoryModelList) {
@@ -288,6 +292,9 @@ export default {
         return `还差${value}元`
       } else {
         return '去结算'
+      }
+      } else {
+        return ""
       }
     }
   },
@@ -348,12 +355,14 @@ export default {
                 this.cartGoodsList1.length ? this.showCart = !this.showCart : true;
             },
     orderClick() {
-      var price = 0
+      if (this.shopInfo) {
+              var price = 0
       if (this.shopInfo.categoryModelList) {
          this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
       }
-      if (price < this.shopInfo.min_price) return;
+      if (this.shopInfo.status  != 1 || price < this.shopInfo.min_price) return;
       this.closeShoppingCartAction1()
+      }
     },
     closeShoppingCartAction1() {
           var array = this.shopInfo.categoryModelList

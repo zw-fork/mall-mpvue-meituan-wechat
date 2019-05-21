@@ -26,7 +26,7 @@
               <div class="r-m">
                 <span class="m-l">起送 ¥{{item.min_price}}</span>
                 <div class="m-m"></div>
-                <span class="m-r">配送时间: 08:11-01:22</span>
+                <span class="m-r">营业时间: 全天</span>
               </div>
               <div class="r-m">
                 <span class="m-l">地址：{{item.address}}</span>
