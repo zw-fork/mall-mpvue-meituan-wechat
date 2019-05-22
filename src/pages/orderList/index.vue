@@ -12,7 +12,7 @@
       <div class="item" v-for="(item, index) in orderList.datas" :key="index">
         <div class="shop-info">
           <img :src="item.shopInfo.pic_url">
-           <div class="order_title" @click="headerClick(item, false)">
+           <div class="order_title" @click="intoShop(item)">
               <div class="order-name" style="margin-bottom:-15rpx;">
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
@@ -33,8 +33,8 @@
             </div>
         </div>
         <div class="bottom-c">
-          <div class="btn" @click="headerClick(item, true)">
-            <span>再来一单</span>
+          <div class="btn" @click="headerClick(item)">
+            <span>{{item.status==1?'微信支付' : '再来一单'}}</span>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction", "getOrderByIdAction"]),
+    ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction", "getOrderByIdAction", "updateOrderStatusAction"]),
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
     updateOrderList(status) {
       this.scrollTop = 0
@@ -93,15 +93,17 @@ export default {
     
     }
   },
-    headerClick(item, flag) {
-      var update = false
-      if (flag) {
-        update = true
+  intoShop(item) {
+     var shopId = item.shopId
+     wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=false'})
+  },
+    headerClick(item) {
+      if (item.status==1) {
+        item.status = 3
+        this.updateOrderStatusAction({order : item})
+      }else{
         var openid = this.userInfo.openid
         this.getOrderByIdAction({'uid': openid, 'data' : item})
-      } else {
-          var shopId = item.shopId
-      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update})
       }
     },
     orderDetail(item) {      

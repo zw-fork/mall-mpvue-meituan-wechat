@@ -7,6 +7,22 @@
         <span class="phone">15214313256</span>
       </div>
     </div>
+    <div class="order-c">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;">
+         <span style="margin-left: 20rpx;">订单管理</span>
+      </div>
+      <swiper class="category-c">
+          <swiper-item>
+            <div class="grid-c">
+              <div class="item" v-for="(item, index) in orderList" :key="index"  @click="itemClick(item)">
+                <img class="item-img" :src="item.url">
+                <span class="item-title">{{item.name}}</span>
+                <text class="count">12</text>
+              </div>
+            </div>
+        </swiper-item>
+      </swiper>
+    </div>
     <div class="list-c">
       <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index" @click="itemClick(item)">
         <div class="item-l">
@@ -18,12 +34,6 @@
       </div>
     </div>
     <div>
-      <contact-button 
-  type="default-light" 
-  size="20"
-  session-from="weapp"
->
-</contact-button>
     </div>
     <div class="btn" @click="logoutClick">退出账号</div>
   </div>
@@ -32,10 +42,16 @@
 <script>
 
 import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
+import {homeData} from './data'
 
 export default {
   data() {
     return {
+       categoryArr: [{items: []}, {items: []}],
+      topBannerData: [],
+      bottomBanner: {},
+      shopsList: [],
+      orderList: [],
       itemList: [
         {
           title: '美团红包',
@@ -77,6 +93,12 @@ export default {
   computed: {
     ...mapState("user", ["userInfo"]),
   },
+    mounted() {
+    var categoryData = homeData.headData.data.primary_filter;
+    categoryData.map((item, index) => {
+       this.orderList.push(item)
+    })
+  },
   methods: {
     itemClick(e) {
       wx.navigateTo({url: e.path})
@@ -101,6 +123,67 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+  .order-c {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height:180rpx;
+    border-radius:25rpx;
+    margin:15rpx;
+    .category-c {
+      height: 100rpx;
+      background-color: white;
+      padding-top: 15rpx;
+      .grid-c {
+        height: 140rpx;
+        flex-wrap: wrap;
+        display: flex;
+        .item {
+          width: 20%;
+          background-color: white;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          box-sizing: border-box;
+          img {
+            width: 60rpx;
+            height: 60rpx;
+          }
+          span {
+            font-size: 20rpx;
+            color: $textBlack-color;
+            margin-top: 10rpx;
+          }
+          .count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $mtRed-color;
+            width: 30rpx;
+            height: 30rpx;
+            border-radius: 15rpx;
+            position: absolute;
+            font-size: 20rpx;
+            margin-left:20rpx;
+            color: white;
+          }
+        }
+      }
+    }
+    .item {
+      box-sizing: border-box;
+      margin-left: 20rpx;
+       float: left;
+      display: flex;
+    }
+    img {
+      width: 60rpx;
+      height: 60rpx;
+    }
+    p {
+      font-size: 32rpx;
+    }
+  }
   .header-c {
     display: flex;
     align-items: center;
@@ -130,7 +213,7 @@ export default {
   .list-c {
     display: flex;
     flex-direction: column;
-    margin-top: 20rpx;
+    margin-top: 200rpx;
     background-color: white;
     .item {
       display: flex;

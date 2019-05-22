@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/index/main",
-
     "pages/home/main",
     "pages/shoppingCart/main",
     "pages/submitOrder/main",
@@ -16,6 +15,7 @@
     "pages/searchList/main",
     "pages/addAddress/main",
     "pages/orderList/main",
+    "pages/orderItemList/main",
     "pages/remark/main",
     "pages/citySearch/main",
     "pages/citys/main",

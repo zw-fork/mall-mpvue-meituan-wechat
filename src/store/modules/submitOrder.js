@@ -65,6 +65,16 @@ const actions = {
       wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true'})
     })
   },
+  updateOrderStatusAction({state, commit}, {order}) {
+    wx.showLoading({title: '加载中...', mask: true})
+    postFetch('/order/' + order.id + '/' + order.status, {}, false).then(response => {
+      getFetch('/order/' + order.uid, {'page' : 1}, false).then(response => {
+        var result = response.result || {}
+        commit('changeOrderDataMut', result)
+      }) 
+      wx.hideLoading()
+    })
+  },
   postOrderDataAction({state, commit}, {order}) {
     var params = {'order': order}  
     postFetch('/order/' + order.uid, order, false).then(response => {
@@ -78,9 +88,7 @@ const actions = {
           var result = response.result || {}
           commit('changeOrderDataMut', result)
         })          
-        wx.switchTab({
-            url: '/pages/orderList/main'
-          })
+        wx.switchTab({url: '/pages/orderList/main'})
       })
   },
   showOrderDetailAction({state, commit}, {order}) {
