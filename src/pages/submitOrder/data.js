@@ -24,14 +24,14 @@ const orderData = {
         "recommend_type": 1
       },
       "address_type": 1,
-      "app_delivery_tip": "美团快送",
+      "app_delivery_tip": "快送",
       "box_price_type_tip": "包装费",
       "box_total_price": 4.0,
       "business_type_list": [{
         "selected": 1,
         "self_delivery_agree_selected": 0,
         "self_delivery_agree_url": "",
-        "title": "美团配送",
+        "title": "配送",
         "type": 0
       }, {
         "selected": 0,
@@ -306,7 +306,7 @@ const orderData = {
       "poi_project_description_url": "",
       "pre_order": 0,
       "privacy_service": {
-        "new_feature_guide_desc": "美团已为您开启号码保护，保护您的隐私",
+        "new_feature_guide_desc": "已为您开启号码保护，保护您的隐私",
         "privacy_close_desc": "对商家、骑手隐藏您的真实手机号，保护您的隐私",
         "privacy_desc": "对商家、骑手隐藏您的真实手机号，保护您的隐私",
         "privacy_explain_url": "http://i.waimai.meituan.com/node/static/privacy-rules",
@@ -336,7 +336,7 @@ const orderData = {
       "shipping_rule_url": "",
       "shop_cart_id": "",
       "show_steal_entry": 0,
-      "tableware_advocate_tip": "美团外卖倡导：减少使用一次性餐具，为环境保护出份力！",
+      "tableware_advocate_tip": "外卖倡导：减少使用一次性餐具，为环境保护出份力！",
       "taxpayer_id_number": "",
       "template_type": 0,
       "tip": "",
@@ -385,7 +385,7 @@ const orderData = {
         "selected": 0,
         "self_delivery_agree_selected": 0,
         "self_delivery_agree_url": "",
-        "title": "美团配送",
+        "title": "配送",
         "type": 0
       }, {
         "selected": 1,
@@ -669,7 +669,7 @@ const orderData = {
       "shipping_rule_url": "",
       "shop_cart_id": "",
       "show_steal_entry": 0,
-      "tableware_advocate_tip": "美团外卖倡导：减少使用一次性餐具，为环境保护出份力！",
+      "tableware_advocate_tip": "外卖倡导：减少使用一次性餐具，为环境保护出份力！",
       "taxpayer_id_number": "",
       "template_type": 0,
       "tip": "",

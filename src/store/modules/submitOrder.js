@@ -102,10 +102,8 @@ const actions = {
   },
   addRemarkDataAction({state, commit}, {remark}) {
     commit('currentOrderRemarkDataMut', remark)
-   // wx.navigateTo({url: '/pages/submitOrder/main'})
     wx.navigateBack()
   }
- // this.getCategoryMenuDataAction({categoryId, index})
 }
 
 const getters = {

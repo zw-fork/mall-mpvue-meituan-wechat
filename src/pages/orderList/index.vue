@@ -2,10 +2,11 @@
   <div class="container">
     <div class="header-c">
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(-1)">全部</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(1)">待支付</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 3 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(3)">配送中</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:25%;" @click="updateOrderList(4)">已完成</span>
+         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(-1)">全部</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(1)">待支付</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 3 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(3)">配送中</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(4)">已完成</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 5 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(5)">退款</span>
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
@@ -120,7 +121,7 @@ export default {
     ...mapState("submitOrder", ["orderList"]),
     ...mapState("user", ["userInfo"]),
      lineStyle() {
-      return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
+      return "bold;"
     }
   },
   onPullDownRefresh: function () {
@@ -141,7 +142,8 @@ export default {
     flex-direction: column;
     .cate-c {
       display: flex;
-      height: 60rpx;
+      height: 90rpx;
+      margin: 10rpx;
       align-items: center;
       border-bottom: 5rpx solid $spLine-color;
       position: relative;
@@ -149,17 +151,14 @@ export default {
       .c-l {
         font-size: 30rpx;
         color: $textBlack-color;
-        margin-left: 40rpx;
       }
       .c-m {
         font-size: 30rpx;
         color: $textBlack-color;
-        margin-left: 80rpx;
       }
       .c-r {
         font-size: 30rpx;
         color: $textBlack-color;
-        margin-left: 80rpx;
       }
       .c-main {
         position: absolute;
@@ -172,7 +171,7 @@ export default {
   .list-c {
     display: block;
     position: fixed;
-    top: 60rpx;
+    top: 105rpx;
     bottom: 0rpx;
     width:100%;
     .item {

@@ -4,7 +4,7 @@ const orderList = {
 		"category": 0,
 		"cursor": "{\"apply_id\":0,\"order_time\":1533610759,\"vernier\":\"MjM1NTczODA1ODYwNzAwMTE0NTgwOTI3ODQwMDg0\"}",
 		"digestlist": [{
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -70,7 +70,7 @@ const orderList = {
 			"wm_poi_id": 470871157426160,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -136,7 +136,7 @@ const orderList = {
 			"wm_poi_id": 470871157426160,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -205,7 +205,7 @@ const orderList = {
 			"wm_poi_id": 427955844165527,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -271,7 +271,7 @@ const orderList = {
 			"wm_poi_id": 340862497334301,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -340,7 +340,7 @@ const orderList = {
 			"wm_poi_id": 523905413608714,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -409,7 +409,7 @@ const orderList = {
 			"wm_poi_id": 421942889953763,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -478,7 +478,7 @@ const orderList = {
 			"wm_poi_id": 421942889953763,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -547,7 +547,7 @@ const orderList = {
 			"wm_poi_id": 421942889953763,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",
@@ -616,7 +616,7 @@ const orderList = {
 			"wm_poi_id": 421942889953763,
 			"wm_poi_valid": 1
 		}, {
-			"app_delivery_tip": "由美团快送提供配送服务",
+			"app_delivery_tip": "由快送提供配送服务",
 			"business_type": 0,
 			"button_list": [{
 				"click_url": "",

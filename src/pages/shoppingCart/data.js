@@ -32,7 +32,7 @@ const shoppingCart = {
       "friend_status": 1,
       "poi_info": {
         "can_use_coupon": 1,
-        "app_delivery_tip": "由美团快送提供配送服务",
+        "app_delivery_tip": "由快送提供配送服务",
         "cityId": 0,
         "epp_per_order_donation_amount": 0,
         "score": 0.0,
@@ -263,7 +263,7 @@ const shoppingCart = {
           "share_button_icon": "",
           "activity_id": 0,
           "share_info": {
-            "content": "生活不只有诗和远方，还有美团外卖正新汉堡·炸鸡（东兰餐厅店）",
+            "content": "生活不只有诗和远方，还有外卖正新汉堡·炸鸡（东兰餐厅店）",
             "icon": "http://p0.meituan.net/waimaipoi/6126e47d09268a4b0bc418488d693a9038058.jpg",
             "title": "正新汉堡·炸鸡（东兰餐厅店）",
             "weixin_url": "pages/external/poi?poi_id=470871157426160&user_id=228577344&utm_source=7004",
@@ -8990,7 +8990,7 @@ const shoppingCart = {
         }],
         "buz_code": 0,
         "can_additional": 1,
-        "comment": "11.31叫的 13点才送过来  要求退款 爱理不理 拒绝退款 美团客服退的款 🌚",
+        "comment": "11.31叫的 13点才送过来  要求退款 爱理不理 拒绝退款 客服退的款 🌚",
         "comment_labels": [{
           "content": "配送慢",
           "label_type": 2
