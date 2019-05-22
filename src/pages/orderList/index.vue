@@ -18,7 +18,7 @@
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
               </div>
-              <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
+              <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.updateTime}}</span>
            </div>
           <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==0">已取消</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==1">待支付</p>
@@ -38,10 +38,10 @@
             </div>
         </div>
         <div class="bottom-c">
-          <div class="btn" @click="headerClick(item)">
+          <div class="btn" @click="agreeClick(item)">
             <span>{{item.status==1?'微信支付' : '再来一单'}}</span>
           </div>
-          <div class="btn" @click="headerClick(item)" v-if="item.status<7">
+          <div class="btn" @click="cancelClick(item)" v-if="item.status<7 && item.status!=0">
             <span>{{item.status==1 ?'取消' : '退款'}}</span>
           </div>
         </div>
@@ -105,14 +105,25 @@ export default {
      var shopId = item.shopId
      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=false'})
   },
-    headerClick(item) {
+    agreeClick(item) {
       var status = item.status
+      var selectStatus = this.pageIndex == -1 ? null : this.pageIndex
       if (status==1) {
-        this.updateOrderStatusAction({order : item, status: 3})
+        this.updateOrderStatusAction({order : item, status: 3, selectStatus: selectStatus})
       }else{
         var openid = this.userInfo.openid
-        this.getOrderByIdAction({'uid': openid, 'data' : item})
+        this.getOrderByIdAction({'uid': openid, 'data' : item, selectStatus: selectStatus})
       }
+    },
+    cancelClick(item) {
+      var status = item.status
+      var selectStatus = this.pageIndex == -1 ? null : this.pageIndex
+      if (status==1) {
+        this.updateOrderStatusAction({order : item, status: 0, selectStatus: selectStatus})
+      }else{
+        this.updateOrderStatusAction({order : item, status: 7, selectStatus: selectStatus})
+      }
+      this.scrollTop = 0
     },
     orderDetail(item) {      
       this.showOrderDetailAction({order: item})

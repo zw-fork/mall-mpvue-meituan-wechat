@@ -65,10 +65,14 @@ const actions = {
       wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true'})
     })
   },
-  updateOrderStatusAction({state, commit}, {order, status}) {
+  updateOrderStatusAction({state, commit}, {order, status, selectStatus}) {
     wx.showLoading({title: '加载中...', mask: true})
+    var data = {'page' : 1, 'status' : selectStatus}
+    if (!selectStatus) {
+      data = {'page' : 1}
+    }
     postFetch('/order/' + order.id + '/' + status, {}, false).then(response => {
-      getFetch('/order/' + order.uid, {'page' : 1, 'status' : order.status}, false).then(response => {
+      getFetch('/order/' + order.uid, data, false).then(response => {
         var result = response.result || {}
         commit('changeOrderDataMut', result)
       }) 
