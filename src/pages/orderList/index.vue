@@ -6,7 +6,7 @@
          <span class="c-m" :style="{'font-weight': pageIndex === 1 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(1)">待支付</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 3 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(3)">配送中</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(4)">已完成</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 5 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(5)">退款</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(8)">退款</span>
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
@@ -20,11 +20,15 @@
               </div>
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
            </div>
-          <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">待支付</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==0">已取消</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==1">待支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付，等待商家配送</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==3">配送中</p>
-          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==0">已取消</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==4">已完成</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==5">其他</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==6">退款申请已取消</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==7">退款申请中</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==8">已退款</p>
         </div>
         <div class="googs-c" @click="orderDetail(item)">
           <div class="goods" style="float:left;">
@@ -36,6 +40,9 @@
         <div class="bottom-c">
           <div class="btn" @click="headerClick(item)">
             <span>{{item.status==1?'微信支付' : '再来一单'}}</span>
+          </div>
+          <div class="btn" @click="headerClick(item)" v-if="item.status<7">
+            <span>{{item.status==1 ?'取消' : '退款'}}</span>
           </div>
         </div>
       </div>
@@ -99,9 +106,9 @@ export default {
      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=false'})
   },
     headerClick(item) {
-      if (item.status==1) {
-        item.status = 3
-        this.updateOrderStatusAction({order : item})
+      var status = item.status
+      if (status==1) {
+        this.updateOrderStatusAction({order : item, status: 3})
       }else{
         var openid = this.userInfo.openid
         this.getOrderByIdAction({'uid': openid, 'data' : item})

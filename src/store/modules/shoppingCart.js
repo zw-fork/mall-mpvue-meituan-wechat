@@ -1,8 +1,6 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
 import {formatYMD} from '@/utils/formatTime'
-import {_array} from '@/utils/arrayExtension'
 import {shoppingCart} from '@/pages/shoppingCart/data'
-import {deepClone} from '@/utils/deepClone'
 import {getFetch} from '@/network/request/HttpExtension'
 const state = {
   shopInfo: {

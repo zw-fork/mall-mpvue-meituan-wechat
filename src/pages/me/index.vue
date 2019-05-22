@@ -23,6 +23,22 @@
         </swiper-item>
       </swiper>
     </div>
+    <div class="order-c">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;">
+         <span style="margin-left: 20rpx;">店铺管理</span>
+      </div>
+      <swiper class="category-c">
+          <swiper-item>
+            <div class="grid-c">
+              <div class="item" v-for="(item, index) in orderList" :key="index"  @click="itemClick(item)">
+                <img class="item-img" :src="item.url">
+                <span class="item-title">{{item.name}}</span>
+                <text class="count">12</text>
+              </div>
+            </div>
+        </swiper-item>
+      </swiper>
+    </div>
     <div class="list-c">
       <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index" @click="itemClick(item)">
         <div class="item-l">
@@ -54,7 +70,7 @@ export default {
       orderList: [],
       itemList: [
         {
-          title: '美团红包',
+          title: '红包',
           icon: 'mt-red-packet-o',
           path: '/pages/redPacket/main',
           amount: 4
