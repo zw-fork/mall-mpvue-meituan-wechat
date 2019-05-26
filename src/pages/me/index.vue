@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="order-c">
-      <div style="border-bottom: 2rpx solid;font-size: 28rpx;">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
          <span style="margin-left: 20rpx;">订单管理</span>
       </div>
       <swiper class="category-c">
@@ -24,13 +24,13 @@
       </swiper>
     </div>
     <div class="order-c">
-      <div style="border-bottom: 2rpx solid;font-size: 28rpx;">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
          <span style="margin-left: 20rpx;">店铺管理</span>
       </div>
       <swiper class="category-c">
           <swiper-item>
             <div class="grid-c">
-              <div class="item" v-for="(item, index) in orderList" :key="index"  @click="itemClick(item)">
+              <div class="item" v-for="(item, index) in shopMenuList" :key="index"  @click="itemClick(item)">
                 <img class="item-img" :src="item.url">
                 <span class="item-title">{{item.name}}</span>
                 <text class="count">12</text>
@@ -67,6 +67,7 @@ export default {
       topBannerData: [],
       bottomBanner: {},
       shopsList: [],
+      shopMenuList: [],
       orderList: [],
       itemList: [
         {
@@ -84,7 +85,7 @@ export default {
         {
           title: '我的地址',
           icon: 'mt-my-location-o',
-          path: '/pages/addressList/main'
+          path: '/pages/goodsManage/main'
         },
         {
           title: '邀请有奖',
@@ -113,6 +114,10 @@ export default {
     var categoryData = homeData.headData.data.primary_filter;
     categoryData.map((item, index) => {
        this.orderList.push(item)
+    })
+    var menuData = homeData.headData.data.shop_menu;
+    menuData.map((item, index) => {
+       this.shopMenuList.push(item)
     })
   },
   methods: {

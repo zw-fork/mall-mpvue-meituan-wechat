@@ -1,5 +1,6 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
 import {postFetch} from '@/network/request/HttpExtension'
+import {API_URL, XIAMIMUSIC, XIAMI_URL} from '@/constants/hostConfig'
 import { getUserInfoWechat } from "@/action/action";
 
 const state = {
@@ -179,7 +180,21 @@ const actions = {
         })
       }
     })
-  }
+  },
+
+  uploadImg({state, commit}, {img, goodsInfo}) {
+    var path = `${API_URL}`
+    wx.uploadFile({
+      url: path + '/goods/upload', //仅为示例，非真实的接口地址
+      filePath: img,
+      name: 'file',
+      formData: goodsInfo,
+      success: function (res) {
+        var data = res.data
+        console.log(res)
+      }
+    })
+  },
 }
 
 const getters = {

@@ -4,6 +4,10 @@
       <span>联系人：</span>
       <input placeholder="请填写收货人的姓名" placeholder-style="font-size: 24rpx" auto-focus v-model="item.name"/>
     </div>
+    <div class="phone">
+      <span>手机号：</span>
+      <input placeholder="请填写收货人手机号码" placeholder-style="font-size: 24rpx" v-model="item.phone"/>
+    </div>
     <div class="sex">
       <div class="l"></div>
       <div class="m" @click="updateSex(1)">
@@ -14,10 +18,6 @@
         <i :class="clazzB" :style="styleB"></i>
         <span>女士</span>
       </div>
-    </div>
-    <div class="phone">
-      <span>手机号：</span>
-      <input placeholder="请填写收货人手机号码" placeholder-style="font-size: 24rpx" v-model="item.phone"/>
     </div>
     <div class="address">
       <span class="l">收货地址：</span>
@@ -33,13 +33,19 @@
     <div class="submit" @click="saveAddress">
       <span>保存地址</span>
     </div>
+    <mp-button type="primary" size="mini" btnClass="mb15">默认按钮</mp-button>
+    <mp-uploader @upLoadSuccess="upLoadSuccess" @upLoadFail="upLoadFail" @uploadDelete="uploadDelete" :showTip=false :count=1></mp-uploader>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import mpButton from 'mpvue-weui/src/button';
 
 export default {
+  components: {
+      mpButton,
+    },
    data() {
     return {
       active : false,
@@ -116,14 +122,13 @@ input {
   right: 0;
   bottom: 0;
   .name {
-    display: flex;
     align-items: center;
     margin-left: 30rpx;
     padding-right: 30rpx;
-    height: 88rpx;
+    height: 100rpx;
     border-bottom: 2rpx solid $spLine-color;
     span {
-      font-size: 28rpx;
+      font-size: 32rpx;
       color: $textBlack-color;
       width: 160rpx;
     }
@@ -148,7 +153,7 @@ input {
         color: $theme-color;
       }
       span {
-        font-size: 28rpx;
+        font-size: 32rpx;
         color: $textBlack-color;
         margin-left: 20rpx;
       }
@@ -161,21 +166,20 @@ input {
         color: $textGray-color;
       }
       span {
-        font-size: 28rpx;
+        font-size: 32rpx;
         color: $textBlack-color;
         margin-left: 20rpx;
       }
     }
   }
   .phone {
-    display: flex;
     align-items: center;
     margin-left: 30rpx;
     padding-right: 30rpx;
-    height: 88rpx;
+    height: 100rpx;
     border-bottom: 2rpx solid $spLine-color;
     span {
-      font-size: 28rpx;
+      font-size: 32rpx;
       color: $textBlack-color;
       width: 160rpx;
     }
@@ -191,7 +195,7 @@ input {
     height: 88rpx;
     border-bottom: 2rpx solid $spLine-color;
     .l {
-      font-size: 28rpx;
+      font-size: 32rpx;
       color: $textBlack-color;
       width: 160rpx;
     }
@@ -203,7 +207,7 @@ input {
         color: $textGray-color;
       }
       span {
-        font-size: 28rpx;
+        font-size: 32rpx;
         margin-left: 10rpx;
         margin-top: 10rpx;
       }

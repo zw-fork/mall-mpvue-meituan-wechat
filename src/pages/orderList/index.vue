@@ -2,11 +2,9 @@
   <div class="container">
     <div class="header-c">
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(-1)">全部</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(1)">待支付</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 3 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(3)">配送中</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(4)">已完成</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList(8)">退款</span>
+         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:30%;" @click="updateOrderList(-1)">全部订单</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:30%;" @click="updateOrderList(4)">已完成</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:30%;" @click="updateOrderList(8)">退款</span>
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">

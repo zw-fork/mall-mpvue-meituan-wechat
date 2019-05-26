@@ -36,6 +36,7 @@ const host = {
   prd: {
     API_URL: 'http://digcampus.natapp1.cc/',
     XIAMI_URL: 'https://api-m.mtime.cn',
+    GOODS_URL_PREFIX: 'http://digcampus.natapp1.cc/img',
     MSITE_URL: 'https://api.douban.com',
     VENILOG_URL: 'https://api.douban.com',
     appId: 'wx3d5c531f5e123456',
@@ -52,7 +53,8 @@ const SET_HOST = (env = 'dev') => {
 }
 
 const API_URL = currentHost.API_URL
+const GOODS_URL_PREFIX = currentHost.GOODS_URL_PREFIX
 const XIAMI_URL = currentHost.XIAMI_URL
 const MSITE_URL = currentHost.MSITE_URL
 const VENILOG_URL = currentHost.VENILOG_URL
-export {ENV, API_URL, MSITE_URL, VENILOG_URL, XIAMI_URL, SET_HOST, currentHost}
+export {ENV, API_URL,GOODS_URL_PREFIX, MSITE_URL, VENILOG_URL, XIAMI_URL, SET_HOST, currentHost}

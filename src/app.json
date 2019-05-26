@@ -17,6 +17,7 @@
     "pages/orderList/main",
     "pages/orderItemList/main",
     "pages/remark/main",
+    "pages/goodsManage/main",
     "pages/citySearch/main",
     "pages/citys/main",
     "pages/addressList/main",

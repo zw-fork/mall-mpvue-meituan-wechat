@@ -24,7 +24,7 @@
       </div>
       <div class="list">
         <div class="item" v-for="(item, index) in currentOrder.itemList" :key="index">
-          <img :src="item.picture">
+          <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
               <span>{{item.name}}</span>
@@ -69,6 +69,7 @@ import sepLine from "@/components/sep-line";
 import {orderData} from './data'
 import {openLocation} from '@/utils/wxapi'
 import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
+import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
   data() {
@@ -83,6 +84,9 @@ export default {
   computed: {
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["currentOrder"]),
+    path() {
+      return `${GOODS_URL_PREFIX}`
+    },
     deliveryFee() {
       return this.currentOrder.shopInfo.support_pay
     },

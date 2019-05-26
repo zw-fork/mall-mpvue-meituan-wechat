@@ -39,11 +39,16 @@
       <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
         <div class="section">
           <span class="title">{{spus.title}}</span>
+          <!-- <div style=" position: absolute;right:10rpx;">
+ <span class="title" style="float: left;">{{spus.title}}</span>
+          <i class="icon mt-reduce-o" style="float: left;"></i>
+          </div> -->
+         
         </div>
         <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
           <div class="item">
             <div class="item-l">
-              <img :src="item.picture">
+              <img :src="path + item.picture">
             </div>
             <div class="item-r">
               <span class="title">{{item.name}}</span>
@@ -209,6 +214,7 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {formatYMD} from '@/utils/formatTime'
 import {_array} from '@/utils/arrayExtension'
 import {getFetch} from '@/network/request/HttpExtension'
+import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
   data() {
@@ -229,6 +235,9 @@ export default {
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
+    },
+    path() {
+      return `${GOODS_URL_PREFIX}`
     },
     totalPrice() {
       var price = 0

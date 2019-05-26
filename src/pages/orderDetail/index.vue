@@ -28,7 +28,7 @@
       </div>
       <div class="list">
         <div class="item" v-for="(item, index) in foodList" :key="index">
-          <img :src="item.picture">
+          <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
               <span>{{item.name}}</span>
@@ -116,6 +116,7 @@
 import sepLine from "@/components/sep-line";
 import {openLocation} from '@/utils/wxapi'
 import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
+import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
   data() {
@@ -127,6 +128,9 @@ export default {
   computed: {
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
+    path() {
+      return `${GOODS_URL_PREFIX}`
+    },
     deliveryFee() {
       return this.orderDetail.deliveryFee
     },
