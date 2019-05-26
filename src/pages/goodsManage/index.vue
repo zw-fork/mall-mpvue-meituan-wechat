@@ -56,7 +56,7 @@ import mpButton from 'mpvue-weui/src/button';
 import mpPicker from 'mpvue-weui/src/picker';
 import inputDialog from '@/components/inputDialog';
 import mpUploader from 'mpvue-weui/src/uploader';
-import {getFetch} from '@/network/request/HttpExtension'
+import {getFetch, postFetch} from '@/network/request/HttpExtension'
 
 export default {
   components: {
@@ -129,14 +129,21 @@ export default {
       uploadFile() {
         this.goods.shopId = this.shopInfo.shopId
         this.goods.shopName = this.shopInfo.shopName
+        this.goods.goodsPrice = parseFloat(this.goods.goodsPrice)
         this.uploadImg({img : this.img, goodsInfo: this.goods})
       },
       createCategory2(name) {
         var category = {}
         category.shopId = 1
         category.name = name
-        this.createCategory({'category' :category})
-        console.log(name);
+        postFetch('/category/' + category.shopId, category, false).then(response => {
+          var data = {}
+          data.label = response.result.name
+          data.value = response.result.categoryId
+          this.goods.categoryName = data.label
+          this.goods.categoryId = data.value
+          this.categoryArray.push(data)
+        })
       },
           onChange(e) {
            
