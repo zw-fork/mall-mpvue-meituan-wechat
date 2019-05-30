@@ -11,6 +11,7 @@
     "pages/redPacket/main",
     "pages/couponList/main",
     "pages/categoryList/main",
+    "pages/goodsList/main",
     "pages/selectAddress/main",
     "pages/searchList/main",
     "pages/addAddress/main",

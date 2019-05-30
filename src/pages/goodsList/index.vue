@@ -49,7 +49,7 @@
         <img src="/static/images/down.png">
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-            <div @click="uploadGoods">
+            <div @click="upGoods">
 <img src="/static/images/down.png">
 <span style="color:white;text-align: center;">上架</span>
       </div>
@@ -145,6 +145,39 @@ export default {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    upGoods(){
+      wx.showModal({
+          content: '确定上架当前商品？',
+          confirmColor: '#FFC24A',
+          success: function(res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+        }
+      })
+    },
+    downGoods(){
+      wx.showModal({
+          content: '确定下架当前商品？',
+          confirmColor: '#FFC24A',
+          success: function(res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+        }
+      })
+    },
+    deleteGoods(){
+      wx.showModal({
+          content: '确定删除当前商品？',
+          confirmColor: '#FFC24A',
+          success: function(res) {
+            if (res.confirm) {
+            } else if (res.cancel) {
+            }
+        }
+      })
+    },
     editGoods() {
       wx.navigateTo({url: '/pages/goodsManage/main?id=' + this.selectGoods.goodsId})
     },

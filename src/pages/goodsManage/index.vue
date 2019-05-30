@@ -123,7 +123,6 @@ export default {
   computed: {
     ...mapState("address", ["myAddress"]),
     ...mapState("user", ["userInfo"]),
-    ...mapState("shoppingCart", ["shopInfo"]),
     path() {
       return `${GOODS_URL_PREFIX}`
     },
@@ -155,8 +154,8 @@ export default {
     })
       },
       uploadFile() {
-        this.goods.shopId = this.shopInfo.shopId
-        this.goods.shopName = this.shopInfo.shopName
+        this.goods.shopId = this.userInfo.shopId
+        this.goods.shopName = this.userInfo.shopName
         this.goods.goodsPrice = parseFloat(this.goods.goodsPrice)
         this.uploadImg({goodsModel : this.goods})
       },
@@ -219,6 +218,11 @@ export default {
   },
   onLoad(options) 
   {
+    this.goods = {
+        statusName : '上架',
+        status : 1,
+        picture: undefined
+      }
     this.reFresh= false
     this.$nextTick(()=>{     
       this.reFresh = true
@@ -246,11 +250,10 @@ export default {
           }
            for (var index in this.statusArray) {
             if (this.goods.status == this.statusArray[index].value) {
-              this.goods.statusName = this.categoryArray[index].label
+              this.goods.statusName = this.statusArray[index].label
             }
           }
         }
-        console.log(this.goods)
       })
     }
     })
