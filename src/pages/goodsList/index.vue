@@ -2,7 +2,7 @@
 <div>
   <div class="container" @click="update">
     <div class="header-c">
-      <div class="header">
+            <div class="header">
         <div class="header-r" @click="scanClick()">
           <img class="item-img" src="/static/images/scan.png">
         </div>
@@ -13,7 +13,12 @@
          <div class="header-r" style="margin: 0 10rpx;" @click="getGoods()">
         <span>搜索</span>
       </div>
-      </div>          
+      </div>    
+       <div class="cate-c">
+         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:34%;" @click="updateOrderList(-1)">全部</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(4)">销售中</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(8)">未上架</span>
+       </div>
     </div>
     <div class="list-c" v-if="pageIndex === 0">
       <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
@@ -90,7 +95,7 @@ export default {
       list:{
         datas : []
       },
-      name: undefined
+      name: ''
 
     }
   },
@@ -136,7 +141,7 @@ export default {
     onLoad(options) 
   {
      this.showCart = false
-    this.name = undefined,
+    this.name = '',
    this.list = {
         datas : []
       }
@@ -200,8 +205,7 @@ export default {
         }
       })
     }, 
-        getGoods() {
-          if (this.name && this.name.trim()) {
+    getGoods() {
       wx.showLoading({title: '加载中...', mask: true})
       getFetch('/goods/'+this.userInfo.shopId, {'name' : this.name.trim()}, false).then(response => {
         this.list.datas = response.result.list
@@ -214,8 +218,6 @@ export default {
         this.list.page =  response.result.nextPage
         wx.hideLoading()
       })
-          }
-
     },
      //滚动条滚到底部或右边的时候触发
   lower(e) {
@@ -299,11 +301,45 @@ export default {
       var item = this.previewInfo
       this.selectSkuAction({item, index: item.preIndex})
     }
+  },
+    onLoad(options) 
+  {
+    this.getGoods()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .header-c {
+    display: flex;
+    flex-direction: column;
+    .cate-c {
+      display: flex;
+      height: 70rpx;
+      align-items: center;
+      border-bottom: 5rpx solid $spLine-color;
+      position: relative;
+      transition: all 0.2s;
+      .c-l {
+        font-size: 30rpx;
+        color: $textBlack-color;
+      }
+      .c-m {
+        font-size: 30rpx;
+        color: $textBlack-color;
+      }
+      .c-r {
+        font-size: 30rpx;
+        color: $textBlack-color;
+      }
+      .c-main {
+        position: absolute;
+        font-size: 32rpx;
+        color: $textBlack-color;
+        right: 30rpx;
+      }
+    }    
+  }
 .editGoods {
   background-color: black;
    display: flex;
@@ -541,7 +577,7 @@ export default {
   .list-c {
     display: flex;
     position: fixed;
-    top: 90rpx;
+    top: 150rpx;
     width:100%;
     bottom: 0rpx;
     .list-l {
