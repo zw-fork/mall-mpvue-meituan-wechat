@@ -454,7 +454,7 @@ export default {
       })
     },
      searchClick() {
-      wx.navigateTo({url: '/pages/searchList/main'})
+      wx.navigateTo({url: '/pages/searchList/main?shopId='+this.shopInfo.shopId})
     },
   },
   onLoad(options) 
