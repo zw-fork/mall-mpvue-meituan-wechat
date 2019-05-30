@@ -32,6 +32,10 @@ const store = new Vuex.Store({
       namespaced: true,
       ...shop
     },
+    wx: {
+      namespaced: true,
+      ...wx
+    },
   }
 })
 

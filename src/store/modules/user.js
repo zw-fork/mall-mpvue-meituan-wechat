@@ -182,18 +182,23 @@ const actions = {
     })
   },
 
-  uploadImg({state, commit}, {img, goodsInfo}) {
+  uploadImg({state, commit}, {goodsModel}) {
     var path = `${API_URL}`
-    wx.uploadFile({
-      url: path + '/goods/upload', //仅为示例，非真实的接口地址
-      filePath: img,
-      name: 'file',
-      formData: goodsInfo,
-      success: function (res) {
-        var data = res.data
-        console.log(res)
-      }
-    })
+    if (goodsModel.wechat) {
+      wx.uploadFile({
+        url: path + '/goods/upload', //仅为示例，非真实的接口地址
+        filePath: goodsModel.picture,
+        name: 'file',
+        formData: goodsModel,
+        success: function (res) {
+          wx.navigateBack()
+        }
+      })
+    } else {
+      postFetch('/goods/upload2', goodsModel, false).then(response => {
+        wx.navigateBack()
+      })
+    }
   },
 }
 

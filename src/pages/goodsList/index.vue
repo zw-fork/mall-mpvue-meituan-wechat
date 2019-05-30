@@ -34,7 +34,7 @@
                     <span>{{item.sequence}}</span>
                   </div>
                   <div class="add-r" >
-                    <img @click.stop="logoutClick($event)" style="width:40rpx;height:40rpx;" src="/static/images/point.png">
+                    <img @click.stop="manageGoods($event, item)" style="width:40rpx;height:40rpx;" src="/static/images/point.png">
                   </div>
                 </div>
               </div>
@@ -45,17 +45,21 @@
     </div>
   </div>
         <div class="editGoods" :style="divStyle" v-if="showEdit">
-      <div>
+      <div @click="editGoods">
         <img src="/static/images/down.png">
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-            <div>
+            <div @click="uploadGoods">
 <img src="/static/images/down.png">
 <span style="color:white;text-align: center;">上架</span>
       </div>
-            <div>
+            <div @click="downGoods">
 <img src="/static/images/down.png">
 <span style="color:white;text-align: center;">下架</span>
+      </div>
+                  <div @click="deleteGoods">
+<img src="/static/images/down.png">
+<span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
   </div>
@@ -73,6 +77,7 @@ import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 export default {
   data() {
     return {
+      selectGoods:undefined,
       show: false,
       divStyle: '',
       showEdit: false,
@@ -140,11 +145,15 @@ export default {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    editGoods() {
+      wx.navigateTo({url: '/pages/goodsManage/main?id=' + this.selectGoods.goodsId})
+    },
     update() {
       this.showEdit = false
       return false;
     },
-    logoutClick(e) {
+    manageGoods(e, item) {
+      this.selectGoods = item
       this.showEdit = true
       this.divStyle = 'top:' + (e.target.offsetTop + e.target.y - 20) + 'rpx;'
       return false;

@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+<div>
+  <div class="container" @click="update">
     <div class="header-c">
       <img :src="userInfo.avatarUrl" alt="">
       <div class="info-c">
@@ -40,18 +41,33 @@
       </swiper>
     </div>
     <div class="list-c">
-      <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index" @click="itemClick(item)">
+      <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index">
         <div class="item-l">
           <i class='icon' :class="item.icon"></i>
           <span class="title">{{item.title}}</span>
           <span class="amount" v-if="item.amount">{{item.amount}}<span>张</span></span>
         </div>
-        <i class='icon mt-arrow-right-o'></i>
+        <i class='icon mt-arrow-right-o' @click="logoutClick($event)"></i>
       </div>
     </div>
     <div>
     </div>
-    <div class="btn" @click="logoutClick">退出账号</div>
+    <div class="btn" @click="logoutClick($event)">退出账号</div>
+</div>
+    <div class="editGoods" :style="divStyle" v-if="showEdit">
+      <div>
+        <img src="/static/images/down.png">
+        <span style="color:white;text-align: center;">编辑</span>
+      </div>
+            <div>
+<img src="/static/images/down.png">
+<span style="color:white;text-align: center;">上架</span>
+      </div>
+            <div>
+<img src="/static/images/down.png">
+<span style="color:white;text-align: center;">下架</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -63,8 +79,11 @@ import {homeData} from './data'
 export default {
   data() {
     return {
+      show: false,
+      showEdit: false,
        categoryArr: [{items: []}, {items: []}],
       topBannerData: [],
+      divStyle: '',
       bottomBanner: {},
       shopsList: [],
       shopMenuList: [],
@@ -121,28 +140,60 @@ export default {
     })
   },
   methods: {
+    update() {
+      if (!this.show) {
+        this.showEdit = false
+      }
+       this.show = false
+       return false;
+    },
     itemClick(e) {
       wx.navigateTo({url: e.path})
     },
-    logoutClick() {
-      wx.showModal({
-          title: '确认退出？',
-          content: '退出登录后将无法查看订单，重新登录即可查看',
-          confirmColor: '#FFC24A',
-          success: function(res) {
-            if (res.confirm) {
-              resolve('ok')
-            } else if (res.cancel) {
-              resolve('cancle')
-            }
-        }
-      })
+    logoutClick(e) {
+      this.showEdit = true
+      this.show = true
+       this.divStyle = 'top:' + (e.target.offsetTop + e.target.y - 20) + 'rpx;'
+       return false;
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+    .screen_cover{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0,0,0,.3);
+        z-index: 11;
+    }
+.editGoods {
+  background-color: black;
+   display: flex;
+   position: absolute;
+   opacity: 0.5;
+   right: 0rpx;
+   img {
+           flex-direction: column;
+      align-items: center;
+      display: flex;
+     margin: 10rpx;
+     width: 50rpx;
+     margin-left: 40rpx;
+     height: 50rpx;
+   }
+   span {
+      flex-direction: column;
+      align-items: center;
+      display: flex;
+           margin: 10rpx;
+           margin-left: 40rpx;
+      font-size: 24rpx;
+   }
+}
 .container {
   .order-c {
     display: flex;

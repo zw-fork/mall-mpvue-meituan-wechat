@@ -1,22 +1,24 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="reFresh">
     <div class="name">
       <span>商品名称：</span>
-      <input placeholder="请填写商品名称" placeholder-style="font-size: 24rpx" auto-focus v-model="goods.name"/>
+      <input placeholder="请填写商品名称" placeholder-style="font-size: 24rpx" v-model="goods.name"/>
     </div>
     <div class="name">
       <span>商品描述：</span>
-      <input placeholder="请填写商品描述" placeholder-style="font-size: 24rpx" auto-focus v-model="goods.description"/>
+      <input placeholder="请填写商品描述" placeholder-style="font-size: 24rpx" v-model="goods.description"/>
     </div>
     <div class="phone"> 
       <span>商品图片：</span>
     <div style="margin-left:150rpx;top:100rpx;margin-top:-45rpx">
-    <mp-uploader @upLoadSuccess="upLoadSuccess" @upLoadFail="upLoadFail" @upLoadComplete="upLoadComplete" @uploadDelete="uploadDelete" :maxLength=2 :showTip=false :count=1></mp-uploader>    
+      <img v-if="goods.picture" class="choosed-img" :src="goods.wechat? goods.picture : (path + goods.picture)" alt="">
+      <img v-if="goods.picture" class="deleteImg" src="/static/images/delete.png" alt="" @click="deleteImg()">
+      <img class="choosed-img" src="/static/images/addphotoes.png" alt="" @click="uploadImg2()">
     </div>
     </div>
     <div class="name">
       <span>商品价格：</span>
-      <input placeholder="请填写商品价格" placeholder-style="font-size: 24rpx" auto-focus v-model="goods.goodsPrice"/>
+      <input placeholder="请填写商品价格" placeholder-style="font-size: 24rpx" v-model="goods.goodsPrice"/>
     </div>
     <div class="b-mid">
         <div class="mid-l">
@@ -31,7 +33,7 @@
     <div class="b-mid" @click="remarkClick">
         <span class="mid-l">商品状态:</span>
         <div class="mid-r" @click="showSinglePicker">
-          <span>{{goods.status}}</span>
+          <span>{{goods.statusName}}</span>
           <i class="icon mt-arrow-right-o"></i>
         </div>
     </div>
@@ -57,6 +59,7 @@ import mpPicker from 'mpvue-weui/src/picker';
 import inputDialog from '@/components/inputDialog';
 import mpUploader from 'mpvue-weui/src/uploader';
 import {getFetch, postFetch} from '@/network/request/HttpExtension'
+import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
   components: {
@@ -67,9 +70,11 @@ export default {
     },
    data() {
     return {
+      reFresh:true,
       goods : {
         statusName : '上架',
-        status : 1
+        status : 1,
+        picture: undefined
       },
       showCategory: false,
       pickerValueArray: [], // picker 数组值
@@ -119,6 +124,9 @@ export default {
     ...mapState("address", ["myAddress"]),
     ...mapState("user", ["userInfo"]),
     ...mapState("shoppingCart", ["shopInfo"]),
+    path() {
+      return `${GOODS_URL_PREFIX}`
+    },
     selectedStyle() {
       return this.item.gender? 'color: #F9D173;' : 'color: #333;'
     }
@@ -126,15 +134,35 @@ export default {
     methods: {
       ...mapActions("user", ["uploadImg"]),
       ...mapActions("shop", ["createCategory", "createShop"]),
+      deleteImg() {
+        this.goods.picture = undefined
+      },
+      uploadImg2() {
+        if (this.goods.picture) {
+          wx.showToast({ title: '最多只能上传一张图片!', icon: 'none', duration: 2000 })
+          return
+        }
+        var that = this
+        wx.chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success: function (res) {
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        that.goods.picture = res.tempFilePaths[0]
+        that.goods.wechat = true
+      }
+    })
+      },
       uploadFile() {
         this.goods.shopId = this.shopInfo.shopId
         this.goods.shopName = this.shopInfo.shopName
         this.goods.goodsPrice = parseFloat(this.goods.goodsPrice)
-        this.uploadImg({img : this.img, goodsInfo: this.goods})
+        this.uploadImg({goodsModel : this.goods})
       },
       createCategory2(name) {
         var category = {}
-        category.shopId = 1
+        category.shopId = this.userInfo.shopId
         category.name = name
         postFetch('/category/' + category.shopId, category, false).then(response => {
           var data = {}
@@ -191,7 +219,12 @@ export default {
   },
   onLoad(options) 
   {
-    getFetch('/category/list/' + 1, {}, false).then(response => {
+    this.reFresh= false
+    this.$nextTick(()=>{     
+      this.reFresh = true
+    });
+    console.log(options.id)
+    getFetch('/category/list/' +  this.userInfo.shopId, {}, false).then(response => {
       var list = response.result
       var categoryArray = []
       for (var index in list) {
@@ -201,12 +234,43 @@ export default {
         categoryArray.push(data)
       }
       this.categoryArray = categoryArray
+          if (options.id) {
+      getFetch('/goods/'+this.userInfo.shopId, {'goodsId' : options.id}, false).then(response => {
+        if (response.result.list.length>0) {
+          this.goods = response.result.list[0]
+          this.goods.goodsPrice = this.goods.min_price?this.goods.min_price:this.goods.goodsPrice
+          for (var index in this.categoryArray) {
+            if (this.goods.categoryId == this.categoryArray[index].value) {
+              this.goods.categoryName = this.categoryArray[index].label
+            }
+          }
+           for (var index in this.statusArray) {
+            if (this.goods.status == this.statusArray[index].value) {
+              this.goods.statusName = this.categoryArray[index].label
+            }
+          }
+        }
+        console.log(this.goods)
+      })
+    }
     })
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.deleteImg {
+  height:30rpx;
+  width:30rpx;
+  right:35rpx;
+  top:-120rpx;
+  position:relative;
+}
+.choosed-img {
+  margin-left: 20rpx;
+  height: 150rpx;
+  width: 150rpx;
+}
     .b-mid {
       display: flex;
       align-items: center;

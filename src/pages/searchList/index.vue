@@ -2,11 +2,14 @@
   <div class="container">
     <div class="header-c">
       <div class="header">
-                <div class="header-r">
+        <div class="header-r" @click="scanClick()">
+          <img class="item-img" src="/static/images/scan.png">
+        </div>
+                <div class="header-m">
           <i class="icon mt-search-o"></i>
           <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name"/>
         </div>
-         <div class="header-l" style="margin: 0 10rpx;" @click="getGoods()">
+         <div class="header-r" style="margin: 0 10rpx;" @click="getGoods()">
         <span>搜索</span>
       </div>
       </div>          
@@ -16,7 +19,7 @@
         <div class="item-list" v-for="(item, index) in list.datas" :key="index">
           <div class="item">
             <div class="item-l">
-              <img :src="item.picture">
+              <img :src="path + item.picture">
             </div>
             <div class="item-r">
               <span class="title">{{item.name}}</span>
@@ -134,6 +137,7 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {formatYMD} from '@/utils/formatTime'
 import {_array} from '@/utils/arrayExtension'
 import {getFetch} from '@/network/request/HttpExtension'
+import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
   data() {
@@ -157,6 +161,9 @@ export default {
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
+    },
+    path() {
+      return `${GOODS_URL_PREFIX}`
     },
     totalPrice() {
       var price = 0
@@ -238,6 +245,15 @@ export default {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    scanClick() {
+      wx.scanCode({
+        success: (res) => {
+          this.name = 'a'
+          this.getGoods()
+          console.log(res)
+        }
+      })
+    }, 
         clearCart() {
      var goodsMap = this.cartMap
       for (var key in goodsMap) {
@@ -256,7 +272,7 @@ export default {
         getGoods() {
           if (this.name && this.name.trim()) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/'+this.shopInfo.shopId, {'name' : this.name.trim()}, false).then(response => {
+      getFetch('/goods/'+this.userInfo.shopId, {'name' : this.name.trim()}, false).then(response => {
         this.list.datas = response.result.list
         for (var index in this.list.datas) {
            var oldGoods = this.cartMap[this.list.datas[index].goodsId]
@@ -379,12 +395,26 @@ export default {
       var item = this.previewInfo
       this.selectSkuAction({item, index: item.preIndex})
     }
-  }
+  },
+  onLoad(options) 
+  {
+    var that = this
+    var shopId=options.shopId;
+    var update = false
+    this.showCart = false
+    if (options.update == 'true') {
+      update = true
+    }
+    if (shopId != this.shopInfo.shopId) {
+      this.tagIndex = 0
+    }
+    this.getMenuDataAction({shopId : shopId, index: this.tagIndex, flag: update})
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-      .header-r {
+      .header-m {
         display: flex;
         align-items: center;
         flex: 1;
@@ -499,13 +529,18 @@ export default {
   .header-c {
     display: flex;
     flex-direction: column;
-    .header-l {
+    .header-r {
       display: flex;
       align-items: center;
       span {
         font-size: 28rpx;
         color: $textBlack-color;
         margin: 0 10rpx;
+      }
+      img {
+        height:55rpx;
+        width: 55rpx;
+        margin-left: 20rpx
       }
     }
     .header {
