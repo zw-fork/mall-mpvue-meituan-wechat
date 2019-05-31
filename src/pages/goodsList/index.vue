@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="container" @click="update">
+  <div class="container" @click="update" @mousedown="update" @scroll="update">
     <div class="header-c">
             <div class="header">
         <div class="header-r" @click="scanClick()">
@@ -10,18 +10,19 @@
           <i class="icon mt-search-o"></i>
           <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name"/>
         </div>
-         <div class="header-r" style="margin: 0 10rpx;" @click="getGoods()">
-        <span>搜索</span>
+         <div class="header-r" style="margin: 0 10rpx;">
+        <span @click="getGoods()">搜索</span>
+         <i @click="addGoods()" class="icon mt-add-o" style="margin-left:20rpx;margin-right:20rpx;"></i>
       </div>
       </div>    
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:34%;" @click="updateOrderList(-1)">全部</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(4)">销售中</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(8)">未上架</span>
+         <span class="c-l" :style="{'font-weight': pageIndex == null  ? 'bold;' : null}" style="text-align:center;width:34%;" @click="updateGoodsList(null)">全部</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold;' : null}" style="text-align:center;width:33%;" @click="updateGoodsList(1)">销售中</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 2 ? 'bold;' : null}" style="text-align:center;width:33%;" @click="updateGoodsList(2)">未上架</span>
        </div>
     </div>
-    <div class="list-c" v-if="pageIndex === 0">
-      <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
+    <div class="list-c">
+      <scroll-view class="list-r" :scroll-y="true"  :scroll-top="scrollTop" @scrolltolower="lower"  @scroll="scroll">
         <div class="item-list" v-for="(item, index) in list.datas" :key="index">
           <div class="item">
             <div class="item-l">
@@ -54,11 +55,11 @@
         <img src="/static/images/down.png">
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-            <div @click="upGoods">
+            <div @click="upGoods" v-if="selectGoods.status==2">
 <img src="/static/images/down.png">
 <span style="color:white;text-align: center;">上架</span>
       </div>
-            <div @click="downGoods">
+            <div @click="downGoods" v-if="selectGoods.status==1">
 <img src="/static/images/down.png">
 <span style="color:white;text-align: center;">下架</span>
       </div>
@@ -88,8 +89,10 @@ export default {
       showEdit: false,
       showCart: false,
       tagIndex: 0,
-      pageIndex: 0,
+      scrollTop:undefined,
+      pageIndex: undefined,
       left: '40rpx',
+      currentScroll: 0,
       stars: [1, 2, 3, 4],
       cartGoodsList1 : [],
       list:{
@@ -104,7 +107,7 @@ export default {
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
-      return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
+      return "bold;"
     },
     path() {
       return `${GOODS_URL_PREFIX}`
@@ -150,6 +153,22 @@ export default {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    scroll(e) {
+      var value = this.currentScroll - e.target.scrollTop
+      if (Math.abs(value) > 0) {
+        this.currentScroll = e.target.scrollTop
+        this.showEdit = false
+      }
+    },
+    updateGoodsList(status) {
+     this.list.page = 1
+     this.scrollTop = 0
+     this.pageIndex = status
+     this.getGoods()
+    },
+    addGoods() {
+      wx.navigateTo({url: '/pages/goodsManage/main'})
+    },
     upGoods(){
       wx.showModal({
           content: '确定上架当前商品？',
@@ -193,7 +212,10 @@ export default {
     manageGoods(e, item) {
       this.selectGoods = item
       this.showEdit = true
-      this.divStyle = 'top:' + (e.target.offsetTop + e.target.y - 20) + 'rpx;'
+      console.log(e)
+      this.divStyle = 'top:' + (2*e.target.y) + 'rpx;'
+       console.log(this.divStyle)
+    //  this.divStyle = 'top:' + (e.pageY) + 'rpx;'
       return false;
     },
     scanClick() {
@@ -207,14 +229,13 @@ export default {
     }, 
     getGoods() {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/'+this.userInfo.shopId, {'name' : this.name.trim()}, false).then(response => {
+      var data = {}
+      data.name = this.name.trim()
+      if (this.pageIndex != undefined) {
+        data.status = this.pageIndex
+      }
+      getFetch('/goods/'+this.userInfo.shopId, data, false).then(response => {
         this.list.datas = response.result.list
-        for (var index in this.list.datas) {
-           var oldGoods = this.cartMap[this.list.datas[index].goodsId]
-           if (oldGoods) {
-             this.list.datas[index] = oldGoods
-           }
-        }
         this.list.page =  response.result.nextPage
         wx.hideLoading()
       })
@@ -223,14 +244,14 @@ export default {
   lower(e) {
     if (this.list.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/'+this.shopInfo.shopId, {'page' : this.list.page,'name' : this.name.trim()}, false).then(response => {
+      var data = {}
+      data.name = this.name.trim()
+      if (this.pageIndex != undefined) {
+        data.status = this.pageIndex
+      }
+      data.page = this.list.page
+      getFetch('/goods/'+this.userInfo.shopId, data, false).then(response => {
         var goodsList = response.result.list
-        for (var index in goodsList) {
-           var oldGoods = this.cartMap[goodsList[index].goodsId]
-           if (oldGoods) {
-             goodsList[index] = oldGoods
-           }
-        }
         this.list.page =  response.result.nextPage
         this.list.datas = [
             ...this.list.datas,
@@ -317,7 +338,6 @@ export default {
       display: flex;
       height: 70rpx;
       align-items: center;
-      border-bottom: 5rpx solid $spLine-color;
       position: relative;
       transition: all 0.2s;
       .c-l {
@@ -483,7 +503,12 @@ export default {
       display: flex;
       align-items: center;
       span {
-        font-size: 28rpx;
+        font-size: 32rpx;
+        color: $textBlack-color;
+        margin: 0 10rpx;
+      }
+      i {
+        font-size: 32rpx;
         color: $textBlack-color;
         margin: 0 10rpx;
       }
