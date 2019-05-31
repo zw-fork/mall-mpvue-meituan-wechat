@@ -156,6 +156,7 @@ export default {
     scroll(e) {
       var value = this.currentScroll - e.target.scrollTop
       if (Math.abs(value) > 0) {
+        this.scrollTop = undefined
         this.currentScroll = e.target.scrollTop
         this.showEdit = false
       }
@@ -212,10 +213,7 @@ export default {
     manageGoods(e, item) {
       this.selectGoods = item
       this.showEdit = true
-      console.log(e)
-      this.divStyle = 'top:' + (2*e.target.y) + 'rpx;'
-       console.log(this.divStyle)
-    //  this.divStyle = 'top:' + (e.pageY) + 'rpx;'
+      this.divStyle = 'top:' + (2*e.target.y-50) + 'rpx;'
       return false;
     },
     scanClick() {
