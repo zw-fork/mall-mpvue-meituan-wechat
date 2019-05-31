@@ -92,10 +92,6 @@ export default {
         },
         {
           label: '下架',
-          value: 0
-        },
-        {
-          label: '缺货',
           value: 2
         }
       ],
@@ -227,7 +223,6 @@ export default {
     this.$nextTick(()=>{     
       this.reFresh = true
     });
-    console.log(options.id)
     getFetch('/category/list/' +  this.userInfo.shopId, {}, false).then(response => {
       var list = response.result
       var categoryArray = []

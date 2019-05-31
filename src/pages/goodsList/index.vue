@@ -77,7 +77,7 @@ import {jointStyle} from "@/utils/style";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {formatYMD} from '@/utils/formatTime'
 import {_array} from '@/utils/arrayExtension'
-import {getFetch} from '@/network/request/HttpExtension'
+import {getFetch,postFetch} from '@/network/request/HttpExtension'
 import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
@@ -101,6 +101,10 @@ export default {
       name: ''
 
     }
+  },
+  mounted(){
+    this.updateGoodsList(null)
+    this.getGoods()
   },
   computed: {
     ...mapState("shoppingCart", ["cartMap","shopInfo", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
@@ -141,14 +145,6 @@ export default {
       }
     }
   },
-    onLoad(options) 
-  {
-     this.showCart = false
-    this.name = '',
-   this.list = {
-        datas : []
-      }
-  },
   methods: {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
@@ -170,34 +166,48 @@ export default {
     addGoods() {
       wx.navigateTo({url: '/pages/goodsManage/main'})
     },
+    updateGoods(goodsModel) {
+      postFetch('/goods/upload2', goodsModel, false).then(response => {
+        this.updateGoodsList(this.pageIndex)
+      })
+    },
     upGoods(){
+      var that = this
       wx.showModal({
           content: '确定上架当前商品？',
           confirmColor: '#FFC24A',
           success: function(res) {
             if (res.confirm) {
+              that.selectGoods.status = 1
+              that.updateGoods(that.selectGoods)
             } else if (res.cancel) {
             }
         }
       })
     },
     downGoods(){
+      var that = this
       wx.showModal({
           content: '确定下架当前商品？',
           confirmColor: '#FFC24A',
           success: function(res) {
             if (res.confirm) {
+              that.selectGoods.status = 2
+              that.updateGoods(that.selectGoods)
             } else if (res.cancel) {
             }
         }
       })
     },
     deleteGoods(){
+      var that = this
       wx.showModal({
           content: '确定删除当前商品？',
           confirmColor: '#FFC24A',
           success: function(res) {
             if (res.confirm) {
+              that.selectGoods.status = 0
+              that.updateGoods(that.selectGoods)
             } else if (res.cancel) {
             }
         }
@@ -320,10 +330,6 @@ export default {
       var item = this.previewInfo
       this.selectSkuAction({item, index: item.preIndex})
     }
-  },
-    onLoad(options) 
-  {
-    this.getGoods()
   }
 }
 </script>
