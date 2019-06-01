@@ -19,6 +19,7 @@
     "pages/orderItemList/main",
     "pages/remark/main",
     "pages/categoryManage/main",
+    "pages/shopManage/main",
     "pages/goodsManage/main",
     "pages/citySearch/main",
     "pages/citys/main",
