@@ -1,53 +1,14 @@
 <template>
   <div class="container" v-if="reFresh">
     <div class="name">
-      <span>商品名称：</span>
-      <input placeholder="请填写商品名称" placeholder-style="font-size: 24rpx" v-model="goods.name"/>
+      <span>分类名称：</span>
+      <input placeholder="请填写分类名称" placeholder-style="font-size: 24rpx" v-model="name"/>
     </div>
-    <div class="name">
-      <span>商品描述：</span>
-      <input placeholder="请填写商品描述" placeholder-style="font-size: 24rpx" v-model="goods.description"/>
-    </div>
-    <div class="phone"> 
-      <span>商品图片：</span>
-    <div style="margin-left:150rpx;top:100rpx;margin-top:-45rpx">
-      <img v-if="goods.picture" class="choosed-img" :src="goods.wechat? goods.picture : (path + goods.picture)" alt="">
-      <img v-if="goods.picture" class="deleteImg" src="/static/images/delete.png" alt="" @click="deleteImg()">
-      <img class="choosed-img" src="/static/images/addphotoes.png" alt="" @click="uploadImg2()">
-    </div>
-    </div>
-    <div class="name">
-      <span>商品价格：</span>
-      <input placeholder="请填写商品价格" placeholder-style="font-size: 24rpx" v-model="goods.goodsPrice"/>
-    </div>
-    <div class="b-mid">
-        <div class="mid-l">
-          <span>商品分类:</span>
-           <i @click="createCategory" class="icon mt-add-o"></i>
-        </div>
-        <div class="mid-r" @click="updateCategoryClick">
-          <span>{{goods.categoryName}}</span>
-           <i class="icon mt-arrow-right-o"></i>
-        </div>
-    </div>
-    <div class="b-mid" @click="remarkClick">
-        <span class="mid-l">商品状态:</span>
-        <div class="mid-r" @click="showSinglePicker">
-          <span>{{goods.statusName}}</span>
-          <i class="icon mt-arrow-right-o"></i>
-        </div>
-    </div>
-    <div class="b-mid" @click="remarkClick">
-        <span class="mid-l">商品描述:</span>
-        <div class="mid-r">
-          <span>请输入商品描述信息</span>
-          <i class="icon mt-arrow-right-o"></i>
-        </div>
-    </div>
-    <div class="submit" @click="uploadFile">
-      <span>保存地址</span>
+    <div class="submit" @click="createCategory2">
+      <span>保存</span>
     </div>
     <mp-picker ref="mpvuePicker" :mode="mode" :deepLength=deepLength :pickerValueDefault="pickerValueDefault" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mp-picker>
+  <input-dialog :is-model="showCategory" @childFn="showCategory = !showCategory" @categoryName="createCategory2"/>
   </div>
 </template>
 
@@ -70,11 +31,7 @@ export default {
    data() {
     return {
       reFresh:true,
-      goods : {
-        statusName : '上架',
-        status : 1,
-        picture: undefined
-      },
+      name:undefined,
       showCategory: false,
       pickerValueArray: [], // picker 数组值
       pickerValueDefault: [], // 初始化值
@@ -127,7 +84,7 @@ export default {
   },
     methods: {
       ...mapActions("user", ["uploadImg"]),
-      ...mapActions("shop", ["createShop"]),
+      ...mapActions("shop", ["createCategory", "createShop"]),
       deleteImg() {
         this.goods.picture = undefined
       },
@@ -154,18 +111,30 @@ export default {
         this.goods.goodsPrice = parseFloat(this.goods.goodsPrice)
         this.uploadImg({goodsModel : this.goods})
       },
-      createCategory() {
-        wx.navigateTo({url: '/pages/categoryManage/main'})
+      createCategory2() {
+        var category = {}
+        category.shopId = this.userInfo.shopId
+        category.name = this.name
+        var categoryName = this.name
+        postFetch('/category/' + category.shopId, category, false).then(response => {
+          var pages = getCurrentPages();
+          var prevPage = pages[pages.length - 2];
+          console.log(response)
+          prevPage.setData({
+            'categoryName': categoryName,
+            'categoryId':response.result.categoryId
+            })
+          wx.navigateBack({delta:1, 'categoryName':categoryName})
+        })
       },
     onConfirm(e) {
-      if (this.type == 'status') {
-        this.goods.status = e.value[0]
-        this.goods.statusName = e.label
-      } else {
+      if (this.type == 'category') {
         this.goods.categoryName = e.label
         this.goods.categoryId = e.value[0]
+      } else {
+        this.goods.status = e.value[0]
+        this.goods.statusName = e.label
       }
-      console.log(this.goods.categoryName)
     },
     updateCategoryClick() {
       this.pickerValueArray = this.categoryArray;
@@ -200,10 +169,13 @@ export default {
     this.goods = {
         statusName : '上架',
         status : 1,
-        categoryName: '未分类',
         picture: undefined
-    }
-    getFetch('/category/list/' +  this.userInfo.shopId, {status:1}, false).then(response => {
+      }
+    this.reFresh= false
+    this.$nextTick(()=>{     
+      this.reFresh = true
+    });
+    getFetch('/category/list/' +  this.userInfo.shopId, {}, false).then(response => {
       var list = response.result
       var categoryArray = []
       for (var index in list) {
@@ -233,18 +205,6 @@ export default {
     }
     })
   },
-    onShow(options) {
-      var pages = getCurrentPages();
-      var currPage = pages[pages.length - 1]
-      if (currPage.data.categoryName) {
-        this.goods.categoryName = currPage.data.categoryName
-        this.goods.categoryId = currPage.data.categoryId
-        var data = {}
-        data.label = currPage.data.categoryName
-        data.value = currPage.data.categoryId
-        this.categoryArray.push(data)
-      }
-  }
 }
 </script>
 
