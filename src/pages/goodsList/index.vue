@@ -168,6 +168,7 @@ export default {
     },
     updateGoods(goodsModel) {
       postFetch('/goods/upload2', goodsModel, false).then(response => {
+        this.showEdit = false
         this.updateGoodsList(this.pageIndex)
       })
     },

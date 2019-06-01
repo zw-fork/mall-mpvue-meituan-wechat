@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="container" @click="update">
+  <div class="container" @click="update" @mousedown="update" @scroll="update">
     <div class="header-c">
             <div class="header">
         <div class="header-r" @click="scanClick()">
@@ -10,34 +10,25 @@
           <i class="icon mt-search-o"></i>
           <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name"/>
         </div>
-         <div class="header-r" style="margin: 0 10rpx;" @click="getGoods()">
-        <span>搜索</span>
+         <div class="header-r" style="margin: 0 10rpx;">
+        <span @click="getGoods()">搜索</span>
+         <i @click="addGoods()" class="icon mt-add-o" style="margin-left:20rpx;margin-right:20rpx;"></i>
       </div>
       </div>    
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:34%;" @click="updateOrderList(-1)">全部</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(4)">上架</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(8)">未上架</span>
+         <span class="c-l" :style="{'font-weight': pageIndex == null  ? 'bold;' : null}" style="text-align:center;width:34%;" @click="updateGoodsList(null)">全部</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold;' : null}" style="text-align:center;width:33%;" @click="updateGoodsList(1)">可见</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 2 ? 'bold;' : null}" style="text-align:center;width:33%;" @click="updateGoodsList(2)">隐藏</span>
        </div>
     </div>
-    <div class="list-c" v-if="pageIndex === 0">
-      <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
+    <div class="list-c">
+      <scroll-view class="list-r" :scroll-y="true">
         <div class="item-list" v-for="(item, index) in list.datas" :key="index">
           <div class="item">
-            <div class="item-l">
-              <img :src="path + item.picture">
-            </div>
             <div class="item-r">
-              <span class="title">{{item.name}}</span>
-              <span class="sub-title">{{item.description}}</span>
-              <span class="sale-num" v-if="false">{{item.month_saled_content}} {{item.praise_content}}</span>
               <div class="r-t">
-                <span class="price">￥{{item.min_price}}</span>
+                <span class="price">{{item.name}}</span>
                 <div class="add-item">
-                  <div class="add-l" @click.stop="reduceClick(item)" v-if="item.sequence > 0">
-                    <i class="icon mt-reduce-o"></i>
-                    <span>{{item.sequence}}</span>
-                  </div>
                   <div class="add-r" >
                     <img @click.stop="manageGoods($event, item)" style="width:40rpx;height:40rpx;" src="/static/images/point.png">
                   </div>
@@ -54,13 +45,13 @@
         <img src="/static/images/down.png">
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-            <div @click="upGoods">
+            <div @click="upGoods" v-if="selectGoods.status==2">
 <img src="/static/images/down.png">
-<span style="color:white;text-align: center;">上架</span>
+<span style="color:white;text-align: center;">可见</span>
       </div>
-            <div @click="downGoods">
+            <div @click="downGoods" v-if="selectGoods.status==1">
 <img src="/static/images/down.png">
-<span style="color:white;text-align: center;">下架</span>
+<span style="color:white;text-align: center;">隐藏</span>
       </div>
                   <div @click="deleteGoods">
 <img src="/static/images/down.png">
@@ -76,7 +67,7 @@ import {jointStyle} from "@/utils/style";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {formatYMD} from '@/utils/formatTime'
 import {_array} from '@/utils/arrayExtension'
-import {getFetch} from '@/network/request/HttpExtension'
+import {getFetch,postFetch} from '@/network/request/HttpExtension'
 import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
@@ -88,8 +79,10 @@ export default {
       showEdit: false,
       showCart: false,
       tagIndex: 0,
-      pageIndex: 0,
+      scrollTop:undefined,
+      pageIndex: undefined,
       left: '40rpx',
+      currentScroll: 0,
       stars: [1, 2, 3, 4],
       cartGoodsList1 : [],
       list:{
@@ -99,12 +92,16 @@ export default {
 
     }
   },
+  mounted(){
+    this.updateGoodsList(null)
+    this.getGoods()
+  },
   computed: {
     ...mapState("shoppingCart", ["cartMap","shopInfo", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
-      return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
+      return "bold;"
     },
     path() {
       return `${GOODS_URL_PREFIX}`
@@ -115,69 +112,72 @@ export default {
          this.shopInfo.categoryModelList.map(item => count += item.count)
       }
       return count
-    },
-    btnTitle() {
-      if (this.shopInfo) {
-      if (this.shopInfo.statu != 1) {
-        return "打烊"
-      }
-      var content = `${this.shopInfo.min_price}元起送`
-      var price = 0
-      if (this.shopInfo.categoryModelList) {
-         this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
-      }
-      if (price <= 0) return content
-      if (price < this.shopInfo.min_price) {
-        var value = parseFloat(this.shopInfo.min_price - price).toFixed(1)
-        return `还差${value}元`
-      } else {
-        return '去结算'
-      }
-      } else {
-        return ""
-      }
     }
-  },
-    onLoad(options) 
-  {
-     this.showCart = false
-    this.name = '',
-   this.list = {
-        datas : []
-      }
   },
   methods: {
     ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    scroll(e) {
+      var value = this.currentScroll - e.target.scrollTop
+      if (Math.abs(value) > 0) {
+        this.scrollTop = undefined
+        this.currentScroll = e.target.scrollTop
+        this.showEdit = false
+      }
+    },
+    updateGoodsList(status) {
+     this.list.page = 1
+     this.scrollTop = 0
+     this.pageIndex = status
+     this.getGoods()
+    },
+    addGoods() {
+      wx.navigateTo({url: '/pages/goodsManage/main'})
+    },
+    updateGoods(goodsModel) {
+      postFetch('/category/' + this.userInfo.shopId, goodsModel, false).then(response => {
+        this.showEdit = false
+        this.updateGoodsList(this.pageIndex)
+      })
+    },
     upGoods(){
+      var that = this
       wx.showModal({
-          content: '确定上架当前分类？',
+          content: '确定上架当前商品？',
           confirmColor: '#FFC24A',
           success: function(res) {
             if (res.confirm) {
+              that.selectGoods.status = 1
+              that.updateGoods(that.selectGoods)
             } else if (res.cancel) {
             }
         }
       })
     },
     downGoods(){
+      var that = this
       wx.showModal({
-          content: '确定下架当前分类？',
+          content: '确定下架当前商品？',
           confirmColor: '#FFC24A',
           success: function(res) {
             if (res.confirm) {
+              that.selectGoods.status = 2
+              that.updateGoods(that.selectGoods)
             } else if (res.cancel) {
             }
         }
       })
     },
     deleteGoods(){
+      var that = this
       wx.showModal({
-          content: '确定删除当前分类，该分类下所有商品也会被删除？',  
+          content: '确定删除当前商品？',
           confirmColor: '#FFC24A',
           success: function(res) {
             if (res.confirm) {
+              that.selectGoods.status = 0
+              that.updateGoods(that.selectGoods)
             } else if (res.cancel) {
             }
         }
@@ -193,7 +193,7 @@ export default {
     manageGoods(e, item) {
       this.selectGoods = item
       this.showEdit = true
-      this.divStyle = 'top:' + (e.target.offsetTop + e.target.y - 20) + 'rpx;'
+      this.divStyle = 'top:' + (2*e.target.y-50) + 'rpx;'
       return false;
     },
     scanClick() {
@@ -207,15 +207,13 @@ export default {
     }, 
     getGoods() {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/'+this.userInfo.shopId, {'name' : this.name.trim()}, false).then(response => {
-        this.list.datas = response.result.list
-        for (var index in this.list.datas) {
-           var oldGoods = this.cartMap[this.list.datas[index].goodsId]
-           if (oldGoods) {
-             this.list.datas[index] = oldGoods
-           }
-        }
-        this.list.page =  response.result.nextPage
+      var data = {}
+      data.name = this.name.trim()
+      if (this.pageIndex != undefined) {
+        data.status = this.pageIndex
+      }
+      getFetch('/category/list/'+this.userInfo.shopId, data, false).then(response => {
+        this.list.datas = response.result
         wx.hideLoading()
       })
     },
@@ -223,14 +221,14 @@ export default {
   lower(e) {
     if (this.list.page>0) {
       wx.showLoading({title: '加载中...', mask: true})
-      getFetch('/goods/'+this.shopInfo.shopId, {'page' : this.list.page,'name' : this.name.trim()}, false).then(response => {
+      var data = {}
+      data.name = this.name.trim()
+      if (this.pageIndex != undefined) {
+        data.status = this.pageIndex
+      }
+      data.page = this.list.page
+      getFetch('/goods/'+this.userInfo.shopId, data, false).then(response => {
         var goodsList = response.result.list
-        for (var index in goodsList) {
-           var oldGoods = this.cartMap[goodsList[index].goodsId]
-           if (oldGoods) {
-             goodsList[index] = oldGoods
-           }
-        }
         this.list.page =  response.result.nextPage
         this.list.datas = [
             ...this.list.datas,
@@ -301,10 +299,6 @@ export default {
       var item = this.previewInfo
       this.selectSkuAction({item, index: item.preIndex})
     }
-  },
-    onLoad(options) 
-  {
-    this.getGoods()
   }
 }
 </script>
@@ -317,7 +311,6 @@ export default {
       display: flex;
       height: 70rpx;
       align-items: center;
-      border-bottom: 5rpx solid $spLine-color;
       position: relative;
       transition: all 0.2s;
       .c-l {
@@ -483,7 +476,12 @@ export default {
       display: flex;
       align-items: center;
       span {
-        font-size: 28rpx;
+        font-size: 32rpx;
+        color: $textBlack-color;
+        margin: 0 10rpx;
+      }
+      i {
+        font-size: 32rpx;
         color: $textBlack-color;
         margin: 0 10rpx;
       }
@@ -659,7 +657,7 @@ export default {
           .item-r {
             display: flex;
             flex-direction: column;
-            margin-left: 20rpx;
+            margin-left: 10rpx;
             justify-content: space-between;
             flex: 1;
             .title {
@@ -688,8 +686,8 @@ export default {
               align-items: center;
               justify-content: space-between;
               .price {
-                font-size: 32rpx;
-                color: $mtRed-color;
+                font-size: 28rpx;
+                color: $textBlack-color;
                 font-weight: bold;
               }
               .sku {
