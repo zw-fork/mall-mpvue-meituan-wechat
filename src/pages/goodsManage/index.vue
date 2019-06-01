@@ -23,10 +23,10 @@
     <div class="b-mid">
         <div class="mid-l">
           <span>商品分类:</span>
-           <i @click="showCategory = !showCategory" class="icon mt-add-o"></i>
+           <i @click="createCategory" class="icon mt-add-o"></i>
         </div>
         <div class="mid-r" @click="updateCategoryClick">
-          <span>{{goods.categoryName ? goods.categoryName : '未分类'}}</span>
+          <span>{{goods.categoryName}}</span>
            <i class="icon mt-arrow-right-o"></i>
         </div>
     </div>
@@ -48,7 +48,6 @@
       <span>保存地址</span>
     </div>
     <mp-picker ref="mpvuePicker" :mode="mode" :deepLength=deepLength :pickerValueDefault="pickerValueDefault" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mp-picker>
-  <input-dialog :is-model="showCategory" @childFn="showCategory = !showCategory" @categoryName="createCategory2"/>
   </div>
 </template>
 
@@ -128,7 +127,7 @@ export default {
   },
     methods: {
       ...mapActions("user", ["uploadImg"]),
-      ...mapActions("shop", ["createCategory", "createShop"]),
+      ...mapActions("shop", ["createShop"]),
       deleteImg() {
         this.goods.picture = undefined
       },
@@ -155,34 +154,18 @@ export default {
         this.goods.goodsPrice = parseFloat(this.goods.goodsPrice)
         this.uploadImg({goodsModel : this.goods})
       },
-      createCategory2(name) {
-        var category = {}
-        category.shopId = this.userInfo.shopId
-        category.name = name
-        postFetch('/category/' + category.shopId, category, false).then(response => {
-          var data = {}
-          data.label = response.result.name
-          data.value = response.result.categoryId
-          this.goods.categoryName = data.label
-          this.goods.categoryId = data.value
-          this.categoryArray.push(data)
-        })
+      createCategory() {
+        wx.navigateTo({url: '/pages/categoryManage/main'})
       },
-          onChange(e) {
-           
-      console.log(e);
-    },
-    onCancel(e) {
-      console.log(e);
-    },
     onConfirm(e) {
-      if (this.type == 'category') {
-        this.goods.categoryName = e.label
-        this.goods.categoryId = e.value[0]
-      } else {
+      if (this.type == 'status') {
         this.goods.status = e.value[0]
         this.goods.statusName = e.label
+      } else {
+        this.goods.categoryName = e.label
+        this.goods.categoryId = e.value[0]
       }
+      console.log(this.goods.categoryName)
     },
     updateCategoryClick() {
       this.pickerValueArray = this.categoryArray;
@@ -217,12 +200,9 @@ export default {
     this.goods = {
         statusName : '上架',
         status : 1,
+        categoryName: '未分类',
         picture: undefined
-      }
-    this.reFresh= false
-    this.$nextTick(()=>{     
-      this.reFresh = true
-    });
+    }
     getFetch('/category/list/' +  this.userInfo.shopId, {}, false).then(response => {
       var list = response.result
       var categoryArray = []
@@ -253,6 +233,18 @@ export default {
     }
     })
   },
+    onShow(options) {
+      var pages = getCurrentPages();
+      var currPage = pages[pages.length - 1]
+      if (currPage.data.categoryName) {
+        this.goods.categoryName = currPage.data.categoryName
+        this.goods.categoryId = currPage.data.categoryId
+        var data = {}
+        data.label = currPage.data.categoryName
+        data.value = currPage.data.categoryId
+        this.categoryArray.push(data)
+      }
+  }
 }
 </script>
 

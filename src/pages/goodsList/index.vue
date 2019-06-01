@@ -331,6 +331,10 @@ export default {
       var item = this.previewInfo
       this.selectSkuAction({item, index: item.preIndex})
     }
+  },
+  onShow(options) {
+    this.showEdit = false
+    this.getGoods()
   }
 }
 </script>

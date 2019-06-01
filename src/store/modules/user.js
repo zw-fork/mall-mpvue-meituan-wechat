@@ -191,16 +191,12 @@ const actions = {
         name: 'file',
         formData: goodsModel,
         success: function (res) {
-          wx.redirectTo({
-            url: '/pages/goodsList/main'
-          })
+          wx.navigateBack({delta:1})
         }
       })
     } else {
       postFetch('/goods/upload2', goodsModel, false).then(response => {
-        wx.redirectTo({
-          url: '/pages/goodsList/main'
-        })
+        wx.navigateBack({delta:1})
       })
     }
   },

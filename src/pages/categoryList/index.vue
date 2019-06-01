@@ -3,9 +3,6 @@
   <div class="container" @click="update" @mousedown="update" @scroll="update">
     <div class="header-c">
             <div class="header">
-        <div class="header-r" @click="scanClick()">
-          <img class="item-img" src="/static/images/scan.png">
-        </div>
                 <div class="header-m">
           <i class="icon mt-search-o"></i>
           <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name"/>
@@ -133,7 +130,7 @@ export default {
      this.getGoods()
     },
     addGoods() {
-      wx.navigateTo({url: '/pages/goodsManage/main'})
+      wx.navigateTo({url: '/pages/categoryManage/main'})
     },
     updateGoods(goodsModel) {
       postFetch('/category/' + this.userInfo.shopId, goodsModel, false).then(response => {
@@ -184,7 +181,7 @@ export default {
       })
     },
     editGoods() {
-      wx.navigateTo({url: '/pages/goodsManage/main?id=' + this.selectGoods.goodsId})
+      wx.navigateTo({url: '/pages/categoryManage/main?id=' + this.selectGoods.goodsId})
     },
     update() {
       this.showEdit = false
@@ -299,6 +296,9 @@ export default {
       var item = this.previewInfo
       this.selectSkuAction({item, index: item.preIndex})
     }
+  },
+  onShow(options) {
+    this.getGoods()
   }
 }
 </script>
