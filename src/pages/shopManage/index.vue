@@ -7,11 +7,14 @@
     <div class="name">
       <span>电话：</span>
       <div>
-        <div class="tel"  v-for="(item, index) in shop.tel" :key="index">
+        <div class="tel" v-if="shop.tel.length>0"  v-for="(item, index) in shop.tel" :key="index">
       <input  type="number" placeholder="请填写手机号码" placeholder-style="font-size: 24rpx" v-model="shop.tel[index]" maxlength="11"/>
-      <i v-if="index==shop.tel.length-1" @click="createCategory" class="icon mt-delete-o" style="font-size: 30rpx"></i>
-      <i v-if="index==shop.tel.length-1" style="margin-left:30rpx;font-size: 32rpx" @click="createCategory" class="icon mt-add-o"></i>
-      </div>        
+      <i @click="deleteTel(index)" class="icon mt-delete-o" style="margin-left:30rpx;font-size: 30rpx"></i>
+      <i v-if="(index==shop.tel.length-1) && shop.tel[index]" style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon mt-add-o"></i>
+      </div>  
+      <div class="tel" v-if="shop.tel.length==0">  
+      <i style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon mt-add-o"></i>
+      </div>    
       </div>
     </div>
     <div class="name"  style="height: 70rpx;">
@@ -97,6 +100,12 @@ export default {
     methods: {
       ...mapActions("user", ["uploadImg"]),
       ...mapActions("shop", ["createShop"]),
+      createTel() {
+        this.shop.tel.push(null)
+      },
+      deleteTel(index) {
+        this.shop.tel.splice(index,1)
+      },
       deleteImg() {
         this.goods.picture = undefined
       },
