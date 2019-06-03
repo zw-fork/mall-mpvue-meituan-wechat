@@ -38,12 +38,7 @@
       </scroll-view>
       <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
         <div class="section">
-          <span class="title">{{spus.title}}</span>
-          <!-- <div style=" position: absolute;right:10rpx;">
- <span class="title" style="float: left;">{{spus.title}}</span>
-          <i class="icon mt-reduce-o" style="float: left;"></i>
-          </div> -->
-         
+          <span class="title">{{spus.title}}</span> 
         </div>
         <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
           <div class="item">
@@ -312,12 +307,12 @@ export default {
     ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
         clickCall() {
-      var that = this
+      var tel = this.shopInfo.tel
       wx.showActionSheet({
         title: "商家电话",
-        itemList: that.phoneList,
+        itemList: tel,
         success(res) {
-          wx.makePhoneCall({phoneNumber: that.phoneList[res.tapIndex]})
+          wx.makePhoneCall({phoneNumber: tel[res.tapIndex]+''})
         }
       })
     },
