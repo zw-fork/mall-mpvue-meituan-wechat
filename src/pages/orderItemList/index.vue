@@ -3,7 +3,7 @@
     <div class="header-c">
        <div class="cate-c">
          <span class="c-l" :style="{'font-weight': statusList.length<1 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([])">全部</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 2 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([1])">新订单</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 2 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([2])">新订单</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 3 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([3])">配送中</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([4])">已完成</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 7 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([7])">退款申请</span>
@@ -12,10 +12,10 @@
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
       <div class="item" v-for="(item, index) in orderList.datas" :key="index">
         <div class="shop-info">
-          <img :src="item.shopInfo.pic_url">
+          <img :src="item.avatar">
            <div class="order_title" @click="headerClick(item, false)">
               <div class="order-name" style="margin-bottom:-15rpx;">
-                <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
+                <span class="shop-name" style="display: inline">{{item.addressInfo.name}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
               </div>
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
@@ -34,9 +34,7 @@
             </div>
         </div>
         <div class="bottom-c">
-          <div class="btn" @click="headerClick(item, true)">
-            <span>再来一单</span>
-          </div>
+         <span>地址：{{item.addressInfo.address}}</span>
         </div>
       </div>
     </scroll-view>
@@ -65,9 +63,10 @@ export default {
       this.scrollTop = 0
       this.statusList = status
       if (status.length<1) {
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
       } else {
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'status':status, 'statusList': status.join(',')}})
+        this.pageIndex = status[0]
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': this.statusList.join(',')}})
       }
     },
     scroll(e) {
@@ -79,6 +78,7 @@ export default {
        var openid = this.userInfo.openid
        var data = {}
        data.page = this.orderList.page
+       data.shopId = this.userInfo.shopId
        if (this.statusList.length>0) {
          data.statusList = this.statusList  
        } 
@@ -120,19 +120,19 @@ export default {
   onLoad(options) 
   {
     this.scrollTop = 0
-    this.pageIndex = parseInt(options.status)
-    if (parseInt(options.status) == -1) {
-      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})
+    if (!options.status) {
+      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
     } else {
-      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'status':options.status, 'statusList': arr.join(',')}})
+      this.pageIndex = parseInt(options.status)
+      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': [2,3,4].join(',')}})
     }
   },
   onPullDownRefresh: function () {
     this.scrollTop = 0
       if (this.statusList.length>0) {
-         this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'statusList': this.statusList.join(',')}})
+         this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': this.statusList.join(',')}})
       } else {
-          this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})     
+          this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})     
       }
   }
 }
@@ -271,8 +271,8 @@ export default {
         margin-left: 30rpx;
         border-top: 2rpx solid $spLine-color;
         align-items: center;
+        font-size: 28rpx;
         background-color: white;
-        justify-content: flex-end;
         .btn {
           display: flex;
           align-items: center;
