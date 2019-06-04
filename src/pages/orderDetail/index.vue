@@ -8,6 +8,7 @@
           <span class="address-info" v-else-if="orderDetail.status==2">已支付，等待商家配送</span>
           <span class="address-info" v-else-if="orderDetail.status==3">配送中</span>
           <span class="address-info" v-else-if="orderDetail.status==4">已完成</span>
+          <span class="address-info" v-else>其他</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
@@ -72,9 +73,21 @@
                   <div class="item_style">
                         <p class="item_left" style="word-break:keep-all;">送货地址：</p>
                         <div class="item_right" v-if="orderDetail.addressInfo">
-                            <p>{{orderDetail.addressInfo.name}}</p>
-                            <p>{{orderDetail.addressInfo.phone}}</p>
                             <p>{{orderDetail.addressInfo.address}}</p>
+                        </div>
+                    </div>
+                    <div class="line-sp"></div>
+                  <div class="item_style">
+                        <p class="item_left" style="word-break:keep-all;">顾客姓名：</p>
+                        <div class="item_right" v-if="orderDetail.addressInfo">
+                            <p>{{orderDetail.addressInfo.name}}</p>
+                        </div>
+                    </div>
+                                        <div class="line-sp"></div>
+                  <div class="item_style" @click="clickCall">
+                        <p class="item_left" style="word-break:keep-all;">顾客电话：</p>
+                        <div class="item_right" v-if="orderDetail.addressInfo">
+                            <p>{{orderDetail.addressInfo.phone}}</p>
                         </div>
                     </div>
       </div>
@@ -143,6 +156,17 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderByIdAction"]),
+            clickCall() {
+      var tel = this.orderDetail.addressInfo.phone
+      var telList = [tel]
+      wx.showActionSheet({
+        title: "顾客电话",
+        itemList: telList,
+        success(res) {
+          wx.makePhoneCall({phoneNumber: telList[res.tapIndex]+''})
+        }
+      })
+    },
     headerClick(item, flag) {
            var update = false
       if (flag) {

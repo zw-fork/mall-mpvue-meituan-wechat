@@ -125,7 +125,6 @@ export default {
     },
     orderDetail(item) {      
       this.showOrderDetailAction({order: item})
-      wx.navigateTo({url: '/pages/orderDetail/main'})
     }
   },
   mounted() {

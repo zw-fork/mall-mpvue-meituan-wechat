@@ -10,10 +10,10 @@
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
-      <div class="item" v-for="(item, index) in orderList.datas" :key="index">
+      <div class="item" v-for="(item, index) in orderList.datas" :key="index" @click="orderDetail(item)">
         <div class="shop-info">
           <img :src="item.avatar">
-           <div class="order_title" @click="headerClick(item, false)">
+           <div class="order_title">
               <div class="order-name" style="margin-bottom:-15rpx;">
                 <span class="shop-name" style="display: inline">{{item.addressInfo.name}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
@@ -26,7 +26,7 @@
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==0">已取消</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==4">已完成</p>
         </div>
-        <div class="googs-c" @click="orderDetail(item)">
+        <div class="googs-c">
           <div class="goods" style="float:left;">
             <span class="s-l">{{item.itemList[0].name}}</span>
             <span class="s-m">等{{item.itemList.length}}件商品</span>
@@ -63,6 +63,7 @@ export default {
       this.scrollTop = 0
       this.statusList = status
       if (status.length<1) {
+        this.pageIndex = null
         this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
       } else {
         this.pageIndex = status[0]
