@@ -57,7 +57,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("submitOrder", ["getOrderDataAction", "showOrderDetailAction", "getOrderByIdAction"]),
+    ...mapActions("submitOrder", ["getOrderDataAction", "showOrderByShopIdDetailAction", "getOrderByIdAction"]),
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
     updateOrderList(status) {
       this.scrollTop = 0
@@ -107,8 +107,7 @@ export default {
       }
     },
     orderDetail(item) {      
-      this.showOrderDetailAction({order: item})
-      wx.navigateTo({url: '/pages/orderDetail/main'})
+      this.showOrderByShopIdDetailAction({order: item})
     }
   },
   computed: {

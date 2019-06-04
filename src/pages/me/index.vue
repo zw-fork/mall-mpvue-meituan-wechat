@@ -18,7 +18,7 @@
               <div class="item" v-for="(item, index) in orderList" :key="index"  @click="itemClick(item)">
                 <img class="item-img" :src="item.url">
                 <span class="item-title">{{item.name}}</span>
-                <text class="count">12</text>
+                <text class="count" v-if="orderCount[index]" >{{orderCount[index]}}</text>
               </div>
             </div>
         </swiper-item>
@@ -34,7 +34,6 @@
               <div class="item" v-for="(item, index) in shopMenuList" :key="index"  @click="itemClick(item)">
                 <img class="item-img" :src="item.url">
                 <span class="item-title">{{item.name}}</span>
-                <text class="count">12</text>
               </div>
             </div>
         </swiper-item>
@@ -75,10 +74,12 @@
 
 import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
 import {homeData} from './data'
+import {getFetch} from '@/network/request/HttpExtension'
 
 export default {
   data() {
     return {
+      orderCount: [],
       show: false,
       showEdit: false,
        categoryArr: [{items: []}, {items: []}],
@@ -156,6 +157,14 @@ export default {
        this.divStyle = 'top:' + (e.target.offsetTop + e.target.y - 20) + 'rpx;'
        return false;
     }
+  },
+  onShow(options) {
+          getFetch('/order/count/'+this.userInfo.shopId, false).then(response => {
+            var count = response.result
+        this.orderCount.push(count.新订单)
+        this.orderCount.push(count.配送中)
+        this.orderCount.push(count.退款)
+      })
   }
 }
 </script>

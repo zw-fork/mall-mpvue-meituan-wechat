@@ -27,7 +27,8 @@
     "pages/protocol/main",
     "pages/feedback/main",
     "pages/pickProtocol/main",
-    "pages/orderDetail/main"
+    "pages/orderDetail/main",
+    "pages/orderItemDetail/main"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ff0066",

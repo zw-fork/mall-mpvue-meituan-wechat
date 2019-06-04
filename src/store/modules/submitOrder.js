@@ -16,6 +16,9 @@ const state = {
   },
   orderDetail: {
 
+  },
+  orderByShopIdDetail: {
+
   }
 }
 
@@ -32,6 +35,9 @@ const mutations = {
   },
   orderDetailDataMut(state, info) {
     state.orderDetail = info
+  },
+  orderByShopIdDetailDataMut(state, info) {
+    state.orderByShopIdDetail = info
   },
   currentOrderRemarkDataMut(state, info) {
     state.currentOrder.remark = info
@@ -98,6 +104,10 @@ const actions = {
   showOrderDetailAction({state, commit}, {order}) {
     commit('orderDetailDataMut', order)
     wx.navigateTo({url: '/pages/orderDetail/main'})
+  },
+  showOrderByShopIdDetailAction({state, commit}, {order}) {
+    commit('orderByShopIdDetailDataMut', order)
+    wx.navigateTo({url: '/pages/orderItemDetail/main'})
   },
   createOrderDetailAction({state, commit}, {order}) {
     order.remark = state.currentOrder.remark
