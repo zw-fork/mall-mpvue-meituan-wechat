@@ -121,10 +121,13 @@ export default {
   {
     this.scrollTop = 0
     if (!options.status) {
+      this.statusList = []
       this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
     } else {
       this.pageIndex = parseInt(options.status)
-      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': [2,3,4].join(',')}})
+      var status = [this.pageIndex]
+      this.statusList = status
+      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': status.join(',')}})
     }
   },
   onPullDownRefresh: function () {
