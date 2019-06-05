@@ -6,7 +6,7 @@
          <span class="c-m" :style="{'font-weight': pageIndex === 2 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([2])">新订单</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 3 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([3])">配送中</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([4])">已完成</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 7 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([7])">退款申请</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:20%;" @click="updateOrderList([-1])">退款</span>
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
@@ -18,7 +18,7 @@
                 <span class="shop-name" style="display: inline">{{item.addressInfo.name}}</span>
                 <i class="icon mt-arrow-right-o" style="display: inline"></i>
               </div>
-              <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.createTime}}</span>
+              <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.updateTime}}</span>
            </div>
           <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">待支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付，等待商家配送</p>
@@ -49,7 +49,7 @@ import {getFetch} from '@/network/request/HttpExtension'
 export default {
   data() {
     return {
-      pageIndex : -1,
+      pageIndex : null,
       scrollTop:undefined,
       left: '40rpx',
       statusList: [],

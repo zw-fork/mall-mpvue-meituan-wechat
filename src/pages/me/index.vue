@@ -161,6 +161,7 @@ export default {
   onShow(options) {
           getFetch('/order/count/'+this.userInfo.shopId, false).then(response => {
             var count = response.result
+            this.orderCount = []
         this.orderCount.push(count.新订单)
         this.orderCount.push(count.配送中)
         this.orderCount.push(count.退款)

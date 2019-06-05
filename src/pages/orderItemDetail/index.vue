@@ -14,8 +14,8 @@
         <div class="delivery-time">
            <span class="c-l">{{orderByShopIdDetail.remark}}</span>
         </div>
-        <div class="bottom-a" @click="headerClick(orderByShopIdDetail, true)">
-          <div class="btn">
+        <div class="bottom-a">
+          <div class="btn" v-if="orderByShopIdDetail.status==2" @click="updateStatus(3)">
             <span>配送</span>
           </div>
            <div class="btn">
@@ -127,6 +127,7 @@
 import sepLine from "@/components/sep-line";
 import {openLocation} from '@/utils/wxapi'
 import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
+import {getFetch, postFetch} from '@/network/request/HttpExtension'
 import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
 
 export default {
@@ -164,6 +165,11 @@ export default {
           wx.makePhoneCall({phoneNumber: telList[res.tapIndex]+''})
         }
       })
+    },
+    updateStatus(status) {
+    postFetch('/order/' + this.orderByShopIdDetail.id + '/' + status, {}, false).then(response => {
+wx.navigateTo({url: '/pages/orderItemList/main?status=' + status})
+    })
     },
     headerClick(item, flag) {
            var update = false
