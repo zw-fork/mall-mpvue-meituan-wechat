@@ -39,8 +39,11 @@
           <div class="btn" @click="agreeClick(item)">
             <span>{{item.status==1?'微信支付' : '再来一单'}}</span>
           </div>
-          <div class="btn" @click="cancelClick(item)" v-if="item.status<7 && item.status!=0">
-            <span>{{item.status==1 ?'取消' : '退款'}}</span>
+          <div class="btn" @click="cancelClick(item)" v-if="item.status==1">
+            <span>取消</span>
+          </div>
+          <div class="btn" @click="cancelClick(item)" v-if="!item.refundStatus && item.status>1">
+            <span>退款</span>
           </div>
         </div>
       </div>
@@ -119,7 +122,7 @@ export default {
       if (status==1) {
         this.updateOrderStatusAction({order : item, status: 0, selectStatus: selectStatus})
       }else{
-        this.updateOrderStatusAction({order : item, status: 7, selectStatus: selectStatus})
+        this.updateOrderStatusAction({order : item, status: item.status, refundStatus : 1, selectStatus: selectStatus})
       }
       this.scrollTop = 0
     },

@@ -121,6 +121,7 @@ export default {
     this.scrollTop = 0
     if (!options.status) {
       this.statusList = []
+      this.pageIndex = undefined
       this.getOrderItemDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
     } else {
       this.pageIndex = parseInt(options.status)

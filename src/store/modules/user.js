@@ -1,5 +1,5 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
-import {postFetch} from '@/network/request/HttpExtension'
+import {postFetch,getFetch} from '@/network/request/HttpExtension'
 import {API_URL, XIAMIMUSIC, XIAMI_URL} from '@/constants/hostConfig'
 import { getUserInfoWechat } from "@/action/action";
 
@@ -200,6 +200,14 @@ const actions = {
       })
     }
   },
+  getPhoneNumber({state, commit}, {target}) {
+    var jsonData = {
+      encryptedData: target.encryptedData,
+      iv: target.iv
+    };
+    getFetch('/wechat/userPhone', target, false).then(response => {
+    })
+  }
 }
 
 const getters = {

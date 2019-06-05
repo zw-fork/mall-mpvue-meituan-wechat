@@ -102,7 +102,7 @@ const homeData = {
         "brand_type": -1,
         "code": 101578,
         "first_tag_codes": [],
-        "path": "/pages/orderItemList/main",
+        "path": "/pages/orderItemList/main?status=-1",
         "gray_switch": 0,
         "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
         "method": 1258576,

@@ -55,12 +55,12 @@
         </div>
       </div>
     </div>
-    <div class="pay-btn" @click="payClick">
+    <button class="pay-btn" open-type="getPhoneNumber" @getphonenumber="bindPhoneNumber">
       <div class="top">
         <span class="s-l">微信支付</span>
         <span class="s-m">￥{{realFee}}</span>
       </div>
-    </div>
+    </button>
   </div>
 </template>
 
@@ -101,7 +101,13 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
-    ...mapActions("user", ["updateDefaultAddress"]),
+    ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber"]),
+    bindPhoneNumber(e) {
+      var target = e.target
+      target.openid = this.userInfo.openid
+      this.getPhoneNumber({target})
+      
+    },
     addressClick(communityId) {
       wx.navigateTo({url: '/pages/addressList/main?communityId=' + communityId})
     },
