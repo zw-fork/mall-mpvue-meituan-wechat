@@ -18,8 +18,11 @@
           <div class="btn" v-if="orderByShopIdDetail.status==2" @click="updateStatus(3)">
             <span>配送</span>
           </div>
+          <div class="btn" v-if="orderByShopIdDetail.status==3">
+            <span>完成</span>
+          </div>
            <div class="btn">
-            <span>取消退款</span>
+            <span>退款</span>
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
-      <div class="item" v-for="(item, index) in orderList.datas" :key="index" @click="orderDetail(item)">
+      <div class="item" v-for="(item, index) in orderItemList.datas" :key="index" @click="orderDetail(item)">
         <div class="shop-info">
           <img :src="item.avatar">
            <div class="order_title">
@@ -21,7 +21,7 @@
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.updateTime}}</span>
            </div>
           <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">待支付</p>
-          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付，等待商家配送</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==3">配送中</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==0">已取消</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==4">已完成</p>
@@ -57,39 +57,38 @@ export default {
     }
   },
   methods: {
-    ...mapActions("submitOrder", ["getOrderDataAction", "showOrderByShopIdDetailAction", "getOrderByIdAction"]),
-    ...mapMutations("submitOrder", ["orderDetailDataMut"]),
+    ...mapActions("submitOrder", ["getOrderItemDataAction", "showOrderByShopIdDetailAction", "getOrderByIdAction"]),
     updateOrderList(status) {
       this.scrollTop = 0
       this.statusList = status
       if (status.length<1) {
         this.pageIndex = null
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
+        this.getOrderItemDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
       } else {
         this.pageIndex = status[0]
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': this.statusList.join(',')}})
+        this.getOrderItemDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': this.statusList.join(',')}})
       }
     },
     scroll(e) {
       this.scrollTop = undefined
     },
     lower(e) {
-       if (this.orderList.page>0) {
+       if (this.orderItemList.page>0) {
         wx.showLoading({title: '加载中...', mask: true})
        var openid = this.userInfo.openid
        var data = {}
-       data.page = this.orderList.page
+       data.page = this.orderItemList.page
        data.shopId = this.userInfo.shopId
        if (this.statusList.length>0) {
          data.statusList = this.statusList  
        } 
      getFetch('/order/' + this.userInfo.openid, data, false).then(response => {
       var result = response.result || {}
-      this.orderList.datas = [
-        ...this.orderList.datas,
+      this.orderItemList.datas = [
+        ...this.orderItemList.datas,
         ...result.list
         ]
-      this.orderList.page = result.nextPage
+      this.orderItemList.page = result.nextPage
       wx.hideLoading()
     })
     
@@ -111,7 +110,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("submitOrder", ["orderList"]),
+    ...mapState("submitOrder", ["orderItemList"]),
     ...mapState("user", ["userInfo"]),
      lineStyle() {
       return "bold;"
@@ -122,20 +121,20 @@ export default {
     this.scrollTop = 0
     if (!options.status) {
       this.statusList = []
-      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
+      this.getOrderItemDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})
     } else {
       this.pageIndex = parseInt(options.status)
       var status = [this.pageIndex]
       this.statusList = status
-      this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': status.join(',')}})
+      this.getOrderItemDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': status.join(',')}})
     }
   },
   onPullDownRefresh: function () {
     this.scrollTop = 0
       if (this.statusList.length>0) {
-         this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': this.statusList.join(',')}})
+         this.getOrderItemDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId, 'statusList': this.statusList.join(',')}})
       } else {
-          this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})     
+          this.getOrderItemDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1,'shopId':this.userInfo.shopId}})     
       }
   }
 }

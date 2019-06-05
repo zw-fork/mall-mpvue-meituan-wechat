@@ -11,6 +11,11 @@ const state = {
     type: -1,
     datas: []
   },
+  orderItemList: {
+    page: 1,
+    type: -1,
+    datas: []
+  },
   currentOrder: {
 
   },
@@ -29,6 +34,10 @@ const mutations = {
   changeOrderDataMut(state, info) {
     state.orderList.datas = info.list
     state.orderList.page = info.nextPage
+  },
+  changeOrderItemDataMut(state, info) {
+    state.orderItemList.datas = info.list
+    state.orderItemList.page = info.nextPage
   },
   currentOrderDataMut(state, info) {
     state.currentOrder = info
@@ -59,6 +68,14 @@ const actions = {
     getFetch('/order/' + uid, data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderDataMut', result)
+      wx.hideLoading()
+    })
+  },
+  getOrderItemDataAction({state, commit}, {uid, data}) {
+    wx.showLoading({title: '加载中...', mask: true})
+    getFetch('/order/' + uid, data, false).then(response => {
+      var result = response.result || {}
+      commit('changeOrderItemDataMut', result)
       wx.hideLoading()
     })
   },
