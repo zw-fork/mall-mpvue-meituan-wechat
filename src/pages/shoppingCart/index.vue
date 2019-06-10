@@ -3,7 +3,7 @@
     <div class="header-c">
       <div class="header">
         <div class="h-l">
-          <img class="shop-logo" :src="shopInfo.pic_url">
+          <i style="font-size:80rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu"></i>
         </div>
         <div class="h-r">
           <span class="r-m">地址: {{shopInfo.address}}</span>
@@ -11,7 +11,7 @@
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
             <span class="t-m">营业时间: 全天</span>
-            <i class="icon mt-arrow-right-o" style="position:absolute; right:0rpx;"></i>
+            <i class="icon iconfont iconright" style="position:absolute; right:0rpx;"></i>
           </div>
           <div class="r-m">
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
@@ -53,11 +53,11 @@
                 <span class="price">￥{{item.min_price}}</span>
                 <div class="add-item">
                   <div class="add-l" @click.stop="reduceClick(item, index, spus.index)" v-if="item.sequence > 0">
-                    <i class="icon mt-reduce-o"></i>
+                    <i class="icon iconfont iconminus-circle"></i>
                     <span>{{item.sequence}}</span>
                   </div>
                   <div class="add-r" @click.stop="addClick(item, index, spus.index)">
-                    <i class="icon mt-add-o"></i>
+                    <i class="icon iconfont iconplus-circle"></i>
                   </div>
                 </div>
               </div>
@@ -99,11 +99,11 @@
                                         </div>
                                         <section class="cart_list_control">
                                             <span @click.stop="reduceClick(item, item.index, item.categoryIndex)">
-                                                <i class="icon mt-reduce-o" style="color: #ccc;font-size: 48rpx;"></i>
+                                                <i class="icon iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
                                             </span>
                                             <span class="cart_num">{{item.sequence}}</span>
                                             <div @click.stop="addClick(item, item.index, item.categoryIndex)">
-                                            <i class="icon mt-add-o" style="color: #F9D173;font-size: 52rpx;"></i>
+                                            <i class="icon iconfont iconplus-circle" style="color: #F9D173;font-size: 52rpx;"></i>
                                           </div>
                                         </section>
                                     </li>
@@ -127,76 +127,6 @@
       <div class="cart-c">
         <img mode='widthFix' :src="productCount > 0 ? '/static/images/shopping_cart.png' : '/static/images/1.png'" @click="toggleCartList()">
         <span v-if="productCount > 0">{{productCount}}</span>
-      </div>
-    </div>
-    <div class="sku-modal" v-if="visibleSkuModal">
-      <div class="modal-c">
-        <div class="header">
-          <span class="title">{{skuInfo.title}}</span>
-          <div class="attrs" v-for="(item, index) in skuInfo.attrs" :key="index">
-            <span class="name">{{item.name}}：</span>
-            <div class="sku">
-              <div class="item" :class="{selected: itm.selected}" v-for="(itm, idx) in item.values" :key="idx" @click="attrClick(itm, idx, index)">
-                <span>{{itm.value}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="footer">
-          <div class="f-l">
-            <span class="price">￥{{skuInfo.price}}</span>
-            <span class="sku">({{skuInfo.selectedItems}})</span>
-          </div>
-          <div class="f-r">
-            <div class="shopping-c" v-if="!skuInfo.selectedCount" @click="modalAdd">
-              <i class="icon mt-shopping-cart-o"></i>
-              <span>加入购物车</span>
-            </div>
-            <div class="add" v-if="skuInfo.selectedCount > 0">
-              <i class="icon mt-reduce-o" :style="{color: '#ccc', 'font-size': 36 + 'rpx'}" @click="modalReduce"></i>
-              <span>{{skuInfo.selectedCount}}</span>
-              <i class="icon mt-add-o" :style="{color: '#F9D173', 'font-size': 40 + 'rpx'}" @click="modalAdd"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cancle" @click="closeSku">
-        <i class="icon mt-fork-o"></i>
-      </div>
-    </div>
-    <div class="previewModal" v-if="visibleItemModal">
-      <div class="modal-c">
-        <div class="header-p">
-          <img class="item-img" :src="previewInfo.picture">
-          <span class="title">{{previewInfo.name}}</span>
-          <div class="saled">
-            <span class="l">{{previewInfo.month_saled_content}}</span>
-            <span class="r">{{previewInfo.praise_content}}</span>
-          </div>
-          <div class="tags-c" v-if="previewInfo.product_label_picture_list > 0">
-            <img class="tags" :src="itm.picture_url" v-for="(itm, idx) in previewInfo.product_label_picture_list" :key="idx">
-          </div>
-          <span class="desc">{{previewInfo.description}}</span>
-        </div>
-        <div class="footer-p">
-          <span class="l">￥{{previewInfo.min_price}}</span>
-          <div class="r">
-            <div class="add-c" v-if="previewInfo.attrs.length === 0">
-              <div class="c-l" v-if="previewInfo.sequence > 0">
-                <i class="icon mt-reduce-o" :style="{color: '#ccc', 'font-size': 36 + 'rpx'}" @click="previewReduce"></i>
-                <span>{{previewInfo.sequence}}</span>
-              </div>
-              <i class="icon mt-add-o" :style="{color: '#F9D173', 'font-size': 40 + 'rpx'}" @click="previewAdd"></i>
-            </div>
-            <div class="attr" v-if="previewInfo.attrs.length > 0" @click="previewAttr">
-              <span>选规格</span>
-              <span class="count" v-if="previewInfo.sequence > 0">{{previewInfo.sequence}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cancle" @click="closePreview">
-        <i class="icon mt-fork-o"></i>
       </div>
     </div>
   </div>
@@ -593,17 +523,12 @@ export default {
     flex-direction: column;
     .header {
       display: flex;
+      background-color: white;
       align-items: center;
-      background-color: #ff0066;
       height: 150rpx;
       .h-l {
         display: flex;
         margin-left: 16rpx;
-        .shop-logo {
-          height: 120rpx;
-          width: 120rpx;
-          border-radius: 8rpx;
-        }
       }
       .h-r {
         display: flex;
@@ -614,7 +539,6 @@ export default {
           align-items: center;
           .t-l {
             font-size: 20rpx;
-            color: white;
           }
           .s-l {
             margin: 0 20rpx;
@@ -624,7 +548,6 @@ export default {
           }
           .t-m {
             font-size: 20rpx;
-            color: white;
           }
           .s-r {
             margin: 0 20rpx;
@@ -634,12 +557,10 @@ export default {
           }
           .t-r {
             font-size: 20rpx;
-            color: white;
           }
         }
         .r-m {
           font-size: 20rpx;
-          color: white;
           line-height: 30rpx;
           height: 30rpx;
           overflow: hidden;

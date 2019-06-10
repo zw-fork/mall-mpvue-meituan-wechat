@@ -16,8 +16,7 @@
         <scroll-view class="item-list" :scroll-y="true">
           <div class="item" v-for="(item, index) in shopList" :key="index" @click="shoppingCartClick(item.shopId)">
             <div class="item-l">
-              <img :src="item.pic_url">
-              <img class="tag" :src="item.poi_promotion_pic">
+             <i style="font-size:80rpx;color:#d81e06;" class="icon iconfont icondianpu"></i>
             </div>
             <div class="item-r">
               <div class="r-t">
