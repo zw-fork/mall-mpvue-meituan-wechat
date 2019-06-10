@@ -178,7 +178,7 @@ export default {
     },
     btnTitle() {
       if (this.shopInfo) {
-      if (this.shopInfo.statu != 1) {
+      if (this.shopInfo.status != 1) {
         return "打烊"
       }
       var content = `${this.shopInfo.min_price}元起送`
