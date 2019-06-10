@@ -9,11 +9,11 @@
       <div>
         <div class="tel" v-if="shop.tel.length>0"  v-for="(item, index) in shop.tel" :key="index">
       <input  type="number" placeholder="请填写手机号码" placeholder-style="font-size: 24rpx" v-model="shop.tel[index]" maxlength="11"/>
+      <i v-if="(index==shop.tel.length-1) && shop.tel[index]" style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
       <i @click="deleteTel(index)" class="icon mt-delete-o" style="margin-left:30rpx;font-size: 30rpx"></i>
-      <i v-if="(index==shop.tel.length-1) && shop.tel[index]" style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon mt-add-o"></i>
       </div>  
       <div class="tel" v-if="shop.tel.length==0">  
-      <i style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon mt-add-o"></i>
+      <i style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
       </div>    
       </div>
     </div>
