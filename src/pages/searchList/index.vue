@@ -3,7 +3,7 @@
     <div class="header-c">
       <div class="header">
         <div class="header-r" @click="scanClick()">
-          <img class="item-img" src="/static/images/scan.png">
+           <i class="icon iconfont iconimportedlayerscopy2" style="margin-left:15rpx;font-size: 45rpx;"></i>
         </div>
                 <div class="header-m">
           <i class="icon mt-search-o"></i>
@@ -29,11 +29,11 @@
                 <span class="price">￥{{item.min_price}}</span>
                 <div class="add-item">
                   <div class="add-l" @click.stop="reduceClick(item)" v-if="item.sequence > 0">
-                    <i class="icon mt-reduce-o"></i>
+                    <i class="icon iconfont iconminus-circle"></i>
                     <span>{{item.sequence}}</span>
                   </div>
                   <div class="add-r" @click.stop="addClick(item)">
-                    <i class="icon mt-add-o"></i>
+                    <i class="icon iconfont iconplus-circle"></i>
                   </div>
                 </div>
               </div>
@@ -62,11 +62,11 @@
                                         </div>
                                         <section class="cart_list_control">
                                             <span @click.stop="reduceClick(item, item.index, item.categoryIndex)">
-                                                <i class="icon mt-reduce-o" style="color: #ccc;font-size: 48rpx;"></i>
+                                                <i class="icon iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
                                             </span>
                                             <span class="cart_num">{{item.sequence}}</span>
                                             <div @click.stop="addClick(item, item.index, item.categoryIndex)">
-                                            <i class="icon mt-add-o" style="color: #F9D173;font-size: 52rpx;"></i>
+                                            <i class="icon iconfont iconplus-circle" style="color: #F9D173;font-size: 52rpx;"></i>
                                           </div>
                                         </section>
                                     </li>
@@ -90,41 +90,6 @@
       <div class="cart-c">
         <img mode='widthFix' :src="productCount > 0 ? '/static/images/shopping_cart.png' : '/static/images/1.png'" @click="toggleCartList()">
         <span v-if="productCount > 0">{{productCount}}</span>
-      </div>
-    </div>
-    <div class="sku-modal" v-if="visibleSkuModal">
-      <div class="modal-c">
-        <div class="header">
-          <span class="title">{{skuInfo.title}}</span>
-          <div class="attrs" v-for="(item, index) in skuInfo.attrs" :key="index">
-            <span class="name">{{item.name}}：</span>
-            <div class="sku">
-              <div class="item" :class="{selected: itm.selected}" v-for="(itm, idx) in item.values" :key="idx" @click="attrClick(itm, idx, index)">
-                <span>{{itm.value}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="footer">
-          <div class="f-l">
-            <span class="price">￥{{skuInfo.price}}</span>
-            <span class="sku">({{skuInfo.selectedItems}})</span>
-          </div>
-          <div class="f-r">
-            <div class="shopping-c" v-if="!skuInfo.selectedCount" @click="modalAdd">
-              <i class="icon mt-shopping-cart-o"></i>
-              <span>加入购物车</span>
-            </div>
-            <div class="add" v-if="skuInfo.selectedCount > 0">
-              <i class="icon mt-reduce-o" :style="{color: '#ccc', 'font-size': 36 + 'rpx'}" @click="modalReduce"></i>
-              <span>{{skuInfo.selectedCount}}</span>
-              <i class="icon mt-add-o" :style="{color: '#F9D173', 'font-size': 40 + 'rpx'}" @click="modalAdd"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cancle" @click="closeSku">
-        <i class="icon mt-fork-o"></i>
       </div>
     </div>
   </div>
@@ -546,7 +511,6 @@ export default {
     .header {
       display: flex;
       align-items: center;
-      background-color: #ff0066;
       height: 80rpx;
       .h-l {
         display: flex;

@@ -10,13 +10,13 @@
     </div>
     <div class="sex">
       <div class="l"></div>
-      <div class="m" @click="updateSex(1)">
-        <i :class="clazzA" :style="styleA"></i>
-        <span>先生</span>
-      </div>
-      <div class="r" @click="updateSex(0)">
-        <i :class="clazzB" :style="styleB"></i>
-        <span>女士</span>
+<div class="tag-c">
+        <div class="tag" :style="styleA" @click="updateSex(1)">
+          <span>先生</span>
+        </div>
+                <div class="tag" :style="styleB" @click="updateSex(0)">
+          <span>女士</span>
+        </div>
       </div>
     </div>
     <div class="address">
@@ -33,7 +33,6 @@
     <div class="submit" @click="saveAddress">
       <span>保存地址</span>
     </div>
-    <mp-button type="primary" size="mini" btnClass="mb15">默认按钮</mp-button>
     <mp-uploader @upLoadSuccess="upLoadSuccess" @upLoadFail="upLoadFail" @uploadDelete="uploadDelete" :showTip=false :count=1></mp-uploader>
   </div>
 </template>
@@ -48,11 +47,12 @@ export default {
     },
    data() {
     return {
+       tags: ['不吃辣', '少放葱'],
       active : false,
-      clazzA : 'icon mt-selected-o',
-      styleA : 'color: #F9D173',
+      clazzA : 'icolorcon mt-selected-o',
+      styleA : 'background-color: #87CEFA',
       clazzB : 'icon mt-unselected-o',
-      styleB : 'color: #333',
+      styleB : 'background-color: none;',
       item : {
         gender : 1
       }
@@ -62,7 +62,7 @@ export default {
     ...mapState("user", ["userInfo"]),
     ...mapState("shoppingCart", ["shopInfo"]),
     selectedStyle() {
-      return this.item.gender? 'color: #F9D173;' : 'color: #333;'
+      return this.item.gender? 'background-color: #87CEFA;' : 'background-color: none;'
     }
   },
     methods: {
@@ -75,15 +75,11 @@ export default {
          if (sex != this.item.gender) {
            this.item.gender = sex
             if (sex) {
-              this.clazzA = 'icon mt-selected-o'
-              this.styleA = 'color: #F9D173;font-size: 32rpx;'
-              this.clazzB = 'icon mt-unselected-o'
-              this.styleB = 'color: #333;font-size: 38rpx'
+              this.styleA = 'background-color: #87CEFA;'
+              this.styleB = 'background-color: none;'
             } else {
-              this.clazzB = 'icon mt-selected-o'
-              this.styleB = 'color: #F9D173;font-size: 32rpx;'
-              this.clazzA = 'icon mt-unselected-o'
-              this.styleA = 'color: #333;font-size: 38rpx'
+              this.styleB = 'background-color: #87CEFA;'
+              this.styleA = 'background-color: none;'
             }
          }
        }
@@ -111,6 +107,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .tag-c {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: white;
+      .tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100rpx;
+        height: 50rpx;
+        border: 2rpx solid $spLine-color;
+        margin-left: 30rpx;
+        span {
+          font-size: 20rpx;
+          color: $textBlack-color;
+        }
+      }
+    }
 input {
  font-size: 28rpx;
 }
@@ -141,7 +155,7 @@ input {
     align-items: center;
     margin-left: 30rpx;
     padding-right: 30rpx;
-    height: 88rpx;
+    height: 80rpx;
     border-bottom: 2rpx solid $spLine-color;
     .l {
       width: 160rpx;

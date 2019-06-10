@@ -10,11 +10,12 @@
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
       <div class="item" v-for="(item, index) in orderList.datas" :key="index">
         <div class="shop-info">
-          <img :src="item.shopInfo.pic_url">
-           <div class="order_title" @click="intoShop(item)">
+ <div class="h-l">
+          <i style="font-size:30rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu"></i>
+        </div>           <div class="order_title" @click="intoShop(item)">
               <div class="order-name" style="margin-bottom:-15rpx;">
                 <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
-                <i class="icon mt-arrow-right-o" style="display: inline"></i>
+                <i class="icon iconfont iconright" style="display: inline"></i>
               </div>
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.updateTime}}</span>
            </div>
@@ -160,8 +161,7 @@ export default {
     flex-direction: column;
     .cate-c {
       display: flex;
-      height: 90rpx;
-      margin: 10rpx;
+      height: 70rpx;
       align-items: center;
       border-bottom: 5rpx solid $spLine-color;
       position: relative;
@@ -189,7 +189,7 @@ export default {
   .list-c {
     display: block;
     position: fixed;
-    top: 105rpx;
+    top: 70rpx;
     bottom: 0rpx;
     width:100%;
     .item {

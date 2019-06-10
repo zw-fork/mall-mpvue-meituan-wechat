@@ -12,7 +12,7 @@
             <span class="address-info" v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
             <span class="user-info" v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
           </div>
-          <i class="icon mt-arrow-right-o" :style="{fontSize: 28 + 'rpx', color: '#999'}"></i>
+          <i class="icon iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
         </div>
       </div>
     </div>
@@ -20,7 +20,7 @@
       <div class="section">
         <img :src="currentOrder.shopInfo.pic_url" >
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
-        <i class="icon mt-arrow-right-o" style="display: inline"></i>
+        <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="list">
         <div class="item" v-for="(item, index) in currentOrder.itemList" :key="index">
@@ -51,7 +51,7 @@
         <span class="mid-l">备注</span>
         <div class="mid-r">
           <span>{{currentOrder.remark? currentOrder.remark:'请输入口味、偏好等要求'}}</span>
-          <i class="icon mt-arrow-right-o"></i>
+          <i class="icon iconfont iconright"></i>
         </div>
       </div>
     </div>
