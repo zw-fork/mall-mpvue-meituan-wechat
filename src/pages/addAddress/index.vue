@@ -72,7 +72,6 @@ export default {
         this.saveOrUpdateAddress({addressModel : this.item})
        },
        updateSex(sex) {
-         if (sex != this.item.gender) {
            this.item.gender = sex
             if (sex) {
               this.styleA = 'background-color: #87CEFA;'
@@ -81,15 +80,10 @@ export default {
               this.styleB = 'background-color: #87CEFA;'
               this.styleA = 'background-color: none;'
             }
-         }
        }
     },
    onLoad(options) 
   {
-    if (this.shopInfo && this.userInfo.addressModel) {
-      this.item.address = this.shopInfo.addressModel.address
-      this.item.communityId = this.shopInfo.addressModel.communityId
-    }
     var id=options.id;
     if (id) {
       var addr = this.myAddress
@@ -99,9 +93,16 @@ export default {
             break
           } 
         }
+    } else {
+      this.item = {
+        gender : 1
+      }
     }
-   
-    
+    if (this.shopInfo && this.userInfo.addressModel) {
+      this.item.address = this.shopInfo.addressModel.address
+      this.item.communityId = this.shopInfo.addressModel.communityId
+    }
+    this.updateSex(this.item.gender)   
   }
 }
 </script>
