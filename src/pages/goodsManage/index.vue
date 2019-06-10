@@ -27,21 +27,21 @@
         </div>
         <div class="mid-r" @click="updateCategoryClick">
           <span>{{goods.categoryName}}</span>
-           <i class="icon mt-arrow-right-o"></i>
+           <i class="icon iconfont iconright"></i>
         </div>
     </div>
     <div class="b-mid" @click="remarkClick">
         <span class="mid-l">商品状态:</span>
         <div class="mid-r" @click="showSinglePicker">
           <span>{{goods.statusName}}</span>
-          <i class="icon mt-arrow-right-o"></i>
+          <i class="icon iconfont iconright"></i>
         </div>
     </div>
     <div class="b-mid" @click="remarkClick">
         <span class="mid-l">商品描述:</span>
         <div class="mid-r">
           <span>请输入商品描述信息</span>
-          <i class="icon mt-arrow-right-o"></i>
+          <i class="icon iconfont iconright"></i>
         </div>
     </div>
     <div class="submit" @click="uploadFile">

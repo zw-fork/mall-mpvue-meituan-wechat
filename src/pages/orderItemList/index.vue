@@ -16,7 +16,7 @@
            <div class="order_title">
               <div class="order-name" style="margin-bottom:-15rpx;">
                 <span class="shop-name" style="display: inline">{{item.addressInfo.name}}</span>
-                <i class="icon mt-arrow-right-o" style="display: inline"></i>
+                <i class="icon iconfont iconright" style="display: inline"></i>
               </div>
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.updateTime}}</span>
            </div>

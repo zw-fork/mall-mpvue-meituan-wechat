@@ -7,10 +7,6 @@
           <span>{{userInfo.addressModel? userInfo.addressModel.address : '请选择小区...'}}</span>
           <i class="icon iconfont icondown" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
         </div>
-        <div class="header-r" @click="searchClick">
-          <i class="icon mt-search-o"></i>
-          <span>请输入收货地址</span>
-        </div>
       </div>
       <div class="category-list">
         <scroll-view class="item-list" :scroll-y="true">

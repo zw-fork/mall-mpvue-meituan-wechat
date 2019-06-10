@@ -31,7 +31,7 @@
       <div class="section" @click="headerClick(orderByShopIdDetail, false)">
         <img :src="orderByShopIdDetail.shopInfo.pic_url" >
         <span>{{orderByShopIdDetail.shopInfo.shopName}}</span>
-        <i class="icon mt-arrow-right-o" style="display: inline"></i>
+        <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="list">
         <div class="item" v-for="(item, index) in foodList" :key="index">

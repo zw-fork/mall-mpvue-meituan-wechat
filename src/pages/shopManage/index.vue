@@ -25,7 +25,7 @@
         <span class="mid-l">商店状态:</span>
         <div class="mid-r" @click="showSinglePicker">
           <span>{{shop.statusName}}</span>
-          <i class="icon mt-arrow-right-o"></i>
+          <i class="icon iconfont iconright"></i>
         </div>
     </div>
     <div class="submit" @click="updateShop">

@@ -12,7 +12,7 @@
         </div>
          <div class="header-r" style="margin: 0 10rpx;">
         <span @click="getGoods()">搜索</span>
-         <i @click="addGoods()" class="icon mt-add-o" style="margin-left:20rpx;margin-right:20rpx;"></i>
+         <i @click="addGoods()" class="icon iconfont iconplus-circle" style="margin-left:20rpx;margin-right:20rpx;font-size: 36rpx;"></i>
       </div>
       </div>    
        <div class="cate-c">
@@ -456,7 +456,6 @@ export default {
     .header {
       display: flex;
       align-items: center;
-      background-color: #ff0066;
       height: 80rpx;
       .h-l {
         display: flex;
