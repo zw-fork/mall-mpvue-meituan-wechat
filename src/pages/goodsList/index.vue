@@ -39,8 +39,8 @@
                     <i class="icon mt-reduce-o"></i>
                     <span>{{item.sequence}}</span>
                   </div>
-                  <div class="add-r" >
-                    <img @click.stop="manageGoods($event, item)" style="width:40rpx;height:40rpx;" src="/static/images/point.png">
+                  <div class="add-r"  @click.stop="manageGoods($event, item)">
+                    <i class="icon iconfont icondian"></i>
                   </div>
                 </div>
               </div>
@@ -52,20 +52,16 @@
   </div>
         <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
-        <img src="/static/images/down.png">
+        <i class="icon iconfont iconicon07"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-            <div @click="upGoods" v-if="selectGoods.status==2">
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">上架</span>
+           <div @click="editGoods">
+        <i class="icon iconfont iconicon07"></i>
+        <span style="color:white;text-align: center;">编辑</span>
       </div>
-            <div @click="downGoods" v-if="selectGoods.status==1">
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">下架</span>
-      </div>
-                  <div @click="deleteGoods">
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">删除</span>
+           <div @click="editGoods">
+        <i class="icon iconfont iconicon07"></i>
+        <span style="color:white;text-align: center;">编辑</span>
       </div>
     </div>
   </div>
@@ -375,22 +371,20 @@ export default {
    position: absolute;
    opacity: 0.5;
    right: 0rpx;
-   img {
-           flex-direction: column;
+   i {
+     font-size: 50rpx;
+     color:white;
+    flex-direction: column;
       align-items: center;
+      margin-left: 10rpx;
       display: flex;
-     margin: 10rpx;
-     width: 50rpx;
-     margin-left: 40rpx;
-     height: 50rpx;
    }
    span {
       flex-direction: column;
       align-items: center;
       display: flex;
-           margin: 10rpx;
-           margin-left: 40rpx;
-      font-size: 24rpx;
+      margin-left: 10rpx;
+      font-size: 28rpx;
    }
 }
       .header-m {
@@ -427,78 +421,6 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-.cart_food_list {
-    position: fixed;
-    width: 100%;
-    padding-bottom: 1rem;
-    z-index: 12;
-    bottom: 0;
-    left: 0;
-    background-color: #fff;
-    header{
-            display: flex;
-            align-items: center;
-            padding: 10rpx 10rpx;
-            background-color: #eceff1;
-            justify-content: space-between;
-            align-items: center;
-        }
-    .cart_food_details{
-            background-color: #fff;
-            max-height: 550rpx;
-            overflow-y: auto;
-            .cart_food_li{
-                display: flex;
-                justify-content: space-between;
-                border-bottom: 2rpx solid $spLine-color;
-                padding: 5rpx 40rpx;
-                height: 80rpx;
-                align-items: center;
-                font-size:32rpx;
-                color:#000;
-                .cart_list_num{
-                    width: 55%;
-                    p:nth-of-type(1){
-                        font-weight: bold;
-                    }
-                    p:nth-of-type(2){
-                    }
-                }
-                .cart_list_price{
-                    span:nth-of-type(1){
-	                    color: #666;
-                        font-family: Helvetica Neue,Tahoma;
-
-                    }
-                    span:nth-of-type(2){
-	                    color: #666;
-                        font-family: Helvetica Neue,Tahoma;
-                        font-weight: bold;
-                    }
-                }
-                .cart_list_control{
-                    display: flex;
-                    align-items: center;
-                    span{
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    svg{
-                        fill: #3190e8;
-                    }
-                    .specs_reduce_icon{
-                        fill: #999;
-                    }
-                    .cart_num{
-                        min-width: 0.5rem;
-                        text-align: center;
-                        font-family: Helvetica Neue,Tahoma;
-                    }
-                }
-            }
-        }       
 }
 .container {
   display: flex;
@@ -638,20 +560,6 @@ export default {
           color: $textDarkGray-color;
           margin-left: 10rpx;
         }
-        .count {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: $mtRed-color;
-          width: 30rpx;
-          height: 30rpx;
-          border-radius: 15rpx;
-          right: 0;
-          top: 6rpx;
-          position: absolute;
-          font-size: 20rpx;
-          color: white;
-        }
       }
       .active {
         background-color: white;
@@ -771,11 +679,7 @@ export default {
                   }
                 }
                 .add-r {
-                  // background: #999;
-                  // border-radius: 15rpx;
-                  // margin: 20rpx;
                   i {
-                    color: $theme-color;
                     font-size: 54rpx;
                   }
                 }

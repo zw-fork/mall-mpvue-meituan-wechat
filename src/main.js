@@ -5,6 +5,7 @@ import App from './App'
 import store from './store'
 import * as util from './utils'
 import 'mpvue-weui/src/style/weui.css';
+import './assets/iconfont/iconfont.css'
 
 Vue.config.productionTip = false
 App.mpType = 'app'
