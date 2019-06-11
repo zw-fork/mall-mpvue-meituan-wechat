@@ -12,7 +12,7 @@
       <i v-if="(index==shop.tel.length-1) && shop.tel[index]" style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
       <i @click="deleteTel(index)" class="icon mt-delete-o" style="margin-left:30rpx;font-size: 30rpx"></i>
       </div>  
-      <div class="tel" v-if="shop.tel.length==0">  
+      <div class="tel" v-if="shop.tel && shop.tel.length==0">  
       <i style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
       </div>    
       </div>

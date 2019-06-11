@@ -23,7 +23,7 @@
     <div class="b-mid">
         <div class="mid-l">
           <span>商品分类:</span>
-           <i @click="createCategory" class="icon mt-add-o"></i>
+           <i @click="createCategory" class="icon iconfont iconplus-circle"></i>
         </div>
         <div class="mid-r" @click="updateCategoryClick">
           <span>{{goods.categoryName}}</span>
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="submit" @click="uploadFile">
-      <span>保存地址</span>
+      <span>保存</span>
     </div>
     <mp-picker ref="mpvuePicker" :mode="mode" :deepLength=deepLength :pickerValueDefault="pickerValueDefault" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mp-picker>
   </div>

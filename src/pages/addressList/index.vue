@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="add-btn" @click="addClick()" v-if="shopInfo.communityId">
-      <i class="icon mt-add-o"></i>
+      <i class="icon iconfont iconplus-circle"></i>
       <span>新增收货地址</span>
     </div>
   </div>
@@ -145,7 +145,6 @@ clearLoop(addressId) {
     right: 0;
     i {
       font-size: 36rpx;
-      color: $theme-color;
     }
     span {
       font-size: 28rpx;

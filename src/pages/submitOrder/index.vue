@@ -55,12 +55,12 @@
         </div>
       </div>
     </div>
-    <button class="pay-btn" open-type="getPhoneNumber" @getphonenumber="bindPhoneNumber">
+     <div class="pay-btn" @click="payClick">
       <div class="top">
         <span class="s-l">微信支付</span>
         <span class="s-m">￥{{realFee}}</span>
       </div>
-    </button>
+    </div>
   </div>
 </template>
 

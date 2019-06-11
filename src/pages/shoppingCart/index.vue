@@ -6,14 +6,14 @@
           <i style="font-size:80rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu"></i>
         </div>
         <div class="h-r">
-          <span class="r-m">地址: {{shopInfo.address}}</span>
+          <span class="r-l">地址: {{shopInfo.address}}</span>
           <div class="r-t">
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
             <span class="t-m">营业时间: 全天</span>
             <i class="icon iconfont iconright" style="position:absolute; right:0rpx;"></i>
           </div>
-          <div class="r-m">
+          <div class="r-m" v-if="shopInfo.bulletin">
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
           </div>
         </div>
@@ -76,6 +76,11 @@
         <div class="btm">
           <i class="icon mt-clock-s"></i>
           <span>营业时间: 全天</span>
+        </div>
+      </div>
+      <div class="delivery" v-if="shopInfo.bulletin">
+        <div class="notice">
+          <span>{{shopInfo.bulletin}}</span>
         </div>
       </div>
     </div>
@@ -538,7 +543,7 @@ export default {
           display: flex;
           align-items: center;
           .t-l {
-            font-size: 20rpx;
+            font-size: 22rpx;
           }
           .s-l {
             margin: 0 20rpx;
@@ -547,7 +552,7 @@ export default {
             background-color: white;
           }
           .t-m {
-            font-size: 20rpx;
+            font-size: 22rpx;
           }
           .s-r {
             margin: 0 20rpx;
@@ -556,37 +561,41 @@ export default {
             background-color: white;
           }
           .t-r {
-            font-size: 20rpx;
+            font-size: 22rpx;
           }
         }
-        .r-m {
-          font-size: 20rpx;
+        .r-l {
+          font-size: 22rpx;
           line-height: 30rpx;
           height: 30rpx;
           overflow: hidden;
-          margin: 10rpx 0;
+        }
+        .r-m {
+          font-size: 22rpx;
+          height: 70rpx;
+          overflow: hidden;
         }
         .r-b {
           display: flex;
           align-items: center;
           .b-l {
             width: 30rpx;
-            height: 30rpx;
+            height: 60rpx;
             background-color: #FF616D;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: white;
-            font-size: 20rpx;
+            font-size: 22rpx;
           }
           .b-r {
-            font-size: 20rpx;
+            font-size: 22rpx;
             color: white;
             flex: 1;
             margin-left: 20rpx;
           }
           i {
-            font-size: 20rpx;
+            font-size: 22rpx;
             color: white;
           }
         }
@@ -978,7 +987,7 @@ export default {
                   }
                 }
                 .b-r {
-                  font-size:20rpx;
+                  font-size:201rpx;
                   color: $textGray-color;
                   margin-left: 20rpx;
                 }
@@ -1124,6 +1133,14 @@ export default {
       }
       .btm {
         @extend .top;
+        border-bottom: 0 solid $spLine-color;
+      }
+      .notice {
+        font-size: 24rpx;
+        display: flex;
+        align-items: center;
+        padding-left: 10rpx;
+        border-bottom: 2rpx solid $spLine-color;
         border-bottom: 0 solid $spLine-color;
       }
     }

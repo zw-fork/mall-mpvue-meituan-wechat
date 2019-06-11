@@ -53,15 +53,13 @@ export default {
     lower(e) {
     },     
     upper1(e) {
-      wx.showLoading({title: '加载中...', mask: true})
       var communityId = this.userInfo.addressModel.communityId
       if (communityId) {
+        wx.showLoading({title: '加载中...', mask: true})
         getFetch('/shop/list/' + communityId, {}, false).then(response => {
           this.shopList = response.result.list
           wx.hideLoading()
         })
-      } else {
-        wx.hideLoading()
       }
     },
     categoryClick() {
