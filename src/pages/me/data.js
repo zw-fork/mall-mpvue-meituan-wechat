@@ -24,14 +24,14 @@ const homeData = {
         "code": 910,
         "first_tag_codes": [],
         "gray_switch": 0,
-        "gray_url": "/static/images/待付款.png",
+        "gray_url": "icondianpu1",
         "method": 1258576,
         "name": "店铺管理",
         "path": "/pages/shopManage/main",
         "second_tag_codes": [],
         "sequence": 100,
         "skip_protocol": "channel?category_type=910&category_text=%E7%BE%8E%E9%A3%9F",
-        "url": "/static/images/order_1.png"
+        "url": "icondianpu1"
       }, {
         "brand_type": -1,
         "code": 101574,
@@ -44,7 +44,7 @@ const homeData = {
         "second_tag_codes": [],
         "sequence": 200,
         "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
-        "url": "/static/images/order_2.png"
+        "url": "iconshangpin"
       }, {
         "brand_type": -1,
         "code": 101578,
@@ -57,7 +57,7 @@ const homeData = {
         "second_tag_codes": [],
         "sequence": 300,
         "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
-        "url": "/static/images/order_3.png"
+        "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
       }, {
         "brand_type": -1,
         "code": 960,
@@ -70,7 +70,7 @@ const homeData = {
         "second_tag_codes": [],
         "sequence": 400,
         "skip_protocol": "channel?category_type=960&category_text=%E7%BE%8E%E5%9B%A2%E4%B8%93%E9%80%81",
-        "url": "/static/images/order_4.png"
+        "url": "iconcount"
       }],
       "primary_filter": [{
         "brand_type": -1,

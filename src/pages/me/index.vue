@@ -32,7 +32,7 @@
           <swiper-item>
             <div class="grid-c">
               <div class="item" v-for="(item, index) in shopMenuList" :key="index"  @click="itemClick(item)">
-                <img class="item-img" :src="item.url">
+                <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
                 <span class="item-title">{{item.name}}</span>
               </div>
             </div>

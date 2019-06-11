@@ -11,7 +11,7 @@
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
             <span class="t-m">营业时间: 全天</span>
-            <i class="icon iconfont iconright" style="position:absolute; right:0rpx;"></i>
+            <i class="icon iconfont iconright" style="position:absolute; right:0rpx;" @click="shopClick"></i>
           </div>
           <div class="r-m" v-if="shopInfo.bulletin">
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
@@ -389,6 +389,7 @@ export default {
   },
   onLoad(options) 
   {
+    this.pageIndex = 0
     var that = this
     var shopId=options.shopId;
     var update = false

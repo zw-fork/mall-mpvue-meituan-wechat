@@ -23,7 +23,7 @@
     </div>
     <div class="item-list">
       <div class="section" @click="headerClick(orderDetail, false)">
-        <img :src="orderDetail.shopInfo.pic_url" >
+        <i style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
         <span>{{orderDetail.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>

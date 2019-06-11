@@ -35,7 +35,7 @@
     "navigationBarTitleText": "达邻购",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "dark",
-    "enablePullDownRefresh": true,
+    "enablePullDownRefresh": false,
     "onReachBottomDistance": 50
   },
   "tabBar": {
