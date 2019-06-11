@@ -98,7 +98,7 @@ const actions = {
     if (refundStatus) {
       refund.refundStatus = refundStatus
     }
-    getFetch('/order/updateStatus/' + order.id + '/' + status, refundStatus, false).then(response => {
+    getFetch('/order/updateStatus/' + order.id + '/' + status, refund, false).then(response => {
       getFetch('/order/' + order.uid, data, false).then(response => {
         var result = response.result || {}
         commit('changeOrderDataMut', result)

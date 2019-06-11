@@ -1,25 +1,19 @@
 <template>
 <div>
   <div class="container" @click="update" @mousedown="update" @scroll="update">
-    <div class="header-c">
-            <div class="header">
-                <div class="header-m">
-          <i class="icon mt-search-o"></i>
-          <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name"/>
-        </div>
-         <div class="header-r" style="margin: 0 10rpx;">
-        <span @click="getGoods()">搜索</span>
-         <i @click="addGoods()" class="icon mt-add-o" style="margin-left:20rpx;margin-right:20rpx;"></i>
-      </div>
-      </div>    
+    <div class="header-c">   
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex == null  ? 'bold;' : null}" style="text-align:center;width:34%;" @click="updateGoodsList(null)">全部</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold;' : null}" style="text-align:center;width:33%;" @click="updateGoodsList(1)">可见</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 2 ? 'bold;' : null}" style="text-align:center;width:33%;" @click="updateGoodsList(2)">隐藏</span>
+         <span class="c-l" :style="{'font-weight': pageIndex == null  ? 'bold;' : null}" style="text-align:center;width:30%;" @click="updateGoodsList(null)">全部</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold;' : null}" style="text-align:center;width:30%;" @click="updateGoodsList(1)">可见</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 2 ? 'bold;' : null}" style="text-align:center;width:30%;" @click="updateGoodsList(2)">隐藏</span>
+                  <span class="c-m" style="text-align:center;width:10%;" @click="addGoods">
+             <i class="icon iconfont iconplus-circle" style="font-size: 40rpx;"></i>        
+                  </span>
+
        </div>
     </div>
     <div class="list-c">
-      <scroll-view class="list-r" :scroll-y="true">
+      <scroll-view class="list-r" :scroll-y="true"  @scroll="scroll">
         <div class="item-list" v-for="(item, index) in list.datas" :key="index">
           <div class="item">
             <div class="item-r">
@@ -39,20 +33,20 @@
   </div>
         <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
-        <img src="/static/images/down.png">
+        <i class="icon iconfont iconedit"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-            <div @click="upGoods" v-if="selectGoods.status==2">
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">可见</span>
+           <div @click="upGoods" v-if="selectGoods.status==2">
+        <i class="icon iconfont iconshangjia1"></i>
+        <span style="color:white;text-align: center;">可见</span>
       </div>
-            <div @click="downGoods" v-if="selectGoods.status==1">
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">隐藏</span>
+      <div  @click="downGoods" v-if="selectGoods.status==1">
+        <i class="icon iconfont iconxiajia"></i>
+        <span style="color:white;text-align: center;">下架</span>
       </div>
-                  <div @click="deleteGoods">
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">删除</span>
+            <div  @click="deleteGoods">
+        <i class="icon iconfont icondelete"></i>
+        <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
   </div>
@@ -309,7 +303,7 @@ export default {
     flex-direction: column;
     .cate-c {
       display: flex;
-      height: 70rpx;
+      height: 80rpx;
       align-items: center;
       position: relative;
       transition: all 0.2s;
@@ -339,6 +333,14 @@ export default {
    position: absolute;
    opacity: 0.5;
    right: 0rpx;
+      i {
+     font-size: 50rpx;
+     color:white;
+    flex-direction: column;
+      align-items: center;
+      margin-left: 20rpx;
+      display: flex;
+   }
    img {
            flex-direction: column;
       align-items: center;
@@ -352,8 +354,7 @@ export default {
       flex-direction: column;
       align-items: center;
       display: flex;
-           margin: 10rpx;
-           margin-left: 40rpx;
+           margin-left: 20rpx;
       font-size: 24rpx;
    }
 }
@@ -575,7 +576,7 @@ export default {
   .list-c {
     display: flex;
     position: fixed;
-    top: 150rpx;
+    top: 70rpx;
     width:100%;
     bottom: 0rpx;
     .list-l {

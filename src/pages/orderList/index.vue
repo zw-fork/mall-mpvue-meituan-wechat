@@ -2,9 +2,9 @@
   <div class="container">
     <div class="header-c">
        <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:34%;" @click="updateOrderList(-1)">全部订单</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(4)">已完成</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList(8)">退款</span>
+         <span class="c-l" :style="{'font-weight': statusList.length<1 ? lineStyle : null}" style="text-align:center;width:34%;" @click="updateOrderList([])">全部订单</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList([4])">已完成</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList([-1])">退款</span>
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
@@ -19,7 +19,10 @@
               </div>
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.updateTime}}</span>
            </div>
-          <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==0">已取消</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-if="item.refundStatus==1">等待商家处理退款</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.refundStatus==2">退款成功</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.refundStatus==3">退款失败</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==0">待支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==1">待支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付，等待商家配送</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==3">配送中</p>
@@ -62,6 +65,7 @@ export default {
     return {
       pageIndex : -1,
       scrollTop:0,
+      statusList: [],
       left: '40rpx',
       status: undefined
     }
@@ -71,11 +75,13 @@ export default {
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
     updateOrderList(status) {
       this.scrollTop = 0
-      this.pageIndex = status
-      if (status == -1) {
+      this.statusList = status
+      if (status.length<1) {
+        this.pageIndex = null
         this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})
       } else {
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'status':status}})
+        this.pageIndex = status[0]
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'statusList': this.statusList.join(',')}})
       }
     },
     scroll(e) {
@@ -123,6 +129,7 @@ export default {
       if (status==1) {
         this.updateOrderStatusAction({order : item, status: 0, selectStatus: selectStatus})
       }else{
+        debugger
         this.updateOrderStatusAction({order : item, status: item.status, refundStatus : 1, selectStatus: selectStatus})
       }
       this.scrollTop = 0

@@ -18,10 +18,10 @@
           <div class="btn" v-if="orderByShopIdDetail.status==2" @click="updateStatus(3)">
             <span>配送</span>
           </div>
-          <div class="btn" v-if="orderByShopIdDetail.status==3">
+          <div class="btn" v-if="orderByShopIdDetail.status==3" @click="updateStatus(4)">
             <span>完成</span>
           </div>
-           <div class="btn">
+           <div class="btn" @click="updateStatus(8)">
             <span>退款</span>
           </div>
         </div>
@@ -170,9 +170,9 @@ export default {
       })
     },
     updateStatus(status) {
-    postFetch('/order/' + this.orderByShopIdDetail.id + '/' + status, {}, false).then(response => {
-wx.navigateTo({url: '/pages/orderItemList/main?status=' + status})
-    })
+      getFetch('/order/updateStatus/' + this.orderByShopIdDetail.id + '/' + status, {}, false).then(response => {
+        wx.navigateTo({url: '/pages/orderItemList/main?status=' + status})
+      })
     },
     headerClick(item, flag) {
            var update = false

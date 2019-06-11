@@ -20,7 +20,10 @@
               </div>
               <span class="order-time" style="color: #999;font-size: 23rpx;margin-left:10rpx;padding:-20rpx;">{{item.updateTime}}</span>
            </div>
-          <p class="order-status" style="position: absolute;right: 0;" v-if="item.status==1">待支付</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-if="item.refundStatus==1">等待处理退款</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.refundStatus==2">退款成功</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.refundStatus==3">退款失败</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==1">待支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==3">配送中</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==0">已取消</p>
