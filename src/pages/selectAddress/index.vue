@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header-c">
       <div class="header-l">
-        <i class="icon mt-location-o" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
+        <i class="icon iconfont iconlocation" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
         <span>成都市</span>
       </div>
       <div class="header-r">
