@@ -1,5 +1,5 @@
 /** Created by guangqiang on 2018-09-28 23:17:03 */
-import {getFetch, postFetch} from '@/network/request/HttpExtension'
+import { getFetch, postFetch } from '@/network/request/HttpExtension'
 
 const state = {
   result: {},
@@ -58,104 +58,115 @@ const mutations = {
 }
 
 const actions = {
-  getUserDataAction({state, commit}, {uid}) {
+  getUserDataAction({ state, commit }, { uid }) {
     getFetch('/wechat/' + uid, {}, false).then(response => {
       var user = response.result || {}
       commit('changeUserDataMut', user)
     })
-  }, 
-  getOrderDataAction({state, commit}, {uid, data}) {
-    wx.showLoading({title: '加载中...', mask: true})
+  },
+  getOrderDataAction({ state, commit }, { uid, data }) {
+    wx.showLoading({ title: '加载中...', mask: true })
     getFetch('/order/' + uid, data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderDataMut', result)
       wx.hideLoading()
     })
   },
-  getOrderItemDataAction({state, commit}, {uid, data}) {
-    wx.showLoading({title: '加载中...', mask: true})
+  getOrderItemDataAction({ state, commit }, { uid, data }) {
+    wx.showLoading({ title: '加载中...', mask: true })
     getFetch('/order/' + uid, data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderItemDataMut', result)
       wx.hideLoading()
     })
   },
-  getOrderByIdAction({state, commit}, {uid, data}) {
-    wx.showLoading({title: '加载中...', mask: true})
+  getOrderByIdAction({ state, commit }, { uid, data }) {
+    wx.showLoading({ title: '加载中...', mask: true })
     getFetch('/order/' + uid + '/' + data.number, data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderByIdDataMut', result)
       wx.hideLoading()
-      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true'})
+      wx.navigateTo({ url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
     })
   },
-  updateOrderStatusAction({state, commit}, {order, status, selectStatus,refundStatus}) {
-    wx.showLoading({title: '加载中...', mask: true})
-    var data = {'page' : 1, 'status' : selectStatus}
+  updateOrderStatusAction({ state, commit }, { order, status, selectStatus, refundStatus }) {
+    wx.showLoading({ title: '加载中...', mask: true })
+    var data = { 'page': 1, 'status': selectStatus }
     var refund = {}
     if (!selectStatus) {
-      data = {'page' : 1}
+      data = { 'page': 1 }
     }
     if (refundStatus) {
       refund.refundStatus = refundStatus
     }
-    getFetch('/order/updateStatus/' + order.id + '/' + status, refund, false).then(response => {
+    getFetch('/order/updateStatus/' + order.number + '/' + status, refund, false).then(response => {
       getFetch('/order/' + order.uid, data, false).then(response => {
         var result = response.result || {}
         commit('changeOrderDataMut', result)
-      }) 
+      })
       wx.hideLoading()
     })
   },
-  postOrderDataAction({state, commit}, {order}) {
-    var params = {'order': order}  
+  postOrderDataAction({ state, commit }, { order }) {
+    var params = { 'order': order }
     postFetch('/order/' + order.uid, order, false).then(response => {
-        var user = response.result || {}
-        this.state.shoppingCart.shopInfo = {}
-        state.orderDetail = {
-          shopInfo : {}
-        }
-        commit('changeUserDataMut', user)
-        getFetch('/wechat/unifiedOrder/' + order.uid, {}, false).then(res => {
-          debugger
-          console.log(res)
-          wx.requestPayment({
-            timeStamp: res.timeStamp,
-            nonceStr: res.nonceStr,
-            package: res.packages,
-            signType: res.signType,
-            paySign: res.paySign,
-            success (res) {
-              debugger
-              console.log(res)
-            },
-            fail (res) {
-              debugger
-              console.log(res)
-             }
-          })
+      var user = response.result || {}
+      this.state.shoppingCart.shopInfo = {}
+      state.orderDetail = {
+        shopInfo: {}
+      }
+      var number = response.result.number
+      commit('changeUserDataMut', user)
+      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, {}, false).then(response => {
+        wx.requestPayment({
+          timeStamp: response.timeStamp,
+          nonceStr: response.nonceStr,
+          package: response.packages,
+          signType: response.signType,
+          paySign: response.paySign,
+          success(res) {
+            getFetch('/order/updateStatus/' + number + '/' + 2, {}, false).then(response => {
+              getFetch('/order/' + order.uid, {}, false).then(response => {
+                var result = response.result || {}
+                commit('changeOrderDataMut', result)
+                wx.switchTab({ url: '/pages/orderList/main' })
+              })
+            })
+
+
+
+
+            // getFetch('/order/' + order.uid, { 'page': 1 }, false).then(response => {
+            //   var result = response.result || {}
+            //   commit('changeOrderDataMut', result)
+            // })
+            
+          },
+          fail(res) {
+            getFetch('/order/' + order.uid, { 'page': 1 }, false).then(response => {
+              var result = response.result || {}
+              commit('changeOrderDataMut', result)
+            })
+            wx.switchTab({ url: '/pages/orderList/main' })
+          }
         })
-        // getFetch('/order/' + order.uid, {'page' : 1}, false).then(response => {
-        //   var result = response.result || {}
-        //   commit('changeOrderDataMut', result)
-        // })          
-        // wx.switchTab({url: '/pages/orderList/main'})
       })
+    })
   },
-  showOrderDetailAction({state, commit}, {order}) {
+  showOrderDetailAction({ state, commit }, { order }) {
     commit('orderDetailDataMut', order)
-    wx.navigateTo({url: '/pages/orderDetail/main'})
+    wx.navigateTo({ url: '/pages/orderDetail/main' })
   },
-  showOrderByShopIdDetailAction({state, commit}, {order}) {
+  showOrderByShopIdDetailAction({ state, commit }, { order }) {
     commit('orderByShopIdDetailDataMut', order)
-    wx.navigateTo({url: '/pages/orderItemDetail/main'})
+    wx.navigateTo({ url: '/pages/orderItemDetail/main' })
   },
-  createOrderDetailAction({state, commit}, {order}) {
+  createOrderDetailAction({ state, commit }, { order }) {
     order.remark = state.currentOrder.remark
     commit('currentOrderDataMut', order)
-    wx.navigateTo({url: '/pages/submitOrder/main'})
+    wx.navigateTo({ url: '/pages/submitOrder/main' })
   },
-  addRemarkDataAction({state, commit}, {remark}) {
+  addRemarkDataAction({ state, commit }, { remark }) {
     commit('currentOrderRemarkDataMut', remark)
     wx.navigateBack()
   }

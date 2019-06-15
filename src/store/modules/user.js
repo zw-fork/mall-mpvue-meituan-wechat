@@ -210,7 +210,6 @@ const actions = {
   },
   unifiedOrder({state, commit}, {openid}) {
     getFetch('/wechat/unifiedOrder/' + openid, {}, false).then(response => {
-      debugger
       wx.requestPayment({
         timeStamp: '',
         nonceStr: '',

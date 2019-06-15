@@ -129,7 +129,6 @@ export default {
       if (status==1) {
         this.updateOrderStatusAction({order : item, status: 0, selectStatus: selectStatus})
       }else{
-        debugger
         this.updateOrderStatusAction({order : item, status: item.status, refundStatus : 1, selectStatus: selectStatus})
       }
       this.scrollTop = 0
