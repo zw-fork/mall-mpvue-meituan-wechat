@@ -1,5 +1,4 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
-import {shoppingCart} from '@/pages/shoppingCart/data'
 import {getFetch, postFetch} from '@/network/request/HttpExtension'
 const state = {
   shopList : []

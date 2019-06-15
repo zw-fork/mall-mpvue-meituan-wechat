@@ -207,6 +207,20 @@ const actions = {
     };
     getFetch('/wechat/userPhone', target, false).then(response => {
     })
+  },
+  unifiedOrder({state, commit}, {openid}) {
+    getFetch('/wechat/unifiedOrder/' + openid, {}, false).then(response => {
+      debugger
+      wx.requestPayment({
+        timeStamp: '',
+        nonceStr: '',
+        package: '',
+        signType: 'MD5',
+        paySign: '',
+        success (res) { },
+        fail (res) { }
+      })
+    })
   }
 }
 

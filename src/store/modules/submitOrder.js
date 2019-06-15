@@ -1,5 +1,6 @@
 /** Created by guangqiang on 2018-09-28 23:17:03 */
 import {getFetch, postFetch} from '@/network/request/HttpExtension'
+
 const state = {
   result: {},
   order: {
@@ -115,11 +116,30 @@ const actions = {
           shopInfo : {}
         }
         commit('changeUserDataMut', user)
-        getFetch('/order/' + order.uid, {'page' : 1}, false).then(response => {
-          var result = response.result || {}
-          commit('changeOrderDataMut', result)
-        })          
-        wx.switchTab({url: '/pages/orderList/main'})
+        getFetch('/wechat/unifiedOrder/' + order.uid, {}, false).then(res => {
+          debugger
+          console.log(res)
+          wx.requestPayment({
+            timeStamp: res.timeStamp,
+            nonceStr: res.nonceStr,
+            package: res.packages,
+            signType: res.signType,
+            paySign: res.paySign,
+            success (res) {
+              debugger
+              console.log(res)
+            },
+            fail (res) {
+              debugger
+              console.log(res)
+             }
+          })
+        })
+        // getFetch('/order/' + order.uid, {'page' : 1}, false).then(response => {
+        //   var result = response.result || {}
+        //   commit('changeOrderDataMut', result)
+        // })          
+        // wx.switchTab({url: '/pages/orderList/main'})
       })
   },
   showOrderDetailAction({state, commit}, {order}) {
