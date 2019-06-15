@@ -24,7 +24,22 @@
         </swiper-item>
       </swiper>
     </div>
-    <div class="order-c">
+    <div class="order-c" v-if="userInfo.role>0">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
+         <span style="margin-left: 20rpx;">商品管理</span>
+      </div>
+      <swiper class="category-c">
+          <swiper-item>
+            <div class="grid-c">
+              <div class="item" v-for="(item, index) in goodsManagerList" :key="index"  @click="itemClick(item)">
+                <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+                <span class="item-title">{{item.name}}</span>
+              </div>
+            </div>
+        </swiper-item>
+      </swiper>
+    </div>
+        <div class="order-c" v-if="userInfo.role>1">
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
          <span style="margin-left: 20rpx;">店铺管理</span>
       </div>
@@ -46,27 +61,22 @@
           <span class="title">{{item.title}}</span>
           <span class="amount" v-if="item.amount">{{item.amount}}<span>张</span></span>
         </div>
-        <i class='icon mt-arrow-right-o' @click="logoutClick($event)"></i>
+        <i class='icon iconfont iconright' @click="itemClick(item)"></i>
+      </div>
+      <div class="item">
+        <div class="item-l">
+          <i class='icon mt-customer-service-o'></i>
+          <span class="title">客服中心</span>
+        </div>
+       <button open-type="contact" style="margin: 0;padding: 0;border:none;background-color: white;">
+         <i class='icon iconfont iconright' @click="logoutClick($event)"></i>
+      </button>
       </div>
     </div>
     <div>
     </div>
     <div class="btn" @click="logoutClick($event)">退出账号</div>
 </div>
-    <div class="editGoods" :style="divStyle" v-if="showEdit">
-      <div>
-        <img src="/static/images/down.png">
-        <span style="color:white;text-align: center;">编辑</span>
-      </div>
-            <div>
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">上架</span>
-      </div>
-            <div>
-<img src="/static/images/down.png">
-<span style="color:white;text-align: center;">下架</span>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -88,6 +98,7 @@ export default {
       bottomBanner: {},
       shopsList: [],
       shopMenuList: [],
+      goodsManagerList:[],
       orderList: [],
       itemList: [
         {
@@ -103,17 +114,13 @@ export default {
           amount: 10
         },
         {
-          title: '我的地址',
+          title: '店铺注册',
           icon: 'mt-my-location-o',
-          path: '/pages/goodsManage/main'
+          path: '/pages/shopManage/main'
         },
         {
           title: '邀请有奖',
           icon: 'mt-gift-o'
-        },
-        {
-          title: '客服中心',
-          icon: 'mt-customer-service-o'
         },
         {
           title: '帮助和反馈',
@@ -159,6 +166,7 @@ export default {
     }
   },
   onShow(options) {
+    if (this.userInfo.shopId) {
           getFetch('/order/count/'+this.userInfo.shopId, false).then(response => {
             var count = response.result
             this.orderCount = []
@@ -166,11 +174,14 @@ export default {
         this.orderCount.push(count.配送中)
         this.orderCount.push(count.退款)
       })
+    }
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
+ button::after{ border: none; } 
     .screen_cover{
         position: fixed;
         top: 0;

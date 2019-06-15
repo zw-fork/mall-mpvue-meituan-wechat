@@ -34,10 +34,10 @@ const host = {
     envVersion: 'develop'
   },
   prd: {
-    API_URL: 'http://digcampus.natapp1.cc/',
+    API_URL: 'http://digcampus.natapp4.cc',
    // API_URL: 'http://39.106.34.223:7100/',
     XIAMI_URL: 'https://api-m.mtime.cn',
-    GOODS_URL_PREFIX: 'http://digcampus.natapp1.cc/img',
+    GOODS_URL_PREFIX: 'http://digcampus.natapp4.cc/img',
    // GOODS_URL_PREFIX: 'http://39.106.34.223:7200/',
     MSITE_URL: 'https://api.douban.com',
     VENILOG_URL: 'https://api.douban.com',

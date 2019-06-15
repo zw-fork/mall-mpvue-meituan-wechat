@@ -150,7 +150,7 @@ export default {
       })
     },
     payClick() {
-      if (this.userInfo.addressModel.address) {
+      if (this.userInfo.addressModel.house_number) {
         this.currentOrder.deliveryFee = this.deliveryFee
         this.currentOrder.addressInfo = this.userInfo.addressModel
         this.currentOrder.realFee = this.realFee

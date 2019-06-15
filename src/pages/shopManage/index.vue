@@ -12,9 +12,9 @@
       <i v-if="(index==shop.tel.length-1) && shop.tel[index]" style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
       <i @click="deleteTel(index)" class="icon mt-delete-o" style="margin-left:30rpx;font-size: 30rpx"></i>
       </div>  
-      <div class="tel" v-if="shop.tel && shop.tel.length==0">  
+      <div class="tel" v-if="!shop.tel || shop.tel.length==0">  
       <i style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
-      </div>    
+      </div>  
       </div>
     </div>
     <div class="name"  style="height: 70rpx;">
@@ -57,6 +57,7 @@ export default {
       shop:{
         statusName : '营业中',
         status : 1,
+        tel: []
       },
       goods : {
         statusName : '上架',
@@ -101,6 +102,9 @@ export default {
       ...mapActions("user", ["uploadImg"]),
       ...mapActions("shop", ["createShop"]),
       createTel() {
+        if (!this.shop.tel) {
+          this.shop.tel = []
+        }
         this.shop.tel.push(null)
       },
       deleteTel(index) {
@@ -135,8 +139,9 @@ export default {
   },
   onLoad(options) 
   {
-    wx.showLoading({title: '加载中...', mask: true})
-    getFetch('/shop/' + this.userInfo.shopId, {}, false).then(response => {
+    if (this.userInfo.shopId) {
+ wx.showLoading({title: '加载中...', mask: true})
+     getFetch('/shop/' + this.userInfo.shopId, {}, false).then(response => {
       this.shop = response.result
                 for (var index in this.statusArray) {
             if (this.shop.status == this.statusArray[index].value) {
@@ -145,6 +150,8 @@ export default {
           }
       wx.hideLoading()
     })
+    }
+
   }
 }
 </script>
