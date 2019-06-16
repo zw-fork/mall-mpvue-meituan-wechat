@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="cart-c">
-        <img mode='widthFix' :src="productCount > 0 ? '/static/images/shopping_cart.png' : '/static/images/1.png'" @click="toggleCartList()">
+          <i mode='widthFix' class="icon iconfont icongouwuche" :style="productCount > 0 ? 'color: #1296db' : 'color: #969696'" @click="toggleCartList()"></i>
         <span v-if="productCount > 0">{{productCount}}</span>
       </div>
     </div>
@@ -1446,9 +1446,8 @@
         bottom: -1rpx;
         z-index: 991;
 
-        img {
-          width: 88rpx;
-          height: 88rpx;
+        i {
+          font-size: 75rpx;
           background-size: cover;
         }
 
