@@ -330,7 +330,6 @@ export default {
   .list-c {
     display: flex;
     flex-direction: column;
-    margin-top: 200rpx;
     background-color: white;
     .item {
       display: flex;
