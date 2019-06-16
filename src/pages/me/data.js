@@ -140,7 +140,7 @@ const homeData = {
         "second_tag_codes": [],
         "sequence": 100,
         "skip_protocol": "channel?category_type=910&category_text=%E7%BE%8E%E9%A3%9F",
-        "url": "/static/images/order_1.png"
+        "url": "icondaifukuan"
       }, {
         "brand_type": -1,
         "code": 101574,
@@ -153,7 +153,7 @@ const homeData = {
         "second_tag_codes": [],
         "sequence": 200,
         "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
-        "url": "/static/images/order_2.png"
+        "url": "iconsending"
       }, {
         "brand_type": -1,
         "code": 101578,
@@ -166,7 +166,7 @@ const homeData = {
         "second_tag_codes": [],
         "sequence": 300,
         "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
-        "url": "/static/images/order_3.png"
+        "url": "icontuihuanhuo"
       }, {
         "brand_type": -1,
         "code": 960,
@@ -179,7 +179,7 @@ const homeData = {
         "second_tag_codes": [],
         "sequence": 400,
         "skip_protocol": "channel?category_type=960&category_text=%E7%BE%8E%E5%9B%A2%E4%B8%93%E9%80%81",
-        "url": "/static/images/order_4.png"
+        "url": "icondingdan"
       }],
       "recommended_search_keyword": {
         "scene_type": "NORMAL",

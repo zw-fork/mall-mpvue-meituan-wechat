@@ -16,12 +16,12 @@
           <swiper-item>
             <div class="grid-c">
               <div class="item" v-for="(item, index) in orderList" :key="index"  @click="itemClick(item)">
-                <img class="item-img" :src="item.url">
+                <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
                 <span class="item-title">{{item.name}}</span>
                 <text class="count" v-if="orderCount[index]" >{{orderCount[index]}}</text>
               </div>
             </div>
-        </swiper-item>
+        </swiper-item>  
       </swiper>
     </div>
     <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
