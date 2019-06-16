@@ -1,12 +1,10 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
-import {formatYMD} from '@/utils/formatTime'
-import {shoppingCart} from '@/pages/shoppingCart/data'
-import {getFetch} from '@/network/request/HttpExtension'
+import { formatYMD } from '@/utils/formatTime'
+import { shoppingCart } from '@/pages/shoppingCart/data'
+import { getFetch } from '@/network/request/HttpExtension'
 const state = {
-  shopInfo: {
-  },
-  spus: {
-  },
+  shopInfo: {},
+  spus: {},
   commentInfo: [],
   reduceFee: 0.0,
   visibleSkuModal: false,
@@ -21,9 +19,8 @@ const mutations = {
   changeShopInfoDataMut(state, info) {
     state.shopInfo = info
   },
-  cleanShopping(state) {    
-    state.shopInfo =  {
-    }
+  cleanShopping(state) {
+    state.shopInfo = {}
   },
   changeSpusDataMut(state, info) {
     state.spus = info;
@@ -49,26 +46,23 @@ const mutations = {
 }
 
 const actions = {
-  getMenuDataAction({state, commit}, {shopId, index, flag}) {
+  getMenuDataAction({ state, commit }, { shopId, index, flag }) {
     if ((state.shopInfo && state.shopInfo.shopId != shopId) || flag) {
-      state.shopInfo = {
-      }
+      state.shopInfo = {}
       state.cartMap = {}
       state.categoryMap = {}
-      wx.showLoading({title: '加载中...', mask: true})
+      wx.showLoading({ title: '加载中...', mask: true })
       getFetch('/shop/' + shopId, {}, false).then(response => {
-        var res = shoppingCart.menuData.data
         var shopInfo = response.result || {}
         if (shopInfo.shopId) {
-          shopInfo.prompt_text = res.shopping_cart.prompt_text
-          shopInfo.activity_info = JSON.parse(res.shopping_cart.activity_info.policy)
+          shopInfo.prompt_text = "满35减23;满50减33;满70减43"
           if (shopInfo.categoryModelList.length > 0) {
             if (shopInfo.categoryModelList.length <= index) {
               index = 0
             }
-            getFetch('/goods/'+shopId, {page: 1, 'categoryId' :  shopInfo.categoryModelList[index].categoryId}, false).then(response => {
+            getFetch('/goods/' + shopId, { page: 1, 'categoryId': shopInfo.categoryModelList[index].categoryId }, false).then(response => {
               var goods = response.result || {}
-              var spus = {title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId}
+              var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId }
               shopInfo.categoryModelList[index].spus = spus
               commit('changeShopInfoDataMut', shopInfo)
               var itemList = this.state.submitOrder.orderDetail.itemList
@@ -85,7 +79,7 @@ const actions = {
                       if (!shopInfo.categoryModelList[index2].totalPrice) {
                         shopInfo.categoryModelList[index2].totalPrice = 0
                       }
-                      shopInfo.categoryModelList[index2].totalPrice +=  itemList[i].currentPrice * itemList[i].sequence
+                      shopInfo.categoryModelList[index2].totalPrice += itemList[i].currentPrice * itemList[i].sequence
                     }
                   }
                 }
@@ -111,7 +105,7 @@ const actions = {
             })
           } else {
             commit('changeShopInfoDataMut', shopInfo)
-            commit('changeSpusDataMut',  {title: '', index: 0, datas: {}, page: 1})
+            commit('changeSpusDataMut', { title: '', index: 0, datas: {}, page: 1 })
           }
           wx.setNavigationBarTitle({
             title: shopInfo.shopName
@@ -119,9 +113,9 @@ const actions = {
         } else {
           wx.showToast({
             title: '加载失败',
-            icon: 'loading',  
-            duration: 1500   
-           })
+            icon: 'loading',
+            duration: 1500
+          })
         }
         wx.hideLoading()
       })
@@ -130,9 +124,9 @@ const actions = {
       wx.setNavigationBarTitle({
         title: shopInfo.shopName
       })
-    } 
+    }
   },
-  getCommentDataAction({state, commit}) {
+  getCommentDataAction({ state, commit }) {
     var res = shoppingCart.commentData.data
     var commentData = res
     var comments = res.comments.map(item => {
@@ -145,7 +139,7 @@ const actions = {
     commentData.comments = comments
 
     var commentMolds = res.comment_categories.map(item => {
-      var num = item.replace(/[^0-9]/ig,"");
+      var num = item.replace(/[^0-9]/ig, "");
       var characters = item.match(/[\u4e00-\u9fa5]/g);
       var title = characters.join("");
       return `${title}(${num})`
@@ -155,13 +149,13 @@ const actions = {
       commentMolds.push(tag)
     })
     commentData.commentMolds = commentMolds
-    
+
     commit('changeCommentDataMut', commentData)
   },
-  getCategoryMenuDataAction({state, commit}, {index, categoryId}) {
-    wx.showLoading({title: '加载中...', mask: true})
+  getCategoryMenuDataAction({ state, commit }, { index, categoryId }) {
+    wx.showLoading({ title: '加载中...', mask: true })
     if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
-      getFetch('/goods/'+state.shopInfo.shopId, {'categoryId' : categoryId}, false).then(response => {
+      getFetch('/goods/' + state.shopInfo.shopId, { 'categoryId': categoryId }, false).then(response => {
         var spus = {}
         var goods = response.result.list
         spus.title = state.shopInfo.categoryModelList[index].name
@@ -175,10 +169,10 @@ const actions = {
         for (var index1 in goods) {
           var data = state.cartMap[goods[index1].goodsId]
           if (data) {
-            goods[index1].sequence = data.sequence 
+            goods[index1].sequence = data.sequence
           }
           goods[index1].status = true
-          state.cartMap[goods[index1].goodsId] = goods[index1]       
+          state.cartMap[goods[index1].goodsId] = goods[index1]
         }
         state.shopInfo.categoryModelList[index].spus = spus
         commit('changeSpusDataMut', spus)
@@ -187,9 +181,9 @@ const actions = {
     } else {
       commit('changeSpusDataMut', state.shopInfo.categoryModelList[index].spus)
       wx.hideLoading()
-    } 
+    }
   },
-  addItemAction({state, commit}, {item, index, categoryIndex}) {
+  addItemAction({ state, commit }, { item, index, categoryIndex }) {
     var selectedFood = state.categoryMap[item.categoryId]
     if (!selectedFood.count) {
       selectedFood.count = 0
@@ -205,21 +199,21 @@ const actions = {
       spus.datas[index].index = index
       spus.datas[index].categoryIndex = categoryIndex
       state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
-    } 
+    }
     else {
       var goods = state.cartMap[item.goodsId]
       if (goods) {
         goods.sequence += 1
-      }else {
+      } else {
         if (!item.sequence) {
           item.sequence = 0
         }
         item.sequence += 1
         state.cartMap[item.goodsId] = item
-      }                    
-}
+      }
+    }
   },
-  reduceItemAction({state, commit}, {item, index, categoryIndex}) {
+  reduceItemAction({ state, commit }, { item, index, categoryIndex }) {
     var selectedFood = state.categoryMap[item.categoryId]
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
@@ -230,7 +224,7 @@ const actions = {
       spus.datas[index].categoryIndex = categoryIndex
       if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
       state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
-    } 
+    }
     else {
       var goods = state.cartMap[item.goodsId]
       if (goods) {
@@ -238,10 +232,10 @@ const actions = {
         if (goods.sequence < 0) {
           goods.sequence = 0
         }
-      }                 
-}
+      }
+    }
   },
-  closeShoppingCartAction({state, commit}) {
+  closeShoppingCartAction({ state, commit }) {
     var array = state.shopInfo.categoryModelList
     var selectedArr = []
     array.map((item, index) => {
@@ -258,9 +252,9 @@ const actions = {
     var shopInfo = state.shopInfo
     shopInfo.selectedArr = selectedArr
     commit('changeShopInfoDataMut', shopInfo)
-    wx.navigateTo({url: '/pages/submitOrder/main'})
+    wx.navigateTo({ url: '/pages/submitOrder/main' })
   },
-  selectSkuAction({state, commit}, {item, index}) {
+  selectSkuAction({ state, commit }, { item, index }) {
     commit('changeSkuModalMut', true)
     var sku = {}
     var array = item.attrs
@@ -288,7 +282,7 @@ const actions = {
     sku.time = new Date()
     commit('changeSkuDataMut', sku)
   },
-  attrSelectAction({state, commit}, {itm, idx, setIdx}) {
+  attrSelectAction({ state, commit }, { itm, idx, setIdx }) {
     var sku = state.skuInfo
     var array = sku.attrs
     var selectedItems = sku.selectedItems.split(',')
@@ -306,12 +300,12 @@ const actions = {
     sku.time = new Date()
     commit('changeSkuDataMut', sku)
   },
-  changeSkuModalDataAction({state, commit}, {num}) {
+  changeSkuModalDataAction({ state, commit }, { num }) {
     var sku = state.skuInfo
     sku.selectedCount = sku.selectedCount + num
     commit('changeSkuDataMut', sku)
   },
-  previewItemAction({state, commit}, {item, index}) {
+  previewItemAction({ state, commit }, { item, index }) {
     commit('changeItemModalMut', true)
     var preview = item
     preview.preIndex = index
