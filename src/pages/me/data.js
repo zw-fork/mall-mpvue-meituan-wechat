@@ -18,6 +18,75 @@ const homeData = {
         "left_text": "",
         "right_text": ""
       },
+      "goods_menu": [
+     {
+        "brand_type": -1,
+        "code": 101574,
+        "first_tag_codes": [],
+        "gray_switch": 0,
+        "path": "/pages/goodsList/main",
+        "gray_url": "http://p0.meituan.net/jungle/45ff2f098a20a77122bff8385192f0ec10547.png",
+        "method": 1258576,
+        "name": "商品管理",
+        "second_tag_codes": [],
+        "sequence": 200,
+        "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
+        "url": "iconshangpin"
+      }, {
+        "brand_type": -1,
+        "code": 101578,
+        "first_tag_codes": [],
+        "path": "/pages/categoryList/main",
+        "gray_switch": 0,
+        "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
+        "method": 1258576,
+        "name": "分类管理",
+        "second_tag_codes": [],
+        "sequence": 300,
+        "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
+        "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
+      }],
+      "super_menu": [
+        {
+           "brand_type": -1,
+           "code": 101574,
+           "first_tag_codes": [],
+           "gray_switch": 0,
+           "path": "/pages/shopManage/main",
+           "gray_url": "http://p0.meituan.net/jungle/45ff2f098a20a77122bff8385192f0ec10547.png",
+           "method": 1258576,
+           "name": "新建店铺",
+           "second_tag_codes": [],
+           "sequence": 200,
+           "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
+           "url": "iconshangpin"
+         }, {
+           "brand_type": -1,
+           "code": 101578,
+           "first_tag_codes": [],
+           "path": "/pages/categoryList/main",
+           "gray_switch": 0,
+           "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
+           "method": 1258576,
+           "name": "店铺审核",
+           "second_tag_codes": [],
+           "sequence": 300,
+           "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
+           "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
+         }, {
+          "brand_type": -1,
+          "code": 101578,
+          "first_tag_codes": [],
+          "path": "/pages/categoryList/main",
+          "gray_switch": 0,
+          "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
+          "method": 1258576,
+          "name": "店铺列表",
+          "second_tag_codes": [],
+          "sequence": 300,
+          "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
+          "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
+        }],
       "shop_menu": [
         {
         "brand_type": -1,
@@ -40,25 +109,12 @@ const homeData = {
         "path": "/pages/goodsList/main",
         "gray_url": "http://p0.meituan.net/jungle/45ff2f098a20a77122bff8385192f0ec10547.png",
         "method": 1258576,
-        "name": "商品编辑",
+        "name": "员工管理",
         "second_tag_codes": [],
         "sequence": 200,
         "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
         "url": "iconshangpin"
-      }, {
-        "brand_type": -1,
-        "code": 101578,
-        "first_tag_codes": [],
-        "path": "/pages/categoryList/main",
-        "gray_switch": 0,
-        "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
-        "method": 1258576,
-        "name": "分类管理",
-        "second_tag_codes": [],
-        "sequence": 300,
-        "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
-        "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
-      }, {
+      },{
         "brand_type": -1,
         "code": 960,
         "path": "/pages/orderItemList/main",

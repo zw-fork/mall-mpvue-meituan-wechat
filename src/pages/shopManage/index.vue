@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-if="reFresh">
-    <div class="name" style="height: 70rpx;">
+    <div class="name" style="height: 65rpx;">
       <span>店铺名称：</span>
       <input placeholder="请填写商品名称" placeholder-style="font-size: 24rpx" v-model="shop.shopName"/>
     </div>
@@ -17,11 +17,18 @@
       </div>  
       </div>
     </div>
-    <div class="name"  style="height: 70rpx;">
-      <span>店铺地址：</span>
-      <input placeholder="请填写商品价格" placeholder-style="font-size: 24rpx" v-model="shop.address"/>
+    <div class="b-mid" v-if="!shop.shopId">
+        <span class="mid-l">小区名称:</span>
+        <div class="mid-r" @click="addressClick">
+          <span>{{shop.communityName}}</span>
+          <i class="icon iconfont iconright"></i>
+        </div>
     </div>
-    <div class="b-mid" @click="remarkClick">
+    <div class="name"  style="height: 65rpx;">
+      <span>店铺地址：</span>
+      <input placeholder="请输入店铺地址" placeholder-style="font-size: 24rpx" v-model="shop.address"/>
+    </div>
+    <div class="b-mid" @click="remarkClick"  v-if="shop.shopId">
         <span class="mid-l">商店状态:</span>
         <div class="mid-r" @click="showSinglePicker">
           <span>{{shop.statusName}}</span>
@@ -55,14 +62,11 @@ export default {
     return {
       reFresh:true,
       shop:{
-        statusName : '营业中',
-        status : 1,
+        statusName : undefined,
+        status : undefined,
+        communityName: undefined,
+        communityId: undefined,
         tel: []
-      },
-      goods : {
-        statusName : '上架',
-        status : 1,
-        picture: undefined
       },
       showCategory: false,
       pickerValueArray: [], // picker 数组值
@@ -72,18 +76,17 @@ export default {
       styleA : 'color: #F9D173',
       clazzB : 'icon mt-unselected-o',
       styleB : 'color: #333',
-      goodsState: undefined,
       statusArray: [
         {
           label: '打烊',
           value: 0
         },
         {
-          label: '营业中',
+          label: '营业',
           value: 1
         },
         {
-          label: '关店',
+          label: '停业',
           value: 2
         }
       ],
@@ -101,6 +104,9 @@ export default {
     methods: {
       ...mapActions("user", ["uploadImg"]),
       ...mapActions("shop", ["createShop"]),
+      addressClick() {
+      wx.navigateTo({url: '/pages/selectAddress/main'})
+    },
       createTel() {
         if (!this.shop.tel) {
           this.shop.tel = []
@@ -150,14 +156,20 @@ export default {
           }
       wx.hideLoading()
     })
+    } else {
+      this.shop = {
+        statusName : undefined,
+        status : undefined,
+        tel: []
+      }
     }
-
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .tel{
+  height: 65rpx;
   align-items:center;
   display: flex;
 }
@@ -177,7 +189,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 88rpx;
+      height: 65rpx;
       margin-left: 30rpx;
       padding-right: 30rpx;
       border-bottom: 2rpx solid $spLine-color;

@@ -4,7 +4,7 @@
        <div class="cate-c">
          <span class="c-l" :style="{'font-weight': statusList.length<1 ? lineStyle : null}" style="text-align:center;width:34%;" @click="updateOrderList([])">全部订单</span>
          <span class="c-m" :style="{'font-weight': pageIndex === 4 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList([4])">已完成</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 8 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList([-1])">退款</span>
+         <span class="c-m" :style="{'font-weight': pageIndex === -1 ? lineStyle : null}" style="text-align:center;width:33%;" @click="updateOrderList([-1])">退款</span>
        </div>
     </div>
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower" :scroll-top="scrollTop" @scroll="scroll">
@@ -63,7 +63,7 @@ import {getFetch} from '@/network/request/HttpExtension'
 export default {
   data() {
     return {
-      pageIndex : -1,
+      pageIndex :undefined,
       scrollTop:0,
       statusList: [],
       left: '40rpx',
@@ -151,10 +151,10 @@ export default {
   },
   onPullDownRefresh: function () {
     this.scrollTop = 0
-      if (this.pageIndex == -1) {
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})
+       if (this.statusList.length>0) {
+         this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'statusList': this.statusList.join(',')}})
       } else {
-        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1, 'status':this.pageIndex}})
+        this.getOrderDataAction({'uid': this.userInfo.openid, 'data' : { 'page' : 1}})
       }
   }
 }

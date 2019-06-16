@@ -64,7 +64,9 @@ export default {
       })
     }
   },
-  mounted() {
+  onShow(options) {
+     this.communityList = [],
+     this.addressModel = {}
   }
 }
 </script>

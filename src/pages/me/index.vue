@@ -8,7 +8,7 @@
         <span class="phone">15214313256</span>
       </div>
     </div>
-    <div class="order-c">
+    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
          <span style="margin-left: 20rpx;">订单管理</span>
       </div>
@@ -24,14 +24,14 @@
         </swiper-item>
       </swiper>
     </div>
-    <div class="order-c" v-if="userInfo.role>0">
+    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
          <span style="margin-left: 20rpx;">商品管理</span>
       </div>
       <swiper class="category-c">
           <swiper-item>
             <div class="grid-c">
-              <div class="item" v-for="(item, index) in goodsManagerList" :key="index"  @click="itemClick(item)">
+              <div class="item" v-for="(item, index) in goodsMenuList" :key="index"  @click="itemClick(item)">
                 <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
                 <span class="item-title">{{item.name}}</span>
               </div>
@@ -39,7 +39,7 @@
         </swiper-item>
       </swiper>
     </div>
-        <div class="order-c" v-if="userInfo.role>1">
+        <div class="order-c" v-if="userInfo.role==2 && userInfo.shopId">
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
          <span style="margin-left: 20rpx;">店铺管理</span>
       </div>
@@ -47,6 +47,21 @@
           <swiper-item>
             <div class="grid-c">
               <div class="item" v-for="(item, index) in shopMenuList" :key="index"  @click="itemClick(item)">
+                <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+                <span class="item-title">{{item.name}}</span>
+              </div>
+            </div>
+        </swiper-item>
+      </swiper>
+    </div>
+            <div class="order-c" v-if="userInfo.role==-1">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
+         <span style="margin-left: 20rpx;">超级管理员</span>
+      </div>
+      <swiper class="category-c">
+          <swiper-item>
+            <div class="grid-c">
+              <div class="item" v-for="(item, index) in superMenuList" :key="index"  @click="itemClick(item)">
                 <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
                 <span class="item-title">{{item.name}}</span>
               </div>
@@ -98,7 +113,8 @@ export default {
       bottomBanner: {},
       shopsList: [],
       shopMenuList: [],
-      goodsManagerList:[],
+      goodsMenuList:[],
+      superMenuList: [],
       orderList: [],
       itemList: [
         {
@@ -145,6 +161,14 @@ export default {
     var menuData = homeData.headData.data.shop_menu;
     menuData.map((item, index) => {
        this.shopMenuList.push(item)
+    })
+    var goodsData = homeData.headData.data.goods_menu;
+    goodsData.map((item, index) => {
+       this.goodsMenuList.push(item)
+    })
+    var superData = homeData.headData.data.super_menu;
+    superData.map((item, index) => {
+       this.superMenuList.push(item)
     })
   },
   methods: {
