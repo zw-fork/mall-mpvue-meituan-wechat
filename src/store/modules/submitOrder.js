@@ -99,13 +99,38 @@ const actions = {
     if (refundStatus) {
       refund.refundStatus = refundStatus
     }
-    getFetch('/order/updateStatus/' + order.number + '/' + status, refund, false).then(response => {
-      getFetch('/order/' + order.uid, data, false).then(response => {
-        var result = response.result || {}
-        commit('changeOrderDataMut', result)
+    refund.openid = order.uid
+    if (order.status == 1 && status == 2) {
+      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, {}, false).then(response => {
+        wx.requestPayment({
+          timeStamp: response.timeStamp,
+          nonceStr: response.nonceStr,
+          package: response.packages,
+          signType: response.signType,
+          paySign: response.paySign,
+          success(res) {
+            getFetch('/order/updateStatus/' + order.number + '/' + 2, {}, false).then(response => {
+              getFetch('/order/' + order.uid, {}, false).then(response => {
+                var result = response.result || {}
+                commit('changeOrderDataMut', result)
+                wx.hideLoading()
+              })
+            })
+          },
+          fail(res) {
+            wx.hideLoading()
+          }
+        })
       })
-      wx.hideLoading()
-    })
+    } else {
+      getFetch('/order/updateStatus/' + order.number + '/' + status, refund, false).then(response => {
+        getFetch('/order/' + order.uid, data, false).then(response => {
+          var result = response.result || {}
+          commit('changeOrderDataMut', result)
+        })
+        wx.hideLoading()
+      })
+    }
   },
   postOrderDataAction({ state, commit }, { order }) {
     var params = { 'order': order }
@@ -132,15 +157,6 @@ const actions = {
                 wx.switchTab({ url: '/pages/orderList/main' })
               })
             })
-
-
-
-
-            // getFetch('/order/' + order.uid, { 'page': 1 }, false).then(response => {
-            //   var result = response.result || {}
-            //   commit('changeOrderDataMut', result)
-            // })
-            
           },
           fail(res) {
             getFetch('/order/' + order.uid, { 'page': 1 }, false).then(response => {
