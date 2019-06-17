@@ -117,7 +117,7 @@ export default {
       var status = item.status
       var selectStatus = this.pageIndex == -1 ? null : this.pageIndex
       if (status==1) {
-        this.updateOrderStatusAction({order : item, status: 3, selectStatus: selectStatus})
+        this.updateOrderStatusAction({order : item, status: 2, selectStatus: selectStatus})
       }else{
         var openid = this.userInfo.openid
         this.getOrderByIdAction({'uid': openid, 'data' : item, selectStatus: selectStatus})

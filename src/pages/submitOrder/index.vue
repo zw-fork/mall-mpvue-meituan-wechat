@@ -2,28 +2,39 @@
   <div class="container">
     <div class="header-c">
       <div class="tab-c">
-        <div class="left" :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}" @click="deliveryClick">小区配送</div>
+        <div class="left"
+             :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}"
+             @click="deliveryClick">小区配送</div>
       </div>
-      <div class="delivery" v-if="tabIndex === 0">
-        <div class="address-c" @click="addressClick(currentOrder.shopInfo.communityId)">
+      <div class="delivery"
+           v-if="tabIndex === 0">
+        <div class="address-c"
+             @click="addressClick(currentOrder.shopInfo.communityId)">
           <i class="icon mt-location-s"></i>
           <div class="address">
-             <span class="address-info" v-if="!userInfo.addressModel.house_number || userInfo.addressModel.communityId != currentOrder.shopInfo.communityId">请添加配送地址...</span>
-            <span class="address-info" v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
-            <span class="user-info" v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}}  {{userInfo.addressModel.phone}}</span>
+            <span class="address-info"
+                  v-if="!userInfo.addressModel.house_number || userInfo.addressModel.communityId != currentOrder.shopInfo.communityId">请添加配送地址...</span>
+            <span class="address-info"
+                  v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
+            <span class="user-info"
+                  v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}} {{userInfo.addressModel.phone}}</span>
           </div>
-          <i class="icon iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
+          <i class="icon iconfont iconright"
+             :style="{fontSize: 32 + 'rpx'}"></i>
         </div>
       </div>
     </div>
     <div class="item-list">
       <div class="section">
-        <img :src="currentOrder.shopInfo.pic_url" >
+        <img :src="currentOrder.shopInfo.pic_url">
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright" style="display: inline"></i>
+        <i class="icon iconfont iconright"
+           style="display: inline"></i>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in currentOrder.itemList" :key="index">
+        <div class="item"
+             v-for="(item, index) in currentOrder.itemList"
+             :key="index">
           <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -39,7 +50,7 @@
           <span>配送费</span>
           <span>￥{{deliveryFee}}</span>
         </div>
-        <sep-line></sep-line> 
+        <sep-line></sep-line>
         <div class="totle-price">
           <span class="m">小计</span>
           <span class="r">￥{{realFee}}</span>
@@ -47,7 +58,8 @@
       </div>
     </div>
     <div class="bottom-c">
-      <div class="b-mid" @click="remarkClick">
+      <div class="b-mid"
+           @click="remarkClick">
         <span class="mid-l">备注</span>
         <div class="mid-r">
           <span>{{currentOrder.remark? currentOrder.remark:'请输入口味、偏好等要求'}}</span>
@@ -55,7 +67,8 @@
         </div>
       </div>
     </div>
-     <div class="pay-btn" @click="payClick">
+    <div class="pay-btn"
+         @click="payClick">
       <div class="top">
         <span class="s-l">微信支付</span>
         <span class="s-m">￥{{realFee}}</span>
@@ -65,66 +78,71 @@
 </template>
 
 <script>
-import sepLine from "@/components/sep-line";
-import {orderData} from './data'
-import {openLocation} from '@/utils/wxapi'
-import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
-import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
+import sepLine from '@/components/sep-line';
+import { orderData } from './data';
+import { openLocation } from '@/utils/wxapi';
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
+import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
 
 export default {
   data() {
     return {
-      order : {},
+      order: {},
       itemData: {},
       addressInfo: {},
       itemList: [],
       tabIndex: 0
-    }
+    };
   },
   computed: {
-    ...mapState("user", ["userInfo"]),
-    ...mapState("submitOrder", ["currentOrder"]),
+    ...mapState('user', ['userInfo']),
+    ...mapState('submitOrder', ['currentOrder']),
     path() {
-      return `${GOODS_URL_PREFIX}`
+      return `${GOODS_URL_PREFIX}`;
     },
     deliveryFee() {
-      return this.currentOrder.shopInfo.support_pay
+      return this.currentOrder.shopInfo.support_pay;
     },
     realFee() {
-      var totalPrice = 0 
-      this.currentOrder.itemList.map(item => totalPrice += parseFloat(item.totalPrice))
-      return (parseFloat(totalPrice) +  this.currentOrder.shopInfo.support_pay).toFixed(2)
+      var totalPrice = 0;
+      this.currentOrder.itemList.map(
+        item => (totalPrice += parseFloat(item.totalPrice))
+      );
+      return (
+        parseFloat(totalPrice) + this.currentOrder.shopInfo.support_pay
+      ).toFixed(2);
     }
   },
   components: {
     sepLine
   },
   methods: {
-    ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
-    ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber"]),
+    ...mapActions('submitOrder', ['postOrderDataAction', 'getOrderDataAction']),
+    ...mapActions('user', ['updateDefaultAddress', 'getPhoneNumber']),
     bindPhoneNumber(e) {
-      var target = e.target
-      target.openid = this.userInfo.openid
-      this.getPhoneNumber({target})
-      
+      var target = e.target;
+      target.openid = this.userInfo.openid;
+      this.getPhoneNumber({ target });
     },
     addressClick(communityId) {
-      wx.navigateTo({url: '/pages/addressList/main?communityId=' + communityId})
+      wx.navigateTo({
+        url: '/pages/addressList/main?communityId=' + communityId
+      });
     },
     redPacketClick() {
-      wx.navigateTo({url: '/pages/redPacket/main'})
+      wx.navigateTo({ url: '/pages/redPacket/main' });
     },
     couponClick() {
-      wx.navigateTo({url: '/pages/couponList/main'})
+      wx.navigateTo({ url: '/pages/couponList/main' });
     },
     remarkClick() {
-      wx.navigateTo({url: '/pages/remark/main'})
+      wx.navigateTo({ url: '/pages/remark/main' });
     },
     goShop() {
-      var shopId = this.currentOrder.shopInfo.shopId
+      var shopId = this.currentOrder.shopInfo.shopId;
       wx.navigateTo({
-          url: '/pages/shoppingCart/main?shopId=' + shopId
-      })
+        url: '/pages/shoppingCart/main?shopId=' + shopId
+      });
     },
     deliveryClick() {
       this.tabIndex = 0;
@@ -133,50 +151,50 @@ export default {
       this.tabIndex = 1;
     },
     protocol() {
-      wx.navigateTo({url: '/pages/pickProtocol/main'})
+      wx.navigateTo({ url: '/pages/pickProtocol/main' });
     },
     openMap() {
       wx.getLocation({
         type: 'gcj02',
-        success (res) {
-          const latitude = res.latitude
-          const longitude = res.longitude
+        success(res) {
+          const latitude = res.latitude;
+          const longitude = res.longitude;
           wx.openLocation({
             latitude,
             longitude,
             scale: 28
-          })
+          });
         }
-      })
+      });
     },
     payClick() {
       if (this.userInfo.addressModel.house_number) {
-        this.currentOrder.deliveryFee = this.deliveryFee
-        this.currentOrder.addressInfo = this.userInfo.addressModel
-        this.currentOrder.realFee = this.realFee
-        this.currentOrder.uid = this.userInfo.openid
-        var wechat = {}
-        wechat.openid = this.userInfo.openid
-        wechat.addressModel = {}
-        wechat.addressModel.id = this.userInfo.addressModel.id
-        this.postOrderDataAction({order : this.currentOrder})
+        this.currentOrder.deliveryFee = this.deliveryFee;
+        this.currentOrder.addressInfo = this.userInfo.addressModel;
+        this.currentOrder.realFee = this.realFee;
+        this.currentOrder.uid = this.userInfo.openid;
+        var wechat = {};
+        wechat.openid = this.userInfo.openid;
+        wechat.addressModel = {};
+        wechat.addressModel.id = this.userInfo.addressModel.id;
+        this.postOrderDataAction({ order: this.currentOrder });
       } else {
         wx.showToast({
-        title: '请填写配送地址!',
-        icon: 'none',
-        duration: 1500
-      })
-      }  
+          title: '请填写配送地址!',
+          icon: 'none',
+          duration: 1500
+        });
+      }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .container {
   display: flex;
   flex-direction: column;
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   .header-c {
     display: flex;
     flex-direction: column;
@@ -255,7 +273,7 @@ export default {
           }
           .c-r {
             font-size: 24rpx;
-            color: #5584E2;
+            color: #5584e2;
             margin-left: 20rpx;
           }
         }
@@ -292,7 +310,7 @@ export default {
         }
         .btn {
           font-size: 28rpx;
-          color: #2F84E9;
+          color: #2f84e9;
         }
       }
       .time {
@@ -437,7 +455,7 @@ export default {
           }
           span {
             font-size: 20rpx;
-              color: $textDarkGray-color;
+            color: $textDarkGray-color;
           }
         }
       }
@@ -665,7 +683,7 @@ export default {
         margin-right: 0;
         .s-l {
           font-size: 24rpx;
-          color: #00CB91;
+          color: #00cb91;
           margin: 0 10rpx;
         }
         .picker {
@@ -690,13 +708,13 @@ export default {
     right: 0;
     bottom: 0;
     height: 100rpx;
-    background-color: #4EAA31;
+    background-color: #4eaa31;
     justify-content: center;
     .top {
       display: flex;
       height: 50rpx;
       align-items: center;
-      margin-top:20rpx;
+      margin-top: 20rpx;
       .s-l {
         font-size: 32rpx;
         color: white;
