@@ -185,6 +185,12 @@ const actions = {
   addRemarkDataAction({ state, commit }, { remark }) {
     commit('currentOrderRemarkDataMut', remark)
     wx.navigateBack()
+  },
+  refundDataAction({ state, commit }, { orderNo, refundDesc, refundFee}) {
+    getFetch('/wxPay/refund', { 'orderNo': orderNo, 'refundDesc': refundDesc,'refundFee': refundFee }, false).then(response => {
+      var result = response.result || {}
+      wx.navigateBack()
+    })
   }
 }
 

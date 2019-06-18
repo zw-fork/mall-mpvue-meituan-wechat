@@ -3,38 +3,63 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-          <span class="address-info" v-if="orderByShopIdDetail.status==0">已取消</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==1">未支付</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==2">已支付，等待商家配送</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==3">配送中</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==4">已完成</span>
-          <span class="address-info" v-else>其他</span>
+          <span class="address-info"
+                v-if="orderByShopIdDetail.status==0">已取消</span>
+          <span class="address-info"
+                v-else-if="orderByShopIdDetail.status==1">未支付</span>
+          <span class="address-info"
+                v-else-if="orderByShopIdDetail.refundStatus==1">等待退款</span>
+          <span class="address-info"
+                v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
+          <span class="address-info"
+                v-else-if="orderByShopIdDetail.status==2">已支付，等待商家配送</span>
+          <span class="address-info"
+                v-else-if="orderByShopIdDetail.status==3">配送中</span>
+          <span class="address-info"
+                v-else-if="orderByShopIdDetail.status==4">已完成</span>
+          <span class="address-info"
+                v-else>其他</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
-           <span class="c-l">{{orderByShopIdDetail.remark}}</span>
+          <span class="c-l">{{orderByShopIdDetail.remark}}</span>
         </div>
         <div class="bottom-a">
-          <div class="btn" v-if="orderByShopIdDetail.status==2" @click="updateStatus(3)">
+          <div class="btn"
+               v-if="orderByShopIdDetail.status==2 && orderByShopIdDetail.refundStatus!=2"
+               @click="updateStatus(3)">
             <span>配送</span>
           </div>
-          <div class="btn" v-if="orderByShopIdDetail.status==3" @click="updateStatus(4)">
+          <div class="btn"
+               v-if="orderByShopIdDetail.status==3"
+               @click="updateStatus(4)">
             <span>完成</span>
           </div>
-           <div class="btn" @click="updateStatus(8)">
+          <div class="btn"
+               @click="refund"
+               v-if="orderByShopIdDetail.refundStatus!=2">
             <span>退款</span>
+          </div>
+          <div class="btn"
+               @click="refund"
+               v-if="orderByShopIdDetail.refundStatus==1">
+            <span>拒绝退款</span>
           </div>
         </div>
       </div>
     </div>
     <div class="item-list">
-      <div class="section" @click="headerClick(orderByShopIdDetail, false)">
-        <img :src="orderByShopIdDetail.shopInfo.pic_url" >
+      <div class="section"
+           @click="headerClick(orderByShopIdDetail, false)">
+        <img :src="orderByShopIdDetail.shopInfo.pic_url">
         <span>{{orderByShopIdDetail.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright" style="display: inline"></i>
+        <i class="icon iconfont iconright"
+           style="display: inline"></i>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in foodList" :key="index">
+        <div class="item"
+             v-for="(item, index) in foodList"
+             :key="index">
           <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -50,7 +75,7 @@
           <span>配送费</span>
           <span>￥{{deliveryFee}}</span>
         </div>
-        <sep-line></sep-line> 
+        <sep-line></sep-line>
         <div class="totle-price">
           <span class="m">小计</span>
           <span class="r">￥{{realFee}}</span>
@@ -58,144 +83,195 @@
       </div>
     </div>
 
-        <div class="header-c">
+    <div class="header-c">
       <div class="delivery order_detail_style">
         <div class="address-c">
           <span>配送信息</span>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-                        <p class="item_left" style="word-break:keep-all; display: inline">送达时间：</p>
-                        <div class="item_right" style="display: inline">
-                            <p>尽快送达</p>
-                        </div>
-                    </div>
-                     <div class="line-sp"></div>
-                  <div class="item_style">
-                        <p class="item_left" style="word-break:keep-all;">送货地址：</p>
-                        <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
-                            <p>{{orderByShopIdDetail.addressInfo.address}}</p>
-                        </div>
-                    </div>
-                    <div class="line-sp"></div>
-                  <div class="item_style">
-                        <p class="item_left" style="word-break:keep-all;">顾客姓名：</p>
-                        <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
-                            <p>{{orderByShopIdDetail.addressInfo.name}}</p>
-                        </div>
-                    </div>
-                                        <div class="line-sp"></div>
-                  <div class="item_style" @click="clickCall">
-                        <p class="item_left" style="word-break:keep-all;">顾客电话：</p>
-                        <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
-                            <p>{{orderByShopIdDetail.addressInfo.phone}}</p>
-                        </div>
-                    </div>
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">送达时间：</p>
+          <div class="item_right"
+               style="display: inline">
+            <p>尽快送达</p>
+          </div>
+        </div>
+        <div class="line-sp"></div>
+        <div class="item_style">
+          <p class="item_left"
+             style="word-break:keep-all;">送货地址：</p>
+          <div class="item_right"
+               v-if="orderByShopIdDetail.addressInfo">
+            <p>{{orderByShopIdDetail.addressInfo.address}}</p>
+          </div>
+        </div>
+        <div class="line-sp"></div>
+        <div class="item_style">
+          <p class="item_left"
+             style="word-break:keep-all;">顾客姓名：</p>
+          <div class="item_right"
+               v-if="orderByShopIdDetail.addressInfo">
+            <p>{{orderByShopIdDetail.addressInfo.name}}</p>
+          </div>
+        </div>
+        <div class="line-sp"></div>
+        <div class="item_style"
+             @click="clickCall">
+          <p class="item_left"
+             style="word-break:keep-all;">顾客电话：</p>
+          <div class="item_right"
+               v-if="orderByShopIdDetail.addressInfo">
+            <p>{{orderByShopIdDetail.addressInfo.phone}}</p>
+          </div>
+        </div>
       </div>
     </div>
 
-
-        <div class="header-c">
+    <div class="header-c">
       <div class="delivery order_detail_style">
         <div class="address-c">
           <span>订单信息</span>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-                        <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
-                        <div class="item_right" style="display: inline">
-                            <p>{{orderByShopIdDetail.number}}</p>
-                        </div>
-                    </div>
-                     <div class="line-sp"></div>
-                  <div class="item_style">
-                       <p class="item_left" style="word-break:keep-all; display: inline">支付方式：</p>
-                        <div class="item_right" style="display: inline">
-                            <p>{{orderByShopIdDetail.paymentType === 1 ? '在线支付' : '其他'}} </p>
-                        </div>
-                    </div>
-                     <div class="line-sp"></div>
-                         <div class="item_style">
-                       <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
-                        <div class="item_right" style="display: inline">
-                            <p>{{orderByShopIdDetail.createTime}}</p>
-                        </div>
-                    </div>
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">订单号：</p>
+          <div class="item_right"
+               style="display: inline">
+            <p>{{orderByShopIdDetail.number}}</p>
+          </div>
+        </div>
+        <div class="line-sp"></div>
+        <div class="item_style">
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">支付方式：</p>
+          <div class="item_right"
+               style="display: inline">
+            <p>{{orderByShopIdDetail.paymentType === 1 ? '在线支付' : '其他'}} </p>
+          </div>
+        </div>
+        <div class="line-sp"></div>
+        <div class="item_style">
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">下单时间：</p>
+          <div class="item_right"
+               style="display: inline">
+            <p>{{orderByShopIdDetail.createTime}}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import sepLine from "@/components/sep-line";
-import {openLocation} from '@/utils/wxapi'
-import {mapState, mapMutations, mapActions, mapGetters} from "vuex"
-import {getFetch, postFetch} from '@/network/request/HttpExtension'
-import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
+import sepLine from '@/components/sep-line';
+import { openLocation } from '@/utils/wxapi';
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
+import { getFetch, postFetch } from '@/network/request/HttpExtension';
+import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
 
 export default {
   data() {
     return {
       foodList: [],
       tabIndex: 0
-    }
+    };
   },
   computed: {
-    ...mapState("user", ["userInfo"]),
-    ...mapState("submitOrder", ["orderByShopIdDetail"]),
+    ...mapState('user', ['userInfo']),
+    ...mapState('submitOrder', ['orderByShopIdDetail']),
     path() {
-      return `${GOODS_URL_PREFIX}`
+      return `${GOODS_URL_PREFIX}`;
     },
     deliveryFee() {
-      return this.orderByShopIdDetail.deliveryFee
+      return this.orderByShopIdDetail.deliveryFee;
     },
     realFee() {
-      return this.orderByShopIdDetail.realFee
+      return this.orderByShopIdDetail.realFee;
     }
   },
   components: {
     sepLine
   },
   methods: {
-    ...mapActions("submitOrder", ["getOrderByIdAction"]),
-            clickCall() {
-      var tel = this.orderByShopIdDetail.addressInfo.phone
-      var telList = [tel]
+    ...mapActions('submitOrder', ['getOrderByIdAction', 'refundDataAction']),
+    refund() {
+      var that = this;
+      wx.showModal({
+        content: '确定对当前订单进行退款处理？',
+        confirmColor: '#FFC24A',
+        success: function(res) {
+          if (res.confirm) {
+            that.refundDataAction({
+              orderNo: that.orderByShopIdDetail.number,
+              refundDesc: '不想要了!',
+              // refundFee: that.orderByShopIdDetail.realFee * 100
+              refundFee: 1
+            });
+          } else if (res.cancel) {
+          }
+        }
+      });
+    },
+    refusal() {
+      var order = this.orderByShopIdDetail;
+      wx.showModal({
+        content: '确定取消对当前订单进行的退款申请？',
+        confirmColor: '#FFC24A',
+        success: function(res) {
+          if (res.confirm) {
+
+          } else if (res.cancel) {
+          }
+        }
+      });
+    },
+    clickCall() {
+      var tel = this.orderByShopIdDetail.addressInfo.phone;
+      var telList = [tel];
       wx.showActionSheet({
-        title: "顾客电话",
+        title: '顾客电话',
         itemList: telList,
         success(res) {
-          wx.makePhoneCall({phoneNumber: telList[res.tapIndex]+''})
+          wx.makePhoneCall({ phoneNumber: telList[res.tapIndex] + '' });
         }
-      })
+      });
     },
     updateStatus(status) {
-      getFetch('/order/updateStatus/' + this.orderByShopIdDetail.id + '/' + status, {}, false).then(response => {
-        wx.navigateTo({url: '/pages/orderItemList/main?status=' + status})
-      })
+      getFetch(
+        '/order/updateStatus/' + this.orderByShopIdDetail.id + '/' + status,
+        {},
+        false
+      ).then(response => {
+        wx.navigateTo({ url: '/pages/orderItemList/main?status=' + status });
+      });
     },
     headerClick(item, flag) {
-           var update = false
+      var update = false;
       if (flag) {
-        update = true
-        var openid = this.userInfo.openid
-        this.getOrderByIdAction({'uid': openid, 'data' : item})
+        update = true;
+        var openid = this.userInfo.openid;
+        this.getOrderByIdAction({ uid: openid, data: item });
       } else {
-          var shopId = item.shopId
-      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update})
+        var shopId = item.shopId;
+        wx.navigateTo({
+          url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update
+        });
       }
     },
     addressClick() {
-      wx.navigateTo({url: '/pages/addressList/main'})
+      wx.navigateTo({ url: '/pages/addressList/main' });
     },
     redPacketClick() {
-      wx.navigateTo({url: '/pages/redPacket/main'})
+      wx.navigateTo({ url: '/pages/redPacket/main' });
     },
     couponClick() {
-      wx.navigateTo({url: '/pages/couponList/main'})
+      wx.navigateTo({ url: '/pages/couponList/main' });
     },
     remarkClick() {
-      wx.navigateTo({url: '/pages/remark/main'})
+      wx.navigateTo({ url: '/pages/remark/main' });
     },
     deliveryClick() {
       this.tabIndex = 0;
@@ -204,28 +280,28 @@ export default {
       this.tabIndex = 1;
     },
     protocol() {
-      wx.navigateTo({url: '/pages/pickProtocol/main'})
+      wx.navigateTo({ url: '/pages/pickProtocol/main' });
     },
     openMap() {
       wx.getLocation({
         type: 'gcj02',
-        success (res) {
-          const latitude = res.latitude
-          const longitude = res.longitude
+        success(res) {
+          const latitude = res.latitude;
+          const longitude = res.longitude;
           wx.openLocation({
             latitude,
             longitude,
             scale: 28
-          })
+          });
         }
-      })
+      });
     }
   },
   mounted() {
-    this.foodList = this.orderByShopIdDetail.itemList
-    this.shopInfo = this.orderByShopIdDetail.shopInfo
+    this.foodList = this.orderByShopIdDetail.itemList;
+    this.shopInfo = this.orderByShopIdDetail.shopInfo;
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -236,35 +312,35 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.order_detail_style{
+.order_detail_style {
   background-color: #fff;
   font-size: 28rpx;
-  .item_style{
+  .item_style {
     margin-left: 20rpx;
     display: flex;
     padding: 10rpx;
-    }
-    }
+  }
+}
 .bottom-a {
-        display: flex;
-        align-items: center;
-        background-color: white;
-        .btn {
-          display: flex;
-          border: 2rpx solid $blue-color;
-          margin: 20rpx;
-          border-radius: 4rpx;
-          span {
-            font-size: 26rpx;
-            color: $blue-color;
-            margin: 6rpx 10rpx;
-          }
-        }
-      }
+  display: flex;
+  align-items: center;
+  background-color: white;
+  .btn {
+    display: flex;
+    border: 2rpx solid $blue-color;
+    margin: 20rpx;
+    border-radius: 4rpx;
+    span {
+      font-size: 26rpx;
+      color: $blue-color;
+      margin: 6rpx 10rpx;
+    }
+  }
+}
 .container {
   display: flex;
   flex-direction: column;
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   .header-c {
     display: flex;
     flex-direction: column;
@@ -295,7 +371,7 @@ export default {
       flex-direction: column;
       .address-c {
         display: flex;
-        font-weight:bold;
+        font-weight: bold;
         font-size: 36rpx;
         background-color: white;
         padding: 0 20rpx;
@@ -327,10 +403,10 @@ export default {
         margin: 0 20rpx;
       }
       text {
-          color: $textBlack-color;
-          font-size: 20rpx;
-          padding: 3rpx 6rpx;
-          border: 2rpx solid $textBlack-color;
+        color: $textBlack-color;
+        font-size: 20rpx;
+        padding: 3rpx 6rpx;
+        border: 2rpx solid $textBlack-color;
       }
       .delivery-time {
         display: flex;
@@ -354,7 +430,7 @@ export default {
           }
           .c-r {
             font-size: 24rpx;
-            color: #5584E2;
+            color: #5584e2;
             margin-left: 20rpx;
           }
         }
@@ -391,7 +467,7 @@ export default {
         }
         .btn {
           font-size: 28rpx;
-          color: #2F84E9;
+          color: #2f84e9;
         }
       }
       .time {
@@ -535,7 +611,7 @@ export default {
           }
           span {
             font-size: 20rpx;
-              color: $textDarkGray-color;
+            color: $textDarkGray-color;
           }
         }
       }
@@ -763,7 +839,7 @@ export default {
         margin-right: 0;
         .s-l {
           font-size: 24rpx;
-          color: #00CB91;
+          color: #00cb91;
           margin: 0 10rpx;
         }
         .picker {
@@ -788,13 +864,13 @@ export default {
     right: 0;
     bottom: 0;
     height: 100rpx;
-    background-color: #4EAA31;
+    background-color: #4eaa31;
     justify-content: center;
     .top {
       display: flex;
       height: 50rpx;
       align-items: center;
-      margin-top:20rpx;
+      margin-top: 20rpx;
       .s-l {
         font-size: 32rpx;
         color: white;

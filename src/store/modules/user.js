@@ -52,6 +52,7 @@ const actions = {
                   jsonData.shopId = shopId
                 } 
                 getUserInfoWechat(jsonData).then(response => { 
+                  wx.setStorageSync("token", response.result.token)
                   commit('changeUserInfoMut', response.result)
                   if (jsonData.shopId) {
                     wx.redirectTo({
@@ -206,19 +207,6 @@ const actions = {
       iv: target.iv
     };
     getFetch('/wechat/userPhone', target, false).then(response => {
-    })
-  },
-  unifiedOrder({state, commit}, {openid}) {
-    getFetch('/wechat/unifiedOrder/' + openid, {}, false).then(response => {
-      wx.requestPayment({
-        timeStamp: '',
-        nonceStr: '',
-        package: '',
-        signType: 'MD5',
-        paySign: '',
-        success (res) { },
-        fail (res) { }
-      })
     })
   }
 }

@@ -12,6 +12,7 @@ import {currentHost} from "@/constants/hostConfig"
 import {errorCode} from "@/constants/errorCodeMap"
 import {timestampToCommonDate} from "@/utils/formatTime"
 import {_array} from "@/utils/arrayExtension"
+import {getStorage} from '@/utils/wxapi'
 
 /**
  * fetch 网络请求的header，可自定义header 内容
@@ -150,10 +151,15 @@ const HttpUtils = {
         wx.showNavigationBarLoading()
         isLoading ? wx.showLoading({title: '加载中...', mask: true}) : null
         const beforeRequest = new Date().getTime()
+        var token = wx.getStorageSync('token')
+        const header1 = {
+          'Content-Type': 'application/json',
+          'token': token
+        }
         wx.request({
           url: url,
           data: params,
-          header: header,
+          header: header1,
           method: requestType,
           success: function (res) {
             let isSuccess = false
