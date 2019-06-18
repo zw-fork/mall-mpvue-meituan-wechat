@@ -8,7 +8,7 @@
           <span class="address-info"
                 v-else-if="orderByShopIdDetail.status==1">未支付</span>
           <span class="address-info"
-                v-else-if="orderByShopIdDetail.refundStatus==1">等待退款</span>
+                v-else-if="orderByShopIdDetail.refundStatus==1">等待退款{{goodsStatus}}</span>
           <span class="address-info"
                 v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
           <span class="address-info"
@@ -190,6 +190,16 @@ export default {
     },
     realFee() {
       return this.orderByShopIdDetail.realFee;
+    },
+    goodsStatus() {
+      if (this.orderByShopIdDetail.status == 2) {
+        return ' - 新订单';
+      } else if (this.orderByShopIdDetail.status == 3) {
+        return ' - 配送中';
+      } else if (this.orderByShopIdDetail.status == 4) {
+        return ' - 已完成';
+      }
+      return '';
     }
   },
   components: {
@@ -239,9 +249,9 @@ export default {
       });
     },
     updateStatus(status, refundStatus) {
-      var refund = {}
+      var refund = {};
       if (refundStatus) {
-        refund.refundStatus = refundStatus
+        refund.refundStatus = refundStatus;
       }
       getFetch(
         '/order/updateStatus/' + this.orderByShopIdDetail.number + '/' + status,
