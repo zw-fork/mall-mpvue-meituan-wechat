@@ -258,7 +258,12 @@ export default {
         refund,
         false
       ).then(response => {
-        wx.navigateTo({ url: '/pages/orderItemList/main?status=' + status });
+        var pages = getCurrentPages();
+        var prevPage = pages[pages.length - 2];
+        prevPage.setData({
+          status: status
+        });
+        wx.navigateBack({ delta: 1 });
       });
     },
     headerClick(item, flag) {

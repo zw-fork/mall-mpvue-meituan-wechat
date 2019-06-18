@@ -202,6 +202,24 @@ export default {
       });
     }
   },
+  onShow(options) {
+    var pages = getCurrentPages();
+    var currPage = pages[pages.length - 1];
+    if (currPage.data.status) {
+      this.scrollTop = 0;
+      this.pageIndex = parseInt(currPage.data.status);
+      var status = [this.pageIndex];
+      this.statusList = status;
+      this.getOrderItemDataAction({
+        uid: this.userInfo.openid,
+        data: {
+          page: 1,
+          shopId: this.userInfo.shopId,
+          statusList: status.join(',')
+        }
+      });
+    }
+  },
   onPullDownRefresh: function() {
     this.scrollTop = 0;
     if (this.statusList.length > 0) {
