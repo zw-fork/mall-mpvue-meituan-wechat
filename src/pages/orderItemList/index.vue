@@ -22,7 +22,7 @@
            </div>
           <p class="order-status" style="position: absolute;right: 0;" v-if="item.refundStatus==1">等待处理退款</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.refundStatus==2">退款成功</p>
-          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.refundStatus==3">退款失败</p>
+          <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.refundStatus==3 && pageIndex === -1">退款失败</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==1">待支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==2">已支付</p>
           <p class="order-status" style="position: absolute;right: 0;" v-else-if="item.status==3">配送中</p>

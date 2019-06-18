@@ -41,7 +41,7 @@
             <span>退款</span>
           </div>
           <div class="btn"
-               @click="refund"
+               @click="updateStatus(orderByShopIdDetail.status, 3)"
                v-if="orderByShopIdDetail.refundStatus==1">
             <span>拒绝退款</span>
           </div>
@@ -222,7 +222,6 @@ export default {
         confirmColor: '#FFC24A',
         success: function(res) {
           if (res.confirm) {
-
           } else if (res.cancel) {
           }
         }
@@ -239,10 +238,14 @@ export default {
         }
       });
     },
-    updateStatus(status) {
+    updateStatus(status, refundStatus) {
+      var refund = {}
+      if (refundStatus) {
+        refund.refundStatus = refundStatus
+      }
       getFetch(
-        '/order/updateStatus/' + this.orderByShopIdDetail.id + '/' + status,
-        {},
+        '/order/updateStatus/' + this.orderByShopIdDetail.number + '/' + status,
+        refund,
         false
       ).then(response => {
         wx.navigateTo({ url: '/pages/orderItemList/main?status=' + status });
