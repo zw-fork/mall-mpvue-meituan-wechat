@@ -142,7 +142,7 @@ const actions = {
       }
       var number = response.result.number
       commit('changeUserDataMut', user)
-      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, {}, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, {shopName:order.shopInfo.addressModel.address + '-' + order.shopInfo.shopName}, false).then(response => {
         wx.requestPayment({
           timeStamp: response.timeStamp,
           nonceStr: response.nonceStr,
