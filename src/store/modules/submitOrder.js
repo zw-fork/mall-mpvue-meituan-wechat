@@ -189,7 +189,12 @@ const actions = {
   refundDataAction({ state, commit }, { orderNo, refundDesc, refundFee}) {
     getFetch('/wxPay/refund', { 'orderNo': orderNo, 'refundDesc': refundDesc,'refundFee': refundFee }, false).then(response => {
       var result = response.result || {}
-      wx.navigateBack()
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2];
+      prevPage.setData({
+        status: -1
+      });
+      wx.navigateBack({ delta: 1 });
     })
   }
 }

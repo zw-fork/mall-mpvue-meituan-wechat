@@ -12,9 +12,9 @@
           <span class="address-info"
                 v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
           <span class="address-info"
-                v-else-if="orderByShopIdDetail.status==2">已支付，等待商家配送</span>
+                v-else-if="orderByShopIdDetail.status==2">已支付，等待商家配送{{refundStatus}}</span>
           <span class="address-info"
-                v-else-if="orderByShopIdDetail.status==3">配送中</span>
+                v-else-if="orderByShopIdDetail.status==3">配送中{{refundStatus}}</span>
           <span class="address-info"
                 v-else-if="orderByShopIdDetail.status==4">已完成</span>
           <span class="address-info"
@@ -37,7 +37,7 @@
           </div>
           <div class="btn"
                @click="refund"
-               v-if="orderByShopIdDetail.refundStatus!=2">
+               v-if="orderByShopIdDetail.refundStatus==1">
             <span>退款</span>
           </div>
           <div class="btn"
@@ -198,6 +198,12 @@ export default {
         return ' - 配送中';
       } else if (this.orderByShopIdDetail.status == 4) {
         return ' - 已完成';
+      }
+      return '';
+    },
+    refundStatus() {
+      if (this.orderByShopIdDetail.refundStatus == 3) {
+        return ' - 申请过退款，被拒绝';
       }
       return '';
     }
