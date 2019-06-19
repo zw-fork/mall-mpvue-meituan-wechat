@@ -144,9 +144,14 @@ export default {
           path: '/pages/feedback/main'
         },
         {
-          title: '协议和说明',
+          title: '生成二维码',
           icon: 'mt-protocol-o',
-          path: '/pages/protocol/main'
+          path: '/pages/index/main?addWorker=1&shopId=1'
+        },
+        {
+          title: '加入店铺',
+          icon: 'mt-protocol-o',
+          path: '/pages/index/main?addWorker=1&shopId=1'
         }]
     }
   },

@@ -25,12 +25,20 @@
           <span class="c-l">{{orderDetail.remark}}</span>
         </div>
         <div class="bottom-a">
-          <div class="btn" v-if="orderDetail.refundStatus==1">
+          <div class="btn"
+               v-if="orderDetail.refundStatus==1">
             <span>取消退款</span>
           </div>
-          <div class="btn" @click="headerClick(orderDetail, true)">
+          <div class="btn"
+               @click="headerClick(orderDetail, true)">
             <span>再来一单</span>
           </div>
+        </div>
+        <div class="modalFooter">
+          <div class="btnCancel"
+               @tap="tapCancel">联系商家</div>
+          <div class="btnConfirm"
+               @tap="confirmSend">联系配送员</div>
         </div>
       </div>
     </div>
@@ -256,6 +264,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.modalFooter {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 80rpx;
+  border-top: 1rpx solid #e5e5e5;
+  font-size: 26rpx;
+  background-color: #f4f4f4;
+  line-height: 80rpx;
+}
+.btnCancel {
+  width: 50%;
+  font-size: 30rpx;
+  color: #333;
+  text-align: center;
+  border-right: 1rpx solid #e5e5e5;
+}
+.btnConfirm {
+  font-size: 30rpx;
+  width: 50%;
+  color: #333;
+  text-align: center;
+}
+.centerdiv {
+  float: left;
+  width: 50px;
+  border-right: 1px dashed black;
+  padding-bottom: 1600px; /*关键*/
+  margin-bottom: -1600px; /*关键*/
+}
 .line-clamp1 {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -276,6 +314,22 @@ export default {
   display: flex;
   align-items: center;
   background-color: white;
+  .btn {
+    display: flex;
+    border: 2rpx solid $blue-color;
+    margin: 20rpx;
+    border-radius: 4rpx;
+    span {
+      font-size: 26rpx;
+      color: $blue-color;
+      margin: 6rpx 10rpx;
+    }
+  }
+}
+.contact {
+  display: flex;
+  align-items: center;
+  background-color: #f4f4f4;
   .btn {
     display: flex;
     border: 2rpx solid $blue-color;

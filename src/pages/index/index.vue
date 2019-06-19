@@ -45,11 +45,12 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
   onLoad(options) 
   {
     this.shopId=options.shopId;
+    var addWorker = options.addWorker;
     var that = this
     wx.getSetting({
       success: function (res) {
         if (res.authSetting['scope.userInfo']) {
-          that.wxLogin({shopId: that.shopId})
+          that.wxLogin({shopId: that.shopId, 'addWorker' : addWorker})
         } 
         else {
           that.isModel = true

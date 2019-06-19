@@ -12,6 +12,7 @@
     "pages/couponList/main",
     "pages/categoryList/main",
     "pages/goodsList/main",
+    "pages/userList/main",
     "pages/selectAddress/main",
     "pages/searchList/main",
     "pages/addAddress/main",
@@ -45,23 +46,22 @@
     "backgroundColor": "#fff",
     "borderStyle": "black",
     "list": [{
-        "pagePath": "pages/home/main",
-        "text": "首页",
-        "iconPath": "static/images/icon_tabbar_home@3x.png",
-        "selectedIconPath": "static/images/icon_tabbar_home_selected@3x.png"
-      },
-      {
-        "pagePath": "pages/orderList/main",
-        "text": "订单",
-        "iconPath": "static/images/icon_tabbar_order@3x.png",
-        "selectedIconPath": "static/images/icon_tabbar_order_selected@3x.png"
-      },
-      {
-        "pagePath": "pages/me/main",
-        "text": "我的",
-        "iconPath": "static/images/icon_tabbar_mine@3x.png",
-        "selectedIconPath": "static/images/icon_tabbar_mine_selected@3x.png"
-      }
-    ]
+      "pagePath": "pages/home/main",
+      "text": "首页",
+      "iconPath": "static/images/icon_tabbar_home@3x.png",
+      "selectedIconPath": "static/images/icon_tabbar_home_selected@3x.png"
+    },
+    {
+      "pagePath": "pages/orderList/main",
+      "text": "订单",
+      "iconPath": "static/images/icon_tabbar_order@3x.png",
+      "selectedIconPath": "static/images/icon_tabbar_order_selected@3x.png"
+    },
+    {
+      "pagePath": "pages/me/main",
+      "text": "我的",
+      "iconPath": "static/images/icon_tabbar_mine@3x.png",
+      "selectedIconPath": "static/images/icon_tabbar_mine_selected@3x.png"
+    }]
   }
 }

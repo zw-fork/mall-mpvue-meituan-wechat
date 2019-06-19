@@ -176,8 +176,8 @@
         }
       },
       btnTitle() {
-        if (this.shopInfo) {
-          if (this.shopInfo.status != 1) {
+        if (this.shopInfo && this.shopInfo.min_price) {
+          if (this.shopInfo.status == 3) {
             return "打烊"
           }
           var content = `${this.shopInfo.min_price}元起送`
