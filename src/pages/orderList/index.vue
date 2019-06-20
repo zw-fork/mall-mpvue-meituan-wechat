@@ -238,13 +238,12 @@
       position: fixed;
       top: 70rpx;
       bottom: 0rpx;
-      width: 100%;
 
       .item {
         display: flex;
         flex-direction: column;
         background-color: white;
-        margin-top: 15rpx;
+        margin: 15rpx;
         border-radius: 25rpx;
 
         .shop-info {
@@ -283,13 +282,12 @@
             color: $textDarkGray-color;
             display: flex;
             float: right;
-            margin-right: 20rpx;
+            margin-right: 30rpx;
           }
         }
 
         .googs-c {
           display: flex;
-          background-color: white;
           flex-direction: column;
 
           .goods {
@@ -320,7 +318,7 @@
 
             .s-r {
               position: absolute;
-              right: 20rpx;
+              right: 0rpx;
               font-size: 24rpx;
               color: $textBlack-color;
             }
@@ -342,6 +340,7 @@
           font-size: 24rpx;
           color: $textBlack-color;
           font-weight: bold;
+          margin-right: 30rpx;
         }
 
         .bottom-c {
