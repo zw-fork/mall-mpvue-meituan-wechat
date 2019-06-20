@@ -11,56 +11,21 @@
                      @scrolltolower="lower"
                      @scroll="scroll">
           <div class="item-list"
-               v-for="(item, index) in list.datas"
+               v-for="(item, index) in list"
                :key="index">
             <div class="item">
               <div class="item-l">
-                <img src="https://wx.qlogo.cn/mmopen/vi_32/LNaO9Gf7SaZT9nv6tVnkOPk2MK7ODYdtUHTBdnNhHCwHmmtib9mDFu3yzMhlfE4Qiady8ibuZbicpCsDuNJBe1uYLA/132">
+                <img :src="item.avatarUrl">
               </div>
               <div class="item-r">
-                <span class="sub-title">微信昵称：{{item.name}}</span>
-                <span class="sub-title">姓名：{{item.description}}</span>
-                <div class="r-t">
-                  <span class="sub-title">电话号码：{{item.description}}</span>
-                  <div class="add-item">
-                    <div class="add-l"
-                         @click.stop="reduceClick(item)"
-                         v-if="item.sequence > 0">
-                      <i class="icon mt-reduce-o"></i>
-                      <span>{{item.sequence}}</span>
-                    </div>
-                    <div class="add-r"
-                         @click.stop="manageGoods($event, item)">
-                      <i class="icon iconfont icondian"></i>
-                    </div>
-                  </div>
-                </div>
+                <span class="sub-title">微信昵称：{{item.nickname}}</span>
+                <span class="sub-title">姓名：{{item.nickname}}</span>
+                <span class="sub-title">电话号码：{{item.tel}}</span>
+                <span class="sub-title">角色：{{item.role == 2 ? '店主' : '员工'}}</span>
               </div>
             </div>
           </div>
         </scroll-view>
-      </div>
-    </div>
-    <div class="editGoods"
-         :style="divStyle"
-         v-if="showEdit">
-      <div @click="editGoods">
-        <i class="icon iconfont iconedit"></i>
-        <span style="color:white;text-align: center;">编辑</span>
-      </div>
-      <div @click="upGoods"
-           v-if="selectGoods.status==2">
-        <i class="icon iconfont iconshangjia1"></i>
-        <span style="color:white;text-align: center;">上架</span>
-      </div>
-      <div @click="downGoods"
-           v-if="selectGoods.status==1">
-        <i class="icon iconfont iconxiajia"></i>
-        <span style="color:white;text-align: center;">下架</span>
-      </div>
-      <div @click="deleteGoods">
-        <i class="icon iconfont icondelete"></i>
-        <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
   </div>
@@ -89,9 +54,7 @@ export default {
       currentScroll: 0,
       stars: [1, 2, 3, 4],
       cartGoodsList1: [],
-      list: {
-        datas: []
-      },
+      list: {},
       name: ''
     };
   },
@@ -113,39 +76,6 @@ export default {
     ...mapState('submitOrder', ['orderDetail']),
     lineStyle() {
       return 'bold;';
-    },
-    path() {
-      return `${GOODS_URL_PREFIX}`;
-    },
-    productCount() {
-      var count = 0;
-      if (this.shopInfo.categoryModelList) {
-        this.shopInfo.categoryModelList.map(item => (count += item.count));
-      }
-      return count;
-    },
-    btnTitle() {
-      if (this.shopInfo) {
-        if (this.shopInfo.statu != 1) {
-          return '打烊';
-        }
-        var content = `${this.shopInfo.min_price}元起送`;
-        var price = 0;
-        if (this.shopInfo.categoryModelList) {
-          this.shopInfo.categoryModelList.map(
-            item => (price += item.totalPrice)
-          );
-        }
-        if (price <= 0) return content;
-        if (price < this.shopInfo.min_price) {
-          var value = parseFloat(this.shopInfo.min_price - price).toFixed(1);
-          return `还差${value}元`;
-        } else {
-          return '去结算';
-        }
-      } else {
-        return '';
-      }
     }
   },
   methods: {
@@ -251,7 +181,6 @@ export default {
     scanClick() {
       wx.scanCode({
         success: res => {
-          debugger;
           this.name = 'a';
           this.getGoods();
           console.log(res);
@@ -260,16 +189,12 @@ export default {
     },
     getGoods() {
       wx.showLoading({ title: '加载中...', mask: true });
-      var data = {};
-      data.name = this.name.trim();
-      if (this.pageIndex != undefined) {
-        data.status = this.pageIndex;
-      }
-      getFetch('/goods/' + this.userInfo.shopId, data, false).then(response => {
-        this.list.datas = response.result.list;
-        this.list.page = response.result.nextPage;
-        wx.hideLoading();
-      });
+      getFetch('/wechat/getStaff/' + this.userInfo.shopId, {}, false).then(
+        response => {
+          this.list = response.result;
+          wx.hideLoading();
+        }
+      );
     },
     //滚动条滚到底部或右边的时候触发
     lower(e) {
@@ -285,7 +210,6 @@ export default {
           response => {
             var goodsList = response.result.list;
             this.list.page = response.result.nextPage;
-            this.list.datas = [...this.list.datas, ...goodsList];
             wx.hideLoading();
           }
         );
@@ -583,21 +507,26 @@ export default {
         display: flex;
         margin: 0 20rpx;
         flex-direction: column;
+        border-bottom: 1px solid #eee;
         .item {
           display: flex;
-          margin-bottom: 30rpx;
+          margin-bottom: 10rpx;
+          margin-top: 15rpx;
           .item-l {
+            display: flex;
+            flex-direction: column;
             img {
               width: 120rpx;
               height: 120rpx;
+              display: flex;
+              flex-direction: column;
               background-size: cover;
             }
           }
           .item-r {
             display: flex;
             flex-direction: column;
-            margin-left: 20rpx;
-            justify-content: space-between;
+            margin-left: 30rpx;
             flex: 1;
             .title {
               font-size: 28rpx;
