@@ -793,7 +793,7 @@
       right: 0;
       bottom: 0;
       height: 100rpx;
-      background-color: #4eaa31;
+      background-color: #FF6347;
       justify-content: center;
 
       .top {
