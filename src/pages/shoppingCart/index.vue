@@ -108,7 +108,7 @@
               </span>
               <span class="cart_num">{{item.sequence}}</span>
               <div @click.stop="addClick(item, item.index, item.categoryIndex)">
-                <i class="icon iconfont iconplus-circle" style="color: #F9D173;font-size: 52rpx;"></i>
+                <i class="icon iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
               </div>
             </section>
           </li>
@@ -874,7 +874,7 @@
 
                   .add-r {
                     i {
-                      color: $theme-color;
+                      color: #FF6347;
                       font-size: 54rpx;
                     }
                   }
