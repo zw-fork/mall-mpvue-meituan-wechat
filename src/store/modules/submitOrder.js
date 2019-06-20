@@ -142,7 +142,7 @@ const actions = {
       }
       var number = response.result.number
       commit('changeUserDataMut', user)
-      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, {shopName:order.shopInfo.addressModel.address + '-' + order.shopInfo.shopName}, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, { shopName: order.shopInfo.addressModel.address + '-' + order.shopInfo.shopName }, false).then(response => {
         wx.requestPayment({
           timeStamp: response.timeStamp,
           nonceStr: response.nonceStr,
@@ -150,6 +150,11 @@ const actions = {
           signType: response.signType,
           paySign: response.paySign,
           success(res) {
+            wx.showToast({
+              title: '支付成功!',
+              icon: 'success',
+              duration: 3000
+            })
             getFetch('/order/updateStatus/' + number + '/' + 2, {}, false).then(response => {
               getFetch('/order/' + order.uid, {}, false).then(response => {
                 var result = response.result || {}
@@ -186,8 +191,8 @@ const actions = {
     commit('currentOrderRemarkDataMut', remark)
     wx.navigateBack()
   },
-  refundDataAction({ state, commit }, { orderNo, refundDesc, refundFee}) {
-    getFetch('/wxPay/refund', { 'orderNo': orderNo, 'refundDesc': refundDesc,'refundFee': refundFee }, false).then(response => {
+  refundDataAction({ state, commit }, { orderNo, refundDesc, refundFee }) {
+    getFetch('/wxPay/refund', { 'orderNo': orderNo, 'refundDesc': refundDesc, 'refundFee': refundFee }, false).then(response => {
       var result = response.result || {}
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];

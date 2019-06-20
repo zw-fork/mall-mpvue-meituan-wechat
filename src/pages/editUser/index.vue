@@ -1,7 +1,14 @@
 <template>
   <div class="container">
     <div class="name">
-      <span>联系人：</span>
+      <span>昵称：</span>
+      <input placeholder="请填写收货人的姓名"
+             placeholder-style="font-size: 24rpx"
+             auto-focus
+             v-model="item.name" />
+    </div>
+    <div class="name">
+      <span>姓名：</span>
       <input placeholder="请填写收货人的姓名"
              placeholder-style="font-size: 24rpx"
              auto-focus
@@ -27,19 +34,6 @@
           <span>女士</span>
         </div>
       </div>
-    </div>
-    <div class="address">
-      <span class="l">收货地址：</span>
-      <div class="m">
-        <span v-if="!item.address">点击选择</span>
-        <span v-else>{{item.address}}</span>
-      </div>
-    </div>
-    <div class="house-num">
-      <span>门牌号：</span>
-      <input placeholder="详细地址，例：16号楼5楼301室"
-             placeholder-style="font-size: 24rpx"
-             v-model="item.house_number" />
     </div>
     <div class="submit"
          @click="saveAddress">

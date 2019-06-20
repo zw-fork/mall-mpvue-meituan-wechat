@@ -12,7 +12,9 @@
                      @scroll="scroll">
           <div class="item-list"
                v-for="(item, index) in list"
-               :key="index">
+               :key="index"
+               @touchstart="showDeleteButton(item, index)"
+               @touchend="clearLoop(item.id)">
             <div class="item">
               <div class="item-l">
                 <img :src="item.avatarUrl">
@@ -42,6 +44,7 @@ import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
 export default {
   data() {
     return {
+      showModal: false,
       selectGoods: undefined,
       show: false,
       divStyle: '',
@@ -98,6 +101,43 @@ export default {
       'previewItemAction'
     ]),
     ...mapActions('submitOrder', ['createOrderDetailAction']),
+    showDeleteButton(item, index) {
+      if (item.role != 2) {
+        var that = this;
+        this.Loop = setTimeout(function() {
+          that.showModal = true;
+          wx.showModal({
+            title: '删除？',
+            content: '确定要删除当前选中的地址？',
+            confirmColor: '#FFC24A',
+            success: function(res) {
+              if (res.confirm) {
+                getFetch(
+                  '/wechat/updateStaff/' + that.userInfo.shopId + '/' + item.id,
+                  {},
+                  false
+                ).then(response => {
+                  that.list.splice(index, 1);
+                  wx.showToast({
+                    title: '删除成功!',
+                    icon: 'success',
+                    duration: 1000
+                  });
+                });
+              }
+            }
+          });
+        }, 800);
+        return false;
+      }
+    },
+    clearLoop(addressId) {
+      clearTimeout(this.Loop);
+      if (!this.showModal) {
+      }
+      this.showModal = false;
+      return false;
+    },
     scroll(e) {
       var value = this.currentScroll - e.target.scrollTop;
       if (Math.abs(value) > 0) {
