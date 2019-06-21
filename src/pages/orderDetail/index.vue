@@ -3,42 +3,59 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-          <span class="address-info" v-if="orderDetail.status==0">已取消</span>
-          <span class="address-info" v-else-if="orderDetail.status==1">未支付</span>
-          <span class="address-info" v-else-if="orderDetail.refundStatus==1">等待退款</span>
-          <span class="address-info" v-else-if="orderDetail.refundStatus==2">退款成功</span>
-          <span class="address-info" v-else-if="orderDetail.status==2">已支付，等待商家配送</span>
-          <span class="address-info" v-else-if="orderDetail.status==3">配送中</span>
-          <span class="address-info" v-else-if="orderDetail.status==4">已完成</span>
-          <span class="address-info" v-else>其他</span>
+          <span class="address-info"
+                v-if="orderDetail.status==0">已取消</span>
+          <span class="address-info"
+                v-else-if="orderDetail.status==1">未支付</span>
+          <span class="address-info"
+                v-else-if="orderDetail.refundStatus==1">等待退款</span>
+          <span class="address-info"
+                v-else-if="orderDetail.refundStatus==2">退款成功</span>
+          <span class="address-info"
+                v-else-if="orderDetail.status==2">已支付，等待商家配送</span>
+          <span class="address-info"
+                v-else-if="orderDetail.status==3">配送中</span>
+          <span class="address-info"
+                v-else-if="orderDetail.status==4">已完成</span>
+          <span class="address-info"
+                v-else>其他</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
           <span class="c-l">{{orderDetail.remark}}</span>
         </div>
         <div class="bottom-a">
-          <div class="btn" v-if="orderDetail.refundStatus==1">
+          <div class="btn"
+               v-if="orderDetail.refundStatus==1">
             <span>取消退款</span>
           </div>
-          <div class="btn" @click="headerClick(orderDetail, true)">
+          <div class="btn"
+               @click="headerClick(orderDetail, true)">
             <span>再来一单</span>
           </div>
         </div>
         <div class="modalFooter">
-          <div class="btnCancel" @tap="tapCancel">联系商家</div>
-          <div class="btnConfirm" @tap="confirmSend">联系配送员</div>
+          <div class="btnCancel"
+               @tap="clickCallShop">联系商家</div>
+          <div class="btnConfirm"
+               @click.stop="clickCallDelivery">联系配送员</div>
         </div>
       </div>
     </div>
     <div class="item-list">
-      <div class="section" @click="headerClick(orderDetail, false)">
-        <i style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
+      <div class="section"
+           @click="headerClick(orderDetail, false)">
+        <i style="font-size:40rpx;color:#d81e06;"
+           class="shop-logo icon iconfont icondianpu2"></i>
         <span>{{orderDetail.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright" style="display: inline"></i>
+        <i class="icon iconfont iconright"
+           style="display: inline"></i>
       </div>
       <div class="line-sp"></div>
       <div class="list">
-        <div class="item" v-for="(item, index) in foodList" :key="index">
+        <div class="item"
+             v-for="(item, index) in foodList"
+             :key="index">
           <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -74,29 +91,38 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">送达时间：</p>
-          <div class="item_right" style="display: inline">
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">送达时间：</p>
+          <div class="item_right"
+               style="display: inline">
             <p>尽快送达</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all;">送货地址：</p>
-          <div class="item_right" v-if="orderDetail.addressInfo">
+          <p class="item_left"
+             style="word-break:keep-all;">送货地址：</p>
+          <div class="item_right"
+               v-if="orderDetail.addressInfo">
             <p>{{orderDetail.addressInfo.address}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all;">顾客姓名：</p>
-          <div class="item_right" v-if="orderDetail.addressInfo">
+          <p class="item_left"
+             style="word-break:keep-all;">顾客姓名：</p>
+          <div class="item_right"
+               v-if="orderDetail.addressInfo">
             <p>{{orderDetail.addressInfo.name}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
-        <div class="item_style" @click="clickCall">
-          <p class="item_left" style="word-break:keep-all;">顾客电话：</p>
-          <div class="item_right" v-if="orderDetail.addressInfo">
+        <div class="item_style"
+             @click="clickCall">
+          <p class="item_left"
+             style="word-break:keep-all;">顾客电话：</p>
+          <div class="item_right"
+               v-if="orderDetail.addressInfo">
             <p>{{orderDetail.addressInfo.phone}}</p>
           </div>
         </div>
@@ -110,22 +136,28 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
-          <div class="item_right" style="display: inline">
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">订单号：</p>
+          <div class="item_right"
+               style="display: inline">
             <p>{{orderDetail.number}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">支付方式：</p>
-          <div class="item_right" style="display: inline">
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">支付方式：</p>
+          <div class="item_right"
+               style="display: inline">
             <p>{{orderDetail.paymentType === 1 ? '在线支付' : '其他'}} </p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
-          <div class="item_right" style="display: inline">
+          <p class="item_left"
+             style="word-break:keep-all; display: inline">下单时间：</p>
+          <div class="item_right"
+               style="display: inline">
             <p>{{orderDetail.createTime}}</p>
           </div>
         </div>
@@ -135,738 +167,580 @@
 </template>
 
 <script>
-  import sepLine from '@/components/sep-line';
-  import { openLocation } from '@/utils/wxapi';
-  import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-  import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
+import sepLine from '@/components/sep-line';
+import { openLocation } from '@/utils/wxapi';
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
+import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
 
-  export default {
-    data() {
-      return {
-        foodList: [],
-        tabIndex: 0
-      };
+export default {
+  data() {
+    return {
+      foodList: [],
+      tabIndex: 0
+    };
+  },
+  computed: {
+    ...mapState('user', ['userInfo']),
+    ...mapState('submitOrder', ['orderDetail']),
+    path() {
+      return `${GOODS_URL_PREFIX}`;
     },
-    computed: {
-      ...mapState('user', ['userInfo']),
-      ...mapState('submitOrder', ['orderDetail']),
-      path() {
-        return `${GOODS_URL_PREFIX}`;
-      },
-      deliveryFee() {
-        return this.orderDetail.deliveryFee;
-      },
-      realFee() {
-        return this.orderDetail.realFee;
+    deliveryFee() {
+      return this.orderDetail.deliveryFee;
+    },
+    realFee() {
+      return this.orderDetail.realFee;
+    }
+  },
+  components: {
+    sepLine
+  },
+  methods: {
+    ...mapActions('submitOrder', ['getOrderByIdAction']),
+    clickCall() {
+      var tel = this.orderDetail.addressInfo.phone;
+      var telList = [tel];
+      wx.showActionSheet({
+        title: '顾客电话',
+        itemList: telList,
+        success(res) {
+          wx.makePhoneCall({ phoneNumber: telList[res.tapIndex] + '' });
+        }
+      });
+    },
+    clickCallShop() {
+      var tel = this.orderDetail.shopInfo.tel;
+      wx.showActionSheet({
+        title: '商家电话',
+        itemList: tel,
+        success(res) {
+          wx.makePhoneCall({ phoneNumber: tel[res.tapIndex] + '' });
+        }
+      });
+    },
+    clickCallDelivery() {
+      var tel = this.orderDetail.deliveryTel;
+      wx.showActionSheet({
+        title: '商家电话',
+        itemList: [tel],
+        success(res) {
+          wx.makePhoneCall({ phoneNumber: tel + '' });
+        }
+      });
+    },
+    headerClick(item, flag) {
+      var update = false;
+      if (flag) {
+        update = true;
+        var openid = this.userInfo.openid;
+        this.getOrderByIdAction({ uid: openid, data: item });
+      } else {
+        var shopId = item.shopId;
+        wx.navigateTo({
+          url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update
+        });
       }
     },
-    components: {
-      sepLine
+    addressClick() {
+      wx.navigateTo({ url: '/pages/addressList/main' });
     },
-    methods: {
-      ...mapActions('submitOrder', ['getOrderByIdAction']),
-      clickCall() {
-        var tel = this.orderDetail.addressInfo.phone;
-        var telList = [tel];
-        wx.showActionSheet({
-          title: '顾客电话',
-          itemList: telList,
-          success(res) {
-            wx.makePhoneCall({ phoneNumber: telList[res.tapIndex] + '' });
-          }
-        });
-      },
-      headerClick(item, flag) {
-        var update = false;
-        if (flag) {
-          update = true;
-          var openid = this.userInfo.openid;
-          this.getOrderByIdAction({ uid: openid, data: item });
-        } else {
-          var shopId = item.shopId;
-          wx.navigateTo({
-            url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update
+    redPacketClick() {
+      wx.navigateTo({ url: '/pages/redPacket/main' });
+    },
+    couponClick() {
+      wx.navigateTo({ url: '/pages/couponList/main' });
+    },
+    remarkClick() {
+      wx.navigateTo({ url: '/pages/remark/main' });
+    },
+    deliveryClick() {
+      this.tabIndex = 0;
+    },
+    pickClick() {
+      this.tabIndex = 1;
+    },
+    protocol() {
+      wx.navigateTo({ url: '/pages/pickProtocol/main' });
+    },
+    openMap() {
+      wx.getLocation({
+        type: 'gcj02',
+        success(res) {
+          const latitude = res.latitude;
+          const longitude = res.longitude;
+          wx.openLocation({
+            latitude,
+            longitude,
+            scale: 28
           });
         }
-      },
-      addressClick() {
-        wx.navigateTo({ url: '/pages/addressList/main' });
-      },
-      redPacketClick() {
-        wx.navigateTo({ url: '/pages/redPacket/main' });
-      },
-      couponClick() {
-        wx.navigateTo({ url: '/pages/couponList/main' });
-      },
-      remarkClick() {
-        wx.navigateTo({ url: '/pages/remark/main' });
-      },
-      deliveryClick() {
-        this.tabIndex = 0;
-      },
-      pickClick() {
-        this.tabIndex = 1;
-      },
-      protocol() {
-        wx.navigateTo({ url: '/pages/pickProtocol/main' });
-      },
-      openMap() {
-        wx.getLocation({
-          type: 'gcj02',
-          success(res) {
-            const latitude = res.latitude;
-            const longitude = res.longitude;
-            wx.openLocation({
-              latitude,
-              longitude,
-              scale: 28
-            });
-          }
-        });
-      }
-    },
-    mounted() {
-      this.foodList = this.orderDetail.itemList;
-      this.shopInfo = this.orderDetail.shopInfo;
+      });
     }
-  };
+  },
+  mounted() {
+    this.foodList = this.orderDetail.itemList;
+    this.shopInfo = this.orderDetail.shopInfo;
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .modalFooter {
-    box-sizing: border-box;
+.modalFooter {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 80rpx;
+  border-top: 1rpx solid #e5e5e5;
+  font-size: 26rpx;
+  background-color: #f4f4f4;
+  line-height: 80rpx;
+}
+
+.btnCancel {
+  width: 50%;
+  font-size: 30rpx;
+  color: #333;
+  text-align: center;
+  border-right: 1rpx solid #e5e5e5;
+}
+
+.btnConfirm {
+  font-size: 30rpx;
+  width: 50%;
+  color: #333;
+  text-align: center;
+}
+
+.centerdiv {
+  float: left;
+  width: 50px;
+  border-right: 1px dashed black;
+  padding-bottom: 1600px;
+  /*关键*/
+  margin-bottom: -1600px;
+  /*关键*/
+}
+
+.line-clamp1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.order_detail_style {
+  background-color: #fff;
+  font-size: 28rpx;
+
+  .item_style {
+    margin-left: 20rpx;
     display: flex;
-    flex-direction: row;
-    height: 80rpx;
-    border-top: 1rpx solid #e5e5e5;
-    font-size: 26rpx;
-    background-color: #f4f4f4;
-    line-height: 80rpx;
+    padding: 10rpx;
   }
+}
 
-  .btnCancel {
-    width: 50%;
-    font-size: 30rpx;
-    color: #333;
-    text-align: center;
-    border-right: 1rpx solid #e5e5e5;
-  }
+.bottom-a {
+  display: flex;
+  align-items: center;
+  background-color: white;
 
-  .btnConfirm {
-    font-size: 30rpx;
-    width: 50%;
-    color: #333;
-    text-align: center;
-  }
+  .btn {
+    display: flex;
+    border: 2rpx solid $blue-color;
+    margin: 20rpx;
+    border-radius: 4rpx;
 
-  .centerdiv {
-    float: left;
-    width: 50px;
-    border-right: 1px dashed black;
-    padding-bottom: 1600px;
-    /*关键*/
-    margin-bottom: -1600px;
-    /*关键*/
-  }
-
-  .line-clamp1 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  .order_detail_style {
-    background-color: #fff;
-    font-size: 28rpx;
-
-    .item_style {
-      margin-left: 20rpx;
-      display: flex;
-      padding: 10rpx;
+    span {
+      font-size: 26rpx;
+      color: $blue-color;
+      margin: 6rpx 10rpx;
     }
   }
+}
 
-  .bottom-a {
+.contact {
+  display: flex;
+  align-items: center;
+  background-color: #f4f4f4;
+
+  .btn {
     display: flex;
-    align-items: center;
-    background-color: white;
+    border: 2rpx solid $blue-color;
+    margin: 20rpx;
+    border-radius: 4rpx;
 
-    .btn {
-      display: flex;
-      border: 2rpx solid $blue-color;
-      margin: 20rpx;
-      border-radius: 4rpx;
-
-      span {
-        font-size: 26rpx;
-        color: $blue-color;
-        margin: 6rpx 10rpx;
-      }
+    span {
+      font-size: 26rpx;
+      color: $blue-color;
+      margin: 6rpx 10rpx;
     }
   }
+}
 
-  .contact {
-    display: flex;
-    align-items: center;
-    background-color: #f4f4f4;
+.line-sp {
+  height: 2rpx;
+  background-color: $spLine-color;
+  flex: 1;
+  margin: 0 20rpx;
+}
 
-    .btn {
-      display: flex;
-      border: 2rpx solid $blue-color;
-      margin: 20rpx;
-      border-radius: 4rpx;
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
 
-      span {
-        font-size: 26rpx;
-        color: $blue-color;
-        margin: 6rpx 10rpx;
-      }
-    }
-  }
-
-  .line-sp {
-    height: 2rpx;
-    background-color: $spLine-color;
-    flex: 1;
-    margin: 0 20rpx;
-  }
-
-  .container {
+  .header-c {
     display: flex;
     flex-direction: column;
-    background-color: #f9f9f9;
+    margin: 20rpx;
+    background-color: white;
 
-    .header-c {
+    .tab-c {
       display: flex;
-      flex-direction: column;
-      margin: 20rpx;
+      height: 88rpx;
+      align-items: center;
       background-color: white;
 
-      .tab-c {
-        display: flex;
-        height: 88rpx;
+      .left {
         align-items: center;
-        background-color: white;
-
-        .left {
-          align-items: center;
-          justify-content: center;
-          display: flex;
-          flex: 1;
-          font-size: 32rpx;
-          color: $textBlack-color;
-          height: 88rpx;
-        }
-
-        .right {
-          @extend .left;
-          background-color: $page-bgcolor;
-        }
+        justify-content: center;
+        display: flex;
+        flex: 1;
+        font-size: 32rpx;
+        color: $textBlack-color;
+        height: 88rpx;
       }
 
-      .delivery {
-        display: flex;
-        background-color: white;
-        flex-direction: column;
+      .right {
+        @extend .left;
+        background-color: $page-bgcolor;
+      }
+    }
 
-        .address-c {
-          display: flex;
-          font-weight: bold;
+    .delivery {
+      display: flex;
+      background-color: white;
+      flex-direction: column;
+
+      .address-c {
+        display: flex;
+        font-weight: bold;
+        font-size: 36rpx;
+        background-color: white;
+        padding: 0 20rpx;
+        margin: 20rpx;
+
+        i {
           font-size: 36rpx;
-          background-color: white;
-          padding: 0 20rpx;
           margin: 20rpx;
-
-          i {
-            font-size: 36rpx;
-            margin: 20rpx;
-            color: #434343;
-          }
-
-          .address {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            flex: 1;
-
-            .address-info {
-              font-size: 32rpx;
-              color: $textBlack-color;
-            }
-
-            .user-info {
-              font-size: 24rpx;
-              color: $textDarkGray-color;
-            }
-          }
-        }
-
-        text {
-          color: $textBlack-color;
-          font-size: 20rpx;
-          padding: 3rpx 6rpx;
-          border: 2rpx solid $textBlack-color;
-        }
-
-        .delivery-time {
-          display: flex;
-          align-items: center;
-          background-color: white;
-          padding: 0 20rpx;
-          margin: 20rpx;
-          font-size: 28rpx;
-
-          i {
-            font-size: 28rpx;
-            color: $textBlack-color;
-          }
-
-          .content {
-            display: flex;
-            align-items: center;
-            flex: 1;
-            margin: 20rpx;
-
-            .c-l {
-              font-size: 32rpx;
-              color: $textBlack-color;
-            }
-
-            .c-r {
-              font-size: 24rpx;
-              color: #5584e2;
-              margin-left: 20rpx;
-            }
-          }
-        }
-      }
-
-      .pick {
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        padding: 30rpx;
-
-        .title {
-          font-size: 28rpx;
-          color: $textBlack-color;
+          color: #434343;
         }
 
         .address {
-          font-size: 36rpx;
-          color: $textBlack-color;
-          font-weight: bold;
-          margin-top: 10rpx;
-        }
-
-        .map {
           display: flex;
-          align-items: center;
-          margin-top: 20rpx;
+          flex-direction: column;
+          justify-content: space-around;
+          flex: 1;
 
-          .distance {
-            font-size: 28rpx;
-            color: #000;
-          }
-
-          .line {
-            width: 2rpx;
-            height: 20rpx;
-            background-color: $textGray-color;
-            margin: 0 16rpx;
-          }
-
-          .btn {
-            font-size: 28rpx;
-            color: #2f84e9;
-          }
-        }
-
-        .time {
-          display: flex;
-          align-items: center;
-          border-top: 2rpx solid $spLine-color;
-          border-bottom: 2rpx solid $spLine-color;
-          margin: 30rpx 0;
-          height: 140rpx;
-
-          .l {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-
-            .l-t {
-              font-size: 24rpx;
-              color: $textDarkGray-color;
-            }
-
-            .l-b {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              margin-top: 10rpx;
-
-              span {
-                font-size: 24rpx;
-                color: #000;
-              }
-
-              i {
-                font-size: 28rpx;
-                color: $textGray-color;
-                margin-left: 10rpx;
-              }
-            }
-          }
-
-          .line {
-            width: 2rpx;
-            height: 100rpx;
-            background-color: $spLine-color;
-          }
-
-          .r {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            margin-left: 30rpx;
-
-            .r-t {
-              font-size: 24rpx;
-              color: $textDarkGray-color;
-            }
-
-            .r-b {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              margin-top: 10rpx;
-
-              span {
-                font-size: 24rpx;
-                color: #000;
-              }
-
-              i {
-                font-size: 28rpx;
-                color: $textGray-color;
-                margin-left: 10rpx;
-              }
-            }
-          }
-        }
-
-        .protocol {
-          display: flex;
-          align-items: center;
-
-          i {
-            font-size: 36rpx;
-            color: $theme-color;
-          }
-
-          span {
-            font-size: 28rpx;
+          .address-info {
+            font-size: 32rpx;
             color: $textBlack-color;
-            margin-left: 30rpx;
           }
 
-          text {
-            font-size: 28rpx;
-            color: #626381;
+          .user-info {
+            font-size: 24rpx;
+            color: $textDarkGray-color;
+          }
+        }
+      }
+
+      text {
+        color: $textBlack-color;
+        font-size: 20rpx;
+        padding: 3rpx 6rpx;
+        border: 2rpx solid $textBlack-color;
+      }
+
+      .delivery-time {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        padding: 0 20rpx;
+        margin: 20rpx;
+        font-size: 28rpx;
+
+        i {
+          font-size: 28rpx;
+          color: $textBlack-color;
+        }
+
+        .content {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          margin: 20rpx;
+
+          .c-l {
+            font-size: 32rpx;
+            color: $textBlack-color;
+          }
+
+          .c-r {
+            font-size: 24rpx;
+            color: #5584e2;
+            margin-left: 20rpx;
           }
         }
       }
     }
 
-    .item-list {
+    .pick {
       display: flex;
       flex-direction: column;
-      margin: 0 20rpx;
       background-color: white;
+      padding: 30rpx;
 
-      .section {
+      .title {
+        font-size: 28rpx;
+        color: $textBlack-color;
+      }
+
+      .address {
+        font-size: 36rpx;
+        color: $textBlack-color;
+        font-weight: bold;
+        margin-top: 10rpx;
+      }
+
+      .map {
         display: flex;
         align-items: center;
-        align-items: center;
-        height: 88rpx;
-        padding: 0 20rpx;
+        margin-top: 20rpx;
 
-        img {
-          width: 40rpx;
-          height: 40rpx;
-          border-radius: 20rpx;
+        .distance {
+          font-size: 28rpx;
+          color: #000;
+        }
+
+        .line {
+          width: 2rpx;
+          height: 20rpx;
+          background-color: $textGray-color;
+          margin: 0 16rpx;
+        }
+
+        .btn {
+          font-size: 28rpx;
+          color: #2f84e9;
+        }
+      }
+
+      .time {
+        display: flex;
+        align-items: center;
+        border-top: 2rpx solid $spLine-color;
+        border-bottom: 2rpx solid $spLine-color;
+        margin: 30rpx 0;
+        height: 140rpx;
+
+        .l {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+
+          .l-t {
+            font-size: 24rpx;
+            color: $textDarkGray-color;
+          }
+
+          .l-b {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 10rpx;
+
+            span {
+              font-size: 24rpx;
+              color: #000;
+            }
+
+            i {
+              font-size: 28rpx;
+              color: $textGray-color;
+              margin-left: 10rpx;
+            }
+          }
+        }
+
+        .line {
+          width: 2rpx;
+          height: 100rpx;
+          background-color: $spLine-color;
+        }
+
+        .r {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          margin-left: 30rpx;
+
+          .r-t {
+            font-size: 24rpx;
+            color: $textDarkGray-color;
+          }
+
+          .r-b {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 10rpx;
+
+            span {
+              font-size: 24rpx;
+              color: #000;
+            }
+
+            i {
+              font-size: 28rpx;
+              color: $textGray-color;
+              margin-left: 10rpx;
+            }
+          }
+        }
+      }
+
+      .protocol {
+        display: flex;
+        align-items: center;
+
+        i {
+          font-size: 36rpx;
+          color: $theme-color;
         }
 
         span {
           font-size: 28rpx;
-          color: $textDarkGray-color;
-          flex: 1;
-          margin-left: 20rpx;
+          color: $textBlack-color;
+          margin-left: 30rpx;
         }
 
         text {
-          color: $textBlack-color;
-          font-size: 20rpx;
-          padding: 3rpx 6rpx;
-          border: 2rpx solid $textBlack-color;
+          font-size: 28rpx;
+          color: #626381;
         }
       }
+    }
+  }
 
-      .list {
+  .item-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20rpx;
+    background-color: white;
+
+    .section {
+      display: flex;
+      align-items: center;
+      align-items: center;
+      height: 88rpx;
+      padding: 0 20rpx;
+
+      img {
+        width: 40rpx;
+        height: 40rpx;
+        border-radius: 20rpx;
+      }
+
+      span {
+        font-size: 28rpx;
+        color: $textDarkGray-color;
+        flex: 1;
+        margin-left: 20rpx;
+      }
+
+      text {
+        color: $textBlack-color;
+        font-size: 20rpx;
+        padding: 3rpx 6rpx;
+        border: 2rpx solid $textBlack-color;
+      }
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+
+      .item {
         display: flex;
-        flex-direction: column;
-        background-color: white;
+        height: 120rpx;
+        flex: 1;
+        margin-bottom: 10rpx;
+        padding-top: 20rpx;
 
-        .item {
+        img {
+          width: 100rpx;
+          height: 100rpx;
+          margin-left: 20rpx;
+        }
+
+        .item-r {
           display: flex;
-          height: 120rpx;
           flex: 1;
-          margin-bottom: 10rpx;
-          padding-top: 20rpx;
+          flex-direction: column;
+          margin: 0 20rpx;
 
-          img {
-            width: 100rpx;
-            height: 100rpx;
-            margin-left: 20rpx;
-          }
-
-          .item-r {
+          .r-t {
             display: flex;
-            flex: 1;
-            flex-direction: column;
-            margin: 0 20rpx;
-
-            .r-t {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-
-              span {
-                font-size: 28rpx;
-                color: $textBlack-color;
-              }
-            }
+            align-items: center;
+            justify-content: space-between;
 
             span {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
+              font-size: 28rpx;
+              color: $textBlack-color;
             }
-          }
-        }
-      }
-
-      .footer {
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-
-        .fold {
-          display: flex;
-          align-self: center;
-          align-items: center;
-          justify-content: center;
-          padding: 6rpx;
-          margin-top: 30rpx;
-          border: 2rpx solid $spLine-color;
-
-          i {
-            font-size: 24rpx;
-            color: $textDarkGray-color;
           }
 
           span {
             font-size: 20rpx;
             color: $textDarkGray-color;
-            margin-right: 6rpx;
-          }
-        }
-
-        .package-cast {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin: 20rpx;
-
-          span {
-            font-size: 28rpx;
-            color: $textBlack-color;
-          }
-        }
-
-        .delivery-cast {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin: 0rpx 20rpx;
-
-          span {
-            font-size: 28rpx;
-            color: $textBlack-color;
-          }
-        }
-
-        .discount {
-          display: flex;
-          margin: 20rpx;
-          flex-direction: column;
-
-          .item {
-            display: flex;
-            align-items: center;
-            margin-top: 10rpx;
-
-            img {
-              width: 30rpx;
-              height: 30rpx;
-            }
-
-            .name {
-              font-size: 28rpx;
-              color: $textDarkGray-color;
-              flex: 1;
-              margin-left: 10rpx;
-            }
-
-            .info {
-              font-size: 28rpx;
-              color: $mtRed-color;
-            }
-          }
-        }
-
-        .red-packet {
-          display: flex;
-          align-content: center;
-          margin: 20rpx;
-          justify-content: space-between;
-
-          .l {
-            font-size: 28rpx;
-            color: $textBlack-color;
-          }
-
-          .r {
-            display: flex;
-            align-items: center;
-
-            span {
-              font-size: 24rpx;
-              color: $mtRed-color;
-            }
-
-            i {
-              font-size: 28rpx;
-              margin-left: 10rpx;
-              color: $textGray-color;
-            }
-          }
-        }
-
-        .coupon {
-          display: flex;
-          align-content: center;
-          margin: 20rpx;
-          justify-content: space-between;
-
-          .l {
-            font-size: 28rpx;
-            color: $textBlack-color;
-          }
-
-          .r {
-            display: flex;
-            align-items: center;
-
-            span {
-              font-size: 24rpx;
-              color: $mtRed-color;
-            }
-
-            i {
-              font-size: 28rpx;
-              margin-left: 10rpx;
-              color: $textGray-color;
-            }
-          }
-        }
-
-        .totle-price {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          margin: 20rpx;
-
-          .l {
-            font-size: 24rpx;
-            color: $textDarkGray-color;
-          }
-
-          .m {
-            font-size: 28rpx;
-            color: $textBlack-color;
-            margin: 0 20rpx;
-          }
-
-          .r {
-            font-size: 28rpx;
-            color: $mtRed-color;
           }
         }
       }
     }
 
-    .privacy-c {
+    .footer {
       display: flex;
       flex-direction: column;
-      height: 160rpx;
       background-color: white;
-      margin: 20rpx;
-      justify-content: center;
 
-      .top {
+      .fold {
         display: flex;
+        align-self: center;
         align-items: center;
-        margin: 0 20rpx;
+        justify-content: center;
+        padding: 6rpx;
+        margin-top: 30rpx;
+        border: 2rpx solid $spLine-color;
 
-        .t-l {
-          display: flex;
-          align-items: center;
-          flex: 1;
+        i {
+          font-size: 24rpx;
+          color: $textDarkGray-color;
+        }
 
-          span {
-            font-size: 28rpx;
-            color: $textBlack-color;
-            margin: 0 10rpx;
-          }
+        span {
+          font-size: 20rpx;
+          color: $textDarkGray-color;
+          margin-right: 6rpx;
         }
       }
 
-      span {
-        font-size: 20rpx;
-        color: $textDarkGray-color;
-        margin: 0 20rpx;
-      }
-    }
-
-    .bottom-c {
-      display: flex;
-      background-color: white;
-      margin: 20rpx;
-      margin-top: 0;
-      justify-content: center;
-      flex-direction: column;
-      margin-bottom: 186rpx;
-
-      .b-top {
+      .package-cast {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 88rpx;
-        margin: 0 20rpx;
-        border-bottom: 2rpx solid $spLine-color;
+        margin: 20rpx;
 
         span {
           font-size: 28rpx;
@@ -874,110 +748,288 @@
         }
       }
 
-      .b-mid {
+      .delivery-cast {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 88rpx;
-        margin: 0 20rpx;
-        border-bottom: 2rpx solid $spLine-color;
+        margin: 0rpx 20rpx;
 
-        .mid-l {
+        span {
           font-size: 28rpx;
           color: $textBlack-color;
         }
+      }
 
-        .mid-r {
+      .discount {
+        display: flex;
+        margin: 20rpx;
+        flex-direction: column;
+
+        .item {
           display: flex;
           align-items: center;
+          margin-top: 10rpx;
 
-          span {
-            font-size: 28rpx;
-            color: $textDarkGray-color;
+          img {
+            width: 30rpx;
+            height: 30rpx;
           }
 
-          i {
+          .name {
             font-size: 28rpx;
-            color: $textGray-color;
+            color: $textDarkGray-color;
+            flex: 1;
             margin-left: 10rpx;
+          }
+
+          .info {
+            font-size: 28rpx;
+            color: $mtRed-color;
           }
         }
       }
 
-      .b-btm {
+      .red-packet {
         display: flex;
-        background-color: white;
+        align-content: center;
         margin: 20rpx;
-        align-items: center;
+        justify-content: space-between;
 
-        .b-l {
+        .l {
           font-size: 28rpx;
           color: $textBlack-color;
-          flex: 1;
         }
 
-        .b-r {
+        .r {
           display: flex;
           align-items: center;
-          margin: 0 20rpx;
-          margin-right: 0;
 
-          .s-l {
+          span {
             font-size: 24rpx;
-            color: #00cb91;
-            margin: 0 10rpx;
+            color: $mtRed-color;
           }
 
-          .picker {
-            div {
-              display: flex;
-              align-items: center;
+          i {
+            font-size: 28rpx;
+            margin-left: 10rpx;
+            color: $textGray-color;
+          }
+        }
+      }
 
-              .s-r {
-                font-size: 28rpx;
-                color: $textDarkGray-color;
-                margin-right: 10rpx;
-                flex: 1;
-              }
+      .coupon {
+        display: flex;
+        align-content: center;
+        margin: 20rpx;
+        justify-content: space-between;
+
+        .l {
+          font-size: 28rpx;
+          color: $textBlack-color;
+        }
+
+        .r {
+          display: flex;
+          align-items: center;
+
+          span {
+            font-size: 24rpx;
+            color: $mtRed-color;
+          }
+
+          i {
+            font-size: 28rpx;
+            margin-left: 10rpx;
+            color: $textGray-color;
+          }
+        }
+      }
+
+      .totle-price {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin: 20rpx;
+
+        .l {
+          font-size: 24rpx;
+          color: $textDarkGray-color;
+        }
+
+        .m {
+          font-size: 28rpx;
+          color: $textBlack-color;
+          margin: 0 20rpx;
+        }
+
+        .r {
+          font-size: 28rpx;
+          color: $mtRed-color;
+        }
+      }
+    }
+  }
+
+  .privacy-c {
+    display: flex;
+    flex-direction: column;
+    height: 160rpx;
+    background-color: white;
+    margin: 20rpx;
+    justify-content: center;
+
+    .top {
+      display: flex;
+      align-items: center;
+      margin: 0 20rpx;
+
+      .t-l {
+        display: flex;
+        align-items: center;
+        flex: 1;
+
+        span {
+          font-size: 28rpx;
+          color: $textBlack-color;
+          margin: 0 10rpx;
+        }
+      }
+    }
+
+    span {
+      font-size: 20rpx;
+      color: $textDarkGray-color;
+      margin: 0 20rpx;
+    }
+  }
+
+  .bottom-c {
+    display: flex;
+    background-color: white;
+    margin: 20rpx;
+    margin-top: 0;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 186rpx;
+
+    .b-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 88rpx;
+      margin: 0 20rpx;
+      border-bottom: 2rpx solid $spLine-color;
+
+      span {
+        font-size: 28rpx;
+        color: $textBlack-color;
+      }
+    }
+
+    .b-mid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 88rpx;
+      margin: 0 20rpx;
+      border-bottom: 2rpx solid $spLine-color;
+
+      .mid-l {
+        font-size: 28rpx;
+        color: $textBlack-color;
+      }
+
+      .mid-r {
+        display: flex;
+        align-items: center;
+
+        span {
+          font-size: 28rpx;
+          color: $textDarkGray-color;
+        }
+
+        i {
+          font-size: 28rpx;
+          color: $textGray-color;
+          margin-left: 10rpx;
+        }
+      }
+    }
+
+    .b-btm {
+      display: flex;
+      background-color: white;
+      margin: 20rpx;
+      align-items: center;
+
+      .b-l {
+        font-size: 28rpx;
+        color: $textBlack-color;
+        flex: 1;
+      }
+
+      .b-r {
+        display: flex;
+        align-items: center;
+        margin: 0 20rpx;
+        margin-right: 0;
+
+        .s-l {
+          font-size: 24rpx;
+          color: #00cb91;
+          margin: 0 10rpx;
+        }
+
+        .picker {
+          div {
+            display: flex;
+            align-items: center;
+
+            .s-r {
+              font-size: 28rpx;
+              color: $textDarkGray-color;
+              margin-right: 10rpx;
+              flex: 1;
             }
           }
         }
       }
     }
+  }
 
-    .pay-btn {
+  .pay-btn {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100rpx;
+    background-color: #4eaa31;
+    justify-content: center;
+
+    .top {
       display: flex;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 100rpx;
-      background-color: #4eaa31;
-      justify-content: center;
+      height: 50rpx;
+      align-items: center;
+      margin-top: 20rpx;
 
-      .top {
-        display: flex;
-        height: 50rpx;
-        align-items: center;
-        margin-top: 20rpx;
+      .s-l {
+        font-size: 32rpx;
+        color: white;
+      }
 
-        .s-l {
-          font-size: 32rpx;
-          color: white;
-        }
+      .s-m {
+        font-size: 36rpx;
+        color: white;
+        font-weight: bold;
+        margin: 0 20rpx;
+      }
 
-        .s-m {
-          font-size: 36rpx;
-          color: white;
-          font-weight: bold;
-          margin: 0 20rpx;
-        }
-
-        .s-r {
-          font-size: 24rpx;
-          color: white;
-        }
+      .s-r {
+        font-size: 24rpx;
+        color: white;
       }
     }
   }
+}
 </style>
