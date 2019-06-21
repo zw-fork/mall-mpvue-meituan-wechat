@@ -101,7 +101,7 @@ const actions = {
     }
     refund.openid = order.uid
     if (order.status == 1 && status == 2) {
-      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, {}, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {
         wx.requestPayment({
           timeStamp: response.timeStamp,
           nonceStr: response.nonceStr,
@@ -109,6 +109,11 @@ const actions = {
           signType: response.signType,
           paySign: response.paySign,
           success(res) {
+            wx.showToast({
+              title: '支付成功!',
+              icon: 'success',
+              duration: 3000
+            })
             getFetch('/order/updateStatus/' + order.number + '/' + 2, {}, false).then(response => {
               getFetch('/order/' + order.uid, {}, false).then(response => {
                 var result = response.result || {}
@@ -133,6 +138,7 @@ const actions = {
     }
   },
   postOrderDataAction({ state, commit }, { order }) {
+    wx.showLoading({ title: '加载中...', mask: true })
     var params = { 'order': order }
     postFetch('/order/' + order.uid, order, false).then(response => {
       var user = response.result || {}
@@ -164,6 +170,11 @@ const actions = {
             })
           },
           fail(res) {
+            wx.showToast({
+              title: '取消支付!',
+              icon: 'none',
+              duration: 3000
+            })
             getFetch('/order/' + order.uid, { 'page': 1 }, false).then(response => {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
@@ -171,6 +182,7 @@ const actions = {
             wx.switchTab({ url: '/pages/orderList/main' })
           }
         })
+        wx.hideLoading()
       })
     })
   },
