@@ -102,30 +102,45 @@ const actions = {
     refund.openid = order.uid
     if (order.status == 1 && status == 2) {
       getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {
-        wx.requestPayment({
-          timeStamp: response.timeStamp,
-          nonceStr: response.nonceStr,
-          package: response.packages,
-          signType: response.signType,
-          paySign: response.paySign,
-          success(res) {
-            wx.showToast({
-              title: '支付成功!',
-              icon: 'success',
-              duration: 3000
-            })
-            getFetch('/order/updateStatus/' + order.number + '/' + 2, {}, false).then(response => {
-              getFetch('/order/' + order.uid, {}, false).then(response => {
-                var result = response.result || {}
-                commit('changeOrderDataMut', result)
-                wx.hideLoading()
+        if (response.result) {
+          wx.requestPayment({
+            timeStamp: response.result.timeStamp,
+            nonceStr: response.result.nonceStr,
+            package: response.result.packages,
+            signType: response.result.signType,
+            paySign: response.result.paySign,
+            success(res) {
+              wx.showToast({
+                title: '支付成功!',
+                icon: 'success',
+                duration: 3000
               })
+              getFetch('/order/updateStatus/' + order.number + '/' + 2, {}, false).then(response => {
+                getFetch('/order/' + order.uid, {}, false).then(response => {
+                  var result = response.result || {}
+                  commit('changeOrderDataMut', result)
+                  wx.hideLoading()
+                })
+              })
+            },
+            fail(res) {
+              wx.hideLoading()
+            }
+          })
+        } else {
+          wx.showToast({
+            title: '该订单已支付，无需重复支付!',
+            icon: 'none',
+            duration: 2000
+          })
+          getFetch('/order/updateStatus/' + order.number + '/' + 2, {}, false).then(response => {
+            getFetch('/order/' + order.uid, {}, false).then(response => {
+              var result = response.result || {}
+              commit('changeOrderDataMut', result)
+              wx.hideLoading()
             })
-          },
-          fail(res) {
-            wx.hideLoading()
-          }
-        })
+          })
+        }
       })
     } else {
       getFetch('/order/updateStatus/' + order.number + '/' + status, refund, false).then(response => {

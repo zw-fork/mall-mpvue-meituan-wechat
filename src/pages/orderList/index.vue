@@ -35,7 +35,7 @@
         </div>
         <div class="googs-c" @click="orderDetail(item)">
           <div class="goods" style="float:left;">
-            <span class="s-l">{{item.itemList[0].name}}</span>
+            <span class="s-l" v-if="item.itemList.length" >{{item.itemList[0].name}}</span>
             <span class="s-m">等{{item.itemList.length}}件商品</span>
             <span class="s-r amount">￥{{item.realFee}}</span>
           </div>
