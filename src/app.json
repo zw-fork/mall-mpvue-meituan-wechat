@@ -42,26 +42,26 @@
   "tabBar": {
     "hideTabBar": true,
     "color": "#999",
-    "selectedColor": "#000",
+    "selectedColor": "#FF4500",
     "backgroundColor": "#fff",
     "borderStyle": "black",
     "list": [{
       "pagePath": "pages/home/main",
       "text": "首页",
-      "iconPath": "static/images/icon_tabbar_home@3x.png",
-      "selectedIconPath": "static/images/icon_tabbar_home_selected@3x.png"
+      "iconPath": "static/images/home.png",
+      "selectedIconPath": "static/images/home_selected.png"
     },
     {
       "pagePath": "pages/orderList/main",
       "text": "订单",
-      "iconPath": "static/images/icon_tabbar_order@3x.png",
-      "selectedIconPath": "static/images/icon_tabbar_order_selected@3x.png"
+      "iconPath": "static/images/order.png",
+      "selectedIconPath": "static/images/order_selected.png"
     },
     {
       "pagePath": "pages/me/main",
       "text": "我的",
-      "iconPath": "static/images/icon_tabbar_mine@3x.png",
-      "selectedIconPath": "static/images/icon_tabbar_mine_selected@3x.png"
+      "iconPath": "static/images/mine.png",
+      "selectedIconPath": "static/images/mine_selected.png"
     }]
   }
 }
