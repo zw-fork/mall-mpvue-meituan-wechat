@@ -151,10 +151,10 @@ const HttpUtils = {
         wx.showNavigationBarLoading()
         isLoading ? wx.showLoading({title: '加载中...', mask: true}) : null
         const beforeRequest = new Date().getTime()
-        var token = wx.getStorageSync('token')
+        var sessionId = wx.getStorageSync('sessionId')
         const header1 = {
           'Content-Type': 'application/json',
-          'token': token
+          'sessionId': sessionId
         }
         wx.request({
           url: url,

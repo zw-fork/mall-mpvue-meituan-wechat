@@ -1,5 +1,6 @@
 /** Created by guangqiang on 2018-09-28 23:17:03 */
 import { getFetch, postFetch } from '@/network/request/HttpExtension'
+import responseCode from '@/constants/responseCode'
 
 const state = {
   result: {},
@@ -102,7 +103,7 @@ const actions = {
     refund.openid = order.uid
     if (order.status == 1 && status == 2) {
       getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {
-        if (response.result) {
+        if (response.code==200) {
           wx.requestPayment({
             timeStamp: response.result.timeStamp,
             nonceStr: response.result.nonceStr,
@@ -127,9 +128,9 @@ const actions = {
               wx.hideLoading()
             }
           })
-        } else {
+        } else if (response.code==responseCode.ORDERPAID_ERROR_CODE) {
           wx.showToast({
-            title: '该订单已支付，无需重复支付!',
+            title: response.message,
             icon: 'none',
             duration: 2000
           })
@@ -165,11 +166,11 @@ const actions = {
       commit('changeUserDataMut', user)
       getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, { shopName: order.shopInfo.addressModel.address + '-' + order.shopInfo.shopName }, false).then(response => {
         wx.requestPayment({
-          timeStamp: response.timeStamp,
-          nonceStr: response.nonceStr,
-          package: response.packages,
-          signType: response.signType,
-          paySign: response.paySign,
+          timeStamp: response.result.timeStamp,
+          nonceStr: response.result.nonceStr,
+          package: response.result.packages,
+          signType: response.result.signType,
+          paySign: response.result.paySign,
           success(res) {
             wx.showToast({
               title: '支付成功!',
