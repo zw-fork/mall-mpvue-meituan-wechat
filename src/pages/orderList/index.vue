@@ -138,8 +138,7 @@
           var openid = this.userInfo.openid;
           this.getOrderByIdAction({
             uid: openid,
-            data: item,
-            selectStatus: selectStatus
+            data: item
           });
         }
       },
