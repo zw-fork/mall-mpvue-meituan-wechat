@@ -68,5 +68,6 @@
     "scope.userLocation": {
       "desc": "应用需要获取定位权限"  
     }
-  }
+  },
+  "navigateToMiniProgramAppIdList":["wxfb86227363fd06dc"]
 }
