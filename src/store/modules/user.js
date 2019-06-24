@@ -209,10 +209,15 @@ const actions = {
   uploadImg({ state, commit }, { goodsModel }) {
     var path = `${API_URL}`
     if (goodsModel.wechat) {
+      var sessionId = wx.getStorageSync('sessionId')
       wx.uploadFile({
         url: path + '/goods/upload', //仅为示例，非真实的接口地址
         filePath: goodsModel.picture,
         name: 'file',
+        header: {
+          'Content-Type': 'application/json',
+          'sessionId': sessionId
+        },
         formData: goodsModel,
         success: function (res) {
           wx.navigateBack({ delta: 1 })

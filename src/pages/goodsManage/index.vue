@@ -4,10 +4,6 @@
       <span>商品名称：</span>
       <input placeholder="请填写商品名称" placeholder-style="font-size: 24rpx" v-model="goods.name"/>
     </div>
-    <div class="name">
-      <span>商品描述：</span>
-      <input placeholder="请填写商品描述" placeholder-style="font-size: 24rpx" v-model="goods.description"/>
-    </div>
     <div class="phone"> 
       <span>商品图片：</span>
     <div style="margin-left:150rpx;top:100rpx;margin-top:-45rpx">
@@ -34,13 +30,6 @@
         <span class="mid-l">商品状态:</span>
         <div class="mid-r" @click="showSinglePicker">
           <span>{{goods.statusName}}</span>
-          <i class="icon iconfont iconright"></i>
-        </div>
-    </div>
-    <div class="b-mid" @click="remarkClick">
-        <span class="mid-l">商品描述:</span>
-        <div class="mid-r">
-          <span>请输入商品描述信息</span>
           <i class="icon iconfont iconright"></i>
         </div>
     </div>
@@ -149,6 +138,7 @@ export default {
     })
       },
       uploadFile() {
+        debugger
         this.goods.shopId = this.userInfo.shopId
         this.goods.shopName = this.userInfo.shopName
         this.goods.goodsPrice = parseFloat(this.goods.goodsPrice)
