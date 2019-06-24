@@ -206,6 +206,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions("user", ["wxLocation"]),
     update() {
       if (!this.show) {
         this.showEdit = false;
@@ -233,17 +234,18 @@ export default {
     },
     locationSearchClick() {
       debugger;
-      this.qqmapsdk.search({
-        keyword: "酒店",
-        success(res) {
-          console.log(`res:`, res);
-          debugger;
-        },
-        fail(res) {
-          console.log(`res:`, res);
-          debugger;
-        }
-      });
+      this.wxLocation()
+      // this.qqmapsdk.search({
+      //   keyword: "酒店",
+      //   success(res) {
+      //     console.log(`res:`, res);
+      //     debugger;
+      //   },
+      //   fail(res) {
+      //     console.log(`res:`, res);
+      //     debugger;
+      //   },
+      // });
     },
     logoutClick(e) {
       wx.getSystemInfo({

@@ -165,23 +165,28 @@ const actions = {
             icon: 'success',
             duration: 1000
           })
-          wx.getLocation({
-            type: 'wgs84',
+          wx.chooseLocation({
             success: function (res) {
-              wx.openLocation({
-                latitude: res.latitude,
-                longitude: res.longitude,
-                scale: 18,
-                success: function (res) {
-                  wx.chooseLocation({
-                    success: function (res) {
-                      console.log(res)
-                    }
-                  })
-                }
-              })
+              console.log(res)
             }
           })
+          // wx.getLocation({
+          //   type: 'wgs84',
+          //   success: function (res) {
+          //     wx.openLocation({
+          //       latitude: res.latitude,
+          //       longitude: res.longitude,
+          //       scale: 18,
+          //       success: function (res) {
+          //         wx.chooseLocation({
+          //           success: function (res) {
+          //             console.log(res)
+          //           }
+          //         })
+          //       }
+          //     })
+          //   }
+          // })
         }
       }
     })

@@ -2,42 +2,18 @@
   <div class="container" v-if="reFresh">
     <div class="name" style="height: 65rpx;">
       <span>店铺名称：</span>
-      <input
-        maxlength="20"
-        placeholder="请填写商品名称(20字内)"
-        placeholder-style="font-size: 24rpx"
-        v-model="shop.shopName"
-      >
+      <input maxlength="20" placeholder="请填写商品名称(20字内)" placeholder-style="font-size: 24rpx" v-model="shop.shopName">
     </div>
     <div class="name">
       <span>电话：</span>
       <div>
         <div class="tel" v-if="shop.tel.length>0" v-for="(item, index) in shop.tel" :key="index">
-          <input
-            type="number"
-            placeholder="请填写手机号码"
-            placeholder-style="font-size: 24rpx"
-            v-model="shop.tel[index]"
-            maxlength="11"
-          >
-          <i
-            v-if="(index==shop.tel.length-1) && shop.tel[index]"
-            style="margin-left:30rpx;font-size: 32rpx"
-            @click="createTel()"
-            class="icon iconfont iconadd"
-          ></i>
-          <i
-            @click="deleteTel(index)"
-            class="icon mt-delete-o"
-            style="margin-left:30rpx;font-size: 30rpx"
-          ></i>
+          <input type="number" placeholder="请填写手机号码" placeholder-style="font-size: 24rpx" v-model="shop.tel[index]" maxlength="11">
+          <i v-if="(index==shop.tel.length-1) && shop.tel[index]" style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
+          <i @click="deleteTel(index)" class="icon mt-delete-o" style="margin-left:30rpx;font-size: 30rpx"></i>
         </div>
         <div class="tel" v-if="!shop.tel || shop.tel.length==0">
-          <i
-            style="margin-left:30rpx;font-size: 32rpx"
-            @click="createTel()"
-            class="icon iconfont iconadd"
-          ></i>
+          <i style="margin-left:30rpx;font-size: 32rpx" @click="createTel()" class="icon iconfont iconadd"></i>
         </div>
       </div>
     </div>
@@ -52,6 +28,13 @@
       <span>店铺地址：</span>
       <input placeholder="请输入店铺地址" placeholder-style="font-size: 24rpx" v-model="shop.address">
     </div>
+    <div class="b-mid">
+      <span class="mid-l">店铺地址:</span>
+      <div class="mid-r" @click="updateWxAddress">
+        <span v-if="shop.wxAddress">{{shop.wxAddress.name}}</span>
+        <i class="icon iconfont iconright"></i>
+      </div>
+    </div>
     <div class="b-mid" @click="remarkClick" v-if="shop.shopId">
       <span class="mid-l">商店状态:</span>
       <div class="mid-r" @click="showSinglePicker">
@@ -62,54 +45,48 @@
     <div class="submit-btn" @click="updateShop">
       <span>保存</span>
     </div>
-    <mp-picker
-      ref="mpvuePicker"
-      :mode="mode"
-      :deepLength="deepLength"
-      :pickerValueDefault="pickerValueDefault"
-      @onChange="onChange"
-      @onConfirm="onConfirm"
-      @onCancel="onCancel"
-      :pickerValueArray="pickerValueArray"
-    ></mp-picker>
+    <mp-picker ref="mpvuePicker" :mode="mode" :deepLength="deepLength" :pickerValueDefault="pickerValueDefault" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mp-picker>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import mpButton from "mpvue-weui/src/button";
-import mpPicker from "mpvue-weui/src/picker";
-import inputDialog from "@/components/inputDialog";
-import mpUploader from "mpvue-weui/src/uploader";
-import { getFetch, postFetch } from "@/network/request/HttpExtension";
-import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
+  import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+  import mpButton from "mpvue-weui/src/button";
+  import mpPicker from "mpvue-weui/src/picker";
+  import inputDialog from "@/components/inputDialog";
+  import mpUploader from "mpvue-weui/src/uploader";
+  import { getFetch, postFetch } from "@/network/request/HttpExtension";
+  import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 
-export default {
-  components: {
-    mpButton,
-    mpPicker,
-    mpUploader,
-    inputDialog
-  },
-  data() {
-    return {
-      reFresh: true,
-      shop: {
-        statusName: undefined,
-        status: undefined,
-        communityName: undefined,
-        communityId: undefined,
-        tel: []
-      },
-      showCategory: false,
-      pickerValueArray: [], // picker 数组值
-      pickerValueDefault: [], // 初始化值
-      active: false,
-      clazzA: "icon mt-selected-o",
-      styleA: "color: #F9D173",
-      clazzB: "icon mt-unselected-o",
-      styleB: "color: #333",
-      statusArray: [
+  export default {
+    components: {
+      mpButton,
+      mpPicker,
+      mpUploader,
+      inputDialog
+    },
+    data() {
+      return {
+        reFresh: true,
+        shop: {
+          statusName: undefined,
+          status: undefined,
+          communityName: undefined,
+          communityId: undefined,
+          tel: [],
+          wxAddress: {
+            name : undefined
+          }
+        },
+        showCategory: false,
+        pickerValueArray: [], // picker 数组值
+        pickerValueDefault: [], // 初始化值
+        active: false,
+        clazzA: "icon mt-selected-o",
+        styleA: "color: #F9D173",
+        clazzB: "icon mt-unselected-o",
+        styleB: "color: #333",
+        statusArray: [
         {
           label: "打烊",
           value: 0
@@ -121,316 +98,367 @@ export default {
         {
           label: "停业",
           value: 2
-        }
-      ],
-      type: undefined,
-      img: undefined,
-      category: undefined
-    };
-  },
-  computed: {
-    ...mapState("address", ["myAddress"]),
-    ...mapState("user", ["userInfo"]),
-    path() {
-      return `${GOODS_URL_PREFIX}`;
-    }
-  },
-  methods: {
-    ...mapActions("user", ["uploadImg"]),
-    ...mapActions("shop", ["createShop"]),
-    addressClick() {
-      wx.navigateTo({ url: "/pages/selectAddress/main" });
-    },
-    createTel() {
-      if (!this.shop.tel) {
-        this.shop.tel = [];
-      }
-      this.shop.tel.push(null);
-    },
-    deleteTel(index) {
-      this.shop.tel.splice(index, 1);
-    },
-    deleteImg() {
-      this.goods.picture = undefined;
-    },
-    createCategory() {
-      wx.navigateTo({ url: "/pages/categoryManage/main" });
-    },
-    onConfirm(e) {
-      if (this.type == "status") {
-        this.goods.status = e.value[0];
-        this.goods.statusName = e.label;
-      } else {
-        this.goods.categoryName = e.label;
-        this.goods.categoryId = e.value[0];
-      }
-      console.log(this.goods.categoryName);
-    },
-    updateShop() {
-      if (!this.shop.shopName) {
-        wx.showToast({
-          title: "店铺名称不能为空!",
-          icon: 'none',
-          duration: 1000
-        });
-        return;
-      }
-      this.createShop({ shop: this.shop });
-    },
-    showSinglePicker() {
-      this.pickerValueArray = this.statusArray;
-      this.mode = "selector";
-      this.type = "status";
-      this.pickerValueDefault = [];
-      this.$refs.mpvuePicker.show();
-    }
-  },
-  onLoad(options) {
-    if (this.userInfo.shopId) {
-      wx.showLoading({ title: "加载中...", mask: true });
-      getFetch("/shop/" + this.userInfo.shopId, {}, false).then(response => {
-        this.shop = response.result;
-        for (var index in this.statusArray) {
-          if (this.shop.status == this.statusArray[index].value) {
-            this.shop.statusName = this.statusArray[index].label;
-          }
-        }
-        wx.hideLoading();
-      });
-    } else {
-      this.shop = {
-        statusName: undefined,
-        status: undefined,
-        tel: []
+        }],
+        type: undefined,
+        img: undefined,
+        category: undefined
       };
+    },
+    computed: {
+      ...mapState("address", ["myAddress"]),
+      ...mapState("user", ["userInfo"]),
+      path() {
+        return `${GOODS_URL_PREFIX}`;
+      }
+    },
+    methods: {
+      ...mapActions("user", ["uploadImg"]),
+      ...mapActions("shop", ["createShop"]),
+      ...mapActions("user", ["wxLocation"]),
+      updateWxAddress() {
+        var that = this
+        wx.chooseLocation({
+          success: function (res) {
+            that.shop.wxAddress = res
+          }
+        })
+      },
+      addressClick() {
+        wx.navigateTo({ url: "/pages/selectAddress/main" });
+      },
+      createTel() {
+        if (!this.shop.tel) {
+          this.shop.tel = [];
+        }
+        this.shop.tel.push(null);
+      },
+      deleteTel(index) {
+        this.shop.tel.splice(index, 1);
+      },
+      deleteImg() {
+        this.goods.picture = undefined;
+      },
+      createCategory() {
+        wx.navigateTo({ url: "/pages/categoryManage/main" });
+      },
+      onConfirm(e) {
+        if (this.type == "status") {
+          this.goods.status = e.value[0];
+          this.goods.statusName = e.label;
+        } else {
+          this.goods.categoryName = e.label;
+          this.goods.categoryId = e.value[0];
+        }
+        console.log(this.goods.categoryName);
+      },
+      updateShop() {
+        if (!this.shop.shopName) {
+          wx.showToast({
+            title: "店铺名称不能为空!",
+            icon: 'none',
+            duration: 1000
+          });
+          return;
+        }
+        this.createShop({ shop: this.shop });
+      },
+      showSinglePicker() {
+        this.pickerValueArray = this.statusArray;
+        this.mode = "selector";
+        this.type = "status";
+        this.pickerValueDefault = [];
+        this.$refs.mpvuePicker.show();
+      }
+    },
+    onLoad(options) {
+      if (this.userInfo.shopId) {
+        wx.showLoading({ title: "加载中...", mask: true });
+        getFetch("/shop/" + this.userInfo.shopId, {}, false).then(response => {
+          this.shop = response.result;
+          for (var index in this.statusArray) {
+            if (this.shop.status == this.statusArray[index].value) {
+              this.shop.statusName = this.statusArray[index].label;
+            }
+          }
+          wx.hideLoading();
+        });
+      } else {
+        this.shop = {
+          statusName: undefined,
+          status: undefined,
+          tel: []
+        };
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-.tel {
-  height: 65rpx;
-  align-items: center;
-  display: flex;
-}
-.deleteImg {
-  height: 30rpx;
-  width: 30rpx;
-  right: 35rpx;
-  top: -120rpx;
-  position: relative;
-}
-.choosed-img {
-  margin-left: 20rpx;
-  height: 150rpx;
-  width: 150rpx;
-}
-.b-mid {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 65rpx;
-  margin-left: 30rpx;
-  padding-right: 30rpx;
-  border-bottom: 2rpx solid $spLine-color;
-  .mid-l {
-    font-size: 28rpx;
-    color: $textBlack-color;
+  .tel {
+    height: 65rpx;
+    align-items: center;
+    display: flex;
+  }
+
+  .deleteImg {
+    height: 30rpx;
+    width: 30rpx;
+    right: 35rpx;
+    top: -120rpx;
+    position: relative;
+  }
+
+  .choosed-img {
+    margin-left: 20rpx;
+    height: 150rpx;
+    width: 150rpx;
+  }
+
+  .b-mid {
     display: flex;
     align-items: center;
-    span {
+    justify-content: space-between;
+    height: 65rpx;
+    margin-left: 30rpx;
+    padding-right: 30rpx;
+    border-bottom: 2rpx solid $spLine-color;
+
+    .mid-l {
       font-size: 28rpx;
-      color: $textDarkGray-color;
+      color: $textBlack-color;
+      display: flex;
+      align-items: center;
+
+      span {
+        font-size: 28rpx;
+        color: $textDarkGray-color;
+      }
+
+      i {
+        font-size: 32rpx;
+        color: $textGray-color;
+        margin-left: 30rpx;
+      }
     }
-    i {
-      font-size: 32rpx;
-      color: $textGray-color;
-      margin-left: 30rpx;
-    }
-  }
-  .mid-m {
-    font-size: 28rpx;
-    padding-right: 30rpx;
-  }
-  .mid-r {
-    display: flex;
-    align-items: center;
-    span {
+
+    .mid-m {
       font-size: 28rpx;
-      color: $textDarkGray-color;
+      padding-right: 30rpx;
     }
-    i {
-      font-size: 28rpx;
-      color: $textGray-color;
-      margin-left: 10rpx;
-    }
-  }
-}
-input {
-  font-size: 28rpx;
-}
-.container {
-  background-color: white;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  .name {
-    display: flex;
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    .r {
+
+    .mid-r {
       display: flex;
-      margin-left: 60rpx;
-      i {
-        font-size: 38rpx;
-        color: $textGray-color;
-      }
+      align-items: center;
+
       span {
-        font-size: 32rpx;
-        color: $textBlack-color;
-        margin-left: 20rpx;
+        font-size: 28rpx;
+        color: $textDarkGray-color;
       }
-    }
-    .m {
-      display: flex;
-      i {
-        font-size: 32rpx;
-        color: $theme-color;
-      }
-      span {
-        font-size: 32rpx;
-        color: $textBlack-color;
-        margin-left: 20rpx;
-      }
-    }
-    span {
-      font-size: 32rpx;
-      color: $textBlack-color;
-      width: 160rpx;
-    }
-    input {
-      flex: 2;
-    }
-  }
-  .sex {
-    display: flex;
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    height: 88rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    .l {
-      width: 160rpx;
-    }
-    .m {
-      display: flex;
-      i {
-        font-size: 32rpx;
-        color: $theme-color;
-      }
-      span {
-        font-size: 32rpx;
-        color: $textBlack-color;
-        margin-left: 20rpx;
-      }
-    }
-    .r {
-      display: flex;
-      margin-left: 60rpx;
-      i {
-        font-size: 38rpx;
-        color: $textGray-color;
-      }
-      span {
-        font-size: 32rpx;
-        color: $textBlack-color;
-        margin-left: 20rpx;
-      }
-    }
-  }
-  .phone {
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    height: 180rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    span {
-      font-size: 32rpx;
-      color: $textBlack-color;
-      width: 160rpx;
-    }
-    input {
-      flex: 1;
-    }
-  }
-  .address {
-    display: flex;
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    height: 88rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    .l {
-      font-size: 32rpx;
-      color: $textBlack-color;
-      width: 160rpx;
-    }
-    .m {
-      display: flex;
-      flex: 1;
-      i {
-        font-size: 38rpx;
-        color: $textGray-color;
-      }
-      span {
-        font-size: 32rpx;
-        margin-right: 10rpx;
-        margin-top: 10rpx;
-      }
-    }
-    .r {
+
       i {
         font-size: 28rpx;
         color: $textGray-color;
+        margin-left: 10rpx;
       }
     }
   }
-  .house-num {
-    display: flex;
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    height: 88rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    span {
-      font-size: 28rpx;
-      color: $textBlack-color;
-      width: 160rpx;
-    }
-    input {
-      flex: 1;
-    }
+
+  input {
+    font-size: 28rpx;
   }
-  .submit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 88rpx;
-    color: white;
-    background-color: $theme-color;
-    border-top: 2rpx solid  $spLine-color;
+
+  .container {
+    background-color: white;
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
-    span {
-      font-size: 32rpx;
+    bottom: 0;
+
+    .name {
+      display: flex;
+      align-items: center;
+      margin-left: 30rpx;
+      padding-right: 30rpx;
+      border-bottom: 2rpx solid $spLine-color;
+
+      .r {
+        display: flex;
+        margin-left: 60rpx;
+
+        i {
+          font-size: 38rpx;
+          color: $textGray-color;
+        }
+
+        span {
+          font-size: 32rpx;
+          color: $textBlack-color;
+          margin-left: 20rpx;
+        }
+      }
+
+      .m {
+        display: flex;
+
+        i {
+          font-size: 32rpx;
+          color: $theme-color;
+        }
+
+        span {
+          font-size: 32rpx;
+          color: $textBlack-color;
+          margin-left: 20rpx;
+        }
+      }
+
+      span {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        width: 160rpx;
+      }
+
+      input {
+        flex: 2;
+      }
+    }
+
+    .sex {
+      display: flex;
+      align-items: center;
+      margin-left: 30rpx;
+      padding-right: 30rpx;
+      height: 88rpx;
+      border-bottom: 2rpx solid $spLine-color;
+
+      .l {
+        width: 160rpx;
+      }
+
+      .m {
+        display: flex;
+
+        i {
+          font-size: 32rpx;
+          color: $theme-color;
+        }
+
+        span {
+          font-size: 32rpx;
+          color: $textBlack-color;
+          margin-left: 20rpx;
+        }
+      }
+
+      .r {
+        display: flex;
+        margin-left: 60rpx;
+
+        i {
+          font-size: 38rpx;
+          color: $textGray-color;
+        }
+
+        span {
+          font-size: 32rpx;
+          color: $textBlack-color;
+          margin-left: 20rpx;
+        }
+      }
+    }
+
+    .phone {
+      align-items: center;
+      margin-left: 30rpx;
+      padding-right: 30rpx;
+      height: 180rpx;
+      border-bottom: 2rpx solid $spLine-color;
+
+      span {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        width: 160rpx;
+      }
+
+      input {
+        flex: 1;
+      }
+    }
+
+    .address {
+      display: flex;
+      align-items: center;
+      margin-left: 30rpx;
+      padding-right: 30rpx;
+      height: 88rpx;
+      border-bottom: 2rpx solid $spLine-color;
+
+      .l {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        width: 160rpx;
+      }
+
+      .m {
+        display: flex;
+        flex: 1;
+
+        i {
+          font-size: 38rpx;
+          color: $textGray-color;
+        }
+
+        span {
+          font-size: 32rpx;
+          margin-right: 10rpx;
+          margin-top: 10rpx;
+        }
+      }
+
+      .r {
+        i {
+          font-size: 28rpx;
+          color: $textGray-color;
+        }
+      }
+    }
+
+    .house-num {
+      display: flex;
+      align-items: center;
+      margin-left: 30rpx;
+      padding-right: 30rpx;
+      height: 88rpx;
+      border-bottom: 2rpx solid $spLine-color;
+
+      span {
+        font-size: 28rpx;
+        color: $textBlack-color;
+        width: 160rpx;
+      }
+
+      input {
+        flex: 1;
+      }
+    }
+
+    .submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 88rpx;
+      color: white;
+      background-color: $theme-color;
+      border-top: 2rpx solid $spLine-color;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      span {
+        font-size: 32rpx;
+      }
     }
   }
-}
 </style>
