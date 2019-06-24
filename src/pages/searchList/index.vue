@@ -23,7 +23,6 @@
             </div>
             <div class="item-r">
               <span class="title">{{item.name}}</span>
-              <span class="sub-title">{{item.description}}</span>
               <span class="sale-num" v-if="false">{{item.month_saled_content}} {{item.praise_content}}</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
@@ -66,7 +65,7 @@
               </span>
               <span class="cart_num">{{item.sequence}}</span>
               <div @click.stop="addClick(item, item.index, item.categoryIndex)">
-                <i class="icon iconfont iconplus-circle" style="color: #F9D173;font-size: 52rpx;"></i>
+                <i class="icon iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
               </div>
             </section>
           </li>
@@ -83,8 +82,8 @@
             <span class="l-r">小区内配送</span>
           </div>
         </div>
-        <div class="m-r" :style="{'background-color': btnTitle === '去结算' ? '#F0D179' : '#969696'}" @click="orderClick">
-          <span :style="{color: btnTitle === '去结算' ? '#333' : '#ffffff'}">{{btnTitle}}</span>
+        <div class="m-r" :style="{'background-color': btnTitle === '去结算' ? '#FF6347' : '#969696'}" @click="orderClick">
+          <span :style="{color: btnTitle === '去结算' ? '#FFFFFF' : '#ffffff'}">{{btnTitle}}</span>
         </div>
       </div>
       <div class="cart-c">
@@ -817,7 +816,7 @@
 
                   .add-r {
                     i {
-                      color: $theme-color;
+                      color: #FF6347;
                       font-size: 54rpx;
                     }
                   }

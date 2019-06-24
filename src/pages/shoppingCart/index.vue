@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="!shopId || shopId == shopInfo.shopId">
     <div class="header-c">
       <div class="header">
         <div class="h-l">
@@ -48,7 +48,6 @@
             <div class="item-r">
               <span class="title">{{item.name}}</span>
               <span class="sub-title">已售1234件</span>
-              <span class="sub-title">{{item.description}}</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
                 <div class="add-item">
@@ -148,6 +147,8 @@
   export default {
     data() {
       return {
+        shopId: undefined,
+        show:false,
         scrollTop: undefined,
         showCart: false,
         tagIndex: 0,
@@ -391,16 +392,16 @@
     {
       this.pageIndex = 0
       var that = this
-      var shopId = options.shopId;
+      this.shopId = options.shopId;
       var update = false
       this.showCart = false
       if (options.update == 'true') {
         update = true
       }
-      if (shopId != this.shopInfo.shopId) {
+      if (this.shopId != this.shopInfo.shopId) {
         this.tagIndex = 0
       }
-      this.getMenuDataAction({ shopId: shopId, index: this.tagIndex, flag: update })
+      this.getMenuDataAction({ shopId: this.shopId, index: this.tagIndex, flag: update })
     },
     onShareAppMessage: function () {
       return {

@@ -55,7 +55,6 @@
               </div>
               <div class="item-r">
                 <span class="title">{{item.name}}</span>
-                <span class="sub-title">{{item.description}}</span>
                 <span
                   class="sale-num"
                   v-if="false"
