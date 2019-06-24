@@ -4,7 +4,7 @@
       <span>分类名称：</span>
       <input placeholder="请填写分类名称" placeholder-style="font-size: 24rpx" v-model="name"/>
     </div>
-    <div class="submit" @click="createCategory2">
+    <div class="submit-btn" @click="createCategory2">
       <span>保存</span>
     </div>
     <mp-picker ref="mpvuePicker" :mode="mode" :deepLength=deepLength :pickerValueDefault="pickerValueDefault" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mp-picker>

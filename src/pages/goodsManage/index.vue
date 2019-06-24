@@ -33,7 +33,7 @@
           <i class="icon iconfont iconright"></i>
         </div>
     </div>
-    <div class="submit" @click="uploadFile">
+    <div class="submit-btn" @click="uploadFile">
       <span>保存</span>
     </div>
     <mp-picker ref="mpvuePicker" :mode="mode" :deepLength=deepLength :pickerValueDefault="pickerValueDefault" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mp-picker>
@@ -138,7 +138,6 @@ export default {
     })
       },
       uploadFile() {
-        debugger
         this.goods.shopId = this.userInfo.shopId
         this.goods.shopName = this.userInfo.shopName
         this.goods.goodsPrice = parseFloat(this.goods.goodsPrice)

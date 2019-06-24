@@ -12,7 +12,7 @@
         <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
       </div>
     </div>
-    <div class="add-btn" @click="addClick()" v-if="shopInfo.communityId">
+    <div class="submit-btn" @click="addClick()" v-if="shopInfo.communityId">
       <i class="icon iconfont iconplus-circle"></i>
       <span>新增收货地址</span>
     </div>
@@ -137,7 +137,7 @@ clearLoop(addressId) {
     align-items: center;
     justify-content: center;
     height: 88rpx;
-    background-color: white;
+    background-color: $theme-color;
     border-top: 2rpx solid  $spLine-color;
     position: fixed;
     bottom: 0;

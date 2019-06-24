@@ -41,7 +41,7 @@
              placeholder-style="font-size: 24rpx"
              v-model="item.house_number" />
     </div>
-    <div class="submit"
+    <div class="submit-btn"
          @click="saveAddress">
       <span>保存地址</span>
     </div>
