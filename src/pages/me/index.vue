@@ -115,6 +115,8 @@
         </div>
       </div>
       <div></div>
+      <div class="btn" @click="locationSearchClick()">位置信息</div>
+      <div class="btn" @click="locationClick()">获取当前位置</div>
       <div class="btn" @click="logoutClick($event)">退出账号</div>
     </div>
   </div>
@@ -124,10 +126,12 @@
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { homeData } from "./data";
 import { getFetch } from "@/network/request/HttpExtension";
+import QQMapWX from "qqmap-wx-jssdk";
 
 export default {
   data() {
     return {
+      qqmapsdk: undefined,
       orderCount: [],
       show: false,
       showEdit: false,
@@ -212,6 +216,35 @@ export default {
     itemClick(e) {
       wx.navigateTo({ url: e.path });
     },
+    locationClick() {
+      debugger;
+      //app.json添加权限描述，否则发生 getLocation:fail:require permission desc
+      wx.getLocation({
+        type: "wgs84",
+        success(res) {
+          console.log(`res:`, res);
+          debugger;
+        },
+        fail(res) {
+          console.log(`res:`, res);
+          debugger;
+        }
+      });
+    },
+    locationSearchClick() {
+      debugger;
+      this.qqmapsdk.search({
+        keyword: "酒店",
+        success(res) {
+          console.log(`res:`, res);
+          debugger;
+        },
+        fail(res) {
+          console.log(`res:`, res);
+          debugger;
+        }
+      });
+    },
     logoutClick(e) {
       wx.getSystemInfo({
         success(system) {
@@ -242,6 +275,11 @@ export default {
         this.orderCount.push(count.退款);
       });
     }
+  },
+  onLoad(options) {
+    this.qqmapsdk = new QQMapWX({
+      key: "2TRBZ-W426X-UEN4V-TVLRM-OP4OT-2XBCL"
+    });
   }
 };
 </script>

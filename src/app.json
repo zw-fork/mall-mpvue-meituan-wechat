@@ -63,5 +63,10 @@
       "iconPath": "static/images/mine.png",
       "selectedIconPath": "static/images/mine_selected.png"
     }]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "应用需要获取定位权限"  
+    }
   }
 }
