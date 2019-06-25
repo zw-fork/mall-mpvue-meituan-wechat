@@ -5,6 +5,7 @@
     "pages/shoppingCart/main",
     "pages/submitOrder/main",
     "pages/me/main",
+    "pages/map/main",
     "pages/error/main",
     "pages/expiredRedPacket/main",
     "pages/expiredCoupon/main",
