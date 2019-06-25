@@ -6,7 +6,7 @@
           <i style="font-size:80rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu"></i>
         </div>
         <div class="h-r">
-          <span class="r-l">地址: {{shopInfo.address}}</span>
+          <span class="r-l" @click="openLocation">地址: {{shopInfo.wxAddress.address}}</span>
           <div class="r-t">
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
@@ -68,7 +68,7 @@
     <div class="shop-info" v-else-if="pageIndex === 1">
       <div class="address">
         <i class="icon mt-location-o"></i>
-        <span>{{shopInfo.address}}</span>
+        <span>{{shopInfo.wxAddress.address}}</span>
         <i class="icon mt-phone-o" @click.stop="clickCall()"></i>
       </div>
       <div class="delivery">
@@ -242,6 +242,14 @@
       ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
       ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
       ...mapActions("submitOrder", ["createOrderDetailAction"]),
+      openLocation() {
+        var shop = this.shopInfo
+        wx.openLocation({
+          latitude: Number(shop.wxAddress.latitude),
+          longitude: Number(shop.wxAddress.longitude),
+          scale: 28
+        })
+      },
       clickCall() {
         var tel = this.shopInfo.tel
         wx.showActionSheet({
