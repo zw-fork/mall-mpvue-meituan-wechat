@@ -31,7 +31,7 @@
                 <div class="m-m"></div>
                 <span class="m-r">营业时间: 全天</span>
                 <div class="m-m"></div>
-                <span class="m-r">距离：{{item.distance}}</span>
+                <span class="m-r">距离：{{item.distance}}km</span>
               </div>
               <div class="r-m">
                 <span class="m-l">地址：{{item.wxAddress.address}}</span>
@@ -94,7 +94,7 @@ export default {
           {
             longitude: res.result.location.lng,
             latitude: res.result.location.lat,
-            dis: 30
+            dis: 3
           },
           false
         ).then(response => {
