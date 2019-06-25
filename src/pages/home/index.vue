@@ -3,16 +3,24 @@
     <div class="content">
       <div class="header-c">
         <div class="header-l" @click="addressClick">
-          <i class="icon iconfont iconlocation" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
-          <span>{{userInfo.addressModel? userInfo.addressModel.address : '请选择小区...'}}</span>
+          <i
+            class="icon iconfont iconlocation"
+            :style="{color: '#434343', 'font-size': 38 + 'rpx'}"
+          ></i>
+          <span>{{address}}</span>
           <i class="icon iconfont icondown" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
         </div>
       </div>
       <div class="category-list">
         <scroll-view class="item-list" :scroll-y="true">
-          <div class="item" v-for="(item, index) in shopList" :key="index" @click="shoppingCartClick(item.shopId)">
+          <div
+            class="item"
+            v-for="(item, index) in shopList"
+            :key="index"
+            @click="shoppingCartClick(item.shopId)"
+          >
             <div class="item-l">
-             <i style="font-size:80rpx;color:#d81e06;" class="icon iconfont icondianpu"></i>
+              <i style="font-size:80rpx;color:#d81e06;" class="icon iconfont icondianpu"></i>
             </div>
             <div class="item-r">
               <div class="r-t">
@@ -28,9 +36,11 @@
               </div>
             </div>
           </div>
-          <div v-if="shopList.length < 1" class="item" style="display: flex;justify-content: center;align-items: center;top:40%">
-            当前地址无商铺信息!
-          </div>
+          <div
+            v-if="shopList.length < 1"
+            class="item"
+            style="display: flex;justify-content: center;align-items: center;top:40%"
+          >当前地址无商铺信息!</div>
         </scroll-view>
       </div>
     </div>
@@ -38,73 +48,86 @@
 </template>
 
 <script>
-import {queryHomeHeadCategory} from '@/action/action'
+import { queryHomeHeadCategory } from "@/action/action";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import {getFetch} from '@/network/request/HttpExtension'
+import { getFetch } from "@/network/request/HttpExtension";
+import QQMapWX from "qqmap-wx-jssdk";
 
 export default {
   data() {
     return {
+      address: undefined
     };
   },
   methods: {
     ...mapActions("user", ["wxLocation"]),
     ...mapActions("shop", ["getShopListDataAction"]),
-    lower(e) {
-    },     
+    lower(e) {},
     upper1(e) {
-      var communityId = this.userInfo.addressModel.communityId
+      var communityId = this.userInfo.addressModel.communityId;
       if (communityId) {
-        wx.showLoading({title: '加载中...', mask: true})
-        getFetch('/shop/list/' + communityId, {}, false).then(response => {
-          this.shopList = response.result.list
-          wx.hideLoading()
-        })
+        wx.showLoading({ title: "加载中...", mask: true });
+        getFetch("/shop/list/" + communityId, {}, false).then(response => {
+          this.shopList = response.result.list;
+          wx.hideLoading();
+        });
       }
     },
     categoryClick() {
-      wx.navigateTo({url: '/pages/categoryList/main'})
+      wx.navigateTo({ url: "/pages/categoryList/main" });
     },
     addressClick() {
-      wx.navigateTo({url: '/pages/selectAddress/main'})
+      wx.navigateTo({ url: "/pages/selectAddress/main" });
     },
     searchClick() {
-      this.wxLocation()
-    //  wx.navigateTo({url: '/pages/searchList/main'})
+      this.wxLocation();
+      //  wx.navigateTo({url: '/pages/searchList/main'})
     },
     shoppingCartClick(shopId) {
-      wx.navigateTo({url: '/pages/shoppingCart/main?shopId=' + shopId})
+      wx.navigateTo({ url: "/pages/shoppingCart/main?shopId=" + shopId });
     }
   },
   computed: {
     ...mapState("user", ["userInfo"]),
-    ...mapState("shop", ["shopList"]),
+    ...mapState("shop", ["shopList"])
   },
   mounted() {
-    var addressModel = this.userInfo.addressModel
+    var addressModel = this.userInfo.addressModel;
     if (addressModel) {
-      var communityId = addressModel.communityId
+      var communityId = addressModel.communityId;
       if (communityId) {
-        this.getShopListDataAction({communityId})
-      } 
-    }
-  },
-  onLoad(options) 
-  {
-    this.shopsList = undefined
-    var addressModel = this.userInfo.addressModel
-    if (addressModel) {
-      var communityId=addressModel.communityId;
-      if (communityId) {
-        this.getShopListDataAction({communityId})
-    }
-    }
-  },
-  onPullDownRefresh: function () {
-     var communityId = this.userInfo.addressModel.communityId
-      if (communityId) {
-        this.getShopListDataAction({communityId})
+        this.getShopListDataAction({ communityId });
       }
+    }
+  },
+  onLoad(options) {
+    this.qqmapsdk = new QQMapWX({
+      key: "2TRBZ-W426X-UEN4V-TVLRM-OP4OT-2XBCL"
+    });
+    var that = this
+    this.qqmapsdk.reverseGeocoder({
+      success(res) {
+        that.address = res.result.address
+        console.log(`res:`, res);
+      },
+      fail(res) {
+        console.log(`res:`, res);
+      }
+    });
+    this.shopsList = undefined;
+    var addressModel = this.userInfo.addressModel;
+    if (addressModel) {
+      var communityId = addressModel.communityId;
+      if (communityId) {
+        this.getShopListDataAction({ communityId });
+      }
+    }
+  },
+  onPullDownRefresh: function() {
+    var communityId = this.userInfo.addressModel.communityId;
+    if (communityId) {
+      this.getShopListDataAction({ communityId });
+    }
   }
 };
 </script>
@@ -141,7 +164,7 @@ export default {
         align-items: center;
         flex: 1;
         background-color: $page-bgcolor;
-        height: 60rpx;;
+        height: 60rpx;
         border-radius: 30rpx;
         margin-left: 30rpx;
         align-items: center;
@@ -320,7 +343,7 @@ export default {
         position: fixed;
         top: 70rpx;
         bottom: 0rpx;
-        width:100%;
+        width: 100%;
         background-color: white;
         .header {
           display: flex;
@@ -331,7 +354,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #F8F8F8;
+            background-color: #f8f8f8;
             flex: 1;
             margin-left: 20rpx;
             padding: 10rpx 0;
@@ -445,9 +468,9 @@ export default {
               align-items: center;
               margin-top: 10rpx;
               .b-l {
-                color: #09CFB5;
+                color: #09cfb5;
                 font-size: 20rpx;
-                border: 2rpx solid #09CFB5;
+                border: 2rpx solid #09cfb5;
                 text-align: center;
                 padding: 0 8rpx;
               }
