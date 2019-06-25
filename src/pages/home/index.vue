@@ -30,9 +30,11 @@
                 <span class="m-l">起送 ¥{{item.min_price}}</span>
                 <div class="m-m"></div>
                 <span class="m-r">营业时间: 全天</span>
+                 <div class="m-m"></div>
+                 <span class="m-r">距离：12.12km</span>
               </div>
               <div class="r-m">
-                <span class="m-l">地址：{{item.address}}</span>
+                <span class="m-l">地址：{{item.wxAddress.address}}</span>
               </div>
             </div>
           </div>
@@ -56,23 +58,12 @@ import QQMapWX from "qqmap-wx-jssdk";
 export default {
   data() {
     return {
-      address: undefined
+      address: undefined,
+      shopList: []
     };
   },
   methods: {
     ...mapActions("user", ["wxLocation"]),
-    ...mapActions("shop", ["getShopListDataAction"]),
-    lower(e) {},
-    upper1(e) {
-      var communityId = this.userInfo.addressModel.communityId;
-      if (communityId) {
-        wx.showLoading({ title: "加载中...", mask: true });
-        getFetch("/shop/list/" + communityId, {}, false).then(response => {
-          this.shopList = response.result.list;
-          wx.hideLoading();
-        });
-      }
-    },
     categoryClick() {
       wx.navigateTo({ url: "/pages/categoryList/main" });
     },
@@ -88,46 +79,32 @@ export default {
     }
   },
   computed: {
-    ...mapState("user", ["userInfo"]),
-    ...mapState("shop", ["shopList"])
-  },
-  mounted() {
-    var addressModel = this.userInfo.addressModel;
-    if (addressModel) {
-      var communityId = addressModel.communityId;
-      if (communityId) {
-        this.getShopListDataAction({ communityId });
-      }
-    }
+    ...mapState("user", ["userInfo"])
   },
   onLoad(options) {
     this.qqmapsdk = new QQMapWX({
       key: "2TRBZ-W426X-UEN4V-TVLRM-OP4OT-2XBCL"
     });
-    var that = this
+    var that = this;
     this.qqmapsdk.reverseGeocoder({
       success(res) {
-        that.address = res.result.address
-        console.log(`res:`, res);
+        that.address = res.result.address;
+        getFetch(
+          "/shop/nearShop",
+          {
+            longitude: res.result.location.lng,
+            latitude: res.result.location.lat,
+            dis: 3
+          },
+          false
+        ).then(response => {
+          that.shopList = response.result;
+        });
       },
       fail(res) {
         console.log(`res:`, res);
       }
     });
-    this.shopsList = undefined;
-    var addressModel = this.userInfo.addressModel;
-    if (addressModel) {
-      var communityId = addressModel.communityId;
-      if (communityId) {
-        this.getShopListDataAction({ communityId });
-      }
-    }
-  },
-  onPullDownRefresh: function() {
-    var communityId = this.userInfo.addressModel.communityId;
-    if (communityId) {
-      this.getShopListDataAction({ communityId });
-    }
   }
 };
 </script>
