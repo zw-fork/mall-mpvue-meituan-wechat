@@ -206,6 +206,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions("user", ["wxLocation"]),
     update() {
       if (!this.show) {
         this.showEdit = false;
@@ -229,24 +230,7 @@ export default {
       });
     },
     locationSearchClick() {
-      var that = this;
-      wx.getLocation({
-        type: "wgs84",
-        success(res) {
-          console.log(`res:`, res);
-          that.qqmapsdk.reverseGeocoder({
-            success(res) {
-              console.log(`res:`, res);
-            },
-            fail(res) {
-              console.log(`res:`, res);
-            }
-          });
-        },
-        fail(res) {
-          console.log(`res:`, res);
-        }
-      });
+      this.wxLocation()
     },
     logoutClick(e) {
       wx.getSystemInfo({
