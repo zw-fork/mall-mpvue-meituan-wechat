@@ -30,8 +30,8 @@
                 <span class="m-l">起送 ¥{{item.min_price}}</span>
                 <div class="m-m"></div>
                 <span class="m-r">营业时间: 全天</span>
-                 <div class="m-m"></div>
-                 <span class="m-r">距离：12.12km</span>
+                <div class="m-m"></div>
+                <span class="m-r">距离：{{item.distance}}</span>
               </div>
               <div class="r-m">
                 <span class="m-l">地址：{{item.wxAddress.address}}</span>
@@ -94,7 +94,7 @@ export default {
           {
             longitude: res.result.location.lng,
             latitude: res.result.location.lat,
-            dis: 3
+            dis: 30
           },
           false
         ).then(response => {

@@ -9,9 +9,11 @@
 	},
 	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
-	"appid": "wx69720258b4555088",
+	"appid": "wxcb1df190a9dfc676",
 	"projectname": "mpvue-meituan",
 	"libVersion": "2.3.0",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -36,7 +38,7 @@
 					"id": 0,
 					"name": "test",
 					"pathName": "pages/index/main",
-					"query": "shopId=123456",
+					"query": "shopId=1",
 					"scene": "1011"
 				}
 			]
