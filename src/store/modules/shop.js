@@ -28,7 +28,9 @@ const actions = {
   },
   createShop({state, commit}, {shop}) {
     postFetch('/shop', shop, false).then(response => {
-      return response.result
+      wx.switchTab({
+        url: '/pages/me/main'
+      })
     })
   }
 }
