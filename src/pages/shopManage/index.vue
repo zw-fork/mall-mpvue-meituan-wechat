@@ -13,34 +13,13 @@
     <div class="name">
       <span>电话：</span>
       <div>
-        <div class="tel" v-if="shop.tel.length>0" v-for="(item, index) in shop.tel" :key="index">
-          <input
-            sty
-            type="number"
-            placeholder="请填写手机号码"
-            placeholder-style="font-size: 24rpx"
-            v-model="shop.tel[index]"
-            maxlength="11"
-          >
-          <i
-            @click="deleteTel(index)"
-            class="icon mt-delete-o"
-            style="margin-left:30rpx;font-size: 30rpx"
-          ></i>
-          <i
-            v-if="(index==shop.tel.length-1) && shop.tel[index]"
-            style="margin-left:30rpx;font-size: 32rpx"
-            @click="createTel()"
-            class="icon iconfont iconadd"
-          ></i>
-        </div>
-        <div class="tel" v-if="!shop.tel || shop.tel.length==0">
-          <i
-            style="margin-left:30rpx;font-size: 32rpx"
-            @click="createTel()"
-            class="icon iconfont iconadd"
-          ></i>
-        </div>
+        <input
+          type="number"
+          placeholder="请填写手机号码"
+          placeholder-style="font-size: 24rpx"
+          v-model="shop.phone"
+          maxlength="11"
+        >
       </div>
     </div>
     <div class="b-mid" v-if="!shop.shopId">
@@ -114,6 +93,7 @@ export default {
         communityName: undefined,
         communityId: undefined,
         tel: [],
+        phone: undefined,
         wxAddress: {
           name: undefined
         }
@@ -190,7 +170,6 @@ export default {
         this.goods.categoryName = e.label;
         this.goods.categoryId = e.value[0];
       }
-      console.log(this.goods.categoryName);
     },
     updateShop() {
       if (!this.shop.shopName) {
@@ -201,6 +180,15 @@ export default {
         });
         return;
       }
+      if (!this.shop.building) {
+        wx.showToast({
+          title: "门牌号不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
+      this.shop.tel = [this.shop.phone];
       this.createShop({ shop: this.shop });
     },
     showSinglePicker() {
@@ -216,6 +204,9 @@ export default {
       wx.showLoading({ title: "加载中...", mask: true });
       getFetch("/shop/" + this.userInfo.shopId, {}, false).then(response => {
         this.shop = response.result;
+        if (this.shop.tel.length > 0) {
+          this.shop.phone = this.shop.tel[0];
+        }
         for (var index in this.statusArray) {
           if (this.shop.status == this.statusArray[index].value) {
             this.shop.statusName = this.statusArray[index].label;
@@ -227,7 +218,8 @@ export default {
       this.shop = {
         statusName: undefined,
         status: undefined,
-        tel: []
+        tel: [],
+        phone: undefined
       };
     }
   }

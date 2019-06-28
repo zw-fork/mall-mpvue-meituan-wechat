@@ -157,19 +157,6 @@ export default {
   methods: {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
-    numberControl(e) {
-      const value = e.mp.detail.value;
-      const pos = e.mp.detail.cursor;
-      console.log(value);
-      console.log(pos);
-      console.log(e.mp.detail);
-      e.mp.detail.value = 999;
-      // 直接返回对象，可以对输入进行过滤处理，同时可以控制光标的位置
-      return {
-        value: 1,
-        cursor: pos
-      };
-    },
     deleteImg() {
       this.goods.picture = undefined;
     },
@@ -195,6 +182,30 @@ export default {
       });
     },
     uploadFile() {
+      if (!this.goods.name || !this.goods.name.trim()) {
+        wx.showToast({
+          title: "商品名称不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
+      if (!this.goods.picture || !this.goods.picture.trim()) {
+        wx.showToast({
+          title: "商品图片不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
+      if (!this.goods.goodsPrice || !this.goods.goodsPrice.trim()) {
+        wx.showToast({
+          title: "商品价格不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
       this.goods.goodsPrice = parseFloat(this.goods.goodsPrice);
