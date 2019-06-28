@@ -1,20 +1,53 @@
 <template>
   <div>
-    <div class="container"
-         @click="update"
-         @mousedown="update"
-         @scroll="update">
+    <div class="container" @click="update" @mousedown="update" @scroll="update">
+      <div class="header-c">
+        <div class="header">
+          <div class="header-r" @click="scanClick()">
+            <img class="item-img" src="/static/images/scan.png">
+          </div>
+          <div class="header-m">
+            <i class="icon mt-search-o"></i>
+            <input placeholder="根据手机号搜索人员" placeholder-style="font-size: 24rpx" v-model="name">
+          </div>
+          <div class="header-r" style="margin: 0 10rpx;">
+            <span @click="getGoods()">搜索</span>
+            <i
+              @click="addGoods()"
+              class="icon iconfont iconplus-circle"
+              style="margin-left:20rpx;margin-right:20rpx;font-size: 36rpx;"
+            ></i>
+          </div>
+        </div>
+        <div class="cate-c">
+          <span
+            class="c-l"
+            :style="{'font-weight': pageIndex == null  ? 'bold;' : null}"
+            style="text-align:center;width:34%;"
+            @click="updateGoodsList(null)"
+          >全部</span>
+          <span
+            class="c-m"
+            :style="{'font-weight': pageIndex === 1 ? 'bold;' : null}"
+            style="text-align:center;width:33%;"
+            @click="updateGoodsList(1)"
+          >店主</span>
+          <span
+            class="c-m"
+            :style="{'font-weight': pageIndex === 2 ? 'bold;' : null}"
+            style="text-align:center;width:33%;"
+            @click="updateGoodsList(2)"
+          >店员</span>
+        </div>
+      </div>
       <div class="list-c">
         <scroll-view class="list-r"
                      :scroll-y="true"
                      :scroll-top="scrollTop"
-                     @scrolltolower="lower"
-                     @scroll="scroll">
+                     @scrolltolower="lower">
           <div class="item-list"
-               v-for="(item, index) in list"
-               :key="index"
-               @touchstart="showDeleteButton(item, index)"
-               @touchend="clearLoop(item.id)">
+               v-for="(item, index) in list.datas"
+               :key="index">
             <div class="item">
               <div class="item-l">
                 <img :src="item.avatarUrl">
@@ -30,120 +63,142 @@
         </scroll-view>
       </div>
     </div>
+    <div class="editGoods" :style="divStyle" v-if="showEdit">
+      <div @click="editGoods">
+        <i class="icon iconfont iconedit"></i>
+        <span style="color:white;text-align: center;">编辑</span>
+      </div>
+      <div @click="upGoods" v-if="selectGoods.status==2">
+        <i class="icon iconfont iconshangjia1"></i>
+        <span style="color:white;text-align: center;">上架</span>
+      </div>
+      <div @click="downGoods" v-if="selectGoods.status==1">
+        <i class="icon iconfont iconxiajia"></i>
+        <span style="color:white;text-align: center;">下架</span>
+      </div>
+      <div @click="deleteGoods">
+        <i class="icon iconfont icondelete"></i>
+        <span style="color:white;text-align: center;">删除</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { jointStyle } from '@/utils/style';
-import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
-import { formatYMD } from '@/utils/formatTime';
-import { _array } from '@/utils/arrayExtension';
-import { getFetch, postFetch } from '@/network/request/HttpExtension';
-import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
+import { jointStyle } from "@/utils/style";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import { formatYMD } from "@/utils/formatTime";
+import { _array } from "@/utils/arrayExtension";
+import { getFetch, postFetch } from "@/network/request/HttpExtension";
+import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 
 export default {
   data() {
     return {
-      showModal: false,
       selectGoods: undefined,
       show: false,
-      divStyle: '',
+      divStyle: "",
       showEdit: false,
       showCart: false,
       tagIndex: 0,
       scrollTop: undefined,
       pageIndex: undefined,
-      left: '40rpx',
+      left: "40rpx",
       currentScroll: 0,
       stars: [1, 2, 3, 4],
       cartGoodsList1: [],
-      list: {},
-      name: ''
+      list: {
+        datas: []
+      },
+      name: ""
     };
   },
   mounted() {
-    this.updateGoodsList(null);
     this.getGoods();
   },
   computed: {
-    ...mapState('shoppingCart', [
-      'cartMap',
-      'shopInfo',
-      'commentInfo',
-      'visibleSkuModal',
-      'visibleItemModal',
-      'skuInfo',
-      'previewInfo'
+    ...mapState("shoppingCart", [
+      "cartMap",
+      "shopInfo",
+      "commentInfo",
+      "visibleSkuModal",
+      "visibleItemModal",
+      "skuInfo",
+      "previewInfo"
     ]),
-    ...mapState('user', ['userInfo']),
-    ...mapState('submitOrder', ['orderDetail']),
+    ...mapState("user", ["userInfo"]),
+    ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
-      return 'bold;';
+      return "bold;";
+    },
+    path() {
+      return `${GOODS_URL_PREFIX}`;
+    },
+    productCount() {
+      var count = 0;
+      if (this.shopInfo.categoryModelList) {
+        this.shopInfo.categoryModelList.map(item => (count += item.count));
+      }
+      return count;
+    },
+    btnTitle() {
+      if (this.shopInfo) {
+        if (this.shopInfo.statu != 1) {
+          return "打烊";
+        }
+        var content = `${this.shopInfo.min_price}元起送`;
+        var price = 0;
+        if (this.shopInfo.categoryModelList) {
+          this.shopInfo.categoryModelList.map(
+            item => (price += item.totalPrice)
+          );
+        }
+        if (price <= 0) return content;
+        if (price < this.shopInfo.min_price) {
+          var value = parseFloat(this.shopInfo.min_price - price).toFixed(1);
+          return `还差${value}元`;
+        } else {
+          return "去结算";
+        }
+      } else {
+        return "";
+      }
     }
   },
   methods: {
-    ...mapMutations('shoppingCart', [
-      'changeReduceFeeDataMut',
-      'changeSkuModalMut',
-      'changeItemModalMut'
+    ...mapMutations("shoppingCart", [
+      "changeReduceFeeDataMut",
+      "changeSkuModalMut",
+      "changeItemModalMut"
     ]),
-    ...mapActions('shoppingCart', [
-      'getMenuDataAction',
-      'getCommentDataAction',
-      'getCategoryMenuDataAction',
-      'addItemAction',
-      'reduceItemAction',
-      'closeShoppingCartAction',
-      'selectSkuAction',
-      'changeSkuDataMut',
-      'attrSelectAction',
-      'changeSkuModalDataAction',
-      'previewItemAction'
+    ...mapActions("shoppingCart", [
+      "getMenuDataAction",
+      "getCommentDataAction",
+      "getCategoryMenuDataAction",
+      "addItemAction",
+      "reduceItemAction",
+      "closeShoppingCartAction",
+      "selectSkuAction",
+      "changeSkuDataMut",
+      "attrSelectAction",
+      "changeSkuModalDataAction",
+      "previewItemAction"
     ]),
-    ...mapActions('submitOrder', ['createOrderDetailAction']),
-    showDeleteButton(item, index) {
-      if (item.role != 2) {
-        var that = this;
-        this.Loop = setTimeout(function() {
-          that.showModal = true;
-          wx.showModal({
-            title: '删除？',
-            content: '确定要删除当前选中的地址？',
-            confirmColor: '#FFC24A',
-            success: function(res) {
-              if (res.confirm) {
-                getFetch(
-                  '/wechat/updateStaff/' + that.userInfo.shopId + '/' + item.id,
-                  {},
-                  false
-                ).then(response => {
-                  that.list.splice(index, 1);
-                  wx.showToast({
-                    title: '删除成功!',
-                    icon: 'success',
-                    duration: 1000
-                  });
-                });
-              }
-            }
-          });
-        }, 800);
-        return false;
-      }
-    },
-    clearLoop(addressId) {
-      clearTimeout(this.Loop);
-      if (!this.showModal) {
-      }
-      this.showModal = false;
-      return false;
-    },
-    scroll(e) {
-      var value = this.currentScroll - e.target.scrollTop;
-      if (Math.abs(value) > 0) {
-        this.scrollTop = undefined;
-        this.currentScroll = e.target.scrollTop;
-        this.showEdit = false;
+    ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    //滚动条滚到底部或右边的时候触发
+    lower(e) {
+      if (this.list.page > 0) {
+        wx.showLoading({ title: "加载中...", mask: true });
+        var data = {};
+        data.page = this.list.page;
+        getFetch("/wechat/userList", data, false).then(
+          response => {
+            var goodsList = response.result.list;
+            this.list.page = response.result.nextPage;
+            this.list.datas = [...this.list.datas, ...goodsList];
+            wx.hideLoading();
+          }
+        );
       }
     },
     updateGoodsList(status) {
@@ -153,10 +208,10 @@ export default {
       this.getGoods();
     },
     addGoods() {
-      wx.navigateTo({ url: '/pages/goodsManage/main' });
+      wx.navigateTo({ url: "/pages/goodsManage/main" });
     },
     updateGoods(goodsModel) {
-      postFetch('/goods/upload2', goodsModel, false).then(response => {
+      postFetch("/goods/upload2", goodsModel, false).then(response => {
         this.showEdit = false;
         this.updateGoodsList(this.pageIndex);
       });
@@ -164,8 +219,8 @@ export default {
     upGoods() {
       var that = this;
       wx.showModal({
-        content: '确定上架当前商品？',
-        confirmColor: '#FFC24A',
+        content: "确定上架当前商品？",
+        confirmColor: "#FFC24A",
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 1;
@@ -178,8 +233,8 @@ export default {
     downGoods() {
       var that = this;
       wx.showModal({
-        content: '确定下架当前商品？',
-        confirmColor: '#FFC24A',
+        content: "确定下架当前商品？",
+        confirmColor: "#FFC24A",
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 2;
@@ -192,8 +247,8 @@ export default {
     deleteGoods() {
       var that = this;
       wx.showModal({
-        content: '确定删除当前商品？',
-        confirmColor: '#FFC24A',
+        content: "确定删除当前商品？",
+        confirmColor: "#FFC24A",
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 0;
@@ -205,7 +260,7 @@ export default {
     },
     editGoods() {
       wx.navigateTo({
-        url: '/pages/goodsManage/main?id=' + this.selectGoods.goodsId
+        url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId
       });
     },
     update() {
@@ -215,45 +270,30 @@ export default {
     manageGoods(e, item) {
       this.selectGoods = item;
       this.showEdit = true;
-      this.divStyle = 'top:' + (2 * e.target.y - 50) + 'rpx;';
+      this.divStyle = "top:" + (2 * e.target.y - 50) + "rpx;";
       return false;
     },
     scanClick() {
       wx.scanCode({
         success: res => {
-          this.name = 'a';
+          this.name = "a";
           this.getGoods();
           console.log(res);
         }
       });
     },
     getGoods() {
-      wx.showLoading({ title: '加载中...', mask: true });
-      getFetch('/wechat/getStaff/' + this.userInfo.shopId, {}, false).then(
-        response => {
-          this.list = response.result;
-          wx.hideLoading();
-        }
-      );
-    },
-    //滚动条滚到底部或右边的时候触发
-    lower(e) {
-      if (this.list.page > 0) {
-        wx.showLoading({ title: '加载中...', mask: true });
-        var data = {};
-        data.name = this.name.trim();
-        if (this.pageIndex != undefined) {
-          data.status = this.pageIndex;
-        }
-        data.page = this.list.page;
-        getFetch('/goods/' + this.userInfo.shopId, data, false).then(
-          response => {
-            var goodsList = response.result.list;
-            this.list.page = response.result.nextPage;
-            wx.hideLoading();
-          }
-        );
+      wx.showLoading({ title: "加载中...", mask: true });
+      var data = {};
+      data.name = this.name.trim();
+      if (this.pageIndex != undefined) {
+        data.status = this.pageIndex;
       }
+      getFetch("/wechat/userList", {}, false).then(response => {
+        this.list.datas = response.result.list;
+        this.list.page = response.result.nextPage;
+        wx.hideLoading();
+      });
     },
     categoryClick(item, index) {
       this.tagIndex = index;
@@ -261,11 +301,11 @@ export default {
       this.getCategoryMenuDataAction({ categoryId, index });
     },
     menuClick() {
-      this.left = 40 + 'rpx';
+      this.left = 40 + "rpx";
       this.pageIndex = 0;
     },
     shopClick() {
-      this.left = 182 + 'rpx';
+      this.left = 182 + "rpx";
       this.pageIndex = 1;
     },
     skuClick(item, index) {
@@ -325,6 +365,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.header-c {
+  display: flex;
+  flex-direction: column;
+  .cate-c {
+    display: flex;
+    height: 70rpx;
+    align-items: center;
+    position: relative;
+    transition: all 0.2s;
+    .c-l {
+      font-size: 30rpx;
+      color: $textBlack-color;
+    }
+    .c-m {
+      font-size: 30rpx;
+      color: $textBlack-color;
+    }
+    .c-r {
+      font-size: 30rpx;
+      color: $textBlack-color;
+    }
+    .c-main {
+      position: absolute;
+      font-size: 32rpx;
+      color: $textBlack-color;
+      right: 30rpx;
+    }
+  }
+}
 .editGoods {
   background-color: black;
   display: flex;
@@ -492,17 +561,17 @@ export default {
   .list-c {
     display: flex;
     position: fixed;
-    top: 0rpx;
+    top: 150rpx;
     width: 100%;
     bottom: 0rpx;
     .list-l {
       display: flex;
       flex-direction: column;
-      width: 120rpx;
+      width: 160rpx;
       background-color: $page-bgcolor;
       .l-item {
         display: flex;
-        width: 120rpx;
+        width: 160rpx;
         align-items: center;
         justify-content: center;
         padding: 20rpx;
@@ -547,26 +616,21 @@ export default {
         display: flex;
         margin: 0 20rpx;
         flex-direction: column;
-        border-bottom: 1px solid #eee;
         .item {
           display: flex;
-          margin-bottom: 10rpx;
-          margin-top: 15rpx;
+          margin-bottom: 30rpx;
           .item-l {
-            display: flex;
-            flex-direction: column;
             img {
-              width: 120rpx;
-              height: 120rpx;
-              display: flex;
-              flex-direction: column;
+              width: 160rpx;
+              height: 160rpx;
               background-size: cover;
             }
           }
           .item-r {
             display: flex;
             flex-direction: column;
-            margin-left: 30rpx;
+            margin-left: 20rpx;
+            justify-content: space-between;
             flex: 1;
             .title {
               font-size: 28rpx;
@@ -577,9 +641,12 @@ export default {
               height: 30rpx;
             }
             .sub-title {
-              font-size: 24rpx;
+              font-size: 20rpx;
               color: $textDarkGray-color;
+              line-height: 30rpx;
               overflow: hidden;
+              height: 30rpx;
+              margin-top: 10rpx;
             }
             .sale-num {
               font-size: 20rpx;

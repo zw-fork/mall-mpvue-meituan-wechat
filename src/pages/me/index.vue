@@ -2,7 +2,7 @@
   <div>
     <div class="container" @click="update">
       <div class="header-c">
-        <img :src="userInfo.avatarUrl" alt>
+        <img :src="userInfo.avatarUrl" alt @click="updateUser(userInfo)">
         <div class="info-c">
           <span class="name">{{userInfo.nickname}}</span>
           <span class="phone">15214313256</span>
@@ -214,6 +214,9 @@ export default {
       this.show = false;
       return false;
     },
+    updateUser() {
+      wx.navigateTo({ url: "/pages/userSetting/main" });
+    },
     itemClick(e) {
       wx.navigateTo({ url: e.path });
     },
@@ -230,7 +233,7 @@ export default {
       });
     },
     locationSearchClick() {
-      this.wxLocation()
+      this.wxLocation();
     },
     logoutClick(e) {
       wx.getSystemInfo({

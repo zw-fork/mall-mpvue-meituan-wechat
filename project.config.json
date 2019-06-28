@@ -2,16 +2,16 @@
 	"description": "项目配置文件。",
 	"setting": {
 		"urlCheck": false,
-		"es6": false,
+		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"autoAudits": false
 	},
-	"miniprogramRoot": "dist/",
+	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
 	"appid": "wxcb1df190a9dfc676",
 	"projectname": "mpvue-meituan",
-	"libVersion": "2.3.0",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
@@ -35,11 +35,11 @@
 			"current": 0,
 			"list": [
 				{
-					"id": 0,
-					"name": "test",
-					"pathName": "pages/index/main",
+					"id": -1,
+					"name": "二维码",
+					"pathName": "pages/home/main",
 					"query": "shopId=1",
-					"scene": "1011"
+					"scene": 1011
 				}
 			]
 		}

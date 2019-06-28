@@ -2,13 +2,13 @@
   <div class="container">
     <div class="content">
       <div class="header-c">
-        <div class="header-l" @click="addressClick">
+        <div class="header-l">
           <i
             class="icon iconfont iconlocation"
             :style="{color: '#434343', 'font-size': 38 + 'rpx'}"
           ></i>
-          <span>{{address}}</span>
-          <i class="icon iconfont icondown" :style="{color: '#434343', 'font-size': 28 + 'rpx'}"></i>
+          <span @click="addressClick">{{address? address : "定位中..."}}</span>
+          <i class="icon iconfont icondingwei" :style="{color: '#434343', 'font-size': 34 + 'rpx'}" style="position:absolute;right:30rpx;"></i>
         </div>
       </div>
       <div class="category-list">
@@ -20,7 +20,7 @@
             @click="shoppingCartClick(item.shopId)"
           >
             <div class="item-l">
-              <i style="font-size:80rpx;color:#d81e06;" class="icon iconfont icondianpu"></i>
+              <i style="font-size:100rpx;color:#d81e06;" class="icon iconfont icondianpu"></i>
             </div>
             <div class="item-r">
               <div class="r-t">
@@ -88,13 +88,14 @@ export default {
     var that = this;
     this.qqmapsdk.reverseGeocoder({
       success(res) {
+        console.log(res)
         that.address = res.result.address;
         getFetch(
           "/shop/nearShop",
           {
             longitude: res.result.location.lng,
             latitude: res.result.location.lat,
-            dis: 1.5
+            dis: 21.5
           },
           false
         ).then(response => {
@@ -120,7 +121,6 @@ export default {
       align-items: center;
       height: 80rpx;
       position: fixed;
-      width: auto;
       padding: 0 30rpx;
       width: 100%;
       box-sizing: border-box;
@@ -351,7 +351,7 @@ export default {
           .item-l {
             display: flex;
             width: 160rpx;
-            height: 120rpx;
+            height: 160rpx;
             position: relative;
             img {
               width: 160rpx;
@@ -364,14 +364,14 @@ export default {
             }
           }
           .item-r {
-            margin-left: 20rpx;
+            margin-left: 40rpx;
             flex-direction: column;
             flex: 1;
             .r-t {
               display: flex;
               flex-direction: column;
               .shop-name {
-                font-size: 28rpx;
+                font-size: 30rpx;
                 color: $textBlack-color;
                 font-weight: bold;
               }
@@ -385,18 +385,18 @@ export default {
                   .l-l {
                     display: flex;
                     i {
-                      font-size: 20rpx;
+                      font-size: 24rpx;
                       color: $theme-color;
                       margin-right: 10rpx;
                     }
                   }
                   .l-m {
-                    font-size: 20rpx;
+                    font-size: 24rpx;
                     color: $textBlack-color;
                     margin-left: 10rpx;
                   }
                   .l-r {
-                    font-size: 20rpx;
+                    font-size: 24rpx;
                     color: $textBlack-color;
                     margin-left: 20rpx;
                   }
@@ -405,7 +405,7 @@ export default {
                   display: flex;
                   align-items: center;
                   .r-l {
-                    font-size: 20rpx;
+                    font-size: 24rpx;
                     color: $textBlack-color;
                   }
                   .r-m {
@@ -415,7 +415,7 @@ export default {
                     margin: 0 10rpx;
                   }
                   .r-r {
-                    font-size: 20rpx;
+                    font-size: 24rpx;
                     color: $textBlack-color;
                   }
                 }
@@ -426,7 +426,7 @@ export default {
               align-items: center;
               margin-top: 10rpx;
               .m-l {
-                font-size: 20rpx;
+                font-size: 24rpx;
                 color: $textBlack-color;
               }
               .m-m {
@@ -436,7 +436,7 @@ export default {
                 background-color: $textGray-color;
               }
               .m-r {
-                font-size: 20rpx;
+                font-size: 24rpx;
                 color: $textBlack-color;
               }
             }

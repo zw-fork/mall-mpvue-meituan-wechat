@@ -23,6 +23,7 @@
     "pages/categoryManage/main",
     "pages/shopManage/main",
     "pages/goodsManage/main",
+    "pages/userSetting/main",
     "pages/citySearch/main",
     "pages/citys/main",
     "pages/addressList/main",
@@ -46,29 +47,39 @@
     "selectedColor": "#FF4500",
     "backgroundColor": "#fff",
     "borderStyle": "black",
-    "list": [{
-      "pagePath": "pages/home/main",
-      "text": "首页",
-      "iconPath": "static/images/home.png",
-      "selectedIconPath": "static/images/home_selected.png"
-    },
-    {
-      "pagePath": "pages/orderList/main",
-      "text": "订单",
-      "iconPath": "static/images/order.png",
-      "selectedIconPath": "static/images/order_selected.png"
-    },
-    {
-      "pagePath": "pages/me/main",
-      "text": "我的",
-      "iconPath": "static/images/mine.png",
-      "selectedIconPath": "static/images/mine_selected.png"
-    }]
+    "list": [
+      {
+        "pagePath": "pages/home/main",
+        "text": "首页",
+        "iconPath": "static/images/home.png",
+        "selectedIconPath": "static/images/home_selected.png"
+      },
+      {
+        "pagePath": "pages/orderList/main",
+        "text": "订单",
+        "iconPath": "static/images/order.png",
+        "selectedIconPath": "static/images/order_selected.png"
+      },
+      {
+        "pagePath": "pages/me/main",
+        "text": "我的",
+        "iconPath": "static/images/mine.png",
+        "selectedIconPath": "static/images/mine_selected.png"
+      }
+    ]
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "应用需要获取定位权限"  
+      "desc": "应用需要获取定位权限"
     }
   },
-  "navigateToMiniProgramAppIdList":["wxfb86227363fd06dc"]
+  "navigateToMiniProgramAppIdList": [
+    "wxfb86227363fd06dc"
+  ],
+  "usingComponents": {
+    "van-button": "vant-weapp/dist/button/index",
+    "van-field": "vant-weapp/dist/field/index",
+    "van-radio": "vant-weapp/dist/radio/index",
+    "van-radio-group": "vant-weapp/dist/radio-group/index"
+  }
 }
