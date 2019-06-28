@@ -3,6 +3,7 @@
     <div class="name" style="height: 65rpx;">
       <span>店铺名称：</span>
       <input
+        disabled="disabled"
         maxlength="20"
         placeholder="请填写商品名称(20字内)"
         placeholder-style="font-size: 24rpx"
@@ -13,7 +14,8 @@
       <span>电话：</span>
       <div>
         <div class="tel" v-if="shop.tel.length>0" v-for="(item, index) in shop.tel" :key="index">
-          <input sty
+          <input
+            sty
             type="number"
             placeholder="请填写手机号码"
             placeholder-style="font-size: 24rpx"
@@ -54,6 +56,15 @@
         <span v-if="shop.wxAddress">{{shop.wxAddress.name}}</span>
         <i class="icon iconfont iconright"></i>
       </div>
+    </div>
+    <div class="name" style="height: 65rpx;">
+      <span>门牌号：</span>
+      <input
+        maxlength="30"
+        placeholder="详细地址,如:1单元1楼1号"
+        placeholder-style="font-size: 24rpx"
+        v-model="shop.building"
+      >
     </div>
     <div class="b-mid" @click="remarkClick" v-if="shop.shopId" style="height: 65rpx;">
       <span class="mid-l">商店状态:</span>
