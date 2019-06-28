@@ -17,7 +17,7 @@
             class="item"
             v-for="(item, index) in shopList"
             :key="index"
-            @click="shoppingCartClick(item.shopId)"
+            @click="shoppingCartClick(item)"
           >
             <div class="item-l">
               <i style="font-size:100rpx;color:#d81e06;" class="icon iconfont icondianpu"></i>
@@ -74,8 +74,10 @@ export default {
       this.wxLocation();
       //  wx.navigateTo({url: '/pages/searchList/main'})
     },
-    shoppingCartClick(shopId) {
-      wx.navigateTo({ url: "/pages/shoppingCart/main?shopId=" + shopId });
+    shoppingCartClick(item) {
+      if (!item.poster) {
+        wx.navigateTo({ url: "/pages/shoppingCart/main?shopId=" + item.shopId });
+      }
     }
   },
   computed: {
