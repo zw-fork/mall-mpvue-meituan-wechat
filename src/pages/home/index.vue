@@ -66,6 +66,7 @@
           success(res) {
             console.log(res);
             that.address = res.result.address;
+             that.location = res.result.location;
             getFetch(
               "/shop/nearShop",
               {
