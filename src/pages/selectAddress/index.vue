@@ -8,9 +8,15 @@
       <div class="header-r">
         <div class="search-bar">
           <i class="icon mt-search-o"></i>
-          <input placeholder="请输入小区" @keyup.enter="getCommunity" placeholder-style="font-size: 24rpx" v-model="addressModel.address"/>
+          <input
+            placeholder="请输入小区"
+            @input="getsuggest"
+            @keyup.enter="getCommunity"
+            placeholder-style="font-size: 24rpx"
+            v-model="addressModel.address"
+          >
           <div class="cancle" v-if="keyword" @click="cancle">
-            <i class="icon qb-icon-cancle-o"></i>                                
+            <i class="icon qb-icon-cancle-o"></i>
           </div>
         </div>
       </div>
@@ -20,7 +26,12 @@
     </div>
     <div class="my-address">
       <div class="list-c">
-        <div class="item" v-for="(item, index) in communityList" :key="index" @click="updateShop(item)">
+        <div
+          class="item"
+          v-for="(item, index) in communityList"
+          :key="index"
+          @click="updateShop(item)"
+        >
           <span class="i-t">{{item.address}}({{item.district}})</span>
         </div>
       </div>
@@ -30,7 +41,8 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import {postFetch} from '@/network/request/HttpExtension'
+import { postFetch } from "@/network/request/HttpExtension";
+import QQMapWX from "qqmap-wx-jssdk";
 
 export default {
   data() {
@@ -38,37 +50,101 @@ export default {
       keyword: true,
       communityList: [],
       addressModel: {}
-    }
+    };
   },
   computed: {
     ...mapState("address", ["myAddress"]),
-    ...mapState("user", ["userInfo"]),
+    ...mapState("user", ["userInfo"])
   },
   methods: {
     ...mapActions("address", ["getAddressDataAction"]),
     ...mapActions("shop", ["getShopListDataAction"]),
     addAddress() {
-       wx.navigateTo({url: '/pages/addAddress/main'})
+      wx.navigateTo({ url: "/pages/addAddress/main" });
     },
     updateShop(item) {
-      getApp().globalData.community=item
-      this.userInfo.addressModel = item
-      this.userInfo.addressModel.communityId = item.id
-      this.getShopListDataAction({communityId : item.id})
+      getApp().globalData.community = item;
+      this.userInfo.addressModel = item;
+      this.userInfo.addressModel.communityId = item.id;
+      this.getShopListDataAction({ communityId: item.id });
+    },
+    //触发关键词输入提示事件
+    getsuggest(event) {
+      if (event.mp.detail.value != '南城') {
+        return;
+      }
+      var _this = this;
+      //调用关键词提示接口
+      this.qqmapsdk.getSuggestion({
+        //获取输入框值并设置keyword参数
+        keyword: event.mp.detail.value, //用户输入的关键词，可设置固定值,如keyword:'KFC'
+        region:'成都', //设置城市名，限制关键词所示的地域范围，非必填参数
+        success: function(res) {
+          debugger
+          //搜索成功后的回调
+          console.log(res);
+          var sug = [];
+          for (var i = 0; i < res.data.length; i++) {
+            sug.push({
+              // 获取返回结果，放到sug数组中
+              title: res.data[i].title,
+              id: res.data[i].id,
+              addr: res.data[i].address,
+              city: res.data[i].city,
+              district: res.data[i].district,
+              latitude: res.data[i].location.lat,
+              longitude: res.data[i].location.lng
+            });
+          }
+          _this.setData({
+            //设置suggestion属性，将关键词搜索结果以列表形式展示
+            suggestion: sug
+          });
+        },
+        fail: function(error) {
+          console.error(error);
+        },
+        complete: function(res) {
+          console.log(res);
+        }
+      });
     },
     getCommunity() {
-      wx.showLoading({title: '加载中...', mask: true})
-      postFetch('/address/list', this.addressModel, false).then(response => {
-        this.communityList = response.result
-        wx.hideLoading()
-      })
+      wx.showLoading({ title: "加载中...", mask: true });
+      this.qqmapsdk.reverseGeocoder({
+        success(res) {
+          console.log(res);
+          that.address = res.result.address;
+          getFetch(
+            "/shop/nearShop",
+            {
+              longitude: res.result.location.lng,
+              latitude: res.result.location.lat,
+              dis: 21.5
+            },
+            false
+          ).then(response => {
+            wx.hideLoading();
+            that.shopList = response.result;
+          });
+        },
+        fail(res) {
+          console.log(`res:`, res);
+        }
+      });
+      postFetch("/address/list", this.addressModel, false).then(response => {
+        this.communityList = response.result;
+        wx.hideLoading();
+      });
     }
   },
   onShow(options) {
-     this.communityList = [],
-     this.addressModel = {}
+    (this.communityList = []), (this.addressModel = {});
+    this.qqmapsdk = new QQMapWX({
+      key: "2TRBZ-W426X-UEN4V-TVLRM-OP4OT-2XBCL"
+    });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

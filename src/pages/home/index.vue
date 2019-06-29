@@ -8,7 +8,12 @@
             :style="{color: '#434343', 'font-size': 38 + 'rpx'}"
           ></i>
           <span @click="addressClick">{{address? address : "定位中..."}}</span>
-          <i class="icon iconfont icondingwei" :style="{color: '#434343', 'font-size': 34 + 'rpx'}" style="position:absolute;right:30rpx;"></i>
+          <i
+            @click="updateAddress"
+            class="icon iconfont icondingwei"
+            :style="{color: '#434343', 'font-size': 34 + 'rpx'}"
+            style="position:absolute;right:30rpx;"
+          ></i>
         </div>
       </div>
       <div class="category-list">
@@ -70,13 +75,40 @@ export default {
     addressClick() {
       wx.navigateTo({ url: "/pages/selectAddress/main" });
     },
+    updateAddress() {
+      var that = this;
+      wx.showLoading({ title: "加载中...", mask: true });
+      this.qqmapsdk.reverseGeocoder({
+        success(res) {
+          console.log(res);
+          that.address = res.result.address;
+          getFetch(
+            "/shop/nearShop",
+            {
+              longitude: res.result.location.lng,
+              latitude: res.result.location.lat,
+              dis: 21.5
+            },
+            false
+          ).then(response => {
+            wx.hideLoading();
+            that.shopList = response.result;
+          });
+        },
+        fail(res) {
+          console.log(`res:`, res);
+        }
+      });
+    },
     searchClick() {
       this.wxLocation();
       //  wx.navigateTo({url: '/pages/searchList/main'})
     },
     shoppingCartClick(item) {
       if (!item.poster) {
-        wx.navigateTo({ url: "/pages/shoppingCart/main?shopId=" + item.shopId });
+        wx.navigateTo({
+          url: "/pages/shoppingCart/main?shopId=" + item.shopId
+        });
       }
     }
   },
@@ -90,7 +122,7 @@ export default {
     var that = this;
     this.qqmapsdk.reverseGeocoder({
       success(res) {
-        console.log(res)
+        console.log(res);
         that.address = res.result.address;
         getFetch(
           "/shop/nearShop",
