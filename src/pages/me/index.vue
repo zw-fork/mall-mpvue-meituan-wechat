@@ -57,31 +57,27 @@
         <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
           <span style="margin-left: 20rpx;">店铺管理</span>
         </div>
-        <swiper class="category-c">
-          <swiper-item>
-            <div class="grid-c">
-              <div class="item" v-for="(item, index) in shopMenuList" :key="index" @click="itemClick(item)">
-                <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
-                <span class="item-title">{{item.name}}</span>
-              </div>
+        <div class="category-c">
+          <div class="grid-c">
+            <div class="item" v-for="(item, index) in shopMenuList" :key="index" @click="itemClick(item)">
+              <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+              <span class="item-title">{{item.name}}</span>
             </div>
-          </swiper-item>
-        </swiper>
+          </div>
+        </div>
       </div>
       <div class="order-c" v-if="userInfo.role==-1">
         <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
           <span style="margin-left: 20rpx;">超级管理员</span>
         </div>
-        <swiper class="category-c">
-          <swiper-item>
-            <div class="grid-c">
-              <div class="item" v-for="(item, index) in superMenuList" :key="index" @click="itemClick(item)">
-                <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
-                <span class="item-title">{{item.name}}</span>
-              </div>
+        <div class="category-c">
+          <div class="grid-c">
+            <div class="item" v-for="(item, index) in superMenuList" :key="index" @click="itemClick(item)">
+              <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+              <span class="item-title">{{item.name}}</span>
             </div>
-          </swiper-item>
-        </swiper>
+          </div>
+        </div>
       </div>
       <div class="list-c">
         <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index">
@@ -117,12 +113,10 @@
   import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
   import { homeData } from "./data";
   import { getFetch } from "@/network/request/HttpExtension";
-  import QQMapWX from "qqmap-wx-jssdk";
 
   export default {
     data() {
       return {
-        qqmapsdk: undefined,
         orderCount: [],
         show: false,
         showEdit: false,
@@ -180,7 +174,6 @@
     mounted() {
       var categoryData = homeData.headData.data.primary_filter;
       categoryData.map((item, index) => {
-        this.orderList.push(item);
         this.orderList.push(item);
       });
       var menuData = homeData.headData.data.shop_menu;
@@ -256,11 +249,6 @@
           this.orderCount.push(count.退款);
         });
       }
-    },
-    onLoad(options) {
-      this.qqmapsdk = new QQMapWX({
-        key: "2TRBZ-W426X-UEN4V-TVLRM-OP4OT-2XBCL"
-      });
     }
   };
 </script>

@@ -3,7 +3,7 @@
     <div class="header-c">
       <div class="header">
         <div class="h-l">
-          <i style="font-size:80rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu"></i>
+          <img class="shop-logo" :src="shopInfo.pic_url? shopInfo.pic_url : '/static/images/shop.png'">
         </div>
         <div class="h-r">
           <span class="r-l" @click="openLocation">地址: {{shopInfo.wxAddress.address}}</span>
@@ -11,7 +11,7 @@
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
             <span class="t-m">营业时间: 全天</span>
-            <i class="icon iconfont iconright" style="position:absolute; right:0rpx;" @click="shopClick"></i>
+            <i class="icon iconfont iconright" style="position:absolute; right:0rpx;"></i>
           </div>
           <div class="r-m" v-if="shopInfo.bulletin">
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
@@ -148,7 +148,7 @@
     data() {
       return {
         shopId: undefined,
-        show:false,
+        show: false,
         scrollTop: undefined,
         showCart: false,
         tagIndex: 0,
@@ -421,6 +421,12 @@
 </script>
 
 <style lang="scss" scoped>
+  .shop-logo {
+    height: 120rpx;
+    width: 120rpx;
+    border-radius: 8rpx;
+  }
+
   .header-r {
     display: flex;
     align-items: center;
@@ -561,7 +567,7 @@
         display: flex;
         background-color: white;
         align-items: center;
-        height: 150rpx;
+        height: 130rpx;
 
         .h-l {
           display: flex;
@@ -613,7 +619,8 @@
 
           .r-m {
             font-size: 22rpx;
-            height: 70rpx;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             overflow: hidden;
           }
 
@@ -635,7 +642,10 @@
             .b-r {
               font-size: 22rpx;
               color: white;
-              flex: 1;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              display: inline-block;
               margin-left: 20rpx;
             }
 
@@ -695,7 +705,7 @@
     .list-c {
       display: flex;
       position: fixed;
-      top: 220rpx;
+      top: 200rpx;
       width: 100%;
       bottom: 100rpx;
 
