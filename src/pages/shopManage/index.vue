@@ -52,6 +52,32 @@
         <i class="icon iconfont iconright"></i>
       </div>
     </div>
+    <div class="phone">
+      <span>商品图片：</span>
+      <div style="margin-left:150rpx;top:100rpx;margin-top:-45rpx">
+        <div style=" display: inline-block;">
+          <img
+            style=" display: inline-block;"
+            v-if="shop.pic_url"
+            class="choosed-img"
+            :src="shop.wechat? shop.pic_url : (path + shop.pic_url)"
+          >
+          <i
+            style=" display: inline-block;"
+            v-if="shop.pic_url"
+            class="deleteImg icon iconfont iconclose-circle"
+            @click="deleteImg()"
+          ></i>
+        </div>
+        <img
+          style=" display: inline-block;"
+          class="choosed-img"
+          src="/static/images/addphotoes.png"
+          alt
+          @click="uploadImg2()"
+        >
+      </div>
+    </div>
     <div class="submit-btn" @click="updateShop">
       <span>保存</span>
     </div>
@@ -94,6 +120,7 @@ export default {
         communityId: undefined,
         tel: [],
         phone: undefined,
+        pic_url: undefined,
         wxAddress: {
           name: undefined
         }
@@ -136,6 +163,30 @@ export default {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
     ...mapActions("user", ["wxLocation"]),
+    deleteImg() {
+      this.shop.pic_url = "";
+    },
+    uploadImg2() {
+      if (this.shop.pic_url) {
+        wx.showToast({
+          title: "最多只能上传一张图片!",
+          icon: "none",
+          duration: 2000
+        });
+        return;
+      }
+      var that = this;
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
+        success: function(res) {
+          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+          that.shop.pic_url = res.tempFilePaths[0];
+          that.shop.wechat = true;
+        }
+      });
+    },
     updateWxAddress() {
       var that = this;
       wx.chooseLocation({
@@ -155,9 +206,6 @@ export default {
     },
     deleteTel(index) {
       this.shop.tel.splice(index, 1);
-    },
-    deleteImg() {
-      this.goods.picture = undefined;
     },
     createCategory() {
       wx.navigateTo({ url: "/pages/categoryManage/main" });
@@ -180,7 +228,15 @@ export default {
         });
         return;
       }
-      if (!this.shop.building) {
+      if (!this.shop.wxAddress || !this.shop.wxAddress.name.trim()) {
+        wx.showToast({
+          title: "店铺地址不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
+      if (!this.shop.building.trim()) {
         wx.showToast({
           title: "门牌号不能为空!",
           icon: "none",
@@ -314,7 +370,9 @@ input {
     margin-left: 30rpx;
     padding-right: 30rpx;
     border-bottom: 2rpx solid $spLine-color;
-
+    input {
+      flex: 1;
+    }
     .r {
       display: flex;
       margin-left: 60rpx;

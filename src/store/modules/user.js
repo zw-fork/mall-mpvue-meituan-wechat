@@ -1,6 +1,6 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
 import { postFetch, getFetch } from '@/network/request/HttpExtension'
-import { API_URL, XIAMIMUSIC, XIAMI_URL } from '@/constants/hostConfig'
+import { API_URL } from '@/constants/hostConfig'
 import { getUserInfoWechat } from "@/action/action";
 
 const state = {
