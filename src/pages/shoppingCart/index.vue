@@ -3,7 +3,7 @@
     <div class="header-c">
       <div class="header">
         <div class="h-l">
-          <img class="shop-logo" :src="shopInfo.pic_url? shopInfo.pic_url : '/static/images/shop.png'">
+          <img class="shop-logo" :src="shopInfo.pic_url? (path + shopInfo.pic_url) : '/static/images/shop.png'">
         </div>
         <div class="h-r">
           <span class="r-l" @click="openLocation">地址: {{shopInfo.wxAddress.address}}</span>

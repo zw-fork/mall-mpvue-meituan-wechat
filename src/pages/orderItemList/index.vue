@@ -140,7 +140,7 @@ export default {
         data.page = this.orderItemList.page;
         data.shopId = this.userInfo.shopId;
         if (this.statusList.length > 0) {
-          data.statusList = this.statusList;
+          data.statusList = this.statusList.join(',');
         }
         getFetch('/order/' + this.userInfo.openid, data, false).then(
           response => {
