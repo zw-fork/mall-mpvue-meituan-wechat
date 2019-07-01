@@ -14,7 +14,12 @@
         </div>
         <div class="category-c">
           <div class="grid-c">
-            <div class="item" v-for="(item, index) in orderList" :key="index" @click="itemClick(item)">
+            <div
+              class="item"
+              v-for="(item, index) in orderList"
+              :key="index"
+              @click="itemClick(item)"
+            >
               <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
               <span class="item-title">{{item.name}}</span>
               <text class="count" v-if="orderCount[index]">{{orderCount[index]}}</text>
@@ -46,7 +51,12 @@
         </div>
         <div class="category-c">
           <div class="grid-c">
-            <div class="item" v-for="(item, index) in goodsMenuList" :key="index" @click="itemClick(item)">
+            <div
+              class="item"
+              v-for="(item, index) in goodsMenuList"
+              :key="index"
+              @click="itemClick(item)"
+            >
               <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
               <span class="item-title">{{item.name}}</span>
             </div>
@@ -59,7 +69,12 @@
         </div>
         <div class="category-c">
           <div class="grid-c">
-            <div class="item" v-for="(item, index) in shopMenuList" :key="index" @click="itemClick(item)">
+            <div
+              class="item"
+              v-for="(item, index) in shopMenuList"
+              :key="index"
+              @click="itemClick(item)"
+            >
               <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
               <span class="item-title">{{item.name}}</span>
             </div>
@@ -72,7 +87,12 @@
         </div>
         <div class="category-c">
           <div class="grid-c">
-            <div class="item" v-for="(item, index) in superMenuList" :key="index" @click="itemClick(item)">
+            <div
+              class="item"
+              v-for="(item, index) in superMenuList"
+              :key="index"
+              @click="itemClick(item)"
+            >
               <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
               <span class="item-title">{{item.name}}</span>
             </div>
@@ -96,7 +116,10 @@
             <i class="icon mt-customer-service-o"></i>
             <span class="title">客服中心</span>
           </div>
-          <button open-type="contact" style="margin: 0;padding: 0;border:none;background-color: white;">
+          <button
+            open-type="contact"
+            style="margin: 0;padding: 0;border:none;background-color: white;"
+          >
             <i class="icon iconfont iconright" @click="logoutClick($event)"></i>
           </button>
         </div>
@@ -110,26 +133,26 @@
 </template>
 
 <script>
-  import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-  import { homeData } from "./data";
-  import { getFetch } from "@/network/request/HttpExtension";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { homeData } from "./data";
+import { getFetch } from "@/network/request/HttpExtension";
 
-  export default {
-    data() {
-      return {
-        orderCount: [],
-        show: false,
-        showEdit: false,
-        categoryArr: [{ items: [] }, { items: [] }],
-        topBannerData: [],
-        divStyle: "",
-        bottomBanner: {},
-        shopsList: [],
-        shopMenuList: [],
-        goodsMenuList: [],
-        superMenuList: [],
-        orderList: [],
-        itemList: [
+export default {
+  data() {
+    return {
+      orderCount: [],
+      show: false,
+      showEdit: false,
+      categoryArr: [{ items: [] }, { items: [] }],
+      topBannerData: [],
+      divStyle: "",
+      bottomBanner: {},
+      shopsList: [],
+      shopMenuList: [],
+      goodsMenuList: [],
+      superMenuList: [],
+      orderList: [],
+      itemList: [
         {
           title: "红包",
           icon: "mt-red-packet-o",
@@ -165,332 +188,344 @@
           title: "加入店铺",
           icon: "mt-protocol-o",
           path: "/pages/index/main?addWorker=1&shopId=1"
-        }]
-      };
-    },
-    computed: {
-      ...mapState("user", ["userInfo"])
-    },
-    mounted() {
-      var categoryData = homeData.headData.data.primary_filter;
-      categoryData.map((item, index) => {
-        this.orderList.push(item);
-      });
-      var menuData = homeData.headData.data.shop_menu;
-      menuData.map((item, index) => {
-        this.shopMenuList.push(item);
-      });
-      var goodsData = homeData.headData.data.goods_menu;
-      goodsData.map((item, index) => {
-        this.goodsMenuList.push(item);
-      });
-      var superData = homeData.headData.data.super_menu;
-      superData.map((item, index) => {
-        this.superMenuList.push(item);
-      });
-    },
-    methods: {
-      ...mapActions("user", ["wxLocation"]),
-      update() {
-        if (!this.show) {
-          this.showEdit = false;
         }
-        this.show = false;
-        return false;
-      },
-      updateUser() {
-        wx.navigateTo({ url: "/pages/userSetting/main" });
-      },
-      itemClick(e) {
-        wx.navigateTo({ url: e.path });
-      },
-      locationClick() {
-        //app.json添加权限描述，否则发生 getLocation:fail:require permission desc
-        wx.getLocation({
-          type: "wgs84",
-          success(res) {
-            console.log(`res:`, res);
-          },
-          fail(res) {
-            console.log(`res:`, res);
-          }
-        });
-      },
-      locationSearchClick() {
-        this.wxLocation();
-      },
-      logoutClick(e) {
-        wx.getSystemInfo({
-          success(system) {
-            console.log(`system:`, system);
-            self.statusBarHeight = system.statusBarHeight;
-            self.platform = system.platform;
-
-            let platformReg = /ios/i;
-            if (platformReg.test(system.platform)) {
-              self.titleBarHeight = 44;
-            } else {
-              self.titleBarHeight = 48;
-            }
-
-            self.navBarHeight = self.statusBarHeight + self.titleBarHeight;
-          }
-        });
-        return false;
+      ]
+    };
+  },
+  computed: {
+    ...mapState("user", ["userInfo"])
+  },
+  mounted() {
+    var categoryData = homeData.headData.data.primary_filter;
+    categoryData.map((item, index) => {
+      this.orderList.push(item);
+    });
+    var menuData = homeData.headData.data.shop_menu;
+    menuData.map((item, index) => {
+      this.shopMenuList.push(item);
+    });
+    var goodsData = homeData.headData.data.goods_menu;
+    goodsData.map((item, index) => {
+      this.goodsMenuList.push(item);
+    });
+    var superData = homeData.headData.data.super_menu;
+    superData.map((item, index) => {
+      this.superMenuList.push(item);
+    });
+  },
+  methods: {
+    ...mapActions("user", ["wxLocation"]),
+    update() {
+      if (!this.show) {
+        this.showEdit = false;
       }
+      this.show = false;
+      return false;
     },
-    onShow(options) {
-      if (this.userInfo.shopId) {
-        getFetch("/order/count/" + this.userInfo.shopId, false).then(response => {
-          var count = response.result;
-          this.orderCount = [];
-          this.orderCount.push(count.新订单);
-          this.orderCount.push(count.配送中);
-          this.orderCount.push(count.退款);
-        });
-      }
+    updateUser() {
+      wx.navigateTo({ url: "/pages/userSetting/main" });
+    },
+    itemClick(e) {
+      wx.navigateTo({ url: e.path });
+    },
+    locationClick() {
+      //app.json添加权限描述，否则发生 getLocation:fail:require permission desc
+      wx.getLocation({
+        type: "wgs84",
+        success(res) {
+          console.log(`res:`, res);
+        },
+        fail(res) {
+          console.log(`res:`, res);
+        }
+      });
+    },
+    locationSearchClick() {
+      this.wxLocation();
+    },
+    logoutClick(e) {
+      wx.getSystemInfo({
+        success(system) {
+          console.log(`system:`, system);
+          self.statusBarHeight = system.statusBarHeight;
+          self.platform = system.platform;
+
+          let platformReg = /ios/i;
+          if (platformReg.test(system.platform)) {
+            self.titleBarHeight = 44;
+          } else {
+            self.titleBarHeight = 48;
+          }
+
+          self.navBarHeight = self.statusBarHeight + self.titleBarHeight;
+        }
+      });
+      return false;
     }
-  };
+  },
+  onShow(options) {
+    if (this.userInfo.shopId) {
+      getFetch("/order/count/" + this.userInfo.shopId, false).then(response => {
+        var count = response.result;
+        this.orderCount = [];
+        this.orderCount.push(count.新订单);
+        this.orderCount.push(count.配送中);
+        this.orderCount.push(count.退款);
+      });
+    }
+  },
+  onPullDownRefresh: function() {
+    if (this.userInfo.shopId) {
+      getFetch("/order/count/" + this.userInfo.shopId, false).then(response => {
+        var count = response.result;
+        this.orderCount = [];
+        this.orderCount.push(count.新订单);
+        this.orderCount.push(count.配送中);
+        this.orderCount.push(count.退款);
+      });
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .itemName {
-    border-bottom: 2rpx solid;
-    font-size: 32rpx;
-    padding-bottom: 10rpx;
+.itemName {
+  border-bottom: 2rpx solid;
+  font-size: 32rpx;
+  padding-bottom: 10rpx;
+}
+
+.editGoods {
+  background-color: black;
+  display: flex;
+  position: absolute;
+  opacity: 0.5;
+  right: 0rpx;
+
+  i {
+    font-size: 50rpx;
+    color: white;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 10rpx;
+    display: flex;
   }
 
-  .editGoods {
-    background-color: black;
+  span {
+    flex-direction: column;
+    align-items: center;
     display: flex;
-    position: absolute;
-    opacity: 0.5;
-    right: 0rpx;
+    margin-left: 10rpx;
+    font-size: 28rpx;
+  }
+}
 
-    i {
-      font-size: 50rpx;
-      color: white;
-      flex-direction: column;
-      align-items: center;
-      margin-left: 10rpx;
-      display: flex;
+button::after {
+  border: none;
+}
+
+.screen_cover {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 11;
+}
+
+.editGoods {
+  background-color: black;
+  display: flex;
+  position: absolute;
+  opacity: 0.5;
+  right: 0rpx;
+
+  img {
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin: 10rpx;
+    width: 50rpx;
+    margin-left: 40rpx;
+    height: 50rpx;
+  }
+
+  span {
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin: 10rpx;
+    margin-left: 40rpx;
+    font-size: 24rpx;
+  }
+}
+
+.container {
+  .order-c {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 25rpx;
+    margin: 15rpx;
+    padding: 10px;
+
+    .category-c {
+      background-color: white;
+      padding-top: 15rpx;
+
+      .grid-c {
+        font-size: 26rpx;
+        flex-wrap: wrap;
+        display: flex;
+
+        .item {
+          padding-bottom: 20rpx;
+          width: 25%;
+          background-color: white;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          box-sizing: border-box;
+
+          img {
+            width: 60rpx;
+            height: 60rpx;
+          }
+
+          span {
+            font-size: 26rpx;
+            color: $textBlack-color;
+          }
+
+          .count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $mtRed-color;
+            width: 30rpx;
+            height: 30rpx;
+            border-radius: 15rpx;
+            position: absolute;
+            font-size: 20rpx;
+            margin-left: 20rpx;
+            color: white;
+          }
+        }
+      }
     }
 
-    span {
-      flex-direction: column;
-      align-items: center;
+    .item {
+      box-sizing: border-box;
+      float: left;
       display: flex;
-      margin-left: 10rpx;
-      font-size: 28rpx;
     }
-  }
-
-  button::after {
-    border: none;
-  }
-
-  .screen_cover {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 11;
-  }
-
-  .editGoods {
-    background-color: black;
-    display: flex;
-    position: absolute;
-    opacity: 0.5;
-    right: 0rpx;
 
     img {
-      flex-direction: column;
-      align-items: center;
-      display: flex;
-      margin: 10rpx;
-      width: 50rpx;
-      margin-left: 40rpx;
-      height: 50rpx;
+      width: 60rpx;
+      height: 60rpx;
     }
 
-    span {
-      flex-direction: column;
-      align-items: center;
-      display: flex;
-      margin: 10rpx;
-      margin-left: 40rpx;
-      font-size: 24rpx;
+    p {
+      font-size: 32rpx;
     }
   }
 
-  .container {
-    .order-c {
-      display: flex;
-      flex-direction: column;
-      background-color: white;
-      border-radius: 25rpx;
-      margin: 15rpx;
-      padding: 10px;
+  .header-c {
+    display: flex;
+    align-items: center;
+    height: 200rpx;
+    background-color: #ff0066;
 
-      .category-c {
-        background-color: white;
-        padding-top: 15rpx;
-
-        .grid-c {
-          font-size: 26rpx;
-          flex-wrap: wrap;
-          display: flex;
-
-          .item {
-            padding-bottom: 20rpx;
-            width: 25%;
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
-
-            img {
-              width: 60rpx;
-              height: 60rpx;
-            }
-
-            span {
-              font-size: 26rpx;
-              color: $textBlack-color;
-            }
-
-            .count {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background-color: $mtRed-color;
-              width: 30rpx;
-              height: 30rpx;
-              border-radius: 15rpx;
-              position: absolute;
-              font-size: 20rpx;
-              margin-left: 20rpx;
-              color: white;
-            }
-          }
-        }
-      }
-
-      .item {
-        box-sizing: border-box;
-        float: left;
-        display: flex;
-      }
-
-      img {
-        width: 60rpx;
-        height: 60rpx;
-      }
-
-      p {
-        font-size: 32rpx;
-      }
+    img {
+      border: 3px solid white;
+      width: 140rpx;
+      height: 140rpx;
+      border-radius: 80rpx;
+      margin-left: 30rpx;
     }
 
-    .header-c {
+    .info-c {
+      display: flex;
+      flex-direction: column;
+      margin-left: 30rpx;
+
+      .name {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        font-weight: bold;
+      }
+
+      .phone {
+        font-size: 28rpx;
+        color: $textBlack-color;
+      }
+    }
+  }
+
+  .list-c {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+
+    .item {
       display: flex;
       align-items: center;
-      height: 200rpx;
-      background-color: #ff0066;
+      height: 88rpx;
+      border-bottom: 2rpx solid $spLine-color;
+      padding: 0 20rpx;
 
-      img {
-        border: 3px solid white;
-        width: 140rpx;
-        height: 140rpx;
-        border-radius: 80rpx;
-        margin-left: 30rpx;
-      }
-
-      .info-c {
+      .item-l {
         display: flex;
-        flex-direction: column;
-        margin-left: 30rpx;
-
-        .name {
-          font-size: 32rpx;
-          color: $textBlack-color;
-          font-weight: bold;
-        }
-
-        .phone {
-          font-size: 28rpx;
-          color: $textBlack-color;
-        }
-      }
-    }
-
-    .list-c {
-      display: flex;
-      flex-direction: column;
-      background-color: white;
-
-      .item {
-        display: flex;
-        align-items: center;
-        height: 88rpx;
-        border-bottom: 2rpx solid $spLine-color;
-        padding: 0 20rpx;
-
-        .item-l {
-          display: flex;
-          flex: 1;
-
-          i {
-            font-size: 38rpx;
-            color: $textDarkGray-color;
-          }
-
-          .title {
-            font-size: 28rpx;
-            color: $textBlack-color;
-            margin-left: 30rpx;
-            margin-top: 6rpx;
-          }
-
-          .amount {
-            font-size: 38rpx;
-            color: $mtRed-color;
-            margin: 0 10rpx;
-            display: flex;
-            align-items: center;
-
-            span {
-              font-size: 24rpx;
-              color: $textDarkGray-color;
-              margin-left: 10rpx;
-            }
-          }
-        }
+        flex: 1;
 
         i {
-          font-size: 24rpx;
-          color: $textGray-color;
+          font-size: 38rpx;
+          color: $textDarkGray-color;
+        }
+
+        .title {
+          font-size: 28rpx;
+          color: $textBlack-color;
+          margin-left: 30rpx;
+          margin-top: 6rpx;
+        }
+
+        .amount {
+          font-size: 38rpx;
+          color: $mtRed-color;
+          margin: 0 10rpx;
+          display: flex;
+          align-items: center;
+
+          span {
+            font-size: 24rpx;
+            color: $textDarkGray-color;
+            margin-left: 10rpx;
+          }
         }
       }
 
-      .item:last-child {
-        border-bottom: 0rpx solid $spLine-color;
+      i {
+        font-size: 24rpx;
+        color: $textGray-color;
       }
     }
 
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 88rpx;
-      background-color: white;
-      margin-top: 20rpx;
-      color: $textBlack-color;
-      font-size: 28rpx;
+    .item:last-child {
+      border-bottom: 0rpx solid $spLine-color;
     }
   }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 88rpx;
+    background-color: white;
+    margin-top: 20rpx;
+    color: $textBlack-color;
+    font-size: 28rpx;
+  }
+}
 </style>

@@ -41,6 +41,11 @@ import QQMapWX from "qqmap-wx-jssdk";
             longitude: 104.061530,
             iconPath: '/static/images/location.png',
             name: '欧尚'
+          }, {
+            latitude: 30.840730,
+            longitude: 104.078640,
+            iconPath: '/static/images/location.png',
+            name: '金马桥'
           }];
         },
         fail(res) {

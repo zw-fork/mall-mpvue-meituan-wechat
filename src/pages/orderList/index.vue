@@ -47,7 +47,7 @@
           <div class="btn" @click="cancelClick(item)" v-if="item.status==1">
             <span>取消</span>
           </div>
-          <div class="btn" @click="cancelClick(item)" v-if="(!item.refundStatus || item.refundStatus == 3) && item.status>1">
+          <div class="btn" @click="cancelClick(item)" v-if="item.canRefund && (!item.refundStatus || item.refundStatus == 3) && item.status>1">
             <span>退款</span>
           </div>
         </div>
