@@ -225,11 +225,21 @@ const actions = {
         },
         formData: goodsModel,
         success: function (res) {
+          var pages = getCurrentPages();
+          var prevPage = pages[pages.length - 2];
+          prevPage.setData({
+            update: true,
+          });
           wx.navigateBack({ delta: 1 })
         }
       })
     } else {
       postFetch('/goods/upload2', goodsModel, false).then(response => {
+        var pages = getCurrentPages();
+        var prevPage = pages[pages.length - 2];
+        prevPage.setData({
+          update: true,
+        });
         wx.navigateBack({ delta: 1 })
       })
     }
@@ -239,7 +249,7 @@ const actions = {
       encryptedData: target.encryptedData,
       iv: target.iv
     };
-    getFetch('/wechat/userPhone', target, false).then(response => {})
+    getFetch('/wechat/userPhone', target, false).then(response => { })
   }
 }
 

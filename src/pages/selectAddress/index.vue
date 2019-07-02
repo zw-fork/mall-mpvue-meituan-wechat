@@ -80,7 +80,6 @@ export default {
         keyword: event.mp.detail.value, //用户输入的关键词，可设置固定值,如keyword:'KFC'
         region:'成都', //设置城市名，限制关键词所示的地域范围，非必填参数
         success: function(res) {
-          debugger
           //搜索成功后的回调
           console.log(res);
           var sug = [];

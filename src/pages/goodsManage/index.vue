@@ -43,7 +43,7 @@
         maxlength="8"
         placeholder="请填写商品价格"
         placeholder-style="font-size: 24rpx"
-        v-model="goods.goodsPrice"
+        v-model="goods.min_price"
       >
     </div>
     <div class="b-mid">
@@ -198,9 +198,11 @@ export default {
         });
         return;
       }
-      if (!this.goods.goodsPrice || !this.goods.goodsPrice.trim()) {
+      debugger
+      this.goods.min_price = parseFloat(this.goods.min_price);
+      if (typeof this.goods.min_price !== "number" || isNaN(this.goods.min_price)) {
         wx.showToast({
-          title: "商品价格不能为空!",
+          title: "商品价格应为数字!",
           icon: "none",
           duration: 1000
         });
@@ -208,7 +210,6 @@ export default {
       }
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
-      this.goods.goodsPrice = parseFloat(this.goods.goodsPrice);
       this.uploadImg({ goodsModel: this.goods });
     },
     createCategory() {
@@ -281,9 +282,6 @@ export default {
         ).then(response => {
           if (response.result.list.length > 0) {
             this.goods = response.result.list[0];
-            this.goods.goodsPrice = this.goods.min_price
-              ? this.goods.min_price
-              : this.goods.goodsPrice;
             for (var index in this.categoryArray) {
               if (this.goods.categoryId == this.categoryArray[index].value) {
                 this.goods.categoryName = this.categoryArray[index].label;

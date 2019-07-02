@@ -86,10 +86,8 @@ export default {
       this.item.realname = event.mp.detail;
     },
     onChangeRadio(event) {
-      debugger
       this.item.radio = event.currentTarget.dataset;
       console.log(event.detail);
-      debugger
     },
     changeTel(event) {
       this.item.tel = event.mp.detail;

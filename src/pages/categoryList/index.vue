@@ -1,50 +1,68 @@
 <template>
-<div>
-  <div class="container" @click="update" @mousedown="update" @scroll="update">
-    <div class="header-c">   
-       <div class="cate-c">
-         <span class="c-l" :style="{'font-weight': pageIndex == null  ? 'bold;' : null}" style="text-align:center;width:30%;" @click="updateGoodsList(null)">全部</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 1 ? 'bold;' : null}" style="text-align:center;width:30%;" @click="updateGoodsList(1)">可见</span>
-         <span class="c-m" :style="{'font-weight': pageIndex === 2 ? 'bold;' : null}" style="text-align:center;width:30%;" @click="updateGoodsList(2)">隐藏</span>
-                  <span class="c-m" style="text-align:center;width:10%;" @click="addGoods">
-             <i class="icon iconfont iconplus-circle" style="font-size: 40rpx;"></i>        
-                  </span>
-
-       </div>
-    </div>
-    <div class="list-c">
-      <scroll-view class="list-r" :scroll-y="true"  @scroll="scroll">
-        <div class="item-list" v-for="(item, index) in list.datas" :key="index">
-          <div class="item">
-            <div class="item-r">
-              <div class="r-t">
-                <span class="price">{{item.name}}</span>
-                <div class="add-item">
-                  <div class="add-r" >
-                    <img @click.stop="manageGoods($event, item)" style="width:40rpx;height:40rpx;" src="/static/images/point.png">
+  <div>
+    <div class="container" @click="update" @mousedown="update" @scroll="update">
+      <div class="header-c">
+        <div class="cate-c">
+          <span
+            class="c-l"
+            :style="{'font-weight': pageIndex == null  ? 'bold;' : null}"
+            style="text-align:center;width:30%;"
+            @click="updateGoodsList(null)"
+          >全部</span>
+          <span
+            class="c-m"
+            :style="{'font-weight': pageIndex === 1 ? 'bold;' : null}"
+            style="text-align:center;width:30%;"
+            @click="updateGoodsList(1)"
+          >可见</span>
+          <span
+            class="c-m"
+            :style="{'font-weight': pageIndex === 2 ? 'bold;' : null}"
+            style="text-align:center;width:30%;"
+            @click="updateGoodsList(2)"
+          >隐藏</span>
+          <span class="c-m" style="text-align:center;width:10%;" @click="addGoods">
+            <i class="icon iconfont iconplus-circle" style="font-size: 40rpx;"></i>
+          </span>
+        </div>
+      </div>
+      <div class="list-c">
+        <scroll-view class="list-r" :scroll-y="true" @scroll="scroll">
+          <div class="item-list" v-for="(item, index) in list.datas" :key="index">
+            <div class="item">
+              <div class="item-r">
+                <div class="r-t">
+                  <span class="price">{{item.name}}</span>
+                  <div class="add-item">
+                    <div class="add-r">
+                      <img
+                        @click.stop="manageGoods($event, item)"
+                        style="width:40rpx;height:40rpx;"
+                        src="/static/images/point.png"
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </scroll-view>
+        </scroll-view>
+      </div>
     </div>
-  </div>
-        <div class="editGoods" :style="divStyle" v-if="showEdit">
+    <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
         <i class="icon iconfont iconedit"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-           <div @click="upGoods" v-if="selectGoods.status==2">
+      <div @click="upGoods" v-if="selectGoods.status==2">
         <i class="icon iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">可见</span>
       </div>
-      <div  @click="downGoods" v-if="selectGoods.status==1">
+      <div @click="downGoods" v-if="selectGoods.status==1">
         <i class="icon iconfont iconxiajia"></i>
-        <span style="color:white;text-align: center;">下架</span>
+        <span style="color:white;text-align: center;">隐藏</span>
       </div>
-            <div  @click="deleteGoods">
+      <div @click="deleteGoods">
         <i class="icon iconfont icondelete"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
@@ -53,417 +71,443 @@
 </template>
 
 <script>
-
-import {jointStyle} from "@/utils/style";
+import { jointStyle } from "@/utils/style";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import {formatYMD} from '@/utils/formatTime'
-import {_array} from '@/utils/arrayExtension'
-import {getFetch,postFetch} from '@/network/request/HttpExtension'
-import {GOODS_URL_PREFIX} from '@/constants/hostConfig'
+import { formatYMD } from "@/utils/formatTime";
+import { _array } from "@/utils/arrayExtension";
+import { getFetch, postFetch } from "@/network/request/HttpExtension";
+import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 
 export default {
   data() {
     return {
-      selectGoods:undefined,
+      selectGoods: undefined,
       show: false,
-      divStyle: '',
+      divStyle: "",
       showEdit: false,
       showCart: false,
       tagIndex: 0,
-      scrollTop:undefined,
+      scrollTop: undefined,
       pageIndex: undefined,
-      left: '40rpx',
+      left: "40rpx",
       currentScroll: 0,
       stars: [1, 2, 3, 4],
-      cartGoodsList1 : [],
-      list:{
-        datas : []
+      cartGoodsList1: [],
+      list: {
+        datas: []
       },
-      name: ''
-
-    }
+      name: ""
+    };
   },
-  mounted(){
-    this.updateGoodsList(null)
-    this.getGoods()
+  mounted() {
+    this.updateGoodsList(null);
+    this.getGoods();
   },
   computed: {
-    ...mapState("shoppingCart", ["cartMap","shopInfo", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
+    ...mapState("shoppingCart", [
+      "cartMap",
+      "shopInfo",
+      "commentInfo",
+      "visibleSkuModal",
+      "visibleItemModal",
+      "skuInfo",
+      "previewInfo"
+    ]),
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
-      return "bold;"
+      return "bold;";
     },
     path() {
-      return `${GOODS_URL_PREFIX}`
+      return `${GOODS_URL_PREFIX}`;
     },
     productCount() {
-      var count = 0
+      var count = 0;
       if (this.shopInfo.categoryModelList) {
-         this.shopInfo.categoryModelList.map(item => count += item.count)
+        this.shopInfo.categoryModelList.map(item => (count += item.count));
       }
-      return count
+      return count;
     }
   },
   methods: {
-    ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
-    ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
+    ...mapMutations("shoppingCart", [
+      "changeReduceFeeDataMut",
+      "changeSkuModalMut",
+      "changeItemModalMut"
+    ]),
+    ...mapActions("shoppingCart", [
+      "getMenuDataAction",
+      "getCommentDataAction",
+      "getCategoryMenuDataAction",
+      "addItemAction",
+      "reduceItemAction",
+      "closeShoppingCartAction",
+      "selectSkuAction",
+      "changeSkuDataMut",
+      "attrSelectAction",
+      "changeSkuModalDataAction",
+      "previewItemAction"
+    ]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
     scroll(e) {
-      var value = this.currentScroll - e.target.scrollTop
+      var value = this.currentScroll - e.target.scrollTop;
       if (Math.abs(value) > 0) {
-        this.scrollTop = undefined
-        this.currentScroll = e.target.scrollTop
-        this.showEdit = false
+        this.scrollTop = undefined;
+        this.currentScroll = e.target.scrollTop;
+        this.showEdit = false;
       }
     },
     updateGoodsList(status) {
-     this.list.page = 1
-     this.scrollTop = 0
-     this.pageIndex = status
-     this.getGoods()
+      this.list.page = 1;
+      this.scrollTop = 0;
+      this.pageIndex = status;
+      this.getGoods();
     },
     addGoods() {
-      wx.navigateTo({url: '/pages/categoryManage/main'})
+      wx.navigateTo({ url: "/pages/categoryManage/main" });
     },
     updateGoods(goodsModel) {
-      postFetch('/category/' + this.userInfo.shopId, goodsModel, false).then(response => {
-        this.showEdit = false
-        this.updateGoodsList(this.pageIndex)
-      })
-    },
-    upGoods(){
-      var that = this
-      wx.showModal({
-          content: '确定上架当前商品？',
-          confirmColor: '#FFC24A',
-          success: function(res) {
-            if (res.confirm) {
-              that.selectGoods.status = 1
-              that.updateGoods(that.selectGoods)
-            } else if (res.cancel) {
-            }
+      postFetch("/category/" + this.userInfo.shopId, goodsModel, false).then(
+        response => {
+          this.showEdit = false;
+          this.updateGoodsList(this.pageIndex);
         }
-      })
+      );
     },
-    downGoods(){
-      var that = this
+    upGoods() {
+      var that = this;
       wx.showModal({
-          content: '确定下架当前商品？',
-          confirmColor: '#FFC24A',
-          success: function(res) {
-            if (res.confirm) {
-              that.selectGoods.status = 2
-              that.updateGoods(that.selectGoods)
-            } else if (res.cancel) {
-            }
+        content: "确定显示当前分类及其商品吗？",
+        confirmColor: "#FFC24A",
+        success: function(res) {
+          if (res.confirm) {
+            that.selectGoods.status = 1;
+            that.updateGoods(that.selectGoods);
+          } else if (res.cancel) {
+          }
         }
-      })
+      });
     },
-    deleteGoods(){
-      var that = this
+    downGoods() {
+      var that = this;
       wx.showModal({
-          content: '确定删除当前商品？',
-          confirmColor: '#FFC24A',
-          success: function(res) {
-            if (res.confirm) {
-              that.selectGoods.status = 0
-              that.updateGoods(that.selectGoods)
-            } else if (res.cancel) {
-            }
+        content: "确定隐藏当前分类及其商品吗？",
+        confirmColor: "#FFC24A",
+        success: function(res) {
+          if (res.confirm) {
+            that.selectGoods.status = 2;
+            that.updateGoods(that.selectGoods);
+          } else if (res.cancel) {
+          }
         }
-      })
+      });
+    },
+    deleteGoods() {
+      var that = this;
+      wx.showModal({
+        content: "确定删除当前分类吗？",
+        confirmColor: "#FFC24A",
+        success: function(res) {
+          if (res.confirm) {
+            that.selectGoods.status = 0;
+            that.updateGoods(that.selectGoods);
+          } else if (res.cancel) {
+          }
+        }
+      });
     },
     editGoods() {
-      wx.navigateTo({url: '/pages/categoryManage/main?id=' + this.selectGoods.goodsId})
+      wx.navigateTo({
+        url: "/pages/categoryManage/main?id=" + this.selectGoods.goodsId
+      });
     },
     update() {
-      this.showEdit = false
+      this.showEdit = false;
       return false;
     },
     manageGoods(e, item) {
-      this.selectGoods = item
-      this.showEdit = true
-      this.divStyle = 'top:' + (2*e.target.y-50) + 'rpx;'
+      this.selectGoods = item;
+      this.showEdit = true;
+      this.divStyle = "top:" + (2 * e.target.y - 50) + "rpx;";
       return false;
     },
     scanClick() {
       wx.scanCode({
-        success: (res) => {
-          this.name = 'a'
-          this.getGoods()
-          console.log(res)
+        success: res => {
+          this.name = "a";
+          this.getGoods();
+          console.log(res);
         }
-      })
-    }, 
-    getGoods() {
-      wx.showLoading({title: '加载中...', mask: true})
-      var data = {}
-      data.name = this.name.trim()
-      if (this.pageIndex != undefined) {
-        data.status = this.pageIndex
-      }
-      getFetch('/category/list/'+this.userInfo.shopId, data, false).then(response => {
-        this.list.datas = response.result
-        wx.hideLoading()
-      })
+      });
     },
-     //滚动条滚到底部或右边的时候触发
-  lower(e) {
-    if (this.list.page>0) {
-      wx.showLoading({title: '加载中...', mask: true})
-      var data = {}
-      data.name = this.name.trim()
+    getGoods() {
+      wx.showLoading({ title: "加载中...", mask: true });
+      var data = {};
+      data.name = this.name.trim();
       if (this.pageIndex != undefined) {
-        data.status = this.pageIndex
+        data.status = this.pageIndex;
       }
-      data.page = this.list.page
-      getFetch('/goods/'+this.userInfo.shopId, data, false).then(response => {
-        var goodsList = response.result.list
-        this.list.page =  response.result.nextPage
-        this.list.datas = [
-            ...this.list.datas,
-            ...goodsList
-        ]
-        wx.hideLoading()
-      })
-    }
-  },
+      getFetch("/category/list/" + this.userInfo.shopId, data, false).then(
+        response => {
+          this.list.datas = response.result;
+          wx.hideLoading();
+        }
+      );
+    },
+    //滚动条滚到底部或右边的时候触发
+    lower(e) {
+      if (this.list.page > 0) {
+        wx.showLoading({ title: "加载中...", mask: true });
+        var data = {};
+        data.name = this.name.trim();
+        if (this.pageIndex != undefined) {
+          data.status = this.pageIndex;
+        }
+        data.page = this.list.page;
+        getFetch("/goods/" + this.userInfo.shopId, data, false).then(
+          response => {
+            var goodsList = response.result.list;
+            this.list.page = response.result.nextPage;
+            this.list.datas = [...this.list.datas, ...goodsList];
+            wx.hideLoading();
+          }
+        );
+      }
+    },
     categoryClick(item, index) {
       this.tagIndex = index;
-      var categoryId = item.categoryId
-      this.getCategoryMenuDataAction({categoryId, index})
+      var categoryId = item.categoryId;
+      this.getCategoryMenuDataAction({ categoryId, index });
     },
     menuClick() {
-      this.left = 40 + 'rpx'
-      this.pageIndex = 0
+      this.left = 40 + "rpx";
+      this.pageIndex = 0;
     },
     shopClick() {
-      this.left = 182 + 'rpx'
-      this.pageIndex = 1
+      this.left = 182 + "rpx";
+      this.pageIndex = 1;
     },
     skuClick(item, index) {
-      this.selectSkuAction({item, index})
+      this.selectSkuAction({ item, index });
     },
     addClick(item, index, categoryIndex) {
-      item.oldData = true
-      this.addItemAction({item, index, categoryIndex})
+      item.oldData = true;
+      this.addItemAction({ item, index, categoryIndex });
     },
     reduceClick(item, index, categoryIndex) {
-      item.oldData = true
-      this.reduceItemAction({item, index, categoryIndex})
+      item.oldData = true;
+      this.reduceItemAction({ item, index, categoryIndex });
     },
     closeSku() {
-      this.changeSkuModalMut(false)
+      this.changeSkuModalMut(false);
     },
     attrClick(itm, idx, setIdx) {
-      this.attrSelectAction({itm, idx, setIdx})
+      this.attrSelectAction({ itm, idx, setIdx });
     },
     modalAdd() {
-      var skuInfo = this.skuInfo
-      const {item, index} = skuInfo
-      this.addItemAction({item, index})
-      this.changeSkuModalDataAction({num: 1})
+      var skuInfo = this.skuInfo;
+      const { item, index } = skuInfo;
+      this.addItemAction({ item, index });
+      this.changeSkuModalDataAction({ num: 1 });
     },
     modalReduce() {
-      var skuInfo = this.skuInfo
-      const {item, index} = skuInfo
-      this.reduceItemAction({item, index})
-      this.changeSkuModalDataAction({num: -1})
+      var skuInfo = this.skuInfo;
+      const { item, index } = skuInfo;
+      this.reduceItemAction({ item, index });
+      this.changeSkuModalDataAction({ num: -1 });
     },
     closePreview() {
-      this.changeItemModalMut(false)
+      this.changeItemModalMut(false);
     },
-    itemClick(item ,index) {
-      this.previewItemAction({item, index})
+    itemClick(item, index) {
+      this.previewItemAction({ item, index });
     },
     previewAdd() {
-      var item = this.previewInfo
-      this.addItemAction({item, index:item.preIndex})
+      var item = this.previewInfo;
+      this.addItemAction({ item, index: item.preIndex });
     },
     previewReduce() {
-      var item = this.previewInfo
-      this.reduceItemAction({item, index:item.preIndex})
+      var item = this.previewInfo;
+      this.reduceItemAction({ item, index: item.preIndex });
     },
     previewAttr() {
-      this.changeItemModalMut(false)
-      var item = this.previewInfo
-      this.selectSkuAction({item, index: item.preIndex})
+      this.changeItemModalMut(false);
+      var item = this.previewInfo;
+      this.selectSkuAction({ item, index: item.preIndex });
     }
   },
   onShow(options) {
-    this.getGoods()
+    this.getGoods();
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-  .header-c {
+.header-c {
+  display: flex;
+  flex-direction: column;
+  .cate-c {
     display: flex;
-    flex-direction: column;
-    .cate-c {
-      display: flex;
-      height: 80rpx;
-      align-items: center;
-      position: relative;
-      transition: all 0.2s;
-      .c-l {
-        font-size: 30rpx;
-        color: $textBlack-color;
-      }
-      .c-m {
-        font-size: 30rpx;
-        color: $textBlack-color;
-      }
-      .c-r {
-        font-size: 30rpx;
-        color: $textBlack-color;
-      }
-      .c-main {
-        position: absolute;
-        font-size: 32rpx;
-        color: $textBlack-color;
-        right: 30rpx;
-      }
-    }    
+    height: 80rpx;
+    align-items: center;
+    position: relative;
+    transition: all 0.2s;
+    .c-l {
+      font-size: 30rpx;
+      color: $textBlack-color;
+    }
+    .c-m {
+      font-size: 30rpx;
+      color: $textBlack-color;
+    }
+    .c-r {
+      font-size: 30rpx;
+      color: $textBlack-color;
+    }
+    .c-main {
+      position: absolute;
+      font-size: 32rpx;
+      color: $textBlack-color;
+      right: 30rpx;
+    }
   }
+}
 .editGoods {
   background-color: black;
-   display: flex;
-   position: absolute;
-   opacity: 0.5;
-   right: 0rpx;
-      i {
-     font-size: 50rpx;
-     color:white;
+  display: flex;
+  position: absolute;
+  opacity: 0.5;
+  right: 0rpx;
+  i {
+    font-size: 50rpx;
+    color: white;
     flex-direction: column;
-      align-items: center;
-      margin-left: 20rpx;
-      display: flex;
-   }
-   img {
-           flex-direction: column;
-      align-items: center;
-      display: flex;
-     margin: 10rpx;
-     width: 50rpx;
-     margin-left: 40rpx;
-     height: 50rpx;
-   }
-   span {
-      flex-direction: column;
-      align-items: center;
-      display: flex;
-           margin-left: 20rpx;
-      font-size: 24rpx;
-   }
+    align-items: center;
+    margin-left: 20rpx;
+    display: flex;
+  }
+  img {
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin: 10rpx;
+    width: 50rpx;
+    margin-left: 40rpx;
+    height: 50rpx;
+  }
+  span {
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin-left: 20rpx;
+    font-size: 24rpx;
+  }
 }
-      .header-m {
-        display: flex;
-        align-items: center;
-        flex: 1;
-        background-color: #fff;
-        height: 60rpx;;
-        border-radius: 30rpx;
-        margin-left: 20rpx;
-        align-items: center;
-        i {
-          color: $textDarkGray-color;
-          font-size: 32rpx;
-          margin-left: 20rpx;
-        }
-        span {
-          color: $textDarkGray-color;
-          font-size: 24rpx;
-          margin-left: 10rpx;
-          margin-right:20rpx;
-        }
-      }
-    .screen_cover{
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(0,0,0,.3);
-        z-index: 11;
-    }
+.header-m {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background-color: #fff;
+  height: 60rpx;
+  border-radius: 30rpx;
+  margin-left: 20rpx;
+  align-items: center;
+  i {
+    color: $textDarkGray-color;
+    font-size: 32rpx;
+    margin-left: 20rpx;
+  }
+  span {
+    color: $textDarkGray-color;
+    font-size: 24rpx;
+    margin-left: 10rpx;
+    margin-right: 20rpx;
+  }
+}
+.screen_cover {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 11;
+}
 .ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .cart_food_list {
-    position: fixed;
-    width: 100%;
-    padding-bottom: 1rem;
-    z-index: 12;
-    bottom: 0;
-    left: 0;
+  position: fixed;
+  width: 100%;
+  padding-bottom: 1rem;
+  z-index: 12;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  header {
+    display: flex;
+    align-items: center;
+    padding: 10rpx 10rpx;
+    background-color: #eceff1;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cart_food_details {
     background-color: #fff;
-    header{
-            display: flex;
-            align-items: center;
-            padding: 10rpx 10rpx;
-            background-color: #eceff1;
-            justify-content: space-between;
-            align-items: center;
+    max-height: 550rpx;
+    overflow-y: auto;
+    .cart_food_li {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2rpx solid $spLine-color;
+      padding: 5rpx 40rpx;
+      height: 80rpx;
+      align-items: center;
+      font-size: 32rpx;
+      color: #000;
+      .cart_list_num {
+        width: 55%;
+        p:nth-of-type(1) {
+          font-weight: bold;
         }
-    .cart_food_details{
-            background-color: #fff;
-            max-height: 550rpx;
-            overflow-y: auto;
-            .cart_food_li{
-                display: flex;
-                justify-content: space-between;
-                border-bottom: 2rpx solid $spLine-color;
-                padding: 5rpx 40rpx;
-                height: 80rpx;
-                align-items: center;
-                font-size:32rpx;
-                color:#000;
-                .cart_list_num{
-                    width: 55%;
-                    p:nth-of-type(1){
-                        font-weight: bold;
-                    }
-                    p:nth-of-type(2){
-                    }
-                }
-                .cart_list_price{
-                    span:nth-of-type(1){
-	                    color: #666;
-                        font-family: Helvetica Neue,Tahoma;
-
-                    }
-                    span:nth-of-type(2){
-	                    color: #666;
-                        font-family: Helvetica Neue,Tahoma;
-                        font-weight: bold;
-                    }
-                }
-                .cart_list_control{
-                    display: flex;
-                    align-items: center;
-                    span{
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    svg{
-                        fill: #3190e8;
-                    }
-                    .specs_reduce_icon{
-                        fill: #999;
-                    }
-                    .cart_num{
-                        min-width: 0.5rem;
-                        text-align: center;
-                        font-family: Helvetica Neue,Tahoma;
-                    }
-                }
-            }
-        }       
+        p:nth-of-type(2) {
+        }
+      }
+      .cart_list_price {
+        span:nth-of-type(1) {
+          color: #666;
+          font-family: Helvetica Neue, Tahoma;
+        }
+        span:nth-of-type(2) {
+          color: #666;
+          font-family: Helvetica Neue, Tahoma;
+          font-weight: bold;
+        }
+      }
+      .cart_list_control {
+        display: flex;
+        align-items: center;
+        span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        svg {
+          fill: #3190e8;
+        }
+        .specs_reduce_icon {
+          fill: #999;
+        }
+        .cart_num {
+          min-width: 0.5rem;
+          text-align: center;
+          font-family: Helvetica Neue, Tahoma;
+        }
+      }
+    }
+  }
 }
 .container {
   display: flex;
@@ -487,9 +531,9 @@ export default {
         margin: 0 10rpx;
       }
       img {
-        height:55rpx;
+        height: 55rpx;
         width: 55rpx;
-        margin-left: 20rpx
+        margin-left: 20rpx;
       }
     }
     .header {
@@ -552,7 +596,7 @@ export default {
           .b-l {
             width: 30rpx;
             height: 30rpx;
-            background-color: #FF616D;
+            background-color: #ff616d;
             align-items: center;
             justify-content: center;
             text-align: center;
@@ -577,7 +621,7 @@ export default {
     display: flex;
     position: fixed;
     top: 70rpx;
-    width:100%;
+    width: 100%;
     bottom: 0rpx;
     .list-l {
       display: flex;
@@ -627,7 +671,7 @@ export default {
       }
     }
     .list-r {
-      display:block;
+      display: block;
       flex-direction: column;
       flex: 1;
       background-color: white;
@@ -701,7 +745,7 @@ export default {
                 position: relative;
                 span {
                   font-size: 20rpx;
-                  color: $textBlack-color
+                  color: $textBlack-color;
                 }
                 .count {
                   width: 30rpx;
@@ -835,7 +879,7 @@ export default {
         .h-r {
           @extend .h-l;
           .score {
-            color: $textDarkGray-color
+            color: $textDarkGray-color;
           }
         }
       }
@@ -849,7 +893,7 @@ export default {
         padding-top: 12rpx;
         .tag-item {
           background-color: white;
-          border: 2rpx solid  $spLine-color;
+          border: 2rpx solid $spLine-color;
           padding: 0 16rpx;
           margin-right: 20rpx;
           margin-top: 18rpx;
@@ -862,10 +906,10 @@ export default {
           }
         }
         .tag-item:first-child {
-          background-color: #FFF7E2;
+          background-color: #fff7e2;
           border: 2rpx solid#F0EDBA;
           span {
-            color: #E7AC40;
+            color: #e7ac40;
           }
         }
       }
@@ -907,7 +951,7 @@ export default {
                   color: $textBlack-color;
                 }
                 .date {
-                  font-size:20rpx;
+                  font-size: 20rpx;
                   color: $textGray-color;
                 }
               }
@@ -923,7 +967,7 @@ export default {
                   }
                 }
                 .b-r {
-                  font-size:20rpx;
+                  font-size: 20rpx;
                   color: $textGray-color;
                   margin-left: 20rpx;
                 }
@@ -979,7 +1023,7 @@ export default {
                 }
                 span {
                   font-size: 24rpx;
-                  color: #777D8A;
+                  color: #777d8a;
                   margin-left: 20rpx;
                 }
               }
@@ -993,7 +1037,7 @@ export default {
             }
             .reply-c {
               display: flex;
-              background-color: #F4F4F4;
+              background-color: #f4f4f4;
               padding: 20rpx 14rpx;
               margin-top: 20rpx;
               margin-bottom: 30rpx;
@@ -1100,8 +1144,8 @@ export default {
           justify-content: center;
           display: flex;
           text-align: center;
-          border: 2rpx solid #0095D8;
-          color: #0095D8;
+          border: 2rpx solid #0095d8;
+          color: #0095d8;
           font-size: 20rpx;
           margin-left: 10rpx;
         }
@@ -1149,7 +1193,7 @@ export default {
       align-items: center;
       justify-content: center;
       height: 50rpx;
-      background-color: #FFEFD2;
+      background-color: #ffefd2;
       span {
         font-size: 20rpx;
         color: $textBlack-color;
@@ -1176,7 +1220,7 @@ export default {
         .m-l {
           display: flex;
           align-items: center;
-          background-color: #2F2F2F;
+          background-color: #2f2f2f;
           .l-l {
             font-size: 24rpx;
             color: $textDarkGray-color;
@@ -1199,7 +1243,7 @@ export default {
         justify-content: center;
         width: 200rpx;
         height: 100rpx;
-        background-color: #2F2F2F;
+        background-color: #2f2f2f;
         span {
           font-size: 32rpx;
           color: $textDarkGray-color;
@@ -1287,11 +1331,11 @@ export default {
               margin-right: 20rpx;
               span {
                 font-size: 24rpx;
-                color: $textBlack-color
+                color: $textBlack-color;
               }
             }
             .selected {
-              background-color: #FFF9F4;
+              background-color: #fff9f4;
               border: 2rpx solid $theme-color;
               span {
                 color: $theme-color;
@@ -1319,7 +1363,7 @@ export default {
           }
           .sku {
             font-size: 20rpx;
-            color:  $textBlack-color;
+            color: $textBlack-color;
             margin-left: 20rpx;
           }
         }
@@ -1335,11 +1379,11 @@ export default {
             background-color: $theme-color;
             i {
               font-size: 28rpx;
-              color:  $textBlack-color;
+              color: $textBlack-color;
             }
             span {
               font-size: 24rpx;
-              color:  $textBlack-color;
+              color: $textBlack-color;
               margin-left: 10rpx;
             }
           }
@@ -1381,7 +1425,7 @@ export default {
         .item-img {
           width: 100%;
           height: 400rpx;
-          background-color: #E7AC40;
+          background-color: #e7ac40;
           border-top-left-radius: 10rpx;
           border-top-right-radius: 10rpx;
         }
@@ -1467,7 +1511,7 @@ export default {
             position: relative;
             span {
               font-size: 20rpx;
-              color: $textBlack-color
+              color: $textBlack-color;
             }
             .count {
               width: 30rpx;

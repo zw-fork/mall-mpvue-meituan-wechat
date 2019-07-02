@@ -27,24 +27,6 @@
           </div>
         </div>
       </div>
-      <div class="editGoods" :style="divStyle" v-if="showEdit">
-        <div @click="editGoods">
-          <i class="icon iconfont iconedit"></i>
-          <span style="color:white;text-align: center;">编辑</span>
-        </div>
-        <div @click="upGoods" v-if="selectGoods.status==2">
-          <i class="icon iconfont iconshangjia1"></i>
-          <span style="color:white;text-align: center;">上架</span>
-        </div>
-        <div @click="downGoods" v-if="selectGoods.status==1">
-          <i class="icon iconfont iconxiajia"></i>
-          <span style="color:white;text-align: center;">下架</span>
-        </div>
-        <div @click="deleteGoods">
-          <i class="icon iconfont icondelete"></i>
-          <span style="color:white;text-align: center;">删除</span>
-        </div>
-      </div>
       <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
         <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
           <span style="margin-left: 20rpx;">商品管理</span>

@@ -60,7 +60,7 @@ const actions = {
             if (shopInfo.categoryModelList.length <= index) {
               index = 0
             }
-            getFetch('/goods/' + shopId, { page: 1, 'categoryId': shopInfo.categoryModelList[index].categoryId }, false).then(response => {
+            getFetch('/goods/' + shopId, { page: 1, 'categoryId': shopInfo.categoryModelList[index].categoryId, 'status' : 1 }, false).then(response => {
               var goods = response.result || {}
               var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId }
               shopInfo.categoryModelList[index].spus = spus
