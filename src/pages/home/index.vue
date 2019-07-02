@@ -110,6 +110,7 @@
           console.log(res);
           that.address = res.result.address;
           that.location = res.result.location
+          that.userInfo.location = res.result.location
           getFetch(
             "/shop/nearShop",
             {

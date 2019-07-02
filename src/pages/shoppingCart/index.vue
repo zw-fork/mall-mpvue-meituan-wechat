@@ -161,7 +161,7 @@
           <div class="m-l">
             <span class="l-l">另需配送费￥{{shopInfo.support_pay}}</span>
             <div class="l-m"></div>
-            <span class="l-r">小区内配送</span>
+            <span class="l-r">{{shopInfo.distance>shopInfo.scope? '超出配送范围' : '小区内配送'}}</span>
           </div>
         </div>
         <div
@@ -210,6 +210,7 @@ import { formatYMD } from "@/utils/formatTime";
 import { _array } from "@/utils/arrayExtension";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
+import QQMapWX from "qqmap-wx-jssdk";
 
 export default {
   data() {
@@ -494,17 +495,17 @@ export default {
     },
     categoryClick(item, index) {
       this.tagIndex = index;
-      this.showEdit = false
+      this.showEdit = false;
       var categoryId = item.categoryId;
       this.getCategoryMenuDataAction({ categoryId, index });
     },
     menuClick() {
-      this.showEdit = false
+      this.showEdit = false;
       this.left = 40 + "rpx";
       this.pageIndex = 0;
     },
     shopClick() {
-      this.showEdit = false
+      this.showEdit = false;
       this.left = 182 + "rpx";
       this.pageIndex = 1;
     },
@@ -577,13 +578,21 @@ export default {
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
       this.getMenuDataAction({
-      shopId: this.shopId,
-      index: this.tagIndex,
-      flag: true
-    });
+        shopId: this.shopId,
+        index: this.tagIndex,
+        flag: true
+      });
     }
   },
   onLoad(options) {
+    var location = this.userInfo.location;
+    var data = {};
+    if (location) {
+      data = {
+        longitude: location.lng,
+        latitude: location.lat
+      };
+    }
     this.pageIndex = 0;
     var that = this;
     this.shopId = options.shopId;
@@ -597,6 +606,7 @@ export default {
     }
     this.getMenuDataAction({
       shopId: this.shopId,
+      data: data,
       index: this.tagIndex,
       flag: update
     });

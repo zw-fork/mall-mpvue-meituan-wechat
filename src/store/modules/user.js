@@ -245,10 +245,6 @@ const actions = {
     }
   },
   getPhoneNumber({ state, commit }, { target }) {
-    var jsonData = {
-      encryptedData: target.encryptedData,
-      iv: target.iv
-    };
     getFetch('/wechat/userPhone', target, false).then(response => { })
   }
 }

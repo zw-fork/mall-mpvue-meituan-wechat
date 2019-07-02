@@ -46,13 +46,13 @@ const mutations = {
 }
 
 const actions = {
-  getMenuDataAction({ state, commit }, { shopId, index, flag }) {
+  getMenuDataAction({ state, commit }, { shopId, data, index, flag }) {
     if ((state.shopInfo && state.shopInfo.shopId != shopId) || flag) {
       state.shopInfo = {}
       state.cartMap = {}
       state.categoryMap = {}
       wx.showLoading({ title: '加载中...', mask: true })
-      getFetch('/shop/' + shopId, {}, false).then(response => {
+      getFetch('/shop/' + shopId,  data, false).then(response => {
         var shopInfo = response.result || {}
         if (shopInfo.shopId) {
           shopInfo.prompt_text = "满35减23;满50减33;满70减43"
