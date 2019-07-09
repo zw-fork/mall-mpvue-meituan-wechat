@@ -35,7 +35,7 @@
 			"current": 0,
 			"list": [
 				{
-					"id": -1,
+					"id": 0,
 					"name": "二维码",
 					"pathName": "pages/home/main",
 					"query": "shopId=1",

@@ -34,8 +34,8 @@ const host = {
     envVersion: 'develop'
   },
   prd: {
-    API_URL: 'https://digcampus.natapp4.cc/',
-   // API_URL: 'http://39.106.34.223:7100/',
+    //API_URL: 'https://digcampus.natapp4.cc/',
+    API_URL: 'http://localhost:8100/',
     XIAMI_URL: 'https://api-m.mtime.cn',
     GOODS_URL_PREFIX: 'https://digcampus.natapp4.cc/img',
    // GOODS_URL_PREFIX: 'http://39.106.34.223:7200/',

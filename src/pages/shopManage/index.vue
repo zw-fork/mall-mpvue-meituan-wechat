@@ -45,6 +45,17 @@
         v-model="shop.building"
       >
     </div>
+    <div class="name" style="height: 65rpx;">
+      <span>配送范围：</span>
+      <input
+        type="digit"
+        maxlength="5"
+        placeholder="例如:1.2"
+        placeholder-style="font-size: 24rpx"
+        v-model="shop.scope"
+      >
+      <div class="mid-r" @click="showSinglePicker">公里</div>
+    </div>
     <div class="b-mid" @click="remarkClick" v-if="shop.shopId" style="height: 65rpx;">
       <span class="mid-l">商店状态:</span>
       <div class="mid-r" @click="showSinglePicker">

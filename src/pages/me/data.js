@@ -131,7 +131,7 @@ const homeData = {
         }, {
           "brand_type": -1,
           "code": 960,
-          "path": "/pages/orderItemList/main",
+          "path": "/pages/statistics/main",
           "first_tag_codes": [],
           "gray_switch": 0,
           "gray_url": "http://p0.meituan.net/jungle/c6fcf3162a093903f30ebbef8acdf40610735.png",

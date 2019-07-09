@@ -57,6 +57,7 @@
                 <span class="sub-title">姓名：{{item.nickname}}</span>
                 <span class="sub-title">电话号码：{{item.tel}}</span>
                 <span class="sub-title">角色：{{item.role == 2 ? '店主' : '员工'}}</span>
+                <span class="sub-title">已关注公众号，可接收订单消息/未关注公众号，不可接收订单消息</span>
               </div>
             </div>
           </div>
@@ -630,8 +631,6 @@ export default {
             display: flex;
             flex-direction: column;
             margin-left: 20rpx;
-            justify-content: space-between;
-            flex: 1;
             .title {
               font-size: 28rpx;
               color: $textBlack-color;
