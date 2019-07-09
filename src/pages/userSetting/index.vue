@@ -1,9 +1,8 @@
 <template>
   <div class="container">
     <van-cell-group>
-      <van-field value="输入框已禁用" label="微信号" disabled border="false"/>
       <van-field
-        v-model="item.realname"
+        v-model="userInfo.realname"
         @change="changeUsername"
         required
         clearable
@@ -13,47 +12,23 @@
       />
       <van-field
         @change="changeTel"
-        v-model="item.tel"
+        v-model="userInfo.tel"
         label="手机号"
         placeholder="请输入手机号"
         :error-message="telError"
         border="false"
       />
-      <div style="margin-left: 50rpx;display:inline-block">
-        <van-radio-group :value="item.radio">
-          性别
-          <van-radio name="1" style="margin-left: 50rpx;display:inline-block" @click="onChangeRadio">男</van-radio>
-          <van-radio name="2" style="margin-left: 50rpx;display:inline-block" @click="onChangeRadio">女</van-radio>
-        </van-radio-group>
-      </div>
     </van-cell-group>
-    <div class="sex">
-      <div class="l"></div>
-      <div class="tag-c">
-        <div class="tag" :style="styleA" @click="updateSex(1)">
-          <span>先生</span>
-        </div>
-        <div class="tag" :style="styleB" @click="updateSex(0)">
-          <span>女士</span>
-        </div>
-      </div>
+    <div class="submit-btn" @click="saveWx">
+      <span>保存</span>
     </div>
-    <div class="submit-btn" @click="saveAddress">
-      <span>保存地址</span>
-    </div>
-    <mp-uploader
-      @upLoadSuccess="upLoadSuccess"
-      @upLoadFail="upLoadFail"
-      @uploadDelete="uploadDelete"
-      :showTip="false"
-      :count="1"
-    ></mp-uploader>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import mpButton from "mpvue-weui/src/button";
+import { postFetch } from "@/network/request/HttpExtension";
 
 export default {
   components: {
@@ -82,17 +57,26 @@ export default {
   },
   methods: {
     ...mapActions("address", ["saveOrUpdateAddress"]),
+    saveWx() {
+      var d =  this.userInfo
+      postFetch("/wechat/updateWx", d, false).then(
+        response => {
+          this.userInfo = response.result
+          wx.navigateBack()
+        }
+      );
+    },
     changeUsername(event) {
-      this.item.realname = event.mp.detail;
+      this.userInfo.realname = event.mp.detail;
     },
     onChangeRadio(event) {
-      this.item.radio = event.currentTarget.dataset;
+      this.userInfo.radio = event.currentTarget.dataset;
       console.log(event.detail);
     },
     changeTel(event) {
-      this.item.tel = event.mp.detail;
-      if (this.item.tel) {
-        this.telError = "手机号错误" + this.item.tel;
+      this.userInfo.tel = event.mp.detail;
+      if (!this.userInfo.tel) {
+        this.telError = "手机号错误";
       } else {
         this.telError = "";
       }
