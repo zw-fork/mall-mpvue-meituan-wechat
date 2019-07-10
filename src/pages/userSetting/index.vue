@@ -19,6 +19,19 @@
         border="false"
       />
     </van-cell-group>
+    <div style="display:inline-block" v-if="userInfo.status>1">
+      <div class="sex">
+        <div class="l">关联公众号：</div>
+        <div class="tag-c">
+          <div class="tag" @click="saveWx(3)" v-if="userInfo.status!=3">
+            <span>同意</span>
+          </div>
+          <div class="tag" @click="saveWx(4)" v-if="userInfo.status!=4">
+            <span>取消</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="submit-btn" @click="saveWx">
       <span>保存</span>
     </div>
@@ -28,7 +41,7 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import mpButton from "mpvue-weui/src/button";
-import { postFetch } from "@/network/request/HttpExtension";
+import { postFetch,getFetch } from "@/network/request/HttpExtension";
 
 export default {
   components: {
@@ -43,6 +56,7 @@ export default {
       styleA: "background-color: #87CEFA",
       clazzB: "icon mt-unselected-o",
       styleB: "background-color: none;",
+      userInfo: {},
       item: {
         radio: "2",
         gender: 1,
@@ -52,19 +66,19 @@ export default {
   },
   computed: {
     ...mapState("address", ["myAddress"]),
-    ...mapState("user", ["userInfo"]),
     ...mapState("shoppingCart", ["shopInfo"])
   },
   methods: {
     ...mapActions("address", ["saveOrUpdateAddress"]),
-    saveWx() {
-      var d =  this.userInfo
-      postFetch("/wechat/updateWx", d, false).then(
-        response => {
-          this.userInfo = response.result
-          wx.navigateBack()
-        }
-      );
+    saveWx(status) {
+      if (status) {
+        this.userInfo.status = status;
+      }
+      var d = this.userInfo;
+      postFetch("/wechat/updateWx", d, false).then(response => {
+        this.userInfo = response.result;
+        wx.navigateBack();
+      });
     },
     changeUsername(event) {
       this.userInfo.realname = event.mp.detail;
@@ -81,6 +95,11 @@ export default {
         this.telError = "";
       }
     }
+  },
+  mounted() {
+    getFetch("/wechat/getUser", {}, false).then(response => {
+      this.userInfo = response || {};
+    });
   }
 };
 </script>
@@ -132,17 +151,16 @@ input {
   .sex {
     display: flex;
     align-items: center;
-    margin-left: 30rpx;
     padding-right: 30rpx;
     height: 80rpx;
     border-bottom: 2rpx solid $spLine-color;
     .l {
-      width: 160rpx;
+      width: 250rpx;
     }
     .m {
       display: flex;
       i {
-        font-size: 32rpx;
+        font-size: 28rpx;
         color: $theme-color;
       }
       span {

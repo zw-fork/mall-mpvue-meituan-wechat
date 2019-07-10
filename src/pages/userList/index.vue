@@ -57,7 +57,9 @@
                 <span class="sub-title">姓名：{{item.realname}}</span>
                 <span class="sub-title">电话号码：{{item.tel}}</span>
                 <span class="sub-title">角色：{{item.role == 2 ? '店主' : '员工'}}</span>
-                <span class="sub-title">已关注公众号，可接收订单消息/未关注公众号，不可接收订单消息</span>
+                <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
+                <span class="sub-title" v-else-if="item.status==2">同意/不同意</span>
+                <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
               </div>
             </div>
           </div>
