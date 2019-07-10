@@ -41,13 +41,8 @@
         </div>
       </div>
       <div class="list-c">
-        <scroll-view class="list-r"
-                     :scroll-y="true"
-                     :scroll-top="scrollTop"
-                     @scrolltolower="lower">
-          <div class="item-list"
-               v-for="(item, index) in list.datas"
-               :key="index">
+        <scroll-view class="list-r" :scroll-y="true" :scroll-top="scrollTop" @scrolltolower="lower">
+          <div class="item-list" v-for="(item, index) in list.datas" :key="index">
             <div class="item">
               <div class="item-l">
                 <img :src="item.avatarUrl">
@@ -58,7 +53,7 @@
                 <span class="sub-title">电话号码：{{item.tel}}</span>
                 <span class="sub-title">角色：{{item.role == 2 ? '店主' : '员工'}}</span>
                 <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
-                <span class="sub-title" v-else-if="item.status==2">同意/不同意</span>
+                <span class="sub-title" v-else-if="item.status==2">同意关注公众号/不同意公众关注号</span>
                 <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
               </div>
             </div>
@@ -194,14 +189,12 @@ export default {
         wx.showLoading({ title: "加载中...", mask: true });
         var data = {};
         data.page = this.list.page;
-        getFetch("/wechat/userList", data, false).then(
-          response => {
-            var goodsList = response.result.list;
-            this.list.page = response.result.nextPage;
-            this.list.datas = [...this.list.datas, ...goodsList];
-            wx.hideLoading();
-          }
-        );
+        getFetch("/wechat/userList", data, false).then(response => {
+          var goodsList = response.result.list;
+          this.list.page = response.result.nextPage;
+          this.list.datas = [...this.list.datas, ...goodsList];
+          wx.hideLoading();
+        });
       }
     },
     updateGoodsList(status) {
@@ -279,9 +272,8 @@ export default {
     scanClick() {
       wx.scanCode({
         success: res => {
-          this.name = "a";
-          this.getGoods();
-          console.log(res);
+          getFetch(res.result, {}, false).then(response => {
+          });
         }
       });
     },

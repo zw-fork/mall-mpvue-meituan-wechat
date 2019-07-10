@@ -164,7 +164,7 @@ export default {
         {
           title: "生成二维码",
           icon: "mt-protocol-o",
-          path: "/pages/index/main?addWorker=1&shopId=1"
+          path: "/pages/qrcode/main"
         },
         {
           title: "加入店铺",
