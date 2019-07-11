@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="submit-btn" @click="saveWx">
+    <div class="submit-btn" @click="saveWx(null)">
       <span>保存</span>
     </div>
   </div>
@@ -97,7 +97,7 @@ export default {
     }
   },
   mounted() {
-    getFetch("/wechat/getUser", {}, false).then(response => {
+    getFetch("/wechat/getCurrentUser", {}, false).then(response => {
       this.userInfo = response || {};
     });
   }

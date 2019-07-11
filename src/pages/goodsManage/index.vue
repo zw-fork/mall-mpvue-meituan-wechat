@@ -198,7 +198,6 @@ export default {
         });
         return;
       }
-      debugger
       this.goods.min_price = parseFloat(this.goods.min_price);
       if (typeof this.goods.min_price !== "number" || isNaN(this.goods.min_price)) {
         wx.showToast({

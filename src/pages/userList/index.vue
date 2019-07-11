@@ -12,11 +12,6 @@
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
             <span @click="getGoods()">搜索</span>
-            <i
-              @click="addGoods()"
-              class="icon iconfont iconplus-circle"
-              style="margin-left:20rpx;margin-right:20rpx;font-size: 36rpx;"
-            ></i>
           </div>
         </div>
         <div class="cate-c">
@@ -55,6 +50,13 @@
                 <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
                 <span class="sub-title" v-else-if="item.status==2">同意关注公众号/不同意公众关注号</span>
                 <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
+                <div class="r-t">
+                  <div class="add-item">
+                    <div class="add-r" @click.stop="manageGoods($event, item)">
+                      <i class="icon iconfont icondian"></i>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -62,20 +64,12 @@
       </div>
     </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
-      <div @click="editGoods">
+      <div @click="editGoods" v-if="userInfo.role==3">
         <i class="icon iconfont iconedit"></i>
-        <span style="color:white;text-align: center;">编辑</span>
+        <span style="color:white;text-align: center;">店铺</span>
       </div>
-      <div @click="upGoods" v-if="selectGoods.status==2">
+      <div @click="upGoods" v-if="userInfo.role==2">
         <i class="icon iconfont iconshangjia1"></i>
-        <span style="color:white;text-align: center;">上架</span>
-      </div>
-      <div @click="downGoods" v-if="selectGoods.status==1">
-        <i class="icon iconfont iconxiajia"></i>
-        <span style="color:white;text-align: center;">下架</span>
-      </div>
-      <div @click="deleteGoods">
-        <i class="icon iconfont icondelete"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
@@ -255,8 +249,9 @@ export default {
       });
     },
     editGoods() {
+      var id = this.selectGoods.id;
       wx.navigateTo({
-        url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId
+        url: "/pages/shopManage/main?id=" + id
       });
     },
     update() {
@@ -272,19 +267,18 @@ export default {
     scanClick() {
       wx.scanCode({
         success: res => {
-          getFetch(res.result, {}, false).then(response => {
-          });
+          getFetch(res.result, {}, false).then(response => {});
         }
       });
     },
     getGoods() {
       wx.showLoading({ title: "加载中...", mask: true });
       var data = {};
-      data.name = this.name.trim();
+      data.tel = this.name.trim();
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
       }
-      getFetch("/wechat/userList", {}, false).then(response => {
+      getFetch("/wechat/userList", data, false).then(response => {
         this.list.datas = response.result.list;
         this.list.page = response.result.nextPage;
         wx.hideLoading();
@@ -380,12 +374,6 @@ export default {
     .c-r {
       font-size: 30rpx;
       color: $textBlack-color;
-    }
-    .c-main {
-      position: absolute;
-      font-size: 32rpx;
-      color: $textBlack-color;
-      right: 30rpx;
     }
   }
 }
@@ -493,6 +481,7 @@ export default {
         .r-t {
           display: flex;
           align-items: center;
+          justify-content: space-between;
           .t-l {
             font-size: 20rpx;
             color: white;
@@ -625,6 +614,8 @@ export default {
             display: flex;
             flex-direction: column;
             margin-left: 20rpx;
+            justify-content: space-between;
+            flex: 1;
             .title {
               font-size: 28rpx;
               color: $textBlack-color;
@@ -646,6 +637,11 @@ export default {
               color: $textDarkGray-color;
               margin-top: 10rpx;
             }
+            .add-r {
+              i {
+                font-size: 54rpx;
+              }
+            }
             .r-t {
               display: flex;
               align-items: center;
@@ -654,33 +650,6 @@ export default {
                 font-size: 32rpx;
                 color: $mtRed-color;
                 font-weight: bold;
-              }
-              .sku {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: $theme-color;
-                padding: 8rpx 12rpx;
-                border-radius: 25rpx;
-                position: relative;
-                span {
-                  font-size: 20rpx;
-                  color: $textBlack-color;
-                }
-                .count {
-                  width: 30rpx;
-                  height: 30rpx;
-                  background-color: $mtRed-color;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  position: absolute;
-                  color: white;
-                  font-size: 20rpx;
-                  right: 0;
-                  top: -14rpx;
-                  border-radius: 15rpx;
-                }
               }
               .add-item {
                 display: flex;
@@ -701,6 +670,7 @@ export default {
                 }
                 .add-r {
                   i {
+                    color: $theme-color;
                     font-size: 54rpx;
                   }
                 }

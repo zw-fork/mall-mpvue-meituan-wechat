@@ -3,7 +3,6 @@
     <div class="name" style="height: 65rpx;">
       <span>店铺名称：</span>
       <input
-        disabled="disabled"
         maxlength="20"
         placeholder="请填写商品名称(20字内)"
         placeholder-style="font-size: 24rpx"
@@ -20,13 +19,6 @@
           v-model="shop.phone"
           maxlength="11"
         >
-      </div>
-    </div>
-    <div class="b-mid" v-if="!shop.shopId">
-      <span class="mid-l">小区名称:</span>
-      <div class="mid-r" @click="addressClick">
-        <span>{{shop.communityName}}</span>
-        <i class="icon iconfont iconright"></i>
       </div>
     </div>
     <div class="b-mid" style="height: 65rpx;">
@@ -146,7 +138,7 @@ export default {
       styleB: "color: #333",
       statusArray: [
         {
-          label: "打烊",
+          label: "停服",
           value: 0
         },
         {
@@ -154,8 +146,12 @@ export default {
           value: 1
         },
         {
-          label: "停业",
+          label: "打烊",
           value: 2
+        },
+        {
+          label: "停业",
+          value: 3
         }
       ],
       type: undefined,
@@ -174,6 +170,7 @@ export default {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
     ...mapActions("user", ["wxLocation"]),
+    ...mapMutations("user", ["changeUserInfoMut"]),
     deleteImg() {
       this.shop.pic_url = "";
     },
@@ -202,6 +199,9 @@ export default {
       var that = this;
       wx.chooseLocation({
         success: function(res) {
+          if (!that.shop.wxAddress) {
+            that.shop.wxAddress = {};
+          }
           that.shop.wxAddress = res;
         }
       });
@@ -223,11 +223,8 @@ export default {
     },
     onConfirm(e) {
       if (this.type == "status") {
-        this.goods.status = e.value[0];
-        this.goods.statusName = e.label;
-      } else {
-        this.goods.categoryName = e.label;
-        this.goods.categoryId = e.value[0];
+        this.shop.status = e.value[0];
+        this.shop.statusName = e.label;
       }
     },
     updateShop() {
@@ -267,10 +264,40 @@ export default {
     }
   },
   onLoad(options) {
-    if (this.userInfo.shopId) {
+    var shopId = this.userInfo.shopId;
+    var userId = this.userInfo.id;
+    if (options.id) {
+      userId = options.id;
+      getFetch("/wechat/getUser/" + options.id, {}, false).then(response => {
+        shopId = response.shopId;
+        if (shopId) {
+          wx.showLoading({ title: "加载中...", mask: true });
+          getFetch("/shop/" + shopId, {}, false).then(response => {
+            this.shop = response.result || {};
+            if (this.shop.tel.length > 0) {
+              this.shop.phone = this.shop.tel[0];
+            }
+            for (var index in this.statusArray) {
+              if (this.shop.status == this.statusArray[index].value) {
+                this.shop.statusName = this.statusArray[index].label;
+              }
+            }
+            wx.hideLoading();
+          });
+        } else {
+          this.shop = {
+            statusName: undefined,
+            status: 3,
+            tel: [],
+            phone: undefined
+          };
+          this.shop.userid = userId;
+        }
+      });
+    } else if (shopId) {
       wx.showLoading({ title: "加载中...", mask: true });
-      getFetch("/shop/" + this.userInfo.shopId, {}, false).then(response => {
-        this.shop = response.result;
+      getFetch("/shop/" + shopId, {}, false).then(response => {
+        this.shop = response.result || {};
         if (this.shop.tel.length > 0) {
           this.shop.phone = this.shop.tel[0];
         }
@@ -284,10 +311,11 @@ export default {
     } else {
       this.shop = {
         statusName: undefined,
-        status: undefined,
+        status: 3,
         tel: [],
         phone: undefined
       };
+      this.shop.userid = userId;
     }
   }
 };

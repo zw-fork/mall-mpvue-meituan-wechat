@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="order-c" v-if="userInfo.role==-1">
+      <div class="order-c" v-if="userInfo.role==3">
         <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
           <span style="margin-left: 20rpx;">超级管理员</span>
         </div>
@@ -106,10 +106,6 @@
           </button>
         </div>
       </div>
-      <div></div>
-      <div class="btn" @click="locationSearchClick()">位置信息</div>
-      <div class="btn" @click="locationClick()">获取当前位置</div>
-      <div class="btn" @click="logoutClick($event)">退出账号</div>
     </div>
   </div>
 </template>
@@ -134,6 +130,7 @@ export default {
       goodsMenuList: [],
       superMenuList: [],
       orderList: [],
+
       itemList: [
         {
           title: "红包",
@@ -196,6 +193,9 @@ export default {
     });
   },
   methods: {
+    ...mapMutations("user", [
+      "changeUserInfoMut"
+    ]),
     ...mapActions("user", ["wxLocation"]),
     update() {
       if (!this.show) {
@@ -257,15 +257,20 @@ export default {
     }
   },
   onPullDownRefresh: function() {
-    if (this.userInfo.shopId) {
-      getFetch("/order/count/" + this.userInfo.shopId, false).then(response => {
-        var count = response.result;
-        this.orderCount = [];
-        this.orderCount.push(count.新订单);
-        this.orderCount.push(count.配送中);
-        this.orderCount.push(count.退款);
-      });
-    }
+    getFetch("/wechat/getUser", {}, false).then(response => {
+      this.changeUserInfoMut(response || {})
+      if (this.userInfo.shopId) {
+        getFetch("/order/count/" + this.userInfo.shopId, false).then(
+          response => {
+            var count = response.result;
+            this.orderCount = [];
+            this.orderCount.push(count.新订单);
+            this.orderCount.push(count.配送中);
+            this.orderCount.push(count.退款);
+          }
+        );
+      }
+    });
   }
 };
 </script>
