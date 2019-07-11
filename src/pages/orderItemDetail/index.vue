@@ -37,7 +37,7 @@
           </div>
           <div class="btn"
                @click="refund"
-               v-if="orderByShopIdDetail.refundStatus==1">
+               v-if="orderByShopIdDetail.refundStatus!=2">
             <span>退款</span>
           </div>
           <div class="btn"
