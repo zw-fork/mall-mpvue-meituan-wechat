@@ -213,6 +213,7 @@ const actions = {
 
   uploadImg({ state, commit }, { goodsModel }) {
     var path = `${API_URL}`
+    goodsModel.goodsPrice = goodsModel.min_price
     if (goodsModel.wechat) {
       var sessionId = wx.getStorageSync('sessionId')
       wx.uploadFile({

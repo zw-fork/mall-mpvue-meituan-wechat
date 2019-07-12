@@ -72,7 +72,7 @@
               {
                 longitude: res.result.location.lng,
                 latitude: res.result.location.lat,
-                dis: 21.5
+                dis: 100.5
               },
               false
             ).then(response => {

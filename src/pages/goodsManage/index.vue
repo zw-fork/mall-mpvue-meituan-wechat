@@ -158,7 +158,8 @@ export default {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
     deleteImg() {
-      this.goods.picture = undefined;
+      this.goods.picture = "";
+      this.goods.wechat = true
     },
     uploadImg2() {
       if (this.goods.picture) {
@@ -209,6 +210,7 @@ export default {
       }
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
+      debugger
       this.uploadImg({ goodsModel: this.goods });
     },
     createCategory() {

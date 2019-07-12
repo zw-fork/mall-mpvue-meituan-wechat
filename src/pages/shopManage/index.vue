@@ -198,7 +198,8 @@ export default {
         sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: function(photo) {
-          console.log(photo.tempFilePaths[0]);
+          that.shop.wechat = true;
+          that.shop.pic_url = "";
           wx.getImageInfo({
             src: photo.tempFilePaths[0],
             success: function(res) {
@@ -362,6 +363,8 @@ export default {
         statusName: undefined,
         status: 3,
         tel: [],
+        wechat: true,
+        pic_url: undefined,
         phone: undefined
       };
       this.shop.userid = userId;
