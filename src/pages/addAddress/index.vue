@@ -117,8 +117,7 @@ export default {
       };
     }
     if (this.shopInfo && this.userInfo.addressModel) {
-      this.item.address = this.shopInfo.addressModel.address;
-      this.item.communityId = this.shopInfo.addressModel.communityId;
+      this.item.address = this.shopInfo.wxAddress.name;
     }
     this.updateSex(this.item.gender);
   }

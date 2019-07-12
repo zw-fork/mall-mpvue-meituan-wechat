@@ -155,7 +155,6 @@ const actions = {
   },
   postOrderDataAction({ state, commit }, { order }) {
     wx.showLoading({ title: '加载中...', mask: true })
-    var params = { 'order': order }
     postFetch('/order/' + order.uid, order, false).then(response => {
       var user = response.result || {}
       this.state.shoppingCart.shopInfo = {}
@@ -164,7 +163,7 @@ const actions = {
       }
       var number = response.result.number
       commit('changeUserDataMut', user)
-      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, { shopName: order.shopInfo.addressModel.address + '-' + order.shopInfo.shopName }, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, { shopName: order.shopInfo.wxAddress.name + '-' + order.shopInfo.shopName }, false).then(response => {
         wx.requestPayment({
           timeStamp: response.result.timeStamp,
           nonceStr: response.result.nonceStr,

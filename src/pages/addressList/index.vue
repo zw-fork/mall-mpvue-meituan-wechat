@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="list-c">
-      <div class="item" v-for="(item, index) in myAddress" :key="index" v-if="item.communityId==communityId || !communityId">
+      <div class="item" v-for="(item, index) in myAddress" :key="index" v-if="item.address == shopInfo.wxAddress.name">
         <div class="i-l" @touchstart="showDeleteButton(item.id)" @touchend="clearLoop(item.id)">
           <div class="user-info">
             <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
@@ -12,7 +12,7 @@
         <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
       </div>
     </div>
-    <div class="submit-btn" @click="addClick()" v-if="shopInfo.communityId">
+    <div class="submit-btn" @click="addClick()">
       <i class="icon iconfont iconplus-circle"></i>
       <span>新增收货地址</span>
     </div>

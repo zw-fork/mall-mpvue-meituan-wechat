@@ -26,7 +26,7 @@
     </div>
     <div class="item-list">
       <div class="section">
-        <img :src="currentOrder.shopInfo.pic_url">
+        <img :src="path + currentOrder.shopInfo.pic_url">
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright"
            style="display: inline"></i>
@@ -177,6 +177,7 @@ export default {
       });
     },
     payClick() {
+      debugger
       if (this.userInfo.addressModel.house_number) {
         this.currentOrder.deliveryFee = this.deliveryFee;
         this.currentOrder.addressInfo = this.userInfo.addressModel;
