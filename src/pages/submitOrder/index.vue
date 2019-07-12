@@ -177,7 +177,6 @@ export default {
       });
     },
     payClick() {
-      debugger
       if (this.userInfo.addressModel.house_number) {
         this.currentOrder.deliveryFee = this.deliveryFee;
         this.currentOrder.addressInfo = this.userInfo.addressModel;

@@ -51,7 +51,7 @@
     <div class="item-list">
       <div class="section"
            @click="headerClick(orderByShopIdDetail, false)">
-        <img :src="orderByShopIdDetail.shopInfo.pic_url">
+        <img :src="path + orderByShopIdDetail.shopInfo.pic_url">
         <span>{{orderByShopIdDetail.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright"
            style="display: inline"></i>
