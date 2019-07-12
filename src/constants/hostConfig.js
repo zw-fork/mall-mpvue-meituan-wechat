@@ -37,7 +37,7 @@ const host = {
     API_URL: 'https://digcampus.natapp4.cc/',
     //API_URL: 'http://localhost:8100/',
     XIAMI_URL: 'https://api-m.mtime.cn',
-    GOODS_URL_PREFIX: 'https://digcampus.natapp4.cc/img',
+    GOODS_URL_PREFIX: 'https://mall-social.oss-cn-beijing.aliyuncs.com/',
    // GOODS_URL_PREFIX: 'http://39.106.34.223:7200/',
     MSITE_URL: 'https://api.douban.com',
     VENILOG_URL: 'https://api.douban.com',

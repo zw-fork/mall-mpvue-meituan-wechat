@@ -48,7 +48,7 @@
       >
       <div class="mid-r" @click="showSinglePicker">公里</div>
     </div>
-    <div class="b-mid" @click="remarkClick" v-if="shop.shopId" style="height: 65rpx;">
+    <div class="b-mid" style="height: 65rpx;">
       <span class="mid-l">商店状态:</span>
       <div class="mid-r" @click="showSinglePicker">
         <span>{{shop.statusName}}</span>
@@ -94,6 +94,12 @@
       @onCancel="onCancel"
       :pickerValueArray="pickerValueArray"
     ></mp-picker>
+    <canvas
+      canvas-id="photo_canvas"
+      :style="{width:  cWidth + 'px', 'height': cHeight + 'px'}"
+      style="position: absolute;left:-3000px;top:-3000px;"
+      class="myCanvas"
+    ></canvas>
   </div>
 </template>
 
@@ -115,6 +121,8 @@ export default {
   },
   data() {
     return {
+      cWidth: undefined,
+      cHeight: undefined,
       reFresh: true,
       shop: {
         statusName: undefined,
@@ -173,6 +181,7 @@ export default {
     ...mapMutations("user", ["changeUserInfoMut"]),
     deleteImg() {
       this.shop.pic_url = "";
+      this.shop.wechat = true;
     },
     uploadImg2() {
       if (this.shop.pic_url) {
@@ -188,10 +197,52 @@ export default {
         count: 1, // 默认9
         sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-        success: function(res) {
-          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-          that.shop.pic_url = res.tempFilePaths[0];
-          that.shop.wechat = true;
+        success: function(photo) {
+          console.log(photo.tempFilePaths[0]);
+          wx.getImageInfo({
+            src: photo.tempFilePaths[0],
+            success: function(res) {
+              var ratio = 1;
+              var canvasWidth = res.width; //图片原始长宽
+              var canvasHeight = res.height;
+              while (canvasWidth > 1500 || canvasHeight > 1500) {
+                // 保证宽高在400以内
+                canvasWidth = Math.trunc(res.width / ratio);
+                canvasHeight = Math.trunc(res.height / ratio);
+                ratio++;
+              }
+              that.cWidth = canvasWidth;
+              that.cHeight = canvasHeight;
+              var ctx = wx.createCanvasContext("photo_canvas");
+              ctx.drawImage(
+                photo.tempFilePaths[0],
+                0,
+                0,
+                res.width,
+                res.height,
+                0,
+                0,
+                canvasWidth,
+                canvasHeight
+              );
+              ctx.draw(false, function() {
+                wx.canvasToTempFilePath(
+                  {
+                    canvasId: "photo_canvas",
+                    fileType: "jpg",
+                    destWidth: canvasWidth,
+                    destHeight: canvasHeight,
+                    success: function(res) {
+                      // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                      that.shop.wechat = true;
+                      that.shop.pic_url = res.tempFilePath;
+                    }
+                  },
+                  that
+                );
+              });
+            }
+          });
         }
       });
     },
@@ -222,10 +273,8 @@ export default {
       wx.navigateTo({ url: "/pages/categoryManage/main" });
     },
     onConfirm(e) {
-      if (this.type == "status") {
-        this.shop.status = e.value[0];
-        this.shop.statusName = e.label;
-      }
+      this.shop.status = e.value[0];
+      this.shop.statusName = e.label;
     },
     updateShop() {
       if (!this.shop.shopName) {
@@ -244,7 +293,7 @@ export default {
         });
         return;
       }
-      if (!this.shop.building.trim()) {
+      if (!this.shop.building || !this.shop.building.trim()) {
         wx.showToast({
           title: "门牌号不能为空!",
           icon: "none",
