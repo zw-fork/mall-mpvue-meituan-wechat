@@ -205,6 +205,8 @@ export default {
         "/wechat/updateStaff/" +
           this.userInfo.shopId +
           "/" +
+          this.userInfo.id,
+           "/" +
           this.selectGoods.id,
         {},
         false

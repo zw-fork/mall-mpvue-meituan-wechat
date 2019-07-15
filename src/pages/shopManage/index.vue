@@ -3,6 +3,7 @@
     <div class="name" style="height: 65rpx;">
       <span>店铺名称：</span>
       <input
+        :disabled="userInfo.role != 3"
         maxlength="20"
         placeholder="请填写商品名称(20字内)"
         placeholder-style="font-size: 24rpx"
@@ -31,6 +32,7 @@
     <div class="name" style="height: 65rpx;">
       <span>门牌号：</span>
       <input
+        :disabled="userInfo.role != 3"
         maxlength="30"
         placeholder="详细地址,如:1单元1楼1号"
         placeholder-style="font-size: 24rpx"
@@ -56,7 +58,7 @@
       </div>
     </div>
     <div class="phone">
-      <span>商品图片：</span>
+      <span>店铺图片：</span>
       <div style="margin-left:150rpx;top:100rpx;margin-top:-45rpx">
         <div style=" display: inline-block;">
           <img
@@ -80,6 +82,15 @@
           @click="uploadImg2()"
         >
       </div>
+    </div>
+    <div class="name" style="height: 65rpx;" v-if="userInfo.role == 3">
+      <span>社区配送：</span>
+      <input
+        maxlength="30"
+        placeholder="详细地址,如:1单元1楼1号"
+        placeholder-style="font-size: 24rpx"
+        v-model="shop.building"
+      >
     </div>
     <div class="submit-btn" @click="updateShop">
       <span>保存</span>
@@ -248,15 +259,17 @@ export default {
       });
     },
     updateWxAddress() {
-      var that = this;
-      wx.chooseLocation({
-        success: function(res) {
-          if (!that.shop.wxAddress) {
-            that.shop.wxAddress = {};
+      if (this.userInfo.role == 3) {
+        var that = this;
+        wx.chooseLocation({
+          success: function(res) {
+            if (!that.shop.wxAddress) {
+              that.shop.wxAddress = {};
+            }
+            that.shop.wxAddress = res;
           }
-          that.shop.wxAddress = res;
-        }
-      });
+        });
+      }
     },
     addressClick() {
       wx.navigateTo({ url: "/pages/selectAddress/main" });
@@ -336,7 +349,7 @@ export default {
           });
         } else {
           this.shop = {
-            statusName: undefined,
+            statusName: "停业",
             status: 3,
             tel: [],
             phone: undefined
@@ -360,7 +373,7 @@ export default {
       });
     } else {
       this.shop = {
-        statusName: undefined,
+        statusName: "停业",
         status: 3,
         tel: [],
         wechat: true,

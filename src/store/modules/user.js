@@ -51,7 +51,7 @@ const actions = {
                 jsonData.shopId = shopId
               }
               getUserInfoWechat(jsonData).then(response => {
-                wx.setStorageSync("sessionId", response.result.sessionId)
+                wx.setStorageSync("sessionId", response.result.id)
                 commit('changeUserInfoMut', response.result)
                 if (addWorker && shopId) {
                   wx.showModal({

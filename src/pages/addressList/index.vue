@@ -7,7 +7,7 @@
             <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
             <span class="s-r">{{item.phone}}</span>
           </div>
-          <span class="address">{{item.wxAddress.name}} {{item.house_number}}</span>
+          <span class="address">{{item.wxAddress ? item.wxAddress.name : ''}} {{item.house_number}}</span>
         </div>
         <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
       </div>
@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import { addressList } from "./data";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {

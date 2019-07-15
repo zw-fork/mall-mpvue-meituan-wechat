@@ -122,20 +122,7 @@ export default {
           value: 2
         }
       ],
-      categoryArray: [
-        {
-          label: "类型A",
-          value: 0
-        },
-        {
-          label: "类型B",
-          value: 1
-        },
-        {
-          label: "类型C",
-          value: 2
-        }
-      ],
+      categoryArray: [],
       item: {
         gender: 1
       },
@@ -159,7 +146,7 @@ export default {
     ...mapActions("shop", ["createShop"]),
     deleteImg() {
       this.goods.picture = "";
-      this.goods.wechat = true
+      this.goods.wechat = true;
     },
     uploadImg2() {
       if (this.goods.picture) {
@@ -200,7 +187,10 @@ export default {
         return;
       }
       this.goods.min_price = parseFloat(this.goods.min_price);
-      if (typeof this.goods.min_price !== "number" || isNaN(this.goods.min_price)) {
+      if (
+        typeof this.goods.min_price !== "number" ||
+        isNaN(this.goods.min_price)
+      ) {
         wx.showToast({
           title: "商品价格应为数字!",
           icon: "none",
@@ -208,9 +198,16 @@ export default {
         });
         return;
       }
+      if (!this.goods.categoryId) {
+        wx.showToast({
+          title: "商品分类不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
-      debugger
       this.uploadImg({ goodsModel: this.goods });
     },
     createCategory() {
@@ -227,11 +224,13 @@ export default {
       console.log(this.goods.categoryName);
     },
     updateCategoryClick() {
-      this.pickerValueArray = this.categoryArray;
-      this.mode = "selector";
-      this.type = "category";
-      this.pickerValueDefault = [];
-      this.$refs.mpvuePicker.show();
+      if (this.categoryArray.length > 0) {
+        this.pickerValueArray = this.categoryArray;
+        this.mode = "selector";
+        this.type = "category";
+        this.pickerValueDefault = [];
+        this.$refs.mpvuePicker.show();
+      }
     },
     showSinglePicker() {
       this.pickerValueArray = this.statusArray;
@@ -258,7 +257,7 @@ export default {
     this.goods = {
       statusName: "上架",
       status: 1,
-      categoryName: "未分类",
+      categoryName: "",
       picture: undefined
     };
     getFetch(
