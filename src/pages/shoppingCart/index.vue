@@ -161,7 +161,7 @@
           <div class="m-l">
             <span class="l-l">另需配送费￥{{shopInfo.support_pay}}</span>
             <div class="l-m"></div>
-            <span class="l-r">{{shopInfo.distance>shopInfo.scope? '超出配送范围' : '小区内配送'}}</span>
+            <span class="l-r" v-if="shopInfo.type != 1">小区内配送</span>
           </div>
         </div>
         <div

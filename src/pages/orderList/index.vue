@@ -198,6 +198,7 @@
   .container {
     .header-c {
       display: flex;
+      background-color: white;
       flex-direction: column;
 
       .cate-c {

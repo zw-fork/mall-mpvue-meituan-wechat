@@ -31,8 +31,8 @@
     <div class="address">
       <span class="l">收货地址：</span>
       <div class="m">
-        <span v-if="!item.address">点击选择</span>
-        <span v-else>{{item.address}}</span>
+        <span v-if="!item.wxAddress">点击选择</span>
+        <span v-else>{{item.wxAddress.name}}</span>
       </div>
     </div>
     <div class="house-num">
@@ -117,7 +117,8 @@ export default {
       };
     }
     if (this.shopInfo && this.userInfo.addressModel) {
-      this.item.address = this.shopInfo.wxAddress.name;
+      this.item.wxAddress = {}
+       this.item.wxAddress = this.shopInfo.wxAddress;
     }
     this.updateSex(this.item.gender);
   }

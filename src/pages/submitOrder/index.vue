@@ -15,7 +15,7 @@
             <span class="address-info"
                   v-if="!userInfo.addressModel.house_number || userInfo.addressModel.communityId != currentOrder.shopInfo.communityId">请添加配送地址...</span>
             <span class="address-info"
-                  v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.address}} {{userInfo.addressModel.house_number}}</span>
+                  v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.wxAddress.address}} {{userInfo.addressModel.house_number}}</span>
             <span class="user-info"
                   v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}} {{userInfo.addressModel.phone}}</span>
           </div>

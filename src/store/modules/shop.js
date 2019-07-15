@@ -30,6 +30,7 @@ const actions = {
   },
   createShop({ state, commit }, { shop }) {
     var path = `${API_URL}`
+    var that = this
     if (shop.wechat) {
       var sessionId = wx.getStorageSync('sessionId')
       wx.uploadFile({
@@ -42,11 +43,13 @@ const actions = {
         },
         formData: {'shop' : JSON.stringify(shop)},
         success: function (res) {
+          that.state.shoppingCart.shopInfo = {}
           wx.navigateBack({ delta: 1 })
         }
       })
     } else {
       postFetch('/shop', shop, false).then(response => {
+        that.state.shoppingCart.shopInfo  =  {}
         wx.switchTab({
           url: '/pages/me/main'
         })

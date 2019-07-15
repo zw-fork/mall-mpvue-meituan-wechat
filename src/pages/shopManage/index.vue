@@ -404,7 +404,7 @@ export default {
   border-bottom: 2rpx solid $spLine-color;
 
   .mid-l {
-    font-size: 28rpx;
+    font-size: 32rpx;
     color: $textBlack-color;
     display: flex;
     align-items: center;

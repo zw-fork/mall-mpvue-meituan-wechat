@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div class="list-c">
-      <div class="item" v-for="(item, index) in myAddress" :key="index" v-if="item.address == shopInfo.wxAddress.name">
+      <div class="item" v-for="(item, index) in myAddress" :key="index" v-if="item.wxAddress && item.wxAddress.name == shopInfo.wxAddress.name">
         <div class="i-l" @touchstart="showDeleteButton(item.id)" @touchend="clearLoop(item.id)">
           <div class="user-info">
             <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
             <span class="s-r">{{item.phone}}</span>
           </div>
-          <span class="address">{{item.address}} {{item.house_number}}</span>
+          <span class="address">{{item.wxAddress.name}} {{item.house_number}}</span>
         </div>
         <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
       </div>

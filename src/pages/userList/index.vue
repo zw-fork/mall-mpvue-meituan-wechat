@@ -50,7 +50,7 @@
                 <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
                 <span class="sub-title" v-else-if="item.status==2">同意关注公众号/不同意公众关注号</span>
                 <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
-                <div class="r-t">
+                <div class="r-t" v-if="item.id != userInfo.id">
                   <div class="add-item">
                     <div class="add-r" @click.stop="manageGoods($event, item)">
                       <i class="icon iconfont icondian"></i>
@@ -201,7 +201,14 @@ export default {
       wx.navigateTo({ url: "/pages/goodsManage/main" });
     },
     updateGoods(goodsModel) {
-      postFetch("/goods/upload2", goodsModel, false).then(response => {
+      getFetch(
+        "/wechat/updateStaff/" +
+          this.userInfo.shopId +
+          "/" +
+          this.selectGoods.id,
+        {},
+        false
+      ).then(response => {
         this.showEdit = false;
         this.updateGoodsList(this.pageIndex);
       });
@@ -209,11 +216,11 @@ export default {
     upGoods() {
       var that = this;
       wx.showModal({
-        content: "确定上架当前商品？",
+        content: "确定删除当前员工吗？",
         confirmColor: "#FFC24A",
         success: function(res) {
           if (res.confirm) {
-            that.selectGoods.status = 1;
+            that.selectGoods.status = 0;
             that.updateGoods(that.selectGoods);
           } else if (res.cancel) {
           }
@@ -277,6 +284,9 @@ export default {
       data.tel = this.name.trim();
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
+      }
+      if (this.userInfo.role != 3) {
+        data.shopId = this.userInfo.shopId;
       }
       getFetch("/wechat/userList", data, false).then(response => {
         this.list.datas = response.result.list;

@@ -5,7 +5,6 @@
         <img :src="userInfo.avatarUrl" alt @click="updateUser(userInfo)">
         <div class="info-c">
           <span class="name">{{userInfo.nickname}}</span>
-          <span class="phone">15214313256</span>
         </div>
       </div>
       <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
@@ -193,9 +192,7 @@ export default {
     });
   },
   methods: {
-    ...mapMutations("user", [
-      "changeUserInfoMut"
-    ]),
+    ...mapMutations("user", ["changeUserInfoMut"]),
     ...mapActions("user", ["wxLocation"]),
     update() {
       if (!this.show) {
@@ -257,8 +254,8 @@ export default {
     }
   },
   onPullDownRefresh: function() {
-    getFetch("/wechat/getUser", {}, false).then(response => {
-      this.changeUserInfoMut(response || {})
+    getFetch("/wechat/getCurrentUser", {}, false).then(response => {
+      this.changeUserInfoMut(response || {});
       if (this.userInfo.shopId) {
         getFetch("/order/count/" + this.userInfo.shopId, false).then(
           response => {
@@ -353,8 +350,7 @@ button::after {
     display: flex;
     flex-direction: column;
     background-color: white;
-    border-radius: 25rpx;
-    margin: 15rpx;
+    margin-top: 15rpx;
     padding: 10px;
 
     .category-c {
@@ -422,7 +418,7 @@ button::after {
     display: flex;
     align-items: center;
     height: 200rpx;
-    background-color: #ff0066;
+    background-color: #817170;
 
     img {
       border: 3px solid white;

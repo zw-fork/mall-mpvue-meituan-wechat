@@ -3,23 +3,23 @@
     <div class="header-c">
       <div class="cate-c">
         <span class="c-l"
-              :style="{'font-weight': statusList.length<1 ? lineStyle : null}"
+              :style="{'color': statusList.length<1 ? lineStyle : null}"
               style="text-align:center;width:20%;"
               @click="updateOrderList([])">全部</span>
         <span class="c-m"
-              :style="{'font-weight': pageIndex === 2 ? lineStyle : null}"
+              :style="{'color': pageIndex === 2 ? lineStyle : null}"
               style="text-align:center;width:20%;"
               @click="updateOrderList([2])">新订单</span>
         <span class="c-m"
-              :style="{'font-weight': pageIndex === 3 ? lineStyle : null}"
+              :style="{'color': pageIndex === 3 ? lineStyle : null}"
               style="text-align:center;width:20%;"
               @click="updateOrderList([3])">配送中</span>
         <span class="c-m"
-              :style="{'font-weight': pageIndex === 4 ? lineStyle : null}"
+              :style="{'color': pageIndex === 4 ? lineStyle : null}"
               style="text-align:center;width:20%;"
               @click="updateOrderList([4])">已完成</span>
         <span class="c-m"
-              :style="{'font-weight': pageIndex === -1 ? lineStyle : null}"
+              :style="{'color': pageIndex === -1 ? lineStyle : null}"
               style="text-align:center;width:20%;"
               @click="updateOrderList([-1])">退款</span>
       </div>
@@ -176,7 +176,7 @@ export default {
     ...mapState('submitOrder', ['orderItemList']),
     ...mapState('user', ['userInfo']),
     lineStyle() {
-      return 'bold;';
+      return '#FFA500;';
     }
   },
   onLoad(options) {
@@ -246,6 +246,7 @@ export default {
   .header-c {
     display: flex;
     flex-direction: column;
+    background-color: white;
     .cate-c {
       display: flex;
       height: 70rpx;
