@@ -100,10 +100,13 @@ const actions = {
     if (refundStatus) {
       refund.refundStatus = refundStatus
     }
+    if (status) {
+      refund.status = status
+    }
     refund.openid = order.uid
     if (order.status == 1 && status == 2) {
       getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {
-        if (response.code==200) {
+        if (response.code == 200) {
           wx.requestPayment({
             timeStamp: response.result.timeStamp,
             nonceStr: response.result.nonceStr,
@@ -116,7 +119,7 @@ const actions = {
                 icon: 'success',
                 duration: 3000
               })
-              getFetch('/order/updateStatus/' + order.number + '/' + 2, {}, false).then(response => {
+              getFetch('/order/updateStatus/' + order.number, { status: 2 }, false).then(response => {
                 getFetch('/order/' + order.uid, {}, false).then(response => {
                   var result = response.result || {}
                   commit('changeOrderDataMut', result)
@@ -128,13 +131,13 @@ const actions = {
               wx.hideLoading()
             }
           })
-        } else if (response.code==responseCode.ORDERPAID_ERROR_CODE) {
+        } else if (response.code == responseCode.ORDERPAID_ERROR_CODE) {
           wx.showToast({
             title: response.message,
             icon: 'none',
             duration: 2000
           })
-          getFetch('/order/updateStatus/' + order.number + '/' + 2, {}, false).then(response => {
+          getFetch('/order/updateStatus/' + order.number, { status: 2 }, false).then(response => {
             getFetch('/order/' + order.uid, {}, false).then(response => {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
@@ -144,7 +147,7 @@ const actions = {
         }
       })
     } else {
-      getFetch('/order/updateStatus/' + order.number + '/' + status, refund, false).then(response => {
+      getFetch('/order/updateStatus/' + order.number, refund, false).then(response => {
         getFetch('/order/' + order.uid, data, false).then(response => {
           var result = response.result || {}
           commit('changeOrderDataMut', result)
@@ -176,7 +179,7 @@ const actions = {
               icon: 'success',
               duration: 3000
             })
-            getFetch('/order/updateStatus/' + number + '/' + 2, {}, false).then(response => {
+            getFetch('/order/updateStatus/' + number, { status: 2 }, false).then(response => {
               getFetch('/order/' + order.uid, {}, false).then(response => {
                 var result = response.result || {}
                 commit('changeOrderDataMut', result)

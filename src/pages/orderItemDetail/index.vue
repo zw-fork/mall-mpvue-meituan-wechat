@@ -3,63 +3,57 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-          <span class="address-info"
-                v-if="orderByShopIdDetail.status==0">已取消</span>
-          <span class="address-info"
-                v-else-if="orderByShopIdDetail.status==1">未支付</span>
-          <span class="address-info"
-                v-else-if="orderByShopIdDetail.refundStatus==1">等待退款{{goodsStatus}}</span>
-          <span class="address-info"
-                v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
-          <span class="address-info"
-                v-else-if="orderByShopIdDetail.status==2">已支付，等待商家配送{{refundStatus}}</span>
-          <span class="address-info"
-                v-else-if="orderByShopIdDetail.status==3">配送中{{refundStatus}}</span>
-          <span class="address-info"
-                v-else-if="orderByShopIdDetail.status==4">已完成</span>
-          <span class="address-info"
-                v-else>其他</span>
+          <span class="address-info" v-if="orderByShopIdDetail.status==0">已取消</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.status==1">未支付</span>
+          <span
+            class="address-info"
+            v-else-if="orderByShopIdDetail.refundStatus==1"
+          >等待退款{{goodsStatus}}</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
+          <span
+            class="address-info"
+            v-else-if="orderByShopIdDetail.status==2"
+          >已支付，等待商家配送{{refundStatus}}</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.status==3">配送中{{refundStatus}}</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.status==4">已完成</span>
+          <span class="address-info" v-else>其他</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
           <span class="c-l">{{orderByShopIdDetail.remark}}</span>
         </div>
         <div class="bottom-a">
-          <div class="btn"
-               v-if="orderByShopIdDetail.status==2 && orderByShopIdDetail.refundStatus!=2"
-               @click="updateStatus(3)">
+          <div
+            class="btn"
+            v-if="orderByShopIdDetail.deliveryStatus==1 "
+            @click="updateStatus(null, 2)"
+          >
             <span>配送</span>
           </div>
-          <div class="btn"
-               v-if="orderByShopIdDetail.status==3"
-               @click="updateStatus(4)">
+          <div class="btn" v-if="orderByShopIdDetail.deliveryStatus==2" @click="updateStatus(null, 3)">
             <span>完成</span>
           </div>
-          <div class="btn"
-               @click="refund"
-               v-if="orderByShopIdDetail.refundStatus!=2">
+          <div class="btn" @click="refund" v-if="orderByShopIdDetail.status==2">
             <span>退款</span>
           </div>
-          <div class="btn"
-               @click="updateStatus(orderByShopIdDetail.status, 3)"
-               v-if="orderByShopIdDetail.refundStatus==1">
+          <div
+            class="btn"
+            @click="updateStatus(null, null, 4)"
+            v-if="orderByShopIdDetail.refundStatus==1"
+          >
             <span>拒绝退款</span>
           </div>
         </div>
       </div>
     </div>
     <div class="item-list">
-      <div class="section"
-           @click="headerClick(orderByShopIdDetail, false)">
+      <div class="section" @click="headerClick(orderByShopIdDetail, false)">
         <img :src="path + orderByShopIdDetail.shopInfo.pic_url">
         <span>{{orderByShopIdDetail.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright"
-           style="display: inline"></i>
+        <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="list">
-        <div class="item"
-             v-for="(item, index) in foodList"
-             :key="index">
+        <div class="item" v-for="(item, index) in foodList" :key="index">
           <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -90,38 +84,29 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">送达时间：</p>
-          <div class="item_right"
-               style="display: inline">
+          <p class="item_left" style="word-break:keep-all; display: inline">送达时间：</p>
+          <div class="item_right" style="display: inline">
             <p>尽快送达</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all;">送货地址：</p>
-          <div class="item_right"
-               v-if="orderByShopIdDetail.addressInfo">
+          <p class="item_left" style="word-break:keep-all;">送货地址：</p>
+          <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
             <p>{{orderByShopIdDetail.addressInfo.address}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all;">顾客姓名：</p>
-          <div class="item_right"
-               v-if="orderByShopIdDetail.addressInfo">
+          <p class="item_left" style="word-break:keep-all;">顾客姓名：</p>
+          <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
             <p>{{orderByShopIdDetail.addressInfo.name}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
-        <div class="item_style"
-             @click="clickCall">
-          <p class="item_left"
-             style="word-break:keep-all;">顾客电话：</p>
-          <div class="item_right"
-               v-if="orderByShopIdDetail.addressInfo">
+        <div class="item_style" @click="clickCall">
+          <p class="item_left" style="word-break:keep-all;">顾客电话：</p>
+          <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
             <p>{{orderByShopIdDetail.addressInfo.phone}}</p>
           </div>
         </div>
@@ -135,28 +120,22 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">订单号：</p>
-          <div class="item_right"
-               style="display: inline">
+          <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
+          <div class="item_right" style="display: inline">
             <p>{{orderByShopIdDetail.number}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">支付方式：</p>
-          <div class="item_right"
-               style="display: inline">
-            <p>{{orderByShopIdDetail.paymentType === 1 ? '在线支付' : '其他'}} </p>
+          <p class="item_left" style="word-break:keep-all; display: inline">支付方式：</p>
+          <div class="item_right" style="display: inline">
+            <p>{{orderByShopIdDetail.paymentType === 1 ? '在线支付' : '其他'}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">下单时间：</p>
-          <div class="item_right"
-               style="display: inline">
+          <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
+          <div class="item_right" style="display: inline">
             <p>{{orderByShopIdDetail.createTime}}</p>
           </div>
         </div>
@@ -166,11 +145,11 @@
 </template>
 
 <script>
-import sepLine from '@/components/sep-line';
-import { openLocation } from '@/utils/wxapi';
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { getFetch, postFetch } from '@/network/request/HttpExtension';
-import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
+import sepLine from "@/components/sep-line";
+import { openLocation } from "@/utils/wxapi";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { getFetch, postFetch } from "@/network/request/HttpExtension";
+import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 
 export default {
   data() {
@@ -180,8 +159,8 @@ export default {
     };
   },
   computed: {
-    ...mapState('user', ['userInfo']),
-    ...mapState('submitOrder', ['orderByShopIdDetail']),
+    ...mapState("user", ["userInfo"]),
+    ...mapState("submitOrder", ["orderByShopIdDetail"]),
     path() {
       return `${GOODS_URL_PREFIX}`;
     },
@@ -193,36 +172,36 @@ export default {
     },
     goodsStatus() {
       if (this.orderByShopIdDetail.status == 2) {
-        return ' - 新订单';
+        return " - 新订单";
       } else if (this.orderByShopIdDetail.status == 3) {
-        return ' - 配送中';
+        return " - 配送中";
       } else if (this.orderByShopIdDetail.status == 4) {
-        return ' - 已完成';
+        return " - 已完成";
       }
-      return '';
+      return "";
     },
     refundStatus() {
       if (this.orderByShopIdDetail.refundStatus == 3) {
-        return ' - 申请过退款，被拒绝';
+        return " - 申请过退款，被拒绝";
       }
-      return '';
+      return "";
     }
   },
   components: {
     sepLine
   },
   methods: {
-    ...mapActions('submitOrder', ['getOrderByIdAction', 'refundDataAction']),
+    ...mapActions("submitOrder", ["getOrderByIdAction", "refundDataAction"]),
     refund() {
       var that = this;
       wx.showModal({
-        content: '确定对当前订单进行退款处理？',
-        confirmColor: '#FFC24A',
+        content: "确定对当前订单进行退款处理？",
+        confirmColor: "#FFC24A",
         success: function(res) {
           if (res.confirm) {
             that.refundDataAction({
               orderNo: that.orderByShopIdDetail.number,
-              refundDesc: '不想要了!',
+              refundDesc: "不想要了!",
               // refundFee: that.orderByShopIdDetail.realFee * 100
               refundFee: 1
             });
@@ -234,8 +213,8 @@ export default {
     refusal() {
       var order = this.orderByShopIdDetail;
       wx.showModal({
-        content: '确定取消对当前订单进行的退款申请？',
-        confirmColor: '#FFC24A',
+        content: "确定取消对当前订单进行的退款申请？",
+        confirmColor: "#FFC24A",
         success: function(res) {
           if (res.confirm) {
           } else if (res.cancel) {
@@ -247,27 +226,33 @@ export default {
       var tel = this.orderByShopIdDetail.addressInfo.phone;
       var telList = [tel];
       wx.showActionSheet({
-        title: '顾客电话',
+        title: "顾客电话",
         itemList: telList,
         success(res) {
-          wx.makePhoneCall({ phoneNumber: telList[res.tapIndex] + '' });
+          wx.makePhoneCall({ phoneNumber: telList[res.tapIndex] + "" });
         }
       });
     },
-    updateStatus(status, refundStatus) {
+    updateStatus(status, deliveryStatus, refundStatus) {
       var refund = {};
+      if (status) {
+        refund.status = status;
+      }
+      if (deliveryStatus) {
+        refund.deliveryStatus = deliveryStatus;
+      }
       if (refundStatus) {
         refund.refundStatus = refundStatus;
       }
       getFetch(
-        '/order/updateStatus/' + this.orderByShopIdDetail.number + '/' + status,
+        "/order/updateStatus/" + this.orderByShopIdDetail.number,
         refund,
         false
       ).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
         prevPage.setData({
-          status: status
+          status: refund
         });
         wx.navigateBack({ delta: 1 });
       });
@@ -281,21 +266,21 @@ export default {
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
-          url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update
+          url: "/pages/shoppingCart/main?shopId=" + shopId + "&update=" + update
         });
       }
     },
     addressClick() {
-      wx.navigateTo({ url: '/pages/addressList/main' });
+      wx.navigateTo({ url: "/pages/addressList/main" });
     },
     redPacketClick() {
-      wx.navigateTo({ url: '/pages/redPacket/main' });
+      wx.navigateTo({ url: "/pages/redPacket/main" });
     },
     couponClick() {
-      wx.navigateTo({ url: '/pages/couponList/main' });
+      wx.navigateTo({ url: "/pages/couponList/main" });
     },
     remarkClick() {
-      wx.navigateTo({ url: '/pages/remark/main' });
+      wx.navigateTo({ url: "/pages/remark/main" });
     },
     deliveryClick() {
       this.tabIndex = 0;
@@ -304,11 +289,11 @@ export default {
       this.tabIndex = 1;
     },
     protocol() {
-      wx.navigateTo({ url: '/pages/pickProtocol/main' });
+      wx.navigateTo({ url: "/pages/pickProtocol/main" });
     },
     openMap() {
       wx.getLocation({
-        type: 'gcj02',
+        type: "gcj02",
         success(res) {
           const latitude = res.latitude;
           const longitude = res.longitude;

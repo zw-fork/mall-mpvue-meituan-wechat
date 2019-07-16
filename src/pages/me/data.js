@@ -45,6 +45,19 @@ const homeData = {
           "sequence": 300,
           "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
           "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
+        }, {
+          "brand_type": -1,
+          "code": 101578,
+          "first_tag_codes": [],
+          "path": "/pages/categoryList/main",
+          "gray_switch": 0,
+          "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
+          "method": 1258576,
+          "name": "我的店铺",
+          "second_tag_codes": [],
+          "sequence": 300,
+          "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
+          "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
         }],
       "super_menu": [
         {
@@ -163,7 +176,7 @@ const homeData = {
         "gray_url": "/static/images/待付款.png",
         "method": 1258576,
         "name": "新订单",
-        "path": "/pages/orderItemList/main?status=2",
+        "path": "/pages/orderItemList/main?deliveryStatus=1",
         "second_tag_codes": [],
         "sequence": 100,
         "skip_protocol": "channel?category_type=910&category_text=%E7%BE%8E%E9%A3%9F",
@@ -173,7 +186,7 @@ const homeData = {
         "code": 101574,
         "first_tag_codes": [],
         "gray_switch": 0,
-        "path": "/pages/orderItemList/main?status=3",
+        "path": "/pages/orderItemList/main?deliveryStatus=2",
         "gray_url": "http://p0.meituan.net/jungle/45ff2f098a20a77122bff8385192f0ec10547.png",
         "method": 1258576,
         "name": "配送中",
@@ -185,7 +198,7 @@ const homeData = {
         "brand_type": -1,
         "code": 101578,
         "first_tag_codes": [],
-        "path": "/pages/orderItemList/main?status=-1",
+        "path": "/pages/orderItemList/main?refundStatus=-1",
         "gray_switch": 0,
         "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
         "method": 1258576,
