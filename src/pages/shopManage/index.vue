@@ -40,6 +40,17 @@
       >
     </div>
     <div class="name" style="height: 65rpx;">
+      <span>起送费：</span>
+      <input
+        type="number"
+        maxlength="3"
+        placeholder="例如:1"
+        placeholder-style="font-size: 24rpx"
+        v-model="shop.scope"
+      >
+      <div class="mid-r" @click="showSinglePicker">元</div>
+    </div>
+    <div class="name" style="height: 65rpx;">
       <span>配送范围：</span>
       <input
         type="digit"

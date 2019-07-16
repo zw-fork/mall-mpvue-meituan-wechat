@@ -149,6 +149,7 @@ export default {
       this.goods.wechat = true;
     },
     uploadImg2() {
+      this.goods.wechat = true;
       if (this.goods.picture) {
         wx.showToast({
           title: "最多只能上传一张图片!",
@@ -165,7 +166,6 @@ export default {
         success: function(res) {
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           that.goods.picture = res.tempFilePaths[0];
-          that.goods.wechat = true;
         }
       });
     },
