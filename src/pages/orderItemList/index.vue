@@ -82,12 +82,12 @@
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.status==2"
+            v-else-if="item.status==2 && item.deliveryStatus==1"
           >已支付</p>
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.status==3"
+            v-else-if="item.status==2 && item.deliveryStatus==2"
           >配送中</p>
           <p
             class="order-status"
@@ -97,7 +97,7 @@
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.status==4"
+            v-else-if="item.deliveryStatus==3"
           >已完成</p>
         </div>
         <div class="googs-c">
@@ -155,21 +155,21 @@ export default {
     },
     lower(e) {
       if (this.orderItemList.page > 0) {
+        this.scrollTop = this.currentScroll;
         wx.showLoading({ title: "加载中...", mask: true });
         var openid = this.userInfo.openid;
         var data = {};
-        data.page = this.orderItemList.page;
-        data.shopId = this.userInfo.shopId;
-        if (this.statusList.length > 0) {
-          data.statusList = this.statusList.join(",");
+        if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
+          data.deliveryStatus = this.pageIndex;
+        } else if (this.pageIndex == 4) {
+          data.refundStatus = -1;
         }
+        data.shopId = this.userInfo.shopId;
+        data.page = this.orderItemList.page;
         getFetch("/order/" + this.userInfo.openid, data, false).then(
           response => {
             var result = response.result || {};
-            this.orderItemList.datas = [
-              ...this.orderItemList.datas,
-              ...result.list
-            ];
+            this.orderItemList.datas = [...this.orderItemList.datas, ...result.list];
             this.orderItemList.page = result.nextPage;
             wx.hideLoading();
           }
@@ -240,7 +240,7 @@ export default {
       this.statusList = status;
       this.getOrderItemDataAction({
         uid: this.userInfo.openid,
-        'data': data
+        data: data
       });
     }
   },

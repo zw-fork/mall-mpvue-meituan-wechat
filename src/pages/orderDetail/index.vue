@@ -3,59 +3,42 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-          <span class="address-info"
-                v-if="orderDetail.status==0">已取消</span>
-          <span class="address-info"
-                v-else-if="orderDetail.status==1">未支付</span>
-          <span class="address-info"
-                v-else-if="orderDetail.refundStatus==1">等待退款</span>
-          <span class="address-info"
-                v-else-if="orderDetail.refundStatus==2">退款成功</span>
-          <span class="address-info"
-                v-else-if="orderDetail.status==2">已支付，等待商家配送</span>
-          <span class="address-info"
-                v-else-if="orderDetail.status==3">配送中</span>
-          <span class="address-info"
-                v-else-if="orderDetail.status==4">已完成</span>
-          <span class="address-info"
-                v-else>其他</span>
+          <span class="address-info" v-if="orderDetail.status==0">已取消</span>
+          <span class="address-info" v-else-if="orderDetail.status==1">未支付</span>
+          <span class="address-info" v-else-if="orderDetail.refundStatus==1">等待退款</span>
+          <span class="address-info" v-else-if="orderDetail.refundStatus==2">退款成功</span>
+          <span class="address-info" v-else-if="orderDetail.status==2">已支付，等待商家配送</span>
+          <span class="address-info" v-else-if="orderDetail.status==3">配送中</span>
+          <span class="address-info" v-else-if="orderDetail.status==4">已完成</span>
+          <span class="address-info" v-else>其他</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
           <span class="c-l">{{orderDetail.remark}}</span>
         </div>
         <div class="bottom-a">
-          <div class="btn"
-               v-if="orderDetail.refundStatus==1">
+          <div class="btn" v-if="orderDetail.refundStatus==1" @click="updateStatus(null, null, 0)">
             <span>取消退款</span>
           </div>
-          <div class="btn"
-               @click="headerClick(orderDetail, true)">
+          <div class="btn" @click="headerClick(orderDetail, true)">
             <span>再来一单</span>
           </div>
         </div>
         <div class="modalFooter">
-          <div class="btnCancel"
-               @tap="clickCallShop">联系商家</div>
-          <div class="btnConfirm"
-               @click.stop="clickCallDelivery">联系配送员</div>
+          <div class="btnCancel" @tap="clickCallShop">联系商家</div>
+          <div class="btnConfirm" @click.stop="clickCallDelivery">联系配送员</div>
         </div>
       </div>
     </div>
     <div class="item-list">
-      <div class="section"
-           @click="headerClick(orderDetail, false)">
-        <i style="font-size:40rpx;color:#d81e06;"
-           class="shop-logo icon iconfont icondianpu2"></i>
+      <div class="section" @click="headerClick(orderDetail, false)">
+        <i style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
         <span>{{orderDetail.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright"
-           style="display: inline"></i>
+        <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="line-sp"></div>
       <div class="list">
-        <div class="item"
-             v-for="(item, index) in foodList"
-             :key="index">
+        <div class="item" v-for="(item, index) in foodList" :key="index">
           <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -71,7 +54,7 @@
           <span>备注</span>
           <span class="line-clamp1" style="width:80%;margin-top:10rpx;">{{orderDetail.remark}}</span>
         </div>
-         <sep-line></sep-line>  -->
+        <sep-line></sep-line>-->
         <div class="delivery-cast">
           <span>配送费</span>
           <span>￥{{deliveryFee}}</span>
@@ -91,38 +74,29 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">送达时间：</p>
-          <div class="item_right"
-               style="display: inline">
+          <p class="item_left" style="word-break:keep-all; display: inline">送达时间：</p>
+          <div class="item_right" style="display: inline">
             <p>尽快送达</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all;">送货地址：</p>
-          <div class="item_right"
-               v-if="orderDetail.addressInfo">
+          <p class="item_left" style="word-break:keep-all;">送货地址：</p>
+          <div class="item_right" v-if="orderDetail.addressInfo">
             <p>{{orderDetail.addressInfo.address}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all;">顾客姓名：</p>
-          <div class="item_right"
-               v-if="orderDetail.addressInfo">
+          <p class="item_left" style="word-break:keep-all;">顾客姓名：</p>
+          <div class="item_right" v-if="orderDetail.addressInfo">
             <p>{{orderDetail.addressInfo.name}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
-        <div class="item_style"
-             @click="clickCall">
-          <p class="item_left"
-             style="word-break:keep-all;">顾客电话：</p>
-          <div class="item_right"
-               v-if="orderDetail.addressInfo">
+        <div class="item_style" @click="clickCall">
+          <p class="item_left" style="word-break:keep-all;">顾客电话：</p>
+          <div class="item_right" v-if="orderDetail.addressInfo">
             <p>{{orderDetail.addressInfo.phone}}</p>
           </div>
         </div>
@@ -136,28 +110,22 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">订单号：</p>
-          <div class="item_right"
-               style="display: inline">
+          <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
+          <div class="item_right" style="display: inline">
             <p>{{orderDetail.number}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">支付方式：</p>
-          <div class="item_right"
-               style="display: inline">
-            <p>{{orderDetail.paymentType === 1 ? '在线支付' : '其他'}} </p>
+          <p class="item_left" style="word-break:keep-all; display: inline">支付方式：</p>
+          <div class="item_right" style="display: inline">
+            <p>{{orderDetail.paymentType === 1 ? '在线支付' : '其他'}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left"
-             style="word-break:keep-all; display: inline">下单时间：</p>
-          <div class="item_right"
-               style="display: inline">
+          <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
+          <div class="item_right" style="display: inline">
             <p>{{orderDetail.createTime}}</p>
           </div>
         </div>
@@ -167,10 +135,11 @@
 </template>
 
 <script>
-import sepLine from '@/components/sep-line';
-import { openLocation } from '@/utils/wxapi';
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
+import sepLine from "@/components/sep-line";
+import { openLocation } from "@/utils/wxapi";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
+import { getFetch, postFetch } from "@/network/request/HttpExtension";
 
 export default {
   data() {
@@ -180,8 +149,8 @@ export default {
     };
   },
   computed: {
-    ...mapState('user', ['userInfo']),
-    ...mapState('submitOrder', ['orderDetail']),
+    ...mapState("user", ["userInfo"]),
+    ...mapState("submitOrder", ["orderDetail"]),
     path() {
       return `${GOODS_URL_PREFIX}`;
     },
@@ -196,35 +165,59 @@ export default {
     sepLine
   },
   methods: {
-    ...mapActions('submitOrder', ['getOrderByIdAction']),
+    ...mapActions("submitOrder", ["getOrderByIdAction"]),
+    updateStatus(status, deliveryStatus, refundStatus) {
+      var refund = {};
+      if (status || status == 0) {
+        refund.status = status;
+      }
+      if (deliveryStatus || deliveryStatus == 0) {
+        refund.deliveryStatus = deliveryStatus;
+      }
+      if (refundStatus || refundStatus == 0) {
+        refund.refundStatus = refundStatus;
+      }
+      getFetch(
+        "/order/updateStatus/" + this.orderDetail.number,
+        refund,
+        false
+      ).then(response => {
+        var pages = getCurrentPages();
+        var prevPage = pages[pages.length - 2];
+        prevPage.setData({
+          status: refund
+        });
+        wx.navigateBack({ delta: 1 });
+      });
+    },
     clickCall() {
       var tel = this.orderDetail.addressInfo.phone;
       var telList = [tel];
       wx.showActionSheet({
-        title: '顾客电话',
+        title: "顾客电话",
         itemList: telList,
         success(res) {
-          wx.makePhoneCall({ phoneNumber: telList[res.tapIndex] + '' });
+          wx.makePhoneCall({ phoneNumber: telList[res.tapIndex] + "" });
         }
       });
     },
     clickCallShop() {
       var tel = this.orderDetail.shopInfo.tel;
       wx.showActionSheet({
-        title: '商家电话',
+        title: "商家电话",
         itemList: tel,
         success(res) {
-          wx.makePhoneCall({ phoneNumber: tel[res.tapIndex] + '' });
+          wx.makePhoneCall({ phoneNumber: tel[res.tapIndex] + "" });
         }
       });
     },
     clickCallDelivery() {
       var tel = this.orderDetail.deliveryTel;
       wx.showActionSheet({
-        title: '商家电话',
+        title: "商家电话",
         itemList: [tel],
         success(res) {
-          wx.makePhoneCall({ phoneNumber: tel + '' });
+          wx.makePhoneCall({ phoneNumber: tel + "" });
         }
       });
     },
@@ -237,21 +230,21 @@ export default {
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
-          url: '/pages/shoppingCart/main?shopId=' + shopId + '&update=' + update
+          url: "/pages/shoppingCart/main?shopId=" + shopId + "&update=" + update
         });
       }
     },
     addressClick() {
-      wx.navigateTo({ url: '/pages/addressList/main' });
+      wx.navigateTo({ url: "/pages/addressList/main" });
     },
     redPacketClick() {
-      wx.navigateTo({ url: '/pages/redPacket/main' });
+      wx.navigateTo({ url: "/pages/redPacket/main" });
     },
     couponClick() {
-      wx.navigateTo({ url: '/pages/couponList/main' });
+      wx.navigateTo({ url: "/pages/couponList/main" });
     },
     remarkClick() {
-      wx.navigateTo({ url: '/pages/remark/main' });
+      wx.navigateTo({ url: "/pages/remark/main" });
     },
     deliveryClick() {
       this.tabIndex = 0;
@@ -260,11 +253,11 @@ export default {
       this.tabIndex = 1;
     },
     protocol() {
-      wx.navigateTo({ url: '/pages/pickProtocol/main' });
+      wx.navigateTo({ url: "/pages/pickProtocol/main" });
     },
     openMap() {
       wx.getLocation({
-        type: 'gcj02',
+        type: "gcj02",
         success(res) {
           const latitude = res.latitude;
           const longitude = res.longitude;

@@ -2,25 +2,30 @@
   <div class="container">
     <div class="header-c">
       <div class="tab-c">
-        <div class="left"
-             :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}"
-             @click="deliveryClick">小区配送</div>
+        <div
+          class="left"
+          :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}"
+          @click="deliveryClick"
+        >小区配送</div>
       </div>
-      <div class="delivery"
-           v-if="tabIndex === 0">
-        <div class="address-c"
-             @click="addressClick(currentOrder.shopInfo.communityId)">
+      <div class="delivery" v-if="tabIndex === 0">
+        <div class="address-c" @click="addressClick(currentOrder.shopInfo.communityId)">
           <i class="icon mt-location-s"></i>
           <div class="address">
-            <span class="address-info"
-                  v-if="!userInfo.addressModel.house_number || userInfo.addressModel.communityId != currentOrder.shopInfo.communityId">请添加配送地址...</span>
-            <span class="address-info"
-                  v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.wxAddress.address}} {{userInfo.addressModel.house_number}}</span>
-            <span class="user-info"
-                  v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId">{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}} {{userInfo.addressModel.phone}}</span>
+            <span
+              class="address-info"
+              v-if="!userInfo.addressModel.house_number || userInfo.addressModel.communityId != currentOrder.shopInfo.communityId"
+            >请添加配送地址...</span>
+            <span
+              class="address-info"
+              v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId"
+            >{{userInfo.addressModel.wxAddress.address}} {{userInfo.addressModel.house_number}}</span>
+            <span
+              class="user-info"
+              v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId"
+            >{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}} {{userInfo.addressModel.phone}}</span>
           </div>
-          <i class="icon iconfont iconright"
-             :style="{fontSize: 32 + 'rpx'}"></i>
+          <i class="icon iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
         </div>
       </div>
     </div>
@@ -28,14 +33,11 @@
       <div class="section">
         <img :src="path + currentOrder.shopInfo.pic_url">
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright"
-           style="display: inline"></i>
+        <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="line-sp"></div>
       <div class="list">
-        <div class="item"
-             v-for="(item, index) in currentOrder.itemList"
-             :key="index">
+        <div class="item" v-for="(item, index) in currentOrder.itemList" :key="index">
           <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -59,8 +61,7 @@
       </div>
     </div>
     <div class="bottom-c">
-      <div class="b-mid"
-           @click="remarkClick">
+      <div class="b-mid" @click="remarkClick">
         <span class="mid-l">备注</span>
         <div class="mid-r">
           <span>{{currentOrder.remark? currentOrder.remark:'请输入口味、偏好等要求'}}</span>
@@ -68,9 +69,7 @@
         </div>
       </div>
     </div>
-    <div class="pay-btn"
-         @click="payClick"
-         :style="btnStyle">
+    <div class="pay-btn" @click="payClick" :style="btnStyle">
       <div class="top">
         <span class="s-l">微信支付</span>
         <span class="s-m">￥{{realFee}}</span>
@@ -80,12 +79,12 @@
 </template>
 
 <script>
-import sepLine from '@/components/sep-line';
-import { orderData } from './data';
-import { openLocation } from '@/utils/wxapi';
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { GOODS_URL_PREFIX } from '@/constants/hostConfig';
-import { jointStyle } from '@/utils/style';
+import sepLine from "@/components/sep-line";
+import { orderData } from "./data";
+import { openLocation } from "@/utils/wxapi";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
+import { jointStyle } from "@/utils/style";
 
 export default {
   data() {
@@ -99,11 +98,11 @@ export default {
     };
   },
   computed: {
-    ...mapState('user', ['userInfo']),
-    ...mapState('submitOrder', ['currentOrder']),
+    ...mapState("user", ["userInfo"]),
+    ...mapState("submitOrder", ["currentOrder"]),
     btnStyle() {
       let style = {};
-      style['background-color'] = this.btnBackgroundColor;
+      style["background-color"] = this.btnBackgroundColor;
       return jointStyle(style);
     },
     path() {
@@ -126,8 +125,8 @@ export default {
     sepLine
   },
   methods: {
-    ...mapActions('submitOrder', ['postOrderDataAction', 'getOrderDataAction']),
-    ...mapActions('user', ['updateDefaultAddress', 'getPhoneNumber']),
+    ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
+    ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber"]),
     bindPhoneNumber(e) {
       var target = e.target;
       target.openid = this.userInfo.openid;
@@ -135,22 +134,22 @@ export default {
     },
     addressClick(communityId) {
       wx.navigateTo({
-        url: '/pages/addressList/main?communityId=' + communityId
+        url: "/pages/addressList/main?communityId=" + communityId
       });
     },
     redPacketClick() {
-      wx.navigateTo({ url: '/pages/redPacket/main' });
+      wx.navigateTo({ url: "/pages/redPacket/main" });
     },
     couponClick() {
-      wx.navigateTo({ url: '/pages/couponList/main' });
+      wx.navigateTo({ url: "/pages/couponList/main" });
     },
     remarkClick() {
-      wx.navigateTo({ url: '/pages/remark/main' });
+      wx.navigateTo({ url: "/pages/remark/main" });
     },
     goShop() {
       var shopId = this.currentOrder.shopInfo.shopId;
       wx.navigateTo({
-        url: '/pages/shoppingCart/main?shopId=' + shopId
+        url: "/pages/shoppingCart/main?shopId=" + shopId
       });
     },
     deliveryClick() {
@@ -160,11 +159,11 @@ export default {
       this.tabIndex = 1;
     },
     protocol() {
-      wx.navigateTo({ url: '/pages/pickProtocol/main' });
+      wx.navigateTo({ url: "/pages/pickProtocol/main" });
     },
     openMap() {
       wx.getLocation({
-        type: 'gcj02',
+        type: "gcj02",
         success(res) {
           const latitude = res.latitude;
           const longitude = res.longitude;
@@ -177,7 +176,8 @@ export default {
       });
     },
     payClick() {
-      if (this.userInfo.addressModel.house_number) {
+      if (this.userInfo.addressModel.house_number && !this.currentOrder.pay) {
+        this.currentOrder.pay = true
         this.currentOrder.deliveryFee = this.deliveryFee;
         this.currentOrder.addressInfo = this.userInfo.addressModel;
         this.currentOrder.realFee = this.realFee;
@@ -189,8 +189,8 @@ export default {
         this.postOrderDataAction({ order: this.currentOrder });
       } else {
         wx.showToast({
-          title: '请填写配送地址!',
-          icon: 'none',
+          title: "请填写配送地址!",
+          icon: "none",
           duration: 1500
         });
       }
