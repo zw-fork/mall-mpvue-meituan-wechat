@@ -120,6 +120,7 @@ export default {
           });
         },
         fail(res) {
+          wx.hideLoading();
           console.log(`res:`, res);
         }
       });

@@ -203,7 +203,8 @@ export default {
   onLoad(options) {
     this.scrollTop = 0;
     var data = {
-      page: 1
+      page: 1,
+      shopId: this.userInfo.shopId
     };
     if (options.deliveryStatus) {
       this.pageIndex = parseInt(options.deliveryStatus);

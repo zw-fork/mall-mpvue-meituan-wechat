@@ -360,10 +360,17 @@ export default {
           });
         } else {
           this.shop = {
+            wechat: true,
             statusName: "停业",
             status: 3,
+            communityName: undefined,
+            communityId: undefined,
             tel: [],
-            phone: undefined
+            phone: undefined,
+            pic_url: undefined,
+            wxAddress: {
+              name: undefined
+            }
           };
           this.shop.userid = userId;
         }
@@ -386,10 +393,15 @@ export default {
       this.shop = {
         statusName: "停业",
         status: 3,
+        communityName: undefined,
+        communityId: undefined,
         tel: [],
         wechat: true,
+        phone: undefined,
         pic_url: undefined,
-        phone: undefined
+        wxAddress: {
+          name: undefined
+        }
       };
       this.shop.userid = userId;
     }

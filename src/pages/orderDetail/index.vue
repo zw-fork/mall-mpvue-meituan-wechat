@@ -26,7 +26,7 @@
         </div>
         <div class="modalFooter">
           <div class="btnCancel" @tap="clickCallShop">联系商家</div>
-          <div class="btnConfirm" @click.stop="clickCallDelivery">联系配送员</div>
+          <div class="btnConfirm" @click.stop="clickCallDelivery"  v-if="orderDetail.deliveryStatus==2">联系配送员</div>
         </div>
       </div>
     </div>

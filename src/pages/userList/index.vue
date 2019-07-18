@@ -276,7 +276,9 @@ export default {
     scanClick() {
       wx.scanCode({
         success: res => {
-          getFetch(res.result, {}, false).then(response => {});
+          getFetch(res.result, {}, false).then(response => {
+            this.getGoods()
+          });
         }
       });
     },
