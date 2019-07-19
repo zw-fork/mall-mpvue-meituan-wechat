@@ -33,7 +33,7 @@
           <div class="btn" v-if="orderByShopIdDetail.deliveryStatus==2" @click="updateStatus(null, 3)">
             <span>完成</span>
           </div>
-          <div class="btn" @click="refund" v-if="orderByShopIdDetail.status==2">
+          <div class="btn" @click="refund" v-if="orderByShopIdDetail.status==2 && userInfo.role==2">
             <span>退款</span>
           </div>
           <div

@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="list-c">
-        <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index">
+        <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index"  @click="itemClick(item)">
           <div class="item-l">
             <i class="icon" :class="item.icon"></i>
             <span class="title">{{item.title}}</span>

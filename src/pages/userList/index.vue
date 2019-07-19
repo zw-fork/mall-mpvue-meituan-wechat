@@ -50,7 +50,10 @@
                 <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
                 <span class="sub-title" v-else-if="item.status==2">同意关注公众号/不同意公众关注号</span>
                 <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
-                <div class="r-t" v-if="item.id != userInfo.id">
+                <div
+                  class="r-t"
+                  v-if="(item.role == 1 && (userInfo.role== 2 || userInfo.role== 3 )) || item.id == userInfo.id || userInfo.role== 3"
+                >
                   <div class="add-item">
                     <div class="add-r" @click.stop="manageGoods($event, item)">
                       <i class="icon iconfont icondian"></i>
@@ -202,11 +205,11 @@ export default {
     },
     updateGoods(goodsModel) {
       getFetch(
-        "/wechat/updateStaff/" +
+        "wechat/updateStaff/" +
           this.userInfo.shopId +
           "/" +
-          this.userInfo.id,
-           "/" +
+          this.userInfo.id +
+          "/" +
           this.selectGoods.id,
         {},
         false
@@ -276,9 +279,11 @@ export default {
     scanClick() {
       wx.scanCode({
         success: res => {
-          getFetch(res.result, {}, false).then(response => {
-            this.getGoods()
-          });
+          getFetch("qrcode/addShop?sessionId=" + res.result, {}, false).then(
+            response => {
+              this.getGoods();
+            }
+          );
         }
       });
     },

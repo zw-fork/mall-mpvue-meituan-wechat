@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     qrcode() {
-      var text = "qrcode/addShop?sessionId=" + encodeURIComponent(wx.getStorageSync("sessionId"));
+      var text = encodeURIComponent(wx.getStorageSync("sessionId"));
       var qrcode = new QRCode("canvas", {
         // usingIn: this,
         text: text,

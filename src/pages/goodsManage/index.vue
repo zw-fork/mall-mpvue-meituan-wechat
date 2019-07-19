@@ -206,6 +206,7 @@ export default {
         });
         return;
       }
+      wx.showLoading({ title: '加载中...', mask: true })
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
       this.uploadImg({ goodsModel: this.goods });

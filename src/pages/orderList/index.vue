@@ -123,7 +123,7 @@
           <div
             class="btn"
             @click="cancelClick(item)"
-            v-if="item.canRefund && (!item.refundStatus || item.refundStatus == 3) && item.status>1"
+            v-if="item.canRefund && (!item.refundStatus || item.refundStatus == 4) && item.status==2"
           >
             <span>退款</span>
           </div>

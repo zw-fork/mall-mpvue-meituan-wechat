@@ -40,13 +40,13 @@
       >
     </div>
     <div class="name" style="height: 65rpx;">
-      <span>起送费：</span>
+      <span>起送金额：</span>
       <input
         type="number"
         maxlength="3"
         placeholder="例如:1"
         placeholder-style="font-size: 24rpx"
-        v-model="shop.scope"
+        v-model="shop.min_price"
       >
       <div class="mid-r" @click="showSinglePicker">元</div>
     </div>
