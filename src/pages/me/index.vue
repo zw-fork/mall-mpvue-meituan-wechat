@@ -1,109 +1,113 @@
 <template>
-  <div>
-    <div class="container" @click="update">
-      <div class="header-c">
-        <img :src="userInfo.avatarUrl" alt @click="updateUser(userInfo)">
-        <div class="info-c">
-          <span class="name">{{userInfo.nickname}}</span>
-        </div>
+  <div class="container" @click="update">
+    <div class="header-c">
+      <img :src="userInfo.avatarUrl" alt @click="updateUser(userInfo)">
+      <div class="info-c" @click="visibleItemModal = !visibleItemModal">
+        <span class="name">{{userInfo.nickname}}</span>
       </div>
-      <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
-        <div class="itemName">
-          <span>订单管理</span>
-        </div>
-        <div class="category-c">
-          <div class="grid-c">
-            <div
-              class="item"
-              v-for="(item, index) in orderList"
-              :key="index"
-              @click="itemClick(item)"
-            >
-              <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
-              <span class="item-title">{{item.name}}</span>
-              <text class="count" v-if="orderCount[index]">{{orderCount[index]}}</text>
-            </div>
-          </div>
-        </div>
+    </div>
+    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
+      <div class="itemName">
+        <span>订单管理</span>
       </div>
-      <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
-        <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
-          <span style="margin-left: 20rpx;">商品管理</span>
-        </div>
-        <div class="category-c">
-          <div class="grid-c">
-            <div
-              class="item"
-              v-for="(item, index) in goodsMenuList"
-              :key="index"
-              @click="itemClick(item)"
-            >
-              <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
-              <span class="item-title">{{item.name}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="order-c" v-if="userInfo.role==2 && userInfo.shopId">
-        <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
-          <span style="margin-left: 20rpx;">店铺管理</span>
-        </div>
-        <div class="category-c">
-          <div class="grid-c">
-            <div
-              class="item"
-              v-for="(item, index) in shopMenuList"
-              :key="index"
-              @click="itemClick(item)"
-            >
-              <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
-              <span class="item-title">{{item.name}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="order-c" v-if="userInfo.role==3">
-        <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
-          <span style="margin-left: 20rpx;">超级管理员</span>
-        </div>
-        <div class="category-c">
-          <div class="grid-c">
-            <div
-              class="item"
-              v-for="(item, index) in superMenuList"
-              :key="index"
-              @click="itemClick(item)"
-            >
-              <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
-              <span class="item-title">{{item.name}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="list-c">
-        <div class="item" v-for="(item, index) in itemList" :key="index" :data-index="index"  @click="itemClick(item)">
-          <div class="item-l">
-            <i class="icon" :class="item.icon"></i>
-            <span class="title">{{item.title}}</span>
-            <span class="amount" v-if="item.amount">
-              {{item.amount}}
-              <span>张</span>
-            </span>
-          </div>
-          <i class="icon iconfont iconright" @click="itemClick(item)"></i>
-        </div>
-        <div class="item">
-          <div class="item-l">
-            <i class="icon mt-customer-service-o"></i>
-            <span class="title">客服中心</span>
-          </div>
-          <button
-            open-type="contact"
-            style="margin: 0;padding: 0;border:none;background-color: white;"
+      <div class="category-c">
+        <div class="grid-c">
+          <div
+            class="item"
+            v-for="(item, index) in orderList"
+            :key="index"
+            @click="itemClick(item)"
           >
-            <i class="icon iconfont iconright" @click="logoutClick($event)"></i>
-          </button>
+            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            <span class="item-title">{{item.name}}</span>
+            <text class="count" v-if="orderCount[index]">{{orderCount[index]}}</text>
+          </div>
         </div>
+      </div>
+    </div>
+    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
+        <span style="margin-left: 20rpx;">商品管理</span>
+      </div>
+      <div class="category-c">
+        <div class="grid-c">
+          <div
+            class="item"
+            v-for="(item, index) in goodsMenuList"
+            :key="index"
+            @click="itemClick(item)"
+          >
+            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            <span class="item-title">{{item.name}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="order-c" v-if="userInfo.role==2 && userInfo.shopId">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
+        <span style="margin-left: 20rpx;">店铺管理</span>
+      </div>
+      <div class="category-c">
+        <div class="grid-c">
+          <div
+            class="item"
+            v-for="(item, index) in shopMenuList"
+            :key="index"
+            @click="itemClick(item)"
+          >
+            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            <span class="item-title">{{item.name}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="order-c" v-if="userInfo.role==3">
+      <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
+        <span style="margin-left: 20rpx;">超级管理员</span>
+      </div>
+      <div class="category-c">
+        <div class="grid-c">
+          <div
+            class="item"
+            v-for="(item, index) in superMenuList"
+            :key="index"
+            @click="itemClick(item)"
+          >
+            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            <span class="item-title">{{item.name}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-c">
+      <div
+        class="item"
+        v-for="(item, index) in itemList"
+        :key="index"
+        :data-index="index"
+        @click="itemClick(item)"
+      >
+        <div class="item-l">
+          <i class="icon" :class="item.icon"></i>
+          <span class="title">{{item.title}}</span>
+          <span class="amount" v-if="item.amount">
+            {{item.amount}}
+            <span>张</span>
+          </span>
+        </div>
+        <i class="icon iconfont iconright" @click="itemClick(item)"></i>
+      </div>
+      <div class="item">
+        <div class="item-l">
+          <i class="icon mt-customer-service-o"></i>
+          <span class="title">客服中心</span>
+        </div>
+        <button
+          open-type="contact"
+          style="margin: 0;padding: 0;border:none;background-color: white;"
+        >
+          <i class="icon iconfont iconright" @click="logoutClick($event)"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -117,6 +121,7 @@ import { getFetch } from "@/network/request/HttpExtension";
 export default {
   data() {
     return {
+      visibleItemModal: false,
       orderCount: [],
       show: false,
       showEdit: false,
@@ -132,40 +137,9 @@ export default {
 
       itemList: [
         {
-          title: "红包",
-          icon: "mt-red-packet-o",
-          path: "/pages/redPacket/main",
-          amount: 4
-        },
-        {
-          title: "商家代金券",
-          icon: "mt-coupon-o",
-          path: "/pages/couponList/main",
-          amount: 10
-        },
-        {
-          title: "店铺注册",
-          icon: "mt-my-location-o",
-          path: "/pages/shopManage/main"
-        },
-        {
-          title: "邀请有奖",
-          icon: "mt-gift-o"
-        },
-        {
-          title: "帮助和反馈",
-          icon: "mt-help-o",
-          path: "/pages/feedback/main"
-        },
-        {
           title: "生成二维码",
           icon: "mt-protocol-o",
           path: "/pages/qrcode/main"
-        },
-        {
-          title: "加入店铺",
-          icon: "mt-protocol-o",
-          path: "/pages/index/main?addWorker=1&shopId=1"
         }
       ]
     };

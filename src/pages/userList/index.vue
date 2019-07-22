@@ -46,13 +46,16 @@
                 <span class="sub-title">微信昵称：{{item.nickname}}</span>
                 <span class="sub-title">姓名：{{item.realname}}</span>
                 <span class="sub-title">电话号码：{{item.tel}}</span>
-                <span class="sub-title">角色：{{item.role == 2 ? '店主' : '员工'}}</span>
+                <span class="sub-title" v-if="item.role == 0">角色：顾客</span>
+                 <span class="sub-title" v-else-if="item.role == 1">角色：店员</span>
+                  <span class="sub-title" v-else-if="item.role == 2">角色：店主</span>
+                   <span class="sub-title" v-else-if="item.role == 3">角色：管理员</span>
                 <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
                 <span class="sub-title" v-else-if="item.status==2">同意关注公众号/不同意公众关注号</span>
                 <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
                 <div
                   class="r-t"
-                  v-if="(item.role == 1 && (userInfo.role== 2 || userInfo.role== 3 )) || item.id == userInfo.id || userInfo.role== 3"
+                  v-if="(item.role == 1 && userInfo.role== 2 ) || (item.id == userInfo.id && userInfo.role== 1) || userInfo.role== 3"
                 >
                   <div class="add-item">
                     <div class="add-r" @click.stop="manageGoods($event, item)">
@@ -67,7 +70,7 @@
       </div>
     </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
-      <div @click="editGoods" v-if="userInfo.role==3">
+      <div @click="editGoods" v-if="userInfo.role==3 && selectGoods.role != 1">
         <i class="icon iconfont iconedit"></i>
         <span style="color:white;text-align: center;">店铺</span>
       </div>

@@ -15,8 +15,6 @@ export default {
   data() {
     return {
       shopId: undefined,
-      isModel: false,
-      motto: "Hello World",
       userInfo: {}
     };
   },
@@ -26,8 +24,6 @@ export default {
       var qrcode = new QRCode("canvas", {
         // usingIn: this,
         text: text,
-        width: 150,
-        height: 150,
         padding: 12,
         colorDark: "#000000",
         colorLight: "#ffffff",

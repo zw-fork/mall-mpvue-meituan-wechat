@@ -31,7 +31,7 @@ const actions = {
   createShop({ state, commit }, { shop }) {
     var path = `${API_URL}`
     var that = this
-    if (shop.wechat) {
+    if (shop.wechat && shop.pic_url) {
       var sessionId = wx.getStorageSync('sessionId')
       wx.uploadFile({
         url: path + '/shop/upload', //仅为示例，非真实的接口地址

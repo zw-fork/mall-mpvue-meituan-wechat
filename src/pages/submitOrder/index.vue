@@ -80,7 +80,6 @@
 
 <script>
 import sepLine from "@/components/sep-line";
-import { orderData } from "./data";
 import { openLocation } from "@/utils/wxapi";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";

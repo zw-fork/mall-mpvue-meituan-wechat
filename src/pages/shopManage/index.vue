@@ -94,16 +94,8 @@
         >
       </div>
     </div>
-    <div class="name" style="height: 65rpx;" v-if="userInfo.role == 3">
-      <span>社区配送：</span>
-      <input
-        maxlength="30"
-        placeholder="详细地址,如:1单元1楼1号"
-        placeholder-style="font-size: 24rpx"
-        v-model="shop.building"
-      >
-    </div>
     <div class="submit-btn" @click="updateShop">
+      111 {{shop.pic_url}}
       <span>保存</span>
     </div>
     <mp-picker
@@ -155,7 +147,7 @@ export default {
         phone: undefined,
         pic_url: undefined,
         wxAddress: {
-          name: undefined
+          name: ""
         }
       },
       showCategory: false,
@@ -214,58 +206,15 @@ export default {
         });
         return;
       }
-      var that = this;
+      this.shop.wechat = true;
+      this.shop.pic_url = "";
+      var that = this.shop;
       wx.chooseImage({
         count: 1, // 默认9
         sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: function(photo) {
-          that.shop.wechat = true;
-          that.shop.pic_url = "";
-          wx.getImageInfo({
-            src: photo.tempFilePaths[0],
-            success: function(res) {
-              var ratio = 1;
-              var canvasWidth = res.width; //图片原始长宽
-              var canvasHeight = res.height;
-              while (canvasWidth > 1500 || canvasHeight > 1500) {
-                // 保证宽高在400以内
-                canvasWidth = Math.trunc(res.width / ratio);
-                canvasHeight = Math.trunc(res.height / ratio);
-                ratio++;
-              }
-              that.cWidth = canvasWidth;
-              that.cHeight = canvasHeight;
-              var ctx = wx.createCanvasContext("photo_canvas");
-              ctx.drawImage(
-                photo.tempFilePaths[0],
-                0,
-                0,
-                res.width,
-                res.height,
-                0,
-                0,
-                canvasWidth,
-                canvasHeight
-              );
-              ctx.draw(false, function() {
-                wx.canvasToTempFilePath(
-                  {
-                    canvasId: "photo_canvas",
-                    fileType: "jpg",
-                    destWidth: canvasWidth,
-                    destHeight: canvasHeight,
-                    success: function(res) {
-                      // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-                      that.shop.wechat = true;
-                      that.shop.pic_url = res.tempFilePath;
-                    }
-                  },
-                  that
-                );
-              });
-            }
-          });
+          that.pic_url = photo.tempFilePaths[0];
         }
       });
     },
@@ -310,7 +259,19 @@ export default {
         });
         return;
       }
-      if (!this.shop.wxAddress || !this.shop.wxAddress.name.trim()) {
+      if (!this.shop.phone) {
+        wx.showToast({
+          title: "电话不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
+      if (
+        !this.shop.wxAddress ||
+        !this.shop.wxAddress.name ||
+        !this.shop.wxAddress.name.trim()
+      ) {
         wx.showToast({
           title: "店铺地址不能为空!",
           icon: "none",
@@ -339,25 +300,26 @@ export default {
   },
   onLoad(options) {
     var shopId = this.userInfo.shopId;
-    var userId = this.userInfo.id;
-    if (options.id) {
-      userId = options.id;
-      getFetch("/wechat/getUser/" + options.id, {}, false).then(response => {
-        shopId = response.shopId;
-        if (shopId) {
-          wx.showLoading({ title: "加载中...", mask: true });
-          getFetch("/shop/" + shopId, {}, false).then(response => {
-            this.shop = response.result || {};
-            if (this.shop.tel.length > 0) {
-              this.shop.phone = this.shop.tel[0];
+    if (
+      (options.id && this.userInfo.role == 3) ||
+      (shopId && this.userInfo.role == 2)
+    ) {
+      wx.showLoading({ title: "加载中...", mask: true });
+      var userId = options.id;
+      if (!userId) {
+        userId = this.userInfo.id;
+      }
+      getFetch("/shop/myShop/" + userId, {}, false).then(response => {
+        this.shop = response.result || {};
+        if (this.shop.shopId) {
+          if (this.shop.tel.length > 0) {
+            this.shop.phone = this.shop.tel[0];
+          }
+          for (var index in this.statusArray) {
+            if (this.shop.status == this.statusArray[index].value) {
+              this.shop.statusName = this.statusArray[index].label;
             }
-            for (var index in this.statusArray) {
-              if (this.shop.status == this.statusArray[index].value) {
-                this.shop.statusName = this.statusArray[index].label;
-              }
-            }
-            wx.hideLoading();
-          });
+          }
         } else {
           this.shop = {
             wechat: true,
@@ -369,41 +331,13 @@ export default {
             phone: undefined,
             pic_url: undefined,
             wxAddress: {
-              name: undefined
+              name: ""
             }
           };
           this.shop.userid = userId;
         }
-      });
-    } else if (shopId) {
-      wx.showLoading({ title: "加载中...", mask: true });
-      getFetch("/shop/" + shopId, {}, false).then(response => {
-        this.shop = response.result || {};
-        if (this.shop.tel.length > 0) {
-          this.shop.phone = this.shop.tel[0];
-        }
-        for (var index in this.statusArray) {
-          if (this.shop.status == this.statusArray[index].value) {
-            this.shop.statusName = this.statusArray[index].label;
-          }
-        }
         wx.hideLoading();
       });
-    } else {
-      this.shop = {
-        statusName: "停业",
-        status: 3,
-        communityName: undefined,
-        communityId: undefined,
-        tel: [],
-        wechat: true,
-        phone: undefined,
-        pic_url: undefined,
-        wxAddress: {
-          name: undefined
-        }
-      };
-      this.shop.userid = userId;
     }
   }
 };

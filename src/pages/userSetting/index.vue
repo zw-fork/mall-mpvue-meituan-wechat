@@ -32,6 +32,12 @@
         </div>
       </div>
     </div>
+    <canvas
+      style="width: 400px; height: 400px;"
+      class="canvas"
+      canvas-id="canvas"
+      bindlongtap="save"
+    ></canvas>
     <div class="submit-btn" @click="saveWx(null)">
       <span>保存</span>
     </div>
@@ -41,7 +47,8 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import mpButton from "mpvue-weui/src/button";
-import { postFetch,getFetch } from "@/network/request/HttpExtension";
+import { postFetch, getFetch } from "@/network/request/HttpExtension";
+import QRCode from "../../utils/weapp-qrcode.js";
 
 export default {
   components: {
@@ -70,6 +77,24 @@ export default {
   },
   methods: {
     ...mapActions("address", ["saveOrUpdateAddress"]),
+    qrcode() {
+      var text = encodeURIComponent(wx.getStorageSync("sessionId"));
+      var qrcode = new QRCode("canvas", {
+        // usingIn: this,
+        text: text,
+        width: 150,
+        height: 150,
+        padding: 12,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+        callback: res => {
+          // 生成二维码的临时文件
+          console.log(res.path);
+        }
+      });
+      console.log(qrcode);
+    },
     saveWx(status) {
       if (status) {
         this.userInfo.status = status;
@@ -100,6 +125,9 @@ export default {
     getFetch("/wechat/getCurrentUser", {}, false).then(response => {
       this.userInfo = response || {};
     });
+    setTimeout(() => {
+      this.qrcode();
+    }, 500);
   }
 };
 </script>
