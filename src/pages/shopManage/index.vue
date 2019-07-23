@@ -64,7 +64,7 @@
     <div class="b-mid" style="height: 65rpx;">
       <span class="mid-l">商店状态:</span>
       <div class="mid-r" @click="showSinglePicker">
-        <span>{{shop.statusName}}</span>
+        <span>{{statusName}}</span>
         <i class="icon iconfont iconright"></i>
       </div>
     </div>
@@ -95,19 +95,17 @@
       </div>
     </div>
     <div class="submit-btn" @click="updateShop">
-      111 {{shop.pic_url}}
       <span>保存</span>
     </div>
-    <mp-picker
+    <mpvue-picker
       ref="mpvuePicker"
       :mode="mode"
-      :deepLength="deepLength"
       :pickerValueDefault="pickerValueDefault"
       @onChange="onChange"
       @onConfirm="onConfirm"
       @onCancel="onCancel"
       :pickerValueArray="pickerValueArray"
-    ></mp-picker>
+    ></mpvue-picker>
     <canvas
       canvas-id="photo_canvas"
       :style="{width:  cWidth + 'px', 'height': cHeight + 'px'}"
@@ -120,16 +118,16 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import mpButton from "mpvue-weui/src/button";
-import mpPicker from "mpvue-weui/src/picker";
 import inputDialog from "@/components/inputDialog";
 import mpUploader from "mpvue-weui/src/uploader";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
+import mpvuePicker from "mpvue-picker";
 
 export default {
   components: {
     mpButton,
-    mpPicker,
+    mpvuePicker,
     mpUploader,
     inputDialog
   },
@@ -138,9 +136,10 @@ export default {
       cWidth: undefined,
       cHeight: undefined,
       reFresh: true,
+      statusName: "",
       shop: {
-        statusName: undefined,
-        status: undefined,
+        statusName: "停服",
+        status: 0,
         communityName: undefined,
         communityId: undefined,
         tel: [],
@@ -249,6 +248,7 @@ export default {
     onConfirm(e) {
       this.shop.status = e.value[0];
       this.shop.statusName = e.label;
+      this.statusName = e.label;
     },
     updateShop() {
       if (!this.shop.shopName) {
@@ -317,7 +317,7 @@ export default {
           }
           for (var index in this.statusArray) {
             if (this.shop.status == this.statusArray[index].value) {
-              this.shop.statusName = this.statusArray[index].label;
+              this.statusName = this.statusArray[index].label;
             }
           }
         } else {
