@@ -57,7 +57,7 @@
             </div>
             <div class="cart_list_price">
               <span>¥</span>
-              <span>{{item.min_price * item.sequence}}</span>
+              <span>{{item.min_price}}</span>
             </div>
             <section class="cart_list_control">
               <span @click.stop="reduceClick(item, item.index, item.categoryIndex)">
@@ -154,7 +154,7 @@
           }
         }
         this.cartGoodsList1 = cartGoodsList
-        return parseFloat(price).toFixed(1);
+        return parseFloat(price).toFixed(2);
       },
       productCount() {
         var count = 0
@@ -176,7 +176,7 @@
       },
       btnTitle() {
         if (this.shopInfo && this.shopInfo.min_price) {
-          if (this.shopInfo.status == 3) {
+          if (this.shopInfo.status != 1) {
             return "打烊"
           }
           var content = `${this.shopInfo.min_price}元起送`
@@ -186,7 +186,7 @@
           }
           if (price <= 0) return content
           if (price < this.shopInfo.min_price) {
-            var value = parseFloat(this.shopInfo.min_price - price).toFixed(1)
+            var value = parseFloat(this.shopInfo.min_price - price).toFixed(2)
             return `还差${value}元`
           } else {
             return '去结算'
@@ -289,7 +289,7 @@
         var selectedArr = []
         this.cartGoodsList1.map((item, index) => {
           var price = item.min_price * item.sequence
-          item.totalPrice = parseFloat(price).toFixed(1)
+          item.totalPrice = parseFloat(price).toFixed(2)
           selectedArr.push(item)
         })
         var order = {}

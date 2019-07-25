@@ -28,6 +28,7 @@
     "minapp-api-promise": "^1.0.2",
     "mpvue": "^2.0.0",
     "mpvue-echarts": "^0.3.1",
+    "mpvue-picker": "^2.1.5",
     "mpvue-weui": "^1.0.7",
     "mpvue-wxparse": "^0.6.5",
     "qqmap-wx-jssdk": "^1.0.0",

@@ -47,9 +47,9 @@
                 <span class="sub-title">姓名：{{item.realname}}</span>
                 <span class="sub-title">电话号码：{{item.tel}}</span>
                 <span class="sub-title" v-if="item.role == 0">角色：顾客</span>
-                 <span class="sub-title" v-else-if="item.role == 1">角色：店员</span>
-                  <span class="sub-title" v-else-if="item.role == 2">角色：店主</span>
-                   <span class="sub-title" v-else-if="item.role == 3">角色：管理员</span>
+                <span class="sub-title" v-else-if="item.role == 1">角色：店员</span>
+                <span class="sub-title" v-else-if="item.role == 2">角色：店主</span>
+                <span class="sub-title" v-else-if="item.role == 3">角色：管理员</span>
                 <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
                 <span class="sub-title" v-else-if="item.status==2">同意关注公众号/不同意公众关注号</span>
                 <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
@@ -131,36 +131,6 @@ export default {
     },
     path() {
       return `${GOODS_URL_PREFIX}`;
-    },
-    productCount() {
-      var count = 0;
-      if (this.shopInfo.categoryModelList) {
-        this.shopInfo.categoryModelList.map(item => (count += item.count));
-      }
-      return count;
-    },
-    btnTitle() {
-      if (this.shopInfo) {
-        if (this.shopInfo.statu != 1) {
-          return "打烊";
-        }
-        var content = `${this.shopInfo.min_price}元起送`;
-        var price = 0;
-        if (this.shopInfo.categoryModelList) {
-          this.shopInfo.categoryModelList.map(
-            item => (price += item.totalPrice)
-          );
-        }
-        if (price <= 0) return content;
-        if (price < this.shopInfo.min_price) {
-          var value = parseFloat(this.shopInfo.min_price - price).toFixed(1);
-          return `还差${value}元`;
-        } else {
-          return "去结算";
-        }
-      } else {
-        return "";
-      }
     }
   },
   methods: {
@@ -264,6 +234,14 @@ export default {
       });
     },
     editGoods() {
+      if (!this.selectGoods.tel || !this.selectGoods.realname) {
+        wx.showToast({
+          title: "姓名和电话不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
       var id = this.selectGoods.id;
       wx.navigateTo({
         url: "/pages/shopManage/main?id=" + id
@@ -682,17 +660,14 @@ export default {
                   align-items: center;
                   i {
                     font-size: 50rpx;
-                    color: $textGray-color;
                   }
                   span {
                     font-size: 32rpx;
-                    color: $textBlack-color;
                     margin: 0 20rpx;
                   }
                 }
                 .add-r {
                   i {
-                    color: $theme-color;
                     font-size: 54rpx;
                   }
                 }

@@ -218,7 +218,7 @@ const actions = {
         item.spus.datas.map((itm, idx) => {
           if (itm.sequence > 0) {
             var price = itm.min_price * itm.sequence
-            itm.totalPrice = parseFloat(price).toFixed(1)
+            itm.totalPrice = parseFloat(price).toFixed(2)
             selectedArr.push(itm)
           }
         })
@@ -252,7 +252,7 @@ const actions = {
     sku.attrs = array
     sku.title = item.name
     sku.selectedCount = item.sequence
-    sku.price = parseFloat(item.min_price).toFixed(1)
+    sku.price = parseFloat(item.min_price).toFixed(2)
     sku.selectedItems = selectedItems.join(',')
     sku.time = new Date()
     commit('changeSkuDataMut', sku)

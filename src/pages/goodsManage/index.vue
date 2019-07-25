@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="reFresh">
+  <div class="container">
     <div class="name">
       <span>商品名称：</span>
       <input
@@ -56,62 +56,53 @@
         <i class="icon iconfont iconright"></i>
       </div>
     </div>
-    <div class="b-mid" @click="remarkClick">
+    <div class="b-mid">
       <span class="mid-l">商品状态:</span>
       <div class="mid-r" @click="showSinglePicker">
-        <span>{{goods.statusName}}</span>
+        <span>{{name}}</span>
         <i class="icon iconfont iconright"></i>
       </div>
     </div>
     <div class="submit-btn" @click="uploadFile">
       <span>保存</span>
     </div>
-    <mp-picker
+    <mpvue-picker
       ref="mpvuePicker"
       :mode="mode"
-      :deepLength="deepLength"
       :pickerValueDefault="pickerValueDefault"
       @onChange="onChange"
       @onConfirm="onConfirm"
       @onCancel="onCancel"
       :pickerValueArray="pickerValueArray"
-    ></mp-picker>
+    ></mpvue-picker>
   </div>
 </template>
-
+ 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import mpButton from "mpvue-weui/src/button";
-import mpPicker from "mpvue-weui/src/picker";
 import inputDialog from "@/components/inputDialog";
 import mpUploader from "mpvue-weui/src/uploader";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
+import mpvuePicker from "mpvue-picker";
 
 export default {
   components: {
     mpButton,
-    mpPicker,
+    mpvuePicker,
     mpUploader,
     inputDialog
   },
   data() {
     return {
-      reFresh: true,
       goods: {
         statusName: "上架",
         status: 1,
         picture: undefined
       },
-      showCategory: false,
-      pickerValueArray: [], // picker 数组值
-      pickerValueDefault: [], // 初始化值
-      active: false,
-      clazzA: "icon mt-selected-o",
-      styleA: "color: #F9D173",
-      clazzB: "icon mt-unselected-o",
-      styleB: "color: #333",
-      goodsState: undefined,
+      name: "",
+      mode: "selector",
       statusArray: [
         {
           label: "上架",
@@ -122,13 +113,35 @@ export default {
           value: 2
         }
       ],
-      categoryArray: [],
-      item: {
-        gender: 1
-      },
-      type: undefined,
-      img: undefined,
-      category: undefined
+      categoryArray: [
+        {
+          label: "住宿费",
+          value: 1
+        },
+        {
+          label: "活动费",
+          value: 2
+        },
+        {
+          label: "通讯费",
+          value: 3
+        },
+        {
+          label: "补助",
+          value: 4
+        }
+      ],
+      statusArray: [
+        {
+          label: "上架",
+          value: 1
+        },
+        {
+          label: "下架",
+          value: 2
+        }
+      ],
+      pickerValueDefault: [0]
     };
   },
   computed: {
@@ -136,9 +149,6 @@ export default {
     ...mapState("user", ["userInfo"]),
     path() {
       return `${GOODS_URL_PREFIX}`;
-    },
-    selectedStyle() {
-      return this.item.gender ? "color: #F9D173;" : "color: #333;";
     }
   },
   methods: {
@@ -206,23 +216,13 @@ export default {
         });
         return;
       }
-      wx.showLoading({ title: '加载中...', mask: true })
+      wx.showLoading({ title: "加载中...", mask: true });
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
       this.uploadImg({ goodsModel: this.goods });
     },
     createCategory() {
       wx.navigateTo({ url: "/pages/categoryManage/main" });
-    },
-    onConfirm(e) {
-      if (this.type == "status") {
-        this.goods.status = e.value[0];
-        this.goods.statusName = e.label;
-      } else {
-        this.goods.categoryName = e.label;
-        this.goods.categoryId = e.value[0];
-      }
-      console.log(this.goods.categoryName);
     },
     updateCategoryClick() {
       if (this.categoryArray.length > 0) {
@@ -240,21 +240,28 @@ export default {
       this.pickerValueDefault = [];
       this.$refs.mpvuePicker.show();
     },
-    upLoadSuccess(res) {
-      this.img = res.files[0];
-      console.log(res);
+    showPicker() {
+      this.$refs.mpvuePicker.show();
     },
-    upLoadFail(res) {
-      console.log(res);
+    onConfirm(e) {
+      if (this.type == "status") {
+        this.goods.status = e.value[0];
+        this.goods.statusName = e.label;
+        this.name = e.label;
+      } else {
+        this.goods.categoryName = e.label;
+        this.goods.categoryId = e.value[0];
+      }
     },
-    upLoadComplete() {
-      console.log("complete");
+    onChange(e) {
+      console.log("A" + e);
     },
-    uploadDelete(res) {
-      console.log(res);
+    onCancel(e) {
+      console.log("B" + e);
     }
   },
   onLoad(options) {
+    debugger
     this.goods = {
       statusName: "上架",
       status: 1,
@@ -291,24 +298,13 @@ export default {
             for (var index in this.statusArray) {
               if (this.goods.status == this.statusArray[index].value) {
                 this.goods.statusName = this.statusArray[index].label;
+                this.name = this.statusArray[index].label;
               }
             }
           }
         });
       }
     });
-  },
-  onShow(options) {
-    var pages = getCurrentPages();
-    var currPage = pages[pages.length - 1];
-    if (currPage.data.categoryName) {
-      this.goods.categoryName = currPage.data.categoryName;
-      this.goods.categoryId = currPage.data.categoryId;
-      var data = {};
-      data.label = currPage.data.categoryName;
-      data.value = currPage.data.categoryId;
-      this.categoryArray.push(data);
-    }
   }
 };
 </script>
@@ -348,10 +344,6 @@ export default {
       color: $textGray-color;
       margin-left: 30rpx;
     }
-  }
-  .mid-m {
-    font-size: 28rpx;
-    padding-right: 30rpx;
   }
   .mid-r {
     display: flex;
@@ -418,42 +410,6 @@ input {
       flex: 1;
     }
   }
-  .sex {
-    display: flex;
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    height: 88rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    .l {
-      width: 160rpx;
-    }
-    .m {
-      display: flex;
-      i {
-        font-size: 32rpx;
-        color: $theme-color;
-      }
-      span {
-        font-size: 32rpx;
-        color: $textBlack-color;
-        margin-left: 20rpx;
-      }
-    }
-    .r {
-      display: flex;
-      margin-left: 60rpx;
-      i {
-        font-size: 38rpx;
-        color: $textGray-color;
-      }
-      span {
-        font-size: 32rpx;
-        color: $textBlack-color;
-        margin-left: 20rpx;
-      }
-    }
-  }
   .phone {
     align-items: center;
     margin-left: 30rpx;
@@ -467,67 +423,6 @@ input {
     }
     input {
       flex: 1;
-    }
-  }
-  .address {
-    display: flex;
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    height: 88rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    .l {
-      font-size: 32rpx;
-      color: $textBlack-color;
-      width: 160rpx;
-    }
-    .m {
-      display: flex;
-      flex: 1;
-      i {
-        font-size: 38rpx;
-        color: $textGray-color;
-      }
-      span {
-        font-size: 32rpx;
-        margin-right: 10rpx;
-        margin-top: 10rpx;
-      }
-    }
-    .r {
-      i {
-        font-size: 28rpx;
-        color: $textGray-color;
-      }
-    }
-  }
-  .house-num {
-    display: flex;
-    align-items: center;
-    margin-left: 30rpx;
-    padding-right: 30rpx;
-    height: 88rpx;
-    border-bottom: 2rpx solid $spLine-color;
-    span {
-      font-size: 28rpx;
-      color: $textBlack-color;
-      width: 160rpx;
-    }
-    input {
-      flex: 1;
-    }
-  }
-  .submit {
-    margin: 40rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 76rpx;
-    background-color: $theme-color;
-    border-radius: 8rpx;
-    span {
-      font-size: 28rpx;
-      color: $textBlack-color;
     }
   }
 }

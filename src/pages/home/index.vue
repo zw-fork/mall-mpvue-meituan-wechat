@@ -59,6 +59,7 @@ import { queryHomeHeadCategory } from "@/action/action";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { getFetch } from "@/network/request/HttpExtension";
 import QQMapWX from "qqmap-wx-jssdk";
+import { shopStatus } from "@/constants/commonType";
 
 export default {
   data() {

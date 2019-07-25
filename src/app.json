@@ -24,6 +24,7 @@
     "pages/remark/main",
     "pages/categoryManage/main",
     "pages/shopManage/main",
+    "pages/shopList/main",
     "pages/goodsManage/main",
     "pages/userSetting/main",
     "pages/citySearch/main",

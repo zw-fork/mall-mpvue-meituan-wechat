@@ -98,15 +98,15 @@
         <i class="icon iconfont iconright" @click="itemClick(item)"></i>
       </div>
       <div class="item">
-        <div class="item-l">
-          <i class="icon mt-customer-service-o"></i>
-          <span class="title">客服中心</span>
-        </div>
+      
         <button
           open-type="contact"
           style="margin: 0;padding: 0;border:none;background-color: white;"
         >
-          <i class="icon iconfont iconright" @click="logoutClick($event)"></i>
+         <div class="item-l">
+          <i class="icon mt-customer-service-o"></i>
+          <span class="title">客服中心</span>
+        </div>
         </button>
       </div>
     </div>
@@ -136,11 +136,7 @@ export default {
       orderList: [],
 
       itemList: [
-        {
-          title: "生成二维码",
-          icon: "mt-protocol-o",
-          path: "/pages/qrcode/main"
-        }
+       
       ]
     };
   },
@@ -444,8 +440,8 @@ button::after {
         .title {
           font-size: 28rpx;
           color: $textBlack-color;
-          margin-left: 30rpx;
-          margin-top: 6rpx;
+          margin-left: 10rpx;
+          margin-top: 15rpx;
         }
 
         .amount {

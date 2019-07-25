@@ -86,3 +86,13 @@ export {
   orderStatus,
   bargainStatus
 }
+
+const shopStatus = {
+  start: 4, //激活，停业。消费者不可见
+  open: 2,  //营业
+  close: 3,   //打烊
+  stop: 5,   //停服
+  click: 4,
+  slide: 3004,
+  gesture: 3005
+}
