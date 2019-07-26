@@ -26,7 +26,11 @@
         </div>
         <div class="modalFooter">
           <div class="btnCancel" @tap="clickCallShop">联系商家</div>
-          <div class="btnConfirm" @click.stop="clickCallDelivery"  v-if="orderDetail.deliveryStatus==2">联系配送员</div>
+          <div
+            class="btnConfirm"
+            @click.stop="clickCallDelivery"
+            v-if="orderDetail.deliveryStatus==2"
+          >联系配送员</div>
         </div>
       </div>
     </div>
@@ -43,7 +47,7 @@
           <div class="item-r">
             <div class="r-t">
               <span>{{item.name}}</span>
-              <span>￥{{item.min_price * item.sequence}}</span>
+              <span>￥{{item.totalPrice}}</span>
             </div>
             <span>x{{item.sequence}}</span>
           </div>
@@ -106,7 +110,7 @@
     <div class="header-c">
       <div class="delivery order_detail_style">
         <div class="address-c">
-          <span>订单信息</span>
+          <span>订单信息{{test(999)}}</span>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
@@ -151,6 +155,11 @@ export default {
   computed: {
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
+    test() {
+      return function(value) {
+        return value + "aaa";
+      };
+    },
     path() {
       return `${GOODS_URL_PREFIX}`;
     },

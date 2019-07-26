@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/main",
+    "pages/asset/main",
     "pages/home/main",
     "pages/qrcode/main",
     "pages/shoppingCart/main",

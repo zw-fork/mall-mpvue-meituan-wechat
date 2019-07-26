@@ -58,7 +58,7 @@
           <div class="item-r">
             <div class="r-t">
               <span>{{item.name}}</span>
-              <span>￥{{item.min_price * item.sequence}}</span>
+              <span>￥{{item.totalPrice}}</span>
             </div>
             <span>x{{item.sequence}}</span>
           </div>

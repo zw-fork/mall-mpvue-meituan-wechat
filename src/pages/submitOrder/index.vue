@@ -10,7 +10,7 @@
       </div>
       <div class="delivery" v-if="tabIndex === 0">
         <div class="address-c" @click="addressClick(currentOrder.shopInfo.communityId)">
-          <i class="icon mt-location-s"></i>
+          <i class="icon iconfont iconlocation"></i>
           <div class="address">
             <span
               class="address-info"
@@ -31,7 +31,7 @@
     </div>
     <div class="item-list">
       <div class="section">
-        <img :src="path + currentOrder.shopInfo.pic_url">
+        <img v-if="path + currentOrder.shopInfo.pic_url" :src="path + currentOrder.shopInfo.pic_url">
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>

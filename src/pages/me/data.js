@@ -143,6 +143,19 @@ const homeData = {
         }, {
           "brand_type": -1,
           "code": 960,
+          "path": "/pages/asset/main",
+          "first_tag_codes": [],
+          "gray_switch": 0,
+          "gray_url": "http://p0.meituan.net/jungle/c6fcf3162a093903f30ebbef8acdf40610735.png",
+          "method": 1258576,
+          "name": "我的资产",
+          "second_tag_codes": [],
+          "sequence": 400,
+          "skip_protocol": "channel?category_type=960&category_text=%E7%BE%8E%E5%9B%A2%E4%B8%93%E9%80%81",
+          "url": "iconcount"
+        }, {
+          "brand_type": -1,
+          "code": 960,
           "path": "/pages/map/main",
           "first_tag_codes": [],
           "gray_switch": 0,
