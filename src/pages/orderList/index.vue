@@ -185,7 +185,7 @@ export default {
           data.refundStatus = -1;
         }
         data.page = this.orderList.page;
-        getFetch("/order/" + this.userInfo.openid, data, false).then(
+        getFetch("/order", data, false).then(
           response => {
             var result = response.result || {};
             this.orderList.datas = [...this.orderList.datas, ...result.list];

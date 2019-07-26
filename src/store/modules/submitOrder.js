@@ -67,7 +67,7 @@ const actions = {
   },
   getOrderDataAction({ state, commit }, { uid, data }) {
     wx.showLoading({ title: '加载中...', mask: true })
-    getFetch('/order/' + uid, data, false).then(response => {
+    getFetch('/order', data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderDataMut', result)
       wx.hideLoading()
@@ -75,7 +75,7 @@ const actions = {
   },
   getOrderItemDataAction({ state, commit }, { uid, data }) {
     wx.showLoading({ title: '加载中...', mask: true })
-    getFetch('/order/' + uid, data, false).then(response => {
+    getFetch('/order', data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderItemDataMut', result)
       wx.hideLoading()
@@ -120,7 +120,7 @@ const actions = {
                 duration: 3000
               })
               getFetch('/order/updateStatus/' + order.number, { status: 2 }, false).then(response => {
-                getFetch('/order/' + order.uid, {}, false).then(response => {
+                getFetch('/order', {}, false).then(response => {
                   var result = response.result || {}
                   commit('changeOrderDataMut', result)
                   wx.hideLoading()
@@ -138,7 +138,7 @@ const actions = {
             duration: 2000
           })
           getFetch('/order/updateStatus/' + order.number, { status: 2 }, false).then(response => {
-            getFetch('/order/' + order.uid, {}, false).then(response => {
+            getFetch('/order', {}, false).then(response => {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
               wx.hideLoading()
@@ -148,7 +148,7 @@ const actions = {
       })
     } else {
       getFetch('/order/updateStatus/' + order.number, refund, false).then(response => {
-        getFetch('/order/' + order.uid, data, false).then(response => {
+        getFetch('/order', data, false).then(response => {
           var result = response.result || {}
           commit('changeOrderDataMut', result)
         })
@@ -158,7 +158,7 @@ const actions = {
   },
   postOrderDataAction({ state, commit }, { order }) {
     wx.showLoading({ title: '加载中...', mask: true })
-    postFetch('/order/' + order.uid, order, false).then(response => {
+    postFetch('/order', order, false).then(response => {
       var user = response.result || {}
       this.state.shoppingCart.shopInfo = {}
       state.orderDetail = {
@@ -180,7 +180,7 @@ const actions = {
               duration: 3000
             })
             getFetch('/order/updateStatus/' + number, { status: 2 }, false).then(response => {
-              getFetch('/order/' + order.uid, {}, false).then(response => {
+              getFetch('/order', {}, false).then(response => {
                 var result = response.result || {}
                 commit('changeOrderDataMut', result)
                 wx.switchTab({ url: '/pages/orderList/main' })
@@ -193,7 +193,7 @@ const actions = {
               icon: 'none',
               duration: 3000
             })
-            getFetch('/order/' + order.uid, { 'page': 1 }, false).then(response => {
+            getFetch('/order', { 'page': 1 }, false).then(response => {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
             })
