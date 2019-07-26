@@ -3,8 +3,8 @@
     <div class="name">
       <span>商品名称：</span>
       <input
-        placeholder="请填写商品名称(30字内)"
-        maxlength="30"
+        placeholder="请填写商品名称(40字内)"
+        maxlength="40"
         placeholder-style="font-size: 24rpx"
         v-model="goods.name"
       >
@@ -261,7 +261,6 @@ export default {
     }
   },
   onLoad(options) {
-    debugger
     this.goods = {
       statusName: "上架",
       status: 1,

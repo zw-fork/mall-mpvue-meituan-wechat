@@ -3,6 +3,7 @@
     <div class="content-c">
       <div class="input-c">
         <textarea
+          maxlength="50"
           v-model="remark"
           placeholder="请输入备注，最多50个字哦"
           placeholder-style="font-size: 28rpx"
