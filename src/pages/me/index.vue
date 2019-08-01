@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="order-c" v-if="userInfo.role==2 && userInfo.shopId">
+    <div class="order-c" v-if="userInfo.role==3">
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
         <span style="margin-left: 20rpx;">店铺管理</span>
       </div>
