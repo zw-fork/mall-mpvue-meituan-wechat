@@ -7,31 +7,31 @@
           :style="{'color': pageIndex === -1 ? lineStyle : null}"
           style="text-align:center;width:20%;"
           @click="updateOrderList(-1)"
-        >全部</span>
+        >全部{{pageIndex === -1 ? (total) : ''}}</span>
         <span
           class="c-m"
           :style="{'color': pageIndex === 1 ? lineStyle : null}"
           style="text-align:center;width:20%;"
           @click="updateOrderList(1)"
-        >新订单</span>
+        >新订单{{pageIndex === 1 ? total : ''}}</span>
         <span
           class="c-m"
           :style="{'color': pageIndex === 2 ? lineStyle : null}"
           style="text-align:center;width:20%;"
           @click="updateOrderList(2)"
-        >配送中</span>
+        >配送中{{pageIndex === 2 ? total : ''}}</span>
         <span
           class="c-m"
           :style="{'color': pageIndex === 3 ? lineStyle : null}"
           style="text-align:center;width:20%;"
           @click="updateOrderList(3)"
-        >已完成</span>
+        >已完成{{pageIndex === 3 ? total : ''}}</span>
         <span
           class="c-m"
           :style="{'color': pageIndex === 4 ? lineStyle : null}"
           style="text-align:center;width:20%;"
           @click="updateOrderList(4)"
-        >退款</span>
+        >退款{{pageIndex === 4 ? total : ''}}</span>
       </div>
     </div>
     <scroll-view
@@ -127,15 +127,30 @@ export default {
       scrollTop: undefined,
       left: "40rpx",
       statusList: [],
-      status: undefined
+      status: undefined,
+      total: undefined,
+      orderItemList: {
+        page: 1,
+        type: -1,
+        datas: []
+      }
     };
   },
   methods: {
     ...mapActions("submitOrder", [
-      "getOrderItemDataAction",
       "showOrderByShopIdDetailAction",
       "getOrderByIdAction"
     ]),
+    getOrderItemDataAction(data) {
+      wx.showLoading({ title: "加载中...", mask: true });
+      getFetch("/order", data, false).then(response => {
+        var result = response.result || {};
+        this.orderItemList.datas = result.list;
+        this.orderItemList.page = result.nextPage;
+        this.total = result.total;
+        wx.hideLoading();
+      });
+    },
     updateOrderList(status) {
       this.scrollTop = 0;
       this.pageIndex = status;
@@ -145,10 +160,8 @@ export default {
       } else if (status == 4) {
         data.refundStatus = -1;
       }
-      this.getOrderItemDataAction({
-        uid: this.userInfo.openid,
-        data: data
-      });
+      this.total = ''
+      this.getOrderItemDataAction(data);
     },
     scroll(e) {
       this.scrollTop = undefined;
@@ -166,14 +179,16 @@ export default {
         }
         data.shopId = this.userInfo.shopId;
         data.page = this.orderItemList.page;
-        getFetch("/order/" + this.userInfo.openid, data, false).then(
-          response => {
-            var result = response.result || {};
-            this.orderItemList.datas = [...this.orderItemList.datas, ...result.list];
-            this.orderItemList.page = result.nextPage;
-            wx.hideLoading();
-          }
-        );
+        getFetch("/order", data, false).then(response => {
+          var result = response.result || {};
+          this.orderItemList.datas = [
+            ...this.orderItemList.datas,
+            ...result.list
+          ];
+          this.orderItemList.page = result.nextPage;
+          this.total = result.total;
+          wx.hideLoading();
+        });
       }
     },
     headerClick(item, flag) {
@@ -194,7 +209,6 @@ export default {
     }
   },
   computed: {
-    ...mapState("submitOrder", ["orderItemList"]),
     ...mapState("user", ["userInfo"]),
     lineStyle() {
       return "#FFA500;";
@@ -209,15 +223,13 @@ export default {
     if (options.deliveryStatus) {
       this.pageIndex = parseInt(options.deliveryStatus);
       data.deliveryStatus = options.deliveryStatus;
-    }
-    if (options.refundStatus) {
+    } else if (options.refundStatus) {
       data.refundStatus = options.refundStatus;
       this.pageIndex = 4;
+    } else {
+      this.pageIndex = -1;
     }
-    this.getOrderItemDataAction({
-      uid: this.userInfo.openid,
-      data: data
-    });
+    this.getOrderItemDataAction(data);
   },
   onShow(options) {
     var pages = getCurrentPages();
@@ -239,29 +251,18 @@ export default {
       }
       var status = [this.pageIndex];
       this.statusList = status;
-      this.getOrderItemDataAction({
-        uid: this.userInfo.openid,
-        data: data
-      });
+      this.getOrderItemDataAction(data);
     }
   },
   onPullDownRefresh: function() {
     this.scrollTop = 0;
-    if (this.statusList.length > 0) {
-      this.getOrderItemDataAction({
-        uid: this.userInfo.openid,
-        data: {
-          page: 1,
-          shopId: this.userInfo.shopId,
-          statusList: this.statusList.join(",")
-        }
-      });
-    } else {
-      this.getOrderItemDataAction({
-        uid: this.userInfo.openid,
-        data: { page: 1, shopId: this.userInfo.shopId }
-      });
+    var data = { page: 1, shopId: this.userInfo.shopId };
+    if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
+      data.deliveryStatus = this.pageIndex;
+    } else if (this.pageIndex == 4) {
+      data.refundStatus = -1;
     }
+    this.getOrderItemDataAction(data);
   }
 };
 </script>

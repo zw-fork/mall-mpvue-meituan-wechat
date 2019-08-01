@@ -14,16 +14,16 @@
           <div class="address">
             <span
               class="address-info"
-              v-if="!userInfo.addressModel.house_number || userInfo.addressModel.communityId != currentOrder.shopInfo.communityId"
+              v-if="!currentOrder.shopInfo.addressModel"
             >请添加配送地址...</span>
             <span
               class="address-info"
-              v-if="userInfo.addressModel.house_number && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId"
-            >{{userInfo.addressModel.wxAddress.address}} {{userInfo.addressModel.house_number}}</span>
+              v-if="currentOrder.shopInfo.addressModel"
+            >{{currentOrder.shopInfo.wxAddress.name}}</span>
             <span
               class="user-info"
-              v-if="userInfo.addressModel.name && userInfo.addressModel.communityId == currentOrder.shopInfo.communityId"
-            >{{userInfo.addressModel.name}} {{userInfo.addressModel.gender == 1? '先生' : '女士'}} {{userInfo.addressModel.phone}}</span>
+              v-if="currentOrder.shopInfo.addressModel"
+            >{{currentOrder.shopInfo.addressModel.house_number}} {{currentOrder.shopInfo.addressModel.phone}}</span>
           </div>
           <i class="icon iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
         </div>
@@ -31,7 +31,7 @@
     </div>
     <div class="item-list">
       <div class="section">
-        <img v-if="path + currentOrder.shopInfo.pic_url" :src="path + currentOrder.shopInfo.pic_url">
+        <img  :src=" currentOrder.shopInfo.pic_url? (path + currentOrder.shopInfo.pic_url) : '/static/images/home_selected.png'">
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
