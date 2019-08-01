@@ -2,14 +2,14 @@
   <div class="container">
     <div class="list-c">
       <div class="item" v-for="(item, index) in myAddress" :key="index">
-        <div class="i-l" @touchstart="showDeleteButton(item.id)" @touchend="clearLoop(item.id)">
+        <div class="i-l" @touchstart="showDeleteButton(item)" @touchend="clearLoop(item)">
           <div class="user-info">
             <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
             <span class="s-r">{{item.phone}}</span>
           </div>
           <span class="address">{{item.wxAddress ? item.wxAddress.name : ''}} {{item.house_number}}</span>
         </div>
-        <i class="icon mt-edit-o" @click="addClick(item.id)"></i>
+        <i class="icon mt-edit-o" @click="addClick(item)"></i>
       </div>
     </div>
     <div class="submit-btn" @click="addClick()">
@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       communityId: undefined,
+      address: undefined,
       showModal: false,
       Loop: undefined
     };
@@ -41,7 +42,7 @@ export default {
       "deleteUserAddressDataAction"
     ]),
     ...mapActions("user", ["updateDefaultAddress"]),
-    showDeleteButton(addressId) {
+    showDeleteButton(item) {
       var that = this;
       this.Loop = setTimeout(function() {
         that.showModal = true;
@@ -51,17 +52,18 @@ export default {
           confirmColor: "#FFC24A",
           success: function(res) {
             if (res.confirm) {
-              that.deleteUserAddressDataAction({ addressId });
+              var id = item.id
+              that.deleteUserAddressDataAction({ id });
             }
           }
         });
       }, 800);
       return false;
     },
-    clearLoop(addressId) {
+    clearLoop(item) {
       clearTimeout(this.Loop);
       if (!this.showModal) {
-        this.updateDefaultAddress2(addressId);
+        this.updateDefaultAddress2(item);
       }
       this.showModal = false;
       return false;
@@ -74,11 +76,8 @@ export default {
       }
     },
     updateDefaultAddress2(addressId) {
-      var wechat = {};
-      wechat.openid = this.userInfo.openid;
-      wechat.addressModel = {};
-      wechat.addressModel.id = addressId;
-      this.updateDefaultAddress({ wechat });
+      this.shopInfo.addressModel = addressId
+      wx.navigateBack({ delta: 1 })
     }
   },
   mounted() {
