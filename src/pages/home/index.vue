@@ -36,7 +36,7 @@
                 <div class="m-m"></div>
                 <span class="m-r">营业时间: 全天</span>
                 <div class="m-m"></div>
-                <span class="m-r">距离：{{item.distance}}km</span>
+                <span class="m-r" v-if="false">距离：{{item.distance}}km</span>
               </div>
               <div class="r-m">
                 <span class="m-l">地址：{{item.wxAddress.address}}</span>
