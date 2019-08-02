@@ -54,38 +54,12 @@ const actions = {
                 wx.setStorageSync("sessionId", response.result.token)
                 response.result.openid = null
                 commit('changeUserInfoMut', response.result)
-                if (addWorker && shopId) {
-                  wx.showModal({
-                    title: '确认加入？',
-                    content: '确认加入该店铺？',
-                    confirmColor: '#FFC24A',
-                    success: function (res) {
-                      if (res.confirm) {
-                        wx.switchTab({
-                          url: '/pages/me/main'
-                        })
-                      } else if (res.cancel) {
-                        if (jsonData.shopId) {
-                          wx.redirectTo({
-                            url: '/pages/shoppingCart/main?shopId=' + jsonData.shopId
-                          })
-                        } else {
-                          wx.switchTab({
-                            url: '/pages/home/main'
-                          })
-                        }
-                      }
-                    }
-                  })
-                }
-                else if (jsonData.shopId) {
+                if (jsonData.shopId) {
                   wx.redirectTo({
                     url: '/pages/shoppingCart/main?shopId=' + jsonData.shopId
                   })
                 } else {
-                  wx.switchTab({
-                    url: '/pages/home/main'
-                  })
+                  wx.navigateBack({ delta: 1 });
                 }
               })
             }
@@ -171,23 +145,6 @@ const actions = {
               console.log(res)
             }
           })
-          // wx.getLocation({
-          //   type: 'wgs84',
-          //   success: function (res) {
-          //     wx.openLocation({
-          //       latitude: res.latitude,
-          //       longitude: res.longitude,
-          //       scale: 18,
-          //       success: function (res) {
-          //         wx.chooseLocation({
-          //           success: function (res) {
-          //             console.log(res)
-          //           }
-          //         })
-          //       }
-          //     })
-          //   }
-          // })
         }
       }
     })

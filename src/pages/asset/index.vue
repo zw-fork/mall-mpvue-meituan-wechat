@@ -1,58 +1,57 @@
 <template>
   <div class="container">
-    <div class="header-c">
-      <div class="cate-c">
-        <span
-          class="c-l"
-          :style="{'font-weight': statusList.length<1 ? lineStyle : null}"
-          style="text-align:center;width:30%;"
-        >时间</span>
-        <span
-          class="c-m"
-          :style="{'font-weight': pageIndex === 4 ? lineStyle : null}"
-          style="text-align:center;width:30%;"
-        >销售额</span>
-        <span
-          class="c-m"
-          :style="{'font-weight': pageIndex === -1 ? lineStyle : null}"
-          style="text-align:center;width:20%;"
-        >订单量</span>
-        <span
-          class="c-m"
-          :style="{'font-weight': pageIndex === 4 ? lineStyle : null}"
-          style="text-align:center;width:20%;"
-        >退款量</span>
+    <div class="asset">
+      <div class="item">
+        <span>累计销售额</span>
+        <span>{{total.sum_total}}</span>
+      </div>
+      <div class="item">
+        <span>累计订单量</span>
+        <span>{{total.count}}</span>
+      </div>
+      <div class="item right">
+        <span>累计退单</span>
+        <span>{{total.refund_status}}</span>
       </div>
     </div>
-    <scroll-view
-      class="list-c"
-      :scroll-y="true"
-      @scrolltolower="lower"
-      :scroll-top="scrollTop"
-      @scroll="scroll"
-    >
-      <div class="header-c" v-for="(item, index) in orderList.datas" :key="index">
-        <div class="cate-c">
-          <span
-            class="c-l"
-            :style="{'font-weight': statusList.length<1 ? lineStyle : null}"
-            style="text-align:center;width:30%;"
-          >{{item.update_time}}</span>
-          <span
-            class="c-m"
-            :style="{'font-weight': pageIndex === 4 ? lineStyle : null}"
-            style="text-align:center;width:30%;"
-          >{{item.sum_total}}</span>
-          <span
-            class="c-m"
-            :style="{'font-weight': pageIndex === -1 ? lineStyle : null}"
-            style="text-align:center;width:20%;"
-          >{{item.count}}</span>
-          <span
-            class="c-m"
-            :style="{'font-weight': pageIndex === 4 ? lineStyle : null}"
-            style="text-align:center;width:20%;"
-          >{{item.refund_status}}</span>
+    <div class="cate-c">
+      <span
+        class="c-l"
+        :style="{'color': pageIndex === 1 ? lineStyle : null}"
+        style="text-align:center;width:50%;"
+        @click="updateList(1)"
+      >订单明细</span>
+      <span
+        class="c-m"
+        :style="{'color': pageIndex === 2 ? lineStyle : null}"
+        style="text-align:center;width:50%;"
+        @click="updateList(2)"
+      >每日明细</span>
+    </div>
+    <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower">
+      <div v-if="pageIndex === 1">
+        <span class="no-data" v-if="!orderList.datas">暂无资金明细~</span>
+        <div class="cashlogs" v-for="(item, index) in orderList.datas" :key="index">
+          <div class="profile">
+            <div class="typeStr">{{item.number}}</div>
+            <div class="dateAdd">{{item.paymentTime}}</div>
+          </div>
+          <div class="amount">
+            <div class="typeStr">{{item.realFee}}</div>
+            <div class="dateAdd" style="color: red">{{item.status==2? '' : '已退款'}}</div>
+          </div>
+        </div>
+      </div>
+      <div v-if="pageIndex === 2">
+        <span class="no-data" v-if="!orderList.datas">暂无资金明细~</span>
+        <div class="cashlogs" v-for="(item, index) in orderList.datas" :key="index">
+          <div class="profile">
+            <div class="typeStr">{{item.update_time}}</div>
+            <div
+              class="dateAdd"
+            >订单：{{item.count}} {{item.refund_status?',退单：' + item.refund_status : ''}}</div>
+          </div>
+          <span class="amount" style="color: red">{{item.sum_total}}</span>
         </div>
       </div>
     </scroll-view>
@@ -67,12 +66,18 @@ import { getFetch } from "@/network/request/HttpExtension";
 export default {
   data() {
     return {
-      pageIndex: undefined,
+      activeIndex: 1,
+      pageIndex: 1,
       scrollTop: 0,
       statusList: [],
       left: "40rpx",
       status: undefined,
+      tabs: ["资金明细", "每日明细", "提现记录"],
       orderList: {
+        datas: []
+      },
+      total: {},
+      statistics: {
         datas: []
       }
     };
@@ -85,23 +90,63 @@ export default {
       "updateOrderStatusAction"
     ]),
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
+    updateList(index) {
+      if (this.pageIndex != index) {
+        wx.showLoading({ title: "加载中...", mask: true });
+        this.orderList.datas = [];
+        this.pageIndex = index;
+        this.orderList.page = 1;
+        if (index == 2) {
+          this.updateStatistics();
+        } else {
+          this.updateDetail();
+        }
+      }
+    },
     scroll(e) {
       this.currentScroll = e.target.scrollTop;
     },
+    updateStatistics() {
+      getFetch(
+        "/order/statistics/" + this.userInfo.shopId,
+        { page: this.orderList.page },
+        false
+      ).then(response => {
+        var result = response.result || {};
+        this.orderList.datas = [...this.orderList.datas, ...result.list];
+        this.orderList.page = result.nextPage;
+        wx.hideLoading();
+      });
+    },
+    updateDetail() {
+      getFetch(
+        "/order/detail/" + this.userInfo.shopId,
+        { page: this.orderList.page },
+        false
+      ).then(response => {
+        var result = response.result || {};
+        this.orderList.datas = [...this.orderList.datas, ...result.list];
+        this.orderList.page = result.nextPage;
+        wx.hideLoading();
+      });
+    },
+    totalStatistics() {
+      getFetch(
+        "/order/totalStatistics/" + this.userInfo.shopId,
+        {},
+        false
+      ).then(response => {
+        this.total = response.result || {};
+      });
+    },
     lower(e) {
       if (this.orderList.page > 0) {
-        this.scrollTop = this.currentScroll;
         wx.showLoading({ title: "加载中...", mask: true });
-        getFetch(
-          "/order/statistics/" + this.userInfo.shopId,
-          { page: this.orderList.page },
-          false
-        ).then(response => {
-          var result = response.result || {};
-          this.orderList.datas = [...this.orderList.datas, ...result.list];
-          this.orderList.page = result.nextPage;
-          wx.hideLoading();
-        });
+        if (this.pageIndex == 2) {
+          this.updateStatistics();
+        } else {
+          this.updateDetail();
+        }
       }
     },
     cancelClick(item) {
@@ -128,8 +173,9 @@ export default {
     }
   },
   mounted() {
+    this.totalStatistics();
     this.scrollTop = 0;
-    getFetch("/order/statistics/" + this.userInfo.shopId, {}, false).then(
+    getFetch("/order/detail/" + this.userInfo.shopId, {}, false).then(
       response => {
         var result = response.result || {};
         this.orderList.datas = result.list;
@@ -140,193 +186,114 @@ export default {
   computed: {
     ...mapState("user", ["userInfo"]),
     lineStyle() {
-      return "bold;";
+      return "#FFA500;";
     }
   },
   onPullDownRefresh: function() {
     this.scrollTop = 0;
-    getFetch("/order/statistics/" + this.userInfo.shopId, {}, false).then(
-      response => {
-        var result = response.result || {};
-        this.orderList.datas = result.list;
-        this.orderList.page = result.nextPage;
-      }
-    );
+    this.totalStatistics();
+    this.orderList.datas = [];
+    this.orderList.page = 1;
+    wx.showLoading({ title: "加载中...", mask: true });
+    if (this.pageIndex == 2) {
+      this.updateStatistics();
+    } else {
+      this.updateDetail();
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.container {
-  .header-c {
-    display: flex;
-    flex-direction: column;
+.cate-c {
+  display: flex;
+  height: 70rpx;
+  align-items: center;
+  border-bottom: 5rpx solid $spLine-color;
+  position: relative;
+  transition: all 0.2s;
 
-    .cate-c {
-      display: flex;
-      height: 70rpx;
-      align-items: center;
-      border-bottom: 5rpx solid $spLine-color;
-      position: relative;
-      transition: all 0.2s;
-
-      .c-l {
-        font-size: 30rpx;
-        color: $textBlack-color;
-      }
-
-      .c-m {
-        font-size: 30rpx;
-        color: $textBlack-color;
-      }
-
-      .c-r {
-        font-size: 30rpx;
-        color: $textBlack-color;
-      }
-
-      .c-main {
-        position: absolute;
-        font-size: 32rpx;
-        color: $textBlack-color;
-        right: 30rpx;
-      }
-    }
+  .c-l {
+    font-size: 30rpx;
+    color: $textBlack-color;
   }
 
-  .list-c {
-    display: block;
-    position: fixed;
-    top: 70rpx;
-    bottom: 0rpx;
-
-    .item {
-      display: flex;
-      flex-direction: column;
-      background-color: white;
-      margin: 15rpx;
-      border-radius: 25rpx;
-
-      .shop-info {
-        display: flex;
-        height: 100rpx;
-        align-items: center;
-        border-bottom: 2rpx solid $spLine-color;
-        margin-left: 30rpx;
-
-        .order_title {
-          align-items: center;
-          justify-content: flex-start;
-        }
-
-        img {
-          width: 60rpx;
-          height: 60rpx;
-        }
-
-        .shop-name {
-          font-size: 32rpx;
-          color: $textBlack-color;
-          margin-left: 10rpx;
-          font-weight: bold;
-        }
-
-        i {
-          font-size: 28rpx;
-          color: $textGray-color;
-          margin-left: 10rpx;
-          flex: 1;
-        }
-
-        .order-status {
-          font-size: 28rpx;
-          color: $textDarkGray-color;
-          display: flex;
-          float: right;
-          margin-right: 30rpx;
-        }
-      }
-
-      .googs-c {
-        display: flex;
-        flex-direction: column;
-
-        .goods {
-          display: flex;
-          align-items: center;
-          margin-left: 100rpx;
-          margin-right: 20rpx;
-          margin-bottom: 15rpx;
-          margin-top: 15rpx;
-
-          .s-l {
-            font-size: 28rpx;
-            color: $textDarkGray-color;
-            padding: 10rpx 0;
-            max-width: 50%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-
-          .s-m {
-            max-width: 35%;
-            font-size: 28rpx;
-            color: $textDarkGray-color;
-            padding: 10rpx 0;
-            text-align: left;
-          }
-
-          .s-r {
-            position: absolute;
-            right: 0rpx;
-            font-size: 24rpx;
-            color: $textBlack-color;
-          }
-        }
-      }
-
-      .price {
-        display: flex;
-        margin: 20rpx;
-        justify-content: flex-end;
-
-        .count {
-          font-size: 24rpx;
-          color: $textDarkGray-color;
-        }
-      }
-
-      .amount {
-        font-size: 24rpx;
-        color: $textBlack-color;
-        font-weight: bold;
-        margin-right: 30rpx;
-      }
-
-      .bottom-c {
-        display: flex;
-        margin-left: 30rpx;
-        border-top: 2rpx solid $spLine-color;
-        align-items: center;
-        justify-content: flex-end;
-
-        .btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: 2rpx solid $blue-color;
-          margin: 20rpx;
-          border-radius: 4rpx;
-
-          span {
-            font-size: 28rpx;
-            color: $blue-color;
-            margin: 6rpx 10rpx;
-          }
-        }
-      }
-    }
+  .c-m {
+    font-size: 30rpx;
+    color: $textBlack-color;
   }
+
+  .c-r {
+    font-size: 30rpx;
+    color: $textBlack-color;
+  }
+
+  .c-main {
+    position: absolute;
+    font-size: 32rpx;
+    color: $textBlack-color;
+    right: 30rpx;
+  }
+}
+.asset {
+  display: flex;
+  height: 150rpx;
+  background-color: #e85654;
+}
+.asset .item {
+  display: flex;
+  flex-direction: column;
+  width: 280rpx;
+  text-align: center;
+  font-size: 16px;
+  line-height: 30px;
+  color: #fff;
+}
+
+.btn-view {
+  text-align: right;
+  height: 70rpx;
+  background-color: #e85654;
+  padding-right: 40rpx;
+  padding-bottom: 30rpx;
+}
+.btn-view .btn {
+  border-color: #fff !important;
+  color: #fff !important;
+}
+.btn-view .bth-right {
+  margin-left: 20rpx;
+}
+.btn-hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.no-data {
+  margin-top: 100rpx;
+  text-align: center;
+  font-size: 13px;
+  color: #ccc;
+}
+
+.cashlogs {
+  display: flex;
+  font-size: 14px;
+  padding-bottom: 10rpx;
+  border-bottom: 1px solid #eee;
+  line-height: 20px;
+}
+.cashlogs .profile {
+  width: 75%;
+  padding-left: 30rpx;
+}
+.cashlogs .amount {
+  width: 20%;
+}
+.list-c {
+  display: block;
+  position: fixed;
+  top: 230rpx;
+  bottom: 0rpx;
 }
 </style>

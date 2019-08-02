@@ -68,9 +68,9 @@ export default {
       this.showModal = false;
       return false;
     },
-    addClick(id) {
-      if (id) {
-        wx.navigateTo({ url: "/pages/addAddress/main?id=" + id });
+    addClick(item) {
+      if (item) {
+        wx.navigateTo({ url: "/pages/addAddress/main?id=" + item.id });
       } else {
         wx.navigateTo({ url: "/pages/addAddress/main" });
       }
@@ -82,10 +82,9 @@ export default {
   },
   mounted() {
     var openid = this.userInfo.openid;
-    this.getAddressDataAction({ openid: openid });
+    this.getAddressDataAction();
   },
   onLoad(options) {
-    this.communityId = options.communityId;
   }
 };
 </script>

@@ -9,7 +9,7 @@
         >小区配送</div>
       </div>
       <div class="delivery" v-if="tabIndex === 0">
-        <div class="address-c" @click="addressClick(currentOrder.shopInfo.communityId)">
+        <div class="address-c" @click="addressClick()">
           <i class="icon iconfont iconlocation"></i>
           <div class="address">
             <span
@@ -19,7 +19,7 @@
             <span
               class="address-info"
               v-if="currentOrder.shopInfo.addressModel"
-            >{{currentOrder.shopInfo.wxAddress.name}}</span>
+            >{{currentOrder.shopInfo.wxAddress.name}} </span>
             <span
               class="user-info"
               v-if="currentOrder.shopInfo.addressModel"
@@ -131,9 +131,9 @@ export default {
       target.openid = this.userInfo.openid;
       this.getPhoneNumber({ target });
     },
-    addressClick(communityId) {
+    addressClick() {
       wx.navigateTo({
-        url: "/pages/addressList/main?communityId=" + communityId
+        url: "/pages/addressList/main"
       });
     },
     redPacketClick() {
@@ -175,16 +175,12 @@ export default {
       });
     },
     payClick() {
-      if (this.userInfo.addressModel.house_number && !this.currentOrder.pay) {
+      if (this.currentOrder.shopInfo.addressModel && this.currentOrder.shopInfo.addressModel.house_number && !this.currentOrder.pay) {
         this.currentOrder.pay = true
         this.currentOrder.deliveryFee = this.deliveryFee;
-        this.currentOrder.addressInfo = this.userInfo.addressModel;
+        this.currentOrder.addressInfo = this.currentOrder.shopInfo.addressModel;
         this.currentOrder.realFee = this.realFee;
         this.currentOrder.uid = this.userInfo.openid;
-        var wechat = {};
-        wechat.openid = this.userInfo.openid;
-        wechat.addressModel = {};
-        wechat.addressModel.id = this.userInfo.addressModel.id;
         this.postOrderDataAction({ order: this.currentOrder });
       } else {
         wx.showToast({

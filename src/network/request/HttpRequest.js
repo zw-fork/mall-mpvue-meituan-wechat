@@ -168,7 +168,7 @@ const HttpUtils = {
               isSuccess = true
               resolve(res.data)
             } else if (resCode == responseCode.TOKEN_INVALID) {
-            } else if (resCode == responseCode.USER_LOGOUT) {
+              wx.navigateTo({ url: '/pages/index/main' })
             } else {
               wx.showToast({ title: '服务器异常', icon: 'none', duration: 4000 })
             }

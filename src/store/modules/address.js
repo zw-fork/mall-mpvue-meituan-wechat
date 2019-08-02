@@ -11,8 +11,8 @@ const mutations = {
 }
 
 const actions = {
-  getAddressDataAction({state, commit}, {openid}) {
-    getFetch('/address/' + openid, {}, false).then(response => {
+  getAddressDataAction({state, commit}) {
+    getFetch('/address', {}, false).then(response => {
       var addressList = response.result.list || {}
       commit('changeMyAddressDataMut', addressList)
     })

@@ -260,6 +260,18 @@ export default {
       console.log("B" + e);
     }
   },
+  onShow(options) {
+    var pages = getCurrentPages();
+    var currPage = pages[pages.length - 1];
+    if (currPage.data.categoryId) {
+      this.goods.categoryName = currPage.data.categoryName;
+      this.goods.categoryId = currPage.data.categoryId;
+      var data = {};
+      data.label = this.goods.categoryName;
+      data.value = this.goods.categoryId;
+      this.categoryArray.push(data);
+    }
+  },
   onLoad(options) {
     this.goods = {
       statusName: "上架",

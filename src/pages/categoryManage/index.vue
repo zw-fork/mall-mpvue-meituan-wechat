@@ -197,53 +197,8 @@ export default {
       console.log(res);
     }
   },
-  onLoad(options) {
-    this.goods = {
-      statusName: "上架",
-      status: 1,
-      picture: undefined
-    };
-    this.reFresh = false;
-    this.$nextTick(() => {
-      this.reFresh = true;
-    });
-    getFetch("/category/list/" + this.userInfo.shopId, {}, false).then(
-      response => {
-        var list = response.result;
-        var categoryArray = [];
-        for (var index in list) {
-          var data = {};
-          data.label = list[index].name;
-          data.value = list[index].categoryId;
-          categoryArray.push(data);
-        }
-        this.categoryArray = categoryArray;
-        if (options.id) {
-          getFetch(
-            "/goods/" + this.userInfo.shopId,
-            { goodsId: options.id },
-            false
-          ).then(response => {
-            if (response.result.list.length > 0) {
-              this.goods = response.result.list[0];
-              this.goods.goodsPrice = this.goods.min_price
-                ? this.goods.min_price
-                : this.goods.goodsPrice;
-              for (var index in this.categoryArray) {
-                if (this.goods.categoryId == this.categoryArray[index].value) {
-                  this.goods.categoryName = this.categoryArray[index].label;
-                }
-              }
-              for (var index in this.statusArray) {
-                if (this.goods.status == this.statusArray[index].value) {
-                  this.goods.statusName = this.statusArray[index].label;
-                }
-              }
-            }
-          });
-        }
-      }
-    );
+  onShow(options) {
+    this.name = ''
   }
 };
 </script>

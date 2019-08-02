@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="order-c" v-if="userInfo.role==3">
+    <div class="order-c" v-if="userInfo.role==2">
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
         <span style="margin-left: 20rpx;">店铺管理</span>
       </div>
@@ -98,15 +98,14 @@
         <i class="icon iconfont iconright" @click="itemClick(item)"></i>
       </div>
       <div class="item">
-      
         <button
           open-type="contact"
           style="margin: 0;padding: 0;border:none;background-color: white;"
         >
-         <div class="item-l">
-          <i class="icon mt-customer-service-o"></i>
-          <span class="title">客服中心</span>
-        </div>
+          <div class="item-l">
+            <i class="icon mt-customer-service-o"></i>
+            <span class="title">客服中心</span>
+          </div>
         </button>
       </div>
     </div>
@@ -134,9 +133,12 @@ export default {
       goodsMenuList: [],
       superMenuList: [],
       orderList: [],
-
       itemList: [
-       
+        {
+          title: "二维码",
+          icon: "mt-protocol-o",
+          path: "/pages/qrcode/main"
+        }
       ]
     };
   },
@@ -176,18 +178,6 @@ export default {
     },
     itemClick(e) {
       wx.navigateTo({ url: e.path });
-    },
-    locationClick() {
-      //app.json添加权限描述，否则发生 getLocation:fail:require permission desc
-      wx.getLocation({
-        type: "wgs84",
-        success(res) {
-          console.log(`res:`, res);
-        },
-        fail(res) {
-          console.log(`res:`, res);
-        }
-      });
     },
     locationSearchClick() {
       this.wxLocation();
