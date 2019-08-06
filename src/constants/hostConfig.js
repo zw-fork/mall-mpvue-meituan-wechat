@@ -34,11 +34,12 @@ const host = {
     envVersion: 'develop'
   },
   prd: {
-    API_URL: 'https://digcampus.natapp4.cc/',
-    //API_URL: 'http://localhost:8100/',
+      API_URL: 'https://digcampus.natapp4.cc/',
+   //   API_URL: 'http://localhost:7100/',
+  //  API_URL: 'https://goomi.higgses.com:7110/',
     XIAMI_URL: 'https://api-m.mtime.cn',
     GOODS_URL_PREFIX: 'https://mall-social.oss-cn-beijing.aliyuncs.com/',
-   // GOODS_URL_PREFIX: 'http://39.106.34.223:7200/',
+    // GOODS_URL_PREFIX: 'http://39.106.34.223:7200/',
     MSITE_URL: 'https://api.douban.com',
     VENILOG_URL: 'https://api.douban.com',
     appId: 'wx3d5c531f5e123456',
@@ -59,4 +60,4 @@ const GOODS_URL_PREFIX = currentHost.GOODS_URL_PREFIX
 const XIAMI_URL = currentHost.XIAMI_URL
 const MSITE_URL = currentHost.MSITE_URL
 const VENILOG_URL = currentHost.VENILOG_URL
-export {ENV, API_URL,GOODS_URL_PREFIX, MSITE_URL, VENILOG_URL, XIAMI_URL, SET_HOST, currentHost}
+export { ENV, API_URL, GOODS_URL_PREFIX, MSITE_URL, VENILOG_URL, XIAMI_URL, SET_HOST, currentHost }
