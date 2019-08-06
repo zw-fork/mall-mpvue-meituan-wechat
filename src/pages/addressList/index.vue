@@ -4,7 +4,7 @@
       <div class="item" v-for="(item, index) in myAddress" :key="index">
         <div class="i-l" @touchstart="showDeleteButton(item)" @touchend="clearLoop(item)">
           <div class="user-info">
-            <span class="s-l">{{item.name}}({{item.gender===1 ? '先生' : '女士'}})</span>
+            <span class="s-l">{{item.name}}</span>
             <span class="s-r">{{item.phone}}</span>
           </div>
           <span class="address">{{item.wxAddress ? item.wxAddress.name : ''}} {{item.house_number}}</span>

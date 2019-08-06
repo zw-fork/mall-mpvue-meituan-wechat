@@ -1,8 +1,8 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/asset/main",
     "pages/home/main",
+    "pages/asset/main",
     "pages/qrcode/main",
     "pages/shoppingCart/main",
     "pages/submitOrder/main",
@@ -80,10 +80,6 @@
     "wxfb86227363fd06dc"
   ],
   "usingComponents": {
-    "van-button": "vant-weapp/dist/button/index",
-    "van-field": "vant-weapp/dist/field/index",
-    "van-radio": "vant-weapp/dist/radio/index",
-    "van-radio-group": "vant-weapp/dist/radio-group/index",
-    "van-notice-bar": "vant-weapp/dist/notice-bar/index"
+    "van-field": "vant-weapp/dist/field/index"
   }
 }

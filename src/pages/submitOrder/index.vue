@@ -19,11 +19,11 @@
             <span
               class="address-info"
               v-if="currentOrder.shopInfo.addressModel"
-            >{{currentOrder.shopInfo.wxAddress.name}} </span>
+            >{{currentOrder.shopInfo.wxAddress.name}} {{currentOrder.shopInfo.addressModel.house_number}} </span>
             <span
               class="user-info"
               v-if="currentOrder.shopInfo.addressModel"
-            >{{currentOrder.shopInfo.addressModel.house_number}} {{currentOrder.shopInfo.addressModel.phone}}</span>
+            >{{currentOrder.shopInfo.addressModel.name}} {{currentOrder.shopInfo.addressModel.phone}}</span>
           </div>
           <i class="icon iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
         </div>

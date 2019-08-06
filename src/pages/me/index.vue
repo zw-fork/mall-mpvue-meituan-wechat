@@ -79,35 +79,20 @@
         </div>
       </div>
     </div>
-    <div class="list-c">
-      <div
-        class="item"
-        v-for="(item, index) in itemList"
-        :key="index"
-        :data-index="index"
-        @click="itemClick(item)"
-      >
-        <div class="item-l">
-          <i class="icon" :class="item.icon"></i>
-          <span class="title">{{item.title}}</span>
-          <span class="amount" v-if="item.amount">
-            {{item.amount}}
-            <span>张</span>
-          </span>
-        </div>
-        <i class="icon iconfont iconright" @click="itemClick(item)"></i>
-      </div>
-      <div class="item">
-        <button
-          open-type="contact"
-          style="margin: 0;padding: 0;border:none;background-color: white;"
-        >
-          <div class="item-l">
-            <i class="icon mt-customer-service-o"></i>
-            <span class="title">客服中心</span>
-          </div>
-        </button>
-      </div>
+
+
+      <div class='user_column'>
+    <div class='user_column_item'>
+      <contact-button style="opacity:0;position:absolute;top:20rpx;" type="default-dark" session-from="weapp" size="30">
+      </contact-button>
+      <image class='user_column_item_image' src='/static/images/customer.png'></image>
+      <div class='user_column_item_text'>联系客服</div>
+    </div>
+        <div class='user_column_item' @click="itemClick(itemList[0])">
+      <image class='user_column_item_image' src='/static/images/code.png'></image>
+      <div class='user_column_item_text'>二维码</div>
+    </div>
+  </div>
     </div>
   </div>
 </template>
@@ -166,6 +151,11 @@ export default {
   methods: {
     ...mapMutations("user", ["changeUserInfoMut"]),
     ...mapActions("user", ["wxLocation"]),
+      goFeedback() {
+         wx.navigateTo({
+        url: "/pages/feedback/main"
+      });
+  },
     update() {
       if (!this.show) {
         this.showEdit = false;
@@ -233,6 +223,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.user_column_item_text {
+  /* border: 1px solid black; */
+  margin-top: 5rpx;
+  font-size: 26rpx;
+  color: #555;
+}
+.user_column_item_badge {
+  height: 28rpx;
+  width: 28rpx;
+  position: absolute;
+  background: #b4282d;
+  color: #fff;
+  border-radius: 50%;
+  margin-top: 20rpx;
+  margin-left: 40rpx;
+}
+
+.user_column_item_image {
+  width: 50rpx;
+  height: 50rpx;
+  margin-top: 30rpx;
+}
+.user_column {
+  background-color: white;
+  /* border: 1px solid black; */
+  height: 140rpx;
+  display: flex;
+  align-items: center;
+}
+
+.user_column_item {
+  width: 25%;
+  height: 140rpx;
+  background: #fff;
+  text-align: center;
+  position: relative;
+}
 .itemName {
   border-bottom: 2rpx solid;
   font-size: 32rpx;

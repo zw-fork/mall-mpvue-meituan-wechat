@@ -70,7 +70,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions("user", ["wxLocation"]),
+    ...mapActions("user", ["wxLocation", "wxLogin"]),
+
     categoryClick() {
       wx.navigateTo({ url: "/pages/categoryList/main" });
     },

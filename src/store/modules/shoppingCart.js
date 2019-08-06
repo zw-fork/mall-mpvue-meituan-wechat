@@ -130,7 +130,7 @@ const actions = {
   getCategoryMenuDataAction({ state, commit }, { index, categoryId }) {
     wx.showLoading({ title: '加载中...', mask: true })
     if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
-      getFetch('/goods/' + state.shopInfo.shopId, { 'categoryId': categoryId }, false).then(response => {
+      getFetch('/goods/' + state.shopInfo.shopId, { 'categoryId': categoryId, 'status':1 }, false).then(response => {
         var spus = {}
         var goods = response.result.list
         spus.title = state.shopInfo.categoryModelList[index].name

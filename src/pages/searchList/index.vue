@@ -2,9 +2,6 @@
   <div class="container">
     <div class="header-c">
       <div class="header">
-        <div class="header-r" @click="scanClick()">
-          <i class="icon iconfont iconimportedlayerscopy2" style="margin-left:15rpx;font-size: 45rpx;"></i>
-        </div>
         <div class="header-m">
           <i class="icon mt-search-o"></i>
           <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name" />

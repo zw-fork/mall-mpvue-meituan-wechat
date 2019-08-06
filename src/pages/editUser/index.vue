@@ -20,21 +20,6 @@
              placeholder-style="font-size: 24rpx"
              v-model="item.phone" />
     </div>
-    <div class="sex">
-      <div class="l"></div>
-      <div class="tag-c">
-        <div class="tag"
-             :style="styleA"
-             @click="updateSex(1)">
-          <span>先生</span>
-        </div>
-        <div class="tag"
-             :style="styleB"
-             @click="updateSex(0)">
-          <span>女士</span>
-        </div>
-      </div>
-    </div>
     <div class="submit"
          @click="saveAddress">
       <span>保存地址</span>

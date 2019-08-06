@@ -59,7 +59,9 @@ const actions = {
                     url: '/pages/shoppingCart/main?shopId=' + jsonData.shopId
                   })
                 } else {
-                  wx.navigateBack({ delta: 1 });
+                  wx.switchTab({
+                    url: '/pages/home/main'
+                  })
                 }
               })
             }
