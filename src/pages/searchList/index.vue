@@ -117,7 +117,6 @@
     },
     computed: {
       ...mapState("shoppingCart", ["cartMap", "shopInfo", "commentInfo", "visibleSkuModal", "visibleItemModal", "skuInfo", "previewInfo"]),
-      ...mapState("user", ["userInfo"]),
       ...mapState("submitOrder", ["orderDetail"]),
       lineStyle() {
         return "bold;padding-bottom:2px; border-bottom:2px solid #F00;"
@@ -172,7 +171,7 @@
         }
       },
       btnTitle() {
-        if (this.shopInfo && this.shopInfo.min_price) {
+      if (this.shopInfo && this.shopInfo.min_price != null) {
           if (this.shopInfo.status != 1) {
             return "打烊"
           }
@@ -232,7 +231,7 @@
       getGoods() {
         if (this.name && this.name.trim()) {
           wx.showLoading({ title: '加载中...', mask: true })
-          getFetch('/goods/' + this.userInfo.shopId, { 'name': this.name.trim() }, false).then(response => {
+          getFetch('/goods/' + this.shopInfo.shopId, { 'name': this.name.trim() }, false).then(response => {
             this.list.datas = response.result.list
             for (var index in this.list.datas) {
               var oldGoods = this.cartMap[this.list.datas[index].goodsId]
