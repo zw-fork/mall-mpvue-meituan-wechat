@@ -93,7 +93,8 @@ export default {
       itemData: {},
       addressInfo: {},
       itemList: [],
-      tabIndex: 0
+      tabIndex: 0,
+      goodsPrice: 0
     };
   },
   computed: {
@@ -111,12 +112,13 @@ export default {
       return this.currentOrder.shopInfo.support_pay;
     },
     realFee() {
-      var totalPrice = 0;
+      var price = 0;
       this.currentOrder.itemList.map(
-        item => (totalPrice += parseFloat(item.totalPrice))
+        item => (price += parseFloat(item.totalPrice))
       );
+      this.goodsPrice = price;
       return (
-        parseFloat(totalPrice) + this.currentOrder.shopInfo.support_pay
+        parseFloat(price) + this.currentOrder.shopInfo.support_pay
       ).toFixed(2);
     }
   },
@@ -180,6 +182,7 @@ export default {
         this.currentOrder.deliveryFee = this.deliveryFee;
         this.currentOrder.addressInfo = this.currentOrder.shopInfo.addressModel;
         this.currentOrder.realFee = this.realFee;
+        this.currentOrder.goodsPrice = this.goodsPrice;
         this.currentOrder.uid = this.userInfo.openid;
         this.postOrderDataAction({ order: this.currentOrder });
       } else {

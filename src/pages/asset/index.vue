@@ -37,7 +37,7 @@
             <div class="dateAdd">{{item.paymentTime}}</div>
           </div>
           <div class="amount">
-            <div class="typeStr">{{item.realFee}}</div>
+            <div class="typeStr">{{item.goodsPrice}}</div>
             <div class="dateAdd" style="color: red">{{item.status==2? '' : '已退款'}}</div>
           </div>
         </div>
