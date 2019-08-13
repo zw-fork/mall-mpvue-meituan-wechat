@@ -7,6 +7,7 @@
     "pages/shoppingCart/main",
     "pages/submitOrder/main",
     "pages/me/main",
+    "pages/refund/main",
     "pages/map/main",
     "pages/error/main",
     "pages/statistics/main",

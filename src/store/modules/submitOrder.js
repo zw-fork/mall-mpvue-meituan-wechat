@@ -86,6 +86,7 @@ const actions = {
     getFetch('/order/' + uid + '/' + data.number, data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderByIdDataMut', result)
+    //  wx.setStorageSync("cartList", result)
       wx.hideLoading()
       wx.navigateTo({ url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
     })

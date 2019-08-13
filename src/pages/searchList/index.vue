@@ -13,7 +13,7 @@
     </div>
     <div class="list-c" v-if="pageIndex === 0">
       <scroll-view class="list-r" :scroll-y="true" @scrolltolower="lower">
-        <div class="item-list" v-for="(item, index) in list.datas" :key="index">
+        <div class="item-list" v-for="(item, index) in list" :key="index">
           <div class="item">
             <div class="item-l">
               <img :src="path + item.picture">
@@ -108,9 +108,8 @@
         left: '40rpx',
         stars: [1, 2, 3, 4],
         cartGoodsList1: [],
-        list: {
-          datas: []
-        },
+        list:[],
+        page:0,    
         name: undefined
 
       }
@@ -232,14 +231,14 @@
         if (this.name && this.name.trim()) {
           wx.showLoading({ title: '加载中...', mask: true })
           getFetch('/goods/' + this.shopInfo.shopId, { 'name': this.name.trim() }, false).then(response => {
-            this.list.datas = response.result.list
-            for (var index in this.list.datas) {
-              var oldGoods = this.cartMap[this.list.datas[index].goodsId]
+            this.list = response.result.list
+            for (var index in this.list) {
+              var oldGoods = this.cartMap[this.list[index].goodsId]
               if (oldGoods) {
-                this.list.datas[index] = oldGoods
+                this.list[index] = oldGoods
               }
             }
-            this.list.page = response.result.nextPage
+            this.page = response.result.nextPage
             wx.hideLoading()
           })
         }

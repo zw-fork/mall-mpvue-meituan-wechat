@@ -218,7 +218,7 @@ export default {
         });
       }
     },
-    cancelClick(item) {
+    cancelClick1(item) {
       var status = item.status;
       var selectStatus = this.pageIndex == -1 ? null : this.pageIndex;
       if (status == 1) {
@@ -239,6 +239,11 @@ export default {
     },
     orderDetail(item) {
       this.showOrderDetailAction({ order: item });
+    },
+    cancelClick(item) {  
+    wx.navigateTo({
+        url: "/pages/refund/main?orderId=" + item.number
+    });
     }
   },
   mounted() {
