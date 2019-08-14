@@ -67,12 +67,12 @@
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.refundStatus==2"
+            v-else-if="item.refundStatus==2 || item.refundStatus==3"
           >退款成功</p>
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.refundStatus==3 && pageIndex === -1"
+            v-else-if="item.refundStatus==4 && pageIndex === -1"
           >退款失败</p>
           <p
             class="order-status"
@@ -236,6 +236,7 @@ export default {
     var currPage = pages[pages.length - 1];
     var status = currPage.data.status;
     if (status) {
+      currPage.data = {}
       var data = {
         page: 1,
         shopId: this.userInfo.shopId

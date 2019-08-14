@@ -12,10 +12,11 @@
           <span class="address-info" v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
           <span
             class="address-info"
-            v-else-if="orderByShopIdDetail.status==2"
+            v-else-if="orderByShopIdDetail.deliveryStatus==1"
           >已支付，等待商家配送{{refundStatus}}</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==3">配送中{{refundStatus}}</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==4">已完成</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.deliveryStatus==2">配送中{{refundStatus}}</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.deliveryStatus==3">已完成</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.refundStatus==2 || orderByShopIdDetail.refundStatus==3">已退款</span>
           <span class="address-info" v-else>其他</span>
         </div>
         <div class="line-sp"></div>
@@ -181,7 +182,7 @@ export default {
       return "";
     },
     refundStatus() {
-      if (this.orderByShopIdDetail.refundStatus == 3) {
+      if (this.orderByShopIdDetail.refundStatus == 4) {
         return " - 申请过退款，被拒绝";
       }
       return "";
@@ -194,21 +195,26 @@ export default {
     ...mapActions("submitOrder", ["getOrderByIdAction", "refundDataAction"]),
     refund() {
       var that = this;
-      wx.showModal({
+      if (this.orderByShopIdDetail.refundStatus == 1) {
+                      wx.showModal({
         content: "确定对当前订单进行退款处理？",
         confirmColor: "#FFC24A",
         success: function(res) {
           if (res.confirm) {
             that.refundDataAction({
               orderNo: that.orderByShopIdDetail.number,
-              refundDesc: "不想要了!",
               // refundFee: that.orderByShopIdDetail.realFee * 100
-              refundFee: 1
+              refundFee: that.orderByShopIdDetail.realFee * 100
             });
           } else if (res.cancel) {
           }
         }
       });
+      } else {
+        wx.navigateTo({
+            url: "/pages/refund/main?orderId=" + this.orderByShopIdDetail.number
+        });
+      }
     },
     refusal() {
       var order = this.orderByShopIdDetail;
@@ -309,6 +315,19 @@ export default {
   mounted() {
     this.foodList = this.orderByShopIdDetail.itemList;
     this.shopInfo = this.orderByShopIdDetail.shopInfo;
+  },
+  onShow(options) {
+    var pages = getCurrentPages();
+    var currPage = pages[pages.length - 1];
+    if (currPage.data.status) {
+       var refund = {};
+       refund.refundStatus = 4
+        var prevPage = pages[pages.length - 2];
+        prevPage.setData({
+          status: refund
+        });
+        wx.navigateBack({ delta: 1 });
+    }
   }
 };
 </script>

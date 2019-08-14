@@ -52,12 +52,12 @@
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.refundStatus==2"
+            v-else-if="item.refundStatus==2 || item.refundStatus==3"
           >退款成功</p>
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.refundStatus==3 && pageIndex === -1"
+            v-else-if="item.refundStatus==4 && pageIndex === -1"
           >退款失败</p>
           <p
             class="order-status"

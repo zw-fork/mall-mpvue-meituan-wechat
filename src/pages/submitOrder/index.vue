@@ -64,7 +64,7 @@
       <div class="b-mid" @click="remarkClick">
         <span class="mid-l">备注</span>
         <div class="mid-r">
-          <span>{{currentOrder.remark? currentOrder.remark:'请输入口味、偏好等要求'}}</span>
+          <span>{{currentOrder.remark? currentOrder.remark:'请输入商品备注'}}</span>
           <i class="icon iconfont iconright"></i>
         </div>
       </div>
