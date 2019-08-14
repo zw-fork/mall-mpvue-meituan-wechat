@@ -5,7 +5,10 @@
         <div class="address-c">
           <span class="address-info" v-if="orderDetail.status==0">已取消</span>
           <span class="address-info" v-else-if="orderDetail.status==1">未支付</span>
-          <span class="address-info" v-else-if="orderDetail.refundStatus==1">等待退款</span>
+          <div v-else-if="orderDetail.refundStatus==1">
+            <span class="address-info">等待退款</span>
+            <p class="address-info1" v-if="orderDetail.refundExplain">退款原因：{{orderDetail.refundExplain}}</p>
+          </div>        
           <span class="address-info" v-else-if="orderDetail.refundStatus==2">退款成功</span>
           <span class="address-info" v-else-if="orderDetail.status==2">已支付，等待商家配送</span>
           <span class="address-info" v-else-if="orderDetail.status==3">配送中</span>
@@ -427,11 +430,20 @@ export default {
 
       .address-c {
         display: flex;
-        font-weight: bold;
-        font-size: 36rpx;
         background-color: white;
         padding: 0 20rpx;
         margin: 20rpx;
+
+        .address-info {
+            font-weight: bold;
+            font-size: 36rpx;
+            color: $textBlack-color;
+        }
+
+        .address-info1 {
+            font-size: 28rpx;
+            color: $textBlack-color;
+        }
 
         i {
           font-size: 36rpx;
@@ -445,10 +457,6 @@ export default {
           justify-content: space-around;
           flex: 1;
 
-          .address-info {
-            font-size: 32rpx;
-            color: $textBlack-color;
-          }
 
           .user-info {
             font-size: 24rpx;

@@ -10,7 +10,7 @@
         </div>
         <div class='item textarea acea-row row-between'>
           <div>退款原因</div>
-          <textarea placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
+          <textarea v-model="orderDetail.refundExplain" placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
         </div>
     </div>
         </div>
@@ -131,7 +131,7 @@
         <div class="item_style">
           <p class="item_left" style="word-break:keep-all; display: inline">描述：</p>
           <div class="item_right" style="display: inline">
-            <p>ddddddddddd水水水水水水水水水水水水水测试所发生的法师法师法师的法师法师ddddddddddd水水水水水水水水水水水水水测试所发生的法师法师法师的法师法师ddddddddddd水水水水水水水水水水水水水测试所发生的法师法师法师的法师法师</p>
+            <p>{{orderDetail.remark}}</p>
           </div>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default {
     return {
       itemList: [],
       tabIndex: 0,
-      refund: false,
+      reason: undefined,
       orderDetail: {}
     };
   },
@@ -170,6 +170,19 @@ export default {
     sepLine
   },
   methods: {
+    refund() {
+      var refund = {}
+      refund.refundStatus = 1
+      refund.refundExplain = this.orderDetail.refundExplain
+      getFetch('/order/updateStatus/' + this.orderDetail.number, refund, false).then(response => {
+        var pages = getCurrentPages();
+        var prevPage = pages[pages.length - 2];
+        prevPage.setData({
+          status:4
+        });
+        wx.navigateBack({ delta: 1 });
+      })
+    },
     clickCall() {
       var tel = this.orderDetail.addressInfo.phone;
       var telList = [tel];
