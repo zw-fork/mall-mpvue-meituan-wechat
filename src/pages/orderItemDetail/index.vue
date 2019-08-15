@@ -123,7 +123,10 @@
         <div class="item_style">
           <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
           <div class="item_right" style="display: inline">
-            <p>{{orderByShopIdDetail.number}}</p>
+            <p>
+              {{orderByShopIdDetail.number}}
+               <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制</span>
+            </p>
           </div>
         </div>
         <div class="line-sp"></div>
@@ -193,6 +196,9 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderByIdAction", "refundDataAction"]),
+    copy() {
+    wx.setClipboardData({data: this.orderByShopIdDetail.number});
+    },
     refund() {
       var that = this;
       if (this.orderByShopIdDetail.refundStatus == 1) {

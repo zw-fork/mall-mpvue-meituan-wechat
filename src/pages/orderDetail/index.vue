@@ -113,13 +113,16 @@
     <div class="header-c">
       <div class="delivery order_detail_style">
         <div class="address-c">
-          <span>订单信息{{test(999)}}</span>
+          <span>订单信息</span>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
           <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
           <div class="item_right" style="display: inline">
-            <p>{{orderDetail.number}}</p>
+            <p>
+              {{orderDetail.number}}
+              <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制</span>
+            </p>
           </div>
         </div>
         <div class="line-sp"></div>
@@ -178,6 +181,9 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderByIdAction"]),
+    copy() {
+    wx.setClipboardData({data: this.orderDetail.number});
+    },
     updateStatus(status, deliveryStatus, refundStatus) {
       var refund = {};
       if (status || status == 0) {
