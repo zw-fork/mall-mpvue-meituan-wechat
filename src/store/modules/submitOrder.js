@@ -94,16 +94,14 @@ const actions = {
   updateOrderStatusAction({ state, commit }, { order, status, selectStatus, refundStatus }) {
     wx.showLoading({ title: '加载中...', mask: true })
     var data = { 'page': 1, 'status': selectStatus }
-    var refund = {}
+    var refund = {};
     if (!selectStatus) {
       data = { 'page': 1 }
     }
     if (refundStatus) {
       refund.refundStatus = refundStatus
     }
-    if (status) {
-      refund.status = status
-    }
+    refund.status = status
     refund.openid = order.uid
     if (order.status == 1 && status == 2) {
       getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {

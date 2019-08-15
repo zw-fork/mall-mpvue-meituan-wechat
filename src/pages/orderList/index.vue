@@ -241,9 +241,19 @@ export default {
       this.showOrderDetailAction({ order: item });
     },
     cancelClick(item) {  
-    wx.navigateTo({
-        url: "/pages/refund/main?orderId=" + item.number
-    });
+      var status = item.status;
+      var selectStatus = this.pageIndex == -1 ? null : this.pageIndex;
+      if (status == 1) {
+        this.updateOrderStatusAction({
+          order: item,
+          status: 0,
+          selectStatus: selectStatus
+        });
+      } else {
+        wx.navigateTo({
+          url: "/pages/refund/main?orderId=" + item.number
+        });
+      }
     }
   },
   mounted() {
