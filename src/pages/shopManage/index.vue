@@ -51,6 +51,17 @@
       <div class="mid-r" @click="showSinglePicker">元</div>
     </div>
     <div class="name" style="height: 65rpx;">
+      <span>配送费：</span>
+      <input
+        type="number"
+        maxlength="3"
+        placeholder="例如:1"
+        placeholder-style="font-size: 24rpx"
+        v-model="shop.support_pay"
+      >
+      <div class="mid-r" @click="showSinglePicker">元</div>
+    </div>
+    <!-- <div class="name" style="height: 65rpx;">
       <span>配送范围：</span>
       <input
         type="digit"
@@ -60,7 +71,7 @@
         v-model="shop.scope"
       >
       <div class="mid-r" @click="showSinglePicker">公里</div>
-    </div>
+    </div> -->
     <div class="b-mid" style="height: 65rpx;">
       <span class="mid-l">商店状态:</span>
       <div class="mid-r" @click="showSinglePicker">

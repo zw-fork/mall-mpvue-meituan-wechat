@@ -32,7 +32,7 @@
       <div class="category-c">
         <div class="grid-c">
           <div
-            class="item"
+            class="item"  
             v-for="(item, index) in goodsMenuList"
             :key="index"
             @click="itemClick(item)"
@@ -405,7 +405,7 @@ button::after {
     display: flex;
     align-items: center;
     height: 200rpx;
-    background-color: #817170;
+    background-color: #e93323;
 
     img {
       border: 3px solid white;

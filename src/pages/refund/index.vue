@@ -32,7 +32,7 @@
     <div class="item-list">
       <div class="section" @click="headerClick(orderDetail, false)">
         <i style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
-        <span>AAAA</span>
+        <span>{{orderDetail.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="line-sp"></div>
@@ -263,12 +263,8 @@ export default {
       });
     }
   },
-  mounted() {
-    this.foodList = this.orderDetail.itemList;
-    this.shopInfo = this.orderDetail.shopInfo;
-  },
      onLoad(options) {
-      getFetch("/order/" + options.orderId, {}, false).then(response => {
+      getFetch("/order/" + options.orderId, {}, true).then(response => {
         this.orderDetail = response.result
         this.itemList = response.result.itemList
       });

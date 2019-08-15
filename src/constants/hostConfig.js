@@ -36,7 +36,7 @@ const host = {
   prd: {
       API_URL: 'https://digcampus.natapp4.cc/',
    //   API_URL: 'http://localhost:7100/',
-  //  API_URL: 'https://goomi.higgses.com:7110/',
+   // API_URL: 'https://goomi.higgses.com:7110/',
     XIAMI_URL: 'https://api-m.mtime.cn',
     GOODS_URL_PREFIX: 'https://mall-social.oss-cn-beijing.aliyuncs.com/',
     // GOODS_URL_PREFIX: 'http://39.106.34.223:7200/',

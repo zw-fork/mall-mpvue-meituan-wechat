@@ -4,7 +4,6 @@
       <van-field
         v-model="userInfo.realname"
         @change="changeUsername"
-        required
         clearable
         label="用户名"
         placeholder="请输入用户名"
@@ -156,6 +155,7 @@ input {
     border-bottom: 2rpx solid $spLine-color;
     .l {
       width: 250rpx;
+      font-size: 30rpx;
     }
     .m {
       display: flex;
