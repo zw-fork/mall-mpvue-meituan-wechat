@@ -24,7 +24,7 @@ const actions = {
     })
   },
   createCategory({ state, commit }, { category }) {
-    postFetch('/category/' + category.shopId, category, false).then(response => {
+    postFetch('/category', category, false).then(response => {
       return response.result
     })
   },

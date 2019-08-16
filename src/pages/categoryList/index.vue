@@ -167,7 +167,7 @@ export default {
       wx.navigateTo({ url: "/pages/categoryManage/main" });
     },
     updateGoods(goodsModel) {
-      postFetch("/category/" + this.userInfo.shopId, goodsModel, false).then(
+      postFetch("/category", goodsModel, false).then(
         response => {
           this.showEdit = false;
           this.updateGoodsList(this.pageIndex);
@@ -218,7 +218,7 @@ export default {
     },
     editGoods() {
       wx.navigateTo({
-        url: "/pages/categoryManage/main?id=" + this.selectGoods.goodsId
+        url: "/pages/categoryManage/main?id=" + this.selectGoods.categoryId
       });
     },
     update() {

@@ -1,6 +1,15 @@
 <template>
   <div class="container">
     <div class="header-c">
+        <div class="header">
+          <div class="header-m">
+            <i class="icon mt-search-o"></i>
+            <input placeholder="根据订单号搜索" placeholder-style="font-size: 24rpx" v-model="name">
+          </div>
+          <div class="header-r" style="margin: 0 10rpx;">
+            <span @click="getGoods()">搜索</span>
+          </div>
+      </div>
       <div class="cate-c">
         <span
           class="c-l"
@@ -269,11 +278,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.header-m {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background-color: #fff;
+  height: 60rpx;
+  border-radius: 30rpx;
+  margin-left: 20rpx;
+  align-items: center;
+  i {
+    color: $textDarkGray-color;
+    font-size: 32rpx;
+    margin-left: 20rpx;
+  }
+  span {
+    color: $textDarkGray-color;
+    font-size: 24rpx;
+    margin-left: 10rpx;
+    margin-right: 20rpx;
+  }
+}
 .container {
   .header-c {
     display: flex;
     flex-direction: column;
     background-color: white;
+    position: relative;
+    .header {
+      display: flex;
+      align-items: center;
+    }
+    .header-r {
+      display: flex;
+      align-items: center;
+      span {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        margin: 0 10rpx;
+      }
+      i {
+        font-size: 32rpx;
+        color: $textBlack-color;
+        margin: 0 10rpx;
+      }
+      img {
+        height: 55rpx;
+        width: 55rpx;
+        margin-left: 20rpx;
+      }
+    }
     .cate-c {
       display: flex;
       height: 70rpx;
@@ -304,7 +359,7 @@ export default {
   .list-c {
     display: block;
     position: fixed;
-    top: 70rpx;
+    top: 100rpx;
     bottom: 0rpx;
     width: 100%;
     .item {

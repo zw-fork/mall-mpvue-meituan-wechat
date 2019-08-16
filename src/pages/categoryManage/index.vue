@@ -6,27 +6,12 @@
         maxlength="10"
         placeholder="请填写分类名称(10字内)"
         placeholder-style="font-size: 24rpx"
-        v-model="name"
+        v-model="category.name"
       >
     </div>
-    <div class="submit-btn" @click="createCategory2">
+    <div class="submit-btn" @click="createCategory">
       <span>保存</span>
     </div>
-    <mp-picker
-      ref="mpvuePicker"
-      :mode="mode"
-      :deepLength="deepLength"
-      :pickerValueDefault="pickerValueDefault"
-      @onChange="onChange"
-      @onConfirm="onConfirm"
-      @onCancel="onCancel"
-      :pickerValueArray="pickerValueArray"
-    ></mp-picker>
-    <input-dialog
-      :is-model="showCategory"
-      @childFn="showCategory = !showCategory"
-      @categoryName="createCategory2"
-    />
   </div>
 </template>
 
@@ -34,7 +19,7 @@
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import mpButton from "mpvue-weui/src/button";
 import mpPicker from "mpvue-weui/src/picker";
-import inputDialog from "@/components/inputDialog";
+//import inputDialog from "@/components/inputDialog";
 import mpUploader from "mpvue-weui/src/uploader";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
@@ -43,46 +28,17 @@ export default {
   components: {
     mpButton,
     mpPicker,
-    mpUploader,
-    inputDialog
+    mpUploader
   },
   data() {
     return {
       reFresh: true,
       name: undefined,
-      showCategory: false,
+      category: {},
       pickerValueArray: [], // picker 数组值
       pickerValueDefault: [], // 初始化值
       active: false,
-      clazzA: "icon mt-selected-o",
-      styleA: "color: #F9D173",
-      clazzB: "icon mt-unselected-o",
-      styleB: "color: #333",
       goodsState: undefined,
-      statusArray: [
-        {
-          label: "上架",
-          value: 1
-        },
-        {
-          label: "下架",
-          value: 2
-        }
-      ],
-      categoryArray: [
-        {
-          label: "类型A",
-          value: 0
-        },
-        {
-          label: "类型B",
-          value: 1
-        },
-        {
-          label: "类型C",
-          value: 2
-        }
-      ],
       item: {
         gender: 1
       },
@@ -92,7 +48,6 @@ export default {
     };
   },
   computed: {
-    ...mapState("address", ["myAddress"]),
     ...mapState("user", ["userInfo"]),
     path() {
       return `${GOODS_URL_PREFIX}`;
@@ -102,40 +57,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions("user", ["uploadImg"]),
-    ...mapActions("shop", ["createCategory", "createShop"]),
-    deleteImg() {
-      this.goods.picture = undefined;
-    },
-    uploadImg2() {
-      if (this.goods.picture) {
-        wx.showToast({
-          title: "最多只能上传一张图片!",
-          icon: "none",
-          duration: 2000
-        });
-        return;
-      }
-      var that = this;
-      wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-        success: function(res) {
-          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-          that.goods.picture = res.tempFilePaths[0];
-          that.goods.wechat = true;
-        }
-      });
-    },
-    uploadFile() {
-      this.goods.shopId = this.userInfo.shopId;
-      this.goods.shopName = this.userInfo.shopName;
-      this.goods.goodsPrice = parseFloat(this.goods.goodsPrice);
-      this.uploadImg({ goodsModel: this.goods });
-    },
-    createCategory2() {
-      if (!this.name || !this.name.trim()) {
+    createCategory() {
+      if (!this.category.name || !this.category.name.trim()) {
         wx.showToast({
           title: "分类名称不能为空!",
           icon: "none",
@@ -143,62 +66,29 @@ export default {
         });
         return;
       }
-      var category = {};
-      category.shopId = this.userInfo.shopId;
-      category.name = this.name;
-      var categoryName = this.name;
-      postFetch("/category/" + category.shopId, category, false).then(
+      postFetch("/category", this.category, false).then(
         response => {
           var pages = getCurrentPages();
           var prevPage = pages[pages.length - 2];
-          console.log(response);
           prevPage.setData({
-            categoryName: categoryName,
+            categoryName: response.result.name,
             categoryId: response.result.categoryId
           });
-          wx.navigateBack({ delta: 1, categoryName: categoryName });
+          wx.navigateBack({ delta: 1, categoryName:  response.result.name });
         }
       );
-    },
-    onConfirm(e) {
-      if (this.type == "category") {
-        this.goods.categoryName = e.label;
-        this.goods.categoryId = e.value[0];
-      } else {
-        this.goods.status = e.value[0];
-        this.goods.statusName = e.label;
-      }
-    },
-    updateCategoryClick() {
-      this.pickerValueArray = this.categoryArray;
-      this.mode = "selector";
-      this.type = "category";
-      this.pickerValueDefault = [];
-      this.$refs.mpvuePicker.show();
-    },
-    showSinglePicker() {
-      this.pickerValueArray = this.statusArray;
-      this.mode = "selector";
-      this.type = "status";
-      this.pickerValueDefault = [];
-      this.$refs.mpvuePicker.show();
-    },
-    upLoadSuccess(res) {
-      this.img = res.files[0];
-      console.log(res);
-    },
-    upLoadFail(res) {
-      console.log(res);
-    },
-    upLoadComplete() {
-      console.log("complete");
-    },
-    uploadDelete(res) {
-      console.log(res);
     }
   },
-  onShow(options) {
-    this.name = ''
+  onLoad(options) {
+    if (options.id) {
+      getFetch('/category/' + options.id, {}, false).then(response => {
+        this.category = response.result
+      })
+    }else {
+      this.category = {
+        shopId : this.userInfo.shopId
+      }
+    }
   }
 };
 </script>

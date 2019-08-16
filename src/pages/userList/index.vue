@@ -502,10 +502,6 @@ export default {
             height: 30rpx;
             background-color: white;
           }
-          .t-r {
-            font-size: 20rpx;
-            color: white;
-          }
         }
         .r-m {
           font-size: 20rpx;

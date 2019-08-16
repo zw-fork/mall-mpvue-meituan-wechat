@@ -165,8 +165,13 @@ const HttpUtils = {
             let isSuccess = false
             let resCode = res.statusCode
             if (parseInt(resCode / 100) == 2) {
-              isSuccess = true
-              resolve(res.data)
+              var data = res.data
+              if (data.code == responseCode.DUPLICATE_KEY_EXCEPTION_CODE) {
+                wx.showToast({ title: '已存在该数据，请修改!', icon: 'none', duration: 4000 })
+              } else {
+                isSuccess = true
+                resolve(res.data)
+              }
             } else if (resCode == responseCode.TOKEN_INVALID) {
               wx.navigateTo({ url: '/pages/index/main' })
             } else {
