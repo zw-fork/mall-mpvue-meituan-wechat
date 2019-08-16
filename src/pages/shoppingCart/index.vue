@@ -9,7 +9,7 @@
           >
         </div>
         <div class="h-r">
-          <span class="r-l" @click="openLocation">地址: {{shopInfo.wxAddress.address}}</span>
+          <span class="r-l" @click="openLocation">地址: {{shopInfo.wxAddress.name}}</span>
           <div class="r-t">
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
@@ -105,7 +105,7 @@
     <div class="shop-info" v-else-if="pageIndex === 1">
       <div class="address">
         <i class="icon mt-location-o"></i>
-        <span>{{shopInfo.wxAddress.address}}</span>
+        <span>{{shopInfo.wxAddress.name}}</span>
         <i class="icon mt-phone-o" @click.stop="clickCall()"></i>
       </div>
       <div class="delivery">

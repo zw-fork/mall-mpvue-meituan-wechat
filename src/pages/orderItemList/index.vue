@@ -4,10 +4,10 @@
         <div class="header">
           <div class="header-m">
             <i class="icon mt-search-o"></i>
-            <input placeholder="根据订单号搜索" placeholder-style="font-size: 24rpx" v-model="name">
+            <input placeholder="根据订单号搜索" placeholder-style="font-size: 24rpx" v-model="number">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
-            <span @click="getGoods()">搜索</span>
+            <span @click="search()">搜索</span>
           </div>
       </div>
       <div class="cate-c">
@@ -138,6 +138,7 @@ export default {
       statusList: [],
       status: undefined,
       total: undefined,
+      number: undefined,
       orderItemList: {
         page: 1,
         type: -1,
@@ -150,6 +151,17 @@ export default {
       "showOrderByShopIdDetailAction",
       "getOrderByIdAction"
     ]),
+    search() {
+      this.scrollTop = 0;
+      var data = { page: 1, shopId: this.userInfo.shopId };
+      if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
+        data.deliveryStatus = this.pageIndex;
+      } else if (this.pageIndex == 4) {
+        data.refundStatus = -1;
+      }
+      data.orderId = this.number
+      this.getOrderItemDataAction(data);
+    },
     getOrderItemDataAction(data) {
       wx.showLoading({ title: "加载中...", mask: true });
       getFetch("/order", data, false).then(response => {
