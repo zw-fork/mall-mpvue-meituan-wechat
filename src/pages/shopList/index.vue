@@ -191,7 +191,6 @@ export default {
     updateGoods(goodsModel) {
       getFetch(
         "wechat/updateStaff/" +
-          this.userInfo.shopId +
           "/" +
           this.userInfo.id +
           "/" +

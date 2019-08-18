@@ -42,7 +42,7 @@
     <div class="name" style="height: 65rpx;">
       <span>起送金额：</span>
       <input
-        type="number"
+        type="digit"
         maxlength="3"
         placeholder="例如:1"
         placeholder-style="font-size: 24rpx"
@@ -53,7 +53,7 @@
     <div class="name" style="height: 65rpx;">
       <span>配送费：</span>
       <input
-        type="number"
+        type="digit"
         maxlength="3"
         placeholder="例如:1"
         placeholder-style="font-size: 24rpx"

@@ -74,7 +74,7 @@
         <i class="icon iconfont iconedit"></i>
         <span style="color:white;text-align: center;">店铺</span>
       </div>
-      <div @click="upGoods" v-if="userInfo.role==2">
+      <div @click="upGoods">
         <i class="icon iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
@@ -179,7 +179,6 @@ export default {
     updateGoods(goodsModel) {
       getFetch(
         "wechat/updateStaff/" +
-          this.userInfo.shopId +
           "/" +
           this.userInfo.id +
           "/" +

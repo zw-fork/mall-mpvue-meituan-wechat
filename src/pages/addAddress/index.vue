@@ -72,6 +72,30 @@ export default {
   methods: {
     ...mapActions('address', ['saveOrUpdateAddress']),
     saveAddress() {
+      if (!this.item.name || !this.item.name.trim()) {
+        wx.showToast({
+          title: "联系人不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
+      if (!this.item.phone || !this.item.phone.trim()) {
+        wx.showToast({
+          title: "手机号不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
+      if (!this.item.house_number || !this.item.house_number.trim()) {
+        wx.showToast({
+          title: "门牌号不能为空!",
+          icon: "none",
+          duration: 1000
+        });
+        return;
+      }
       this.item.openid = this.userInfo.openid;
       this.saveOrUpdateAddress({ addressModel: this.item });
     },
