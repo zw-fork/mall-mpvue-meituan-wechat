@@ -57,7 +57,6 @@ export default {
     ...mapState("user", ["userInfo"])
   },
   methods: {
-    ...mapActions("address", ["getAddressDataAction"]),
     ...mapActions("shop", ["getShopListDataAction"]),
     addAddress() {
       wx.navigateTo({ url: "/pages/addAddress/main" });

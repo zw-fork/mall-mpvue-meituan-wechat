@@ -1,15 +1,17 @@
 <template>
   <div class="container">
     <div class="list-c">
-      <div class="item" v-for="(item, index) in myAddress" :key="index">
-        <div class="i-l" @touchstart="showDeleteButton(item)" @touchend="clearLoop(item)">
-          <div class="user-info">
-            <span class="s-l">{{item.name}}</span>
-            <span class="s-r">{{item.phone}}</span>
+      <div v-for="(item, index) in myAddress" :key="index">
+        <div class="item" v-if="shopInfo.wxAddress.name == item.wxAddress.name">
+          <div  class="i-l" @touchstart="showDeleteButton(item)" @touchend="clearLoop(item)">
+            <div class="user-info">
+              <span class="s-l">{{item.name}}</span>
+              <span class="s-r">{{item.phone}}</span>
+            </div>
+            <span class="address">{{item.wxAddress ? item.wxAddress.name : ''}} {{item.house_number}}</span>
           </div>
-          <span class="address">{{item.wxAddress ? item.wxAddress.name : ''}} {{item.house_number}}</span>
+          <i class="icon mt-edit-o" @click="addClick(item)"></i>
         </div>
-        <i class="icon mt-edit-o" @click="addClick(item)"></i>
       </div>
     </div>
     <div class="submit-btn" @click="addClick()">
@@ -81,7 +83,6 @@ export default {
     }
   },
   mounted() {
-    var openid = this.userInfo.openid;
     this.getAddressDataAction();
   },
   onLoad(options) {
