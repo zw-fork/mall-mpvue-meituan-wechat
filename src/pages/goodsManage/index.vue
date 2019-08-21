@@ -276,13 +276,29 @@ export default {
     this.goods = {
       statusName: "上架",
       status: 1,
+      name: "",
       categoryName: "",
+      min_price: "",
       picture: undefined
     };
+    if (options.barcode) {
+          getFetch(
+      "/barcode/" + options.barcode,
+      {},
+      true
+    ).then(response => {
+      var result = response.result
+      if (result) {
+        this.goods.name = result.goodsName;
+        this.goods.min_price = result.price;
+        this.goods.picture = result.ssoImg;
+      }
+    })
+    }
     getFetch(
       "/category/list/" + this.userInfo.shopId,
       { status: 1 },
-      false
+      true
     ).then(response => {
       var list = response.result;
       var categoryArray = [];
@@ -297,7 +313,7 @@ export default {
         getFetch(
           "/goods/" + this.userInfo.shopId,
           { goodsId: options.id },
-          false
+          true
         ).then(response => {
           if (response.result.list.length > 0) {
             this.goods = response.result.list[0];

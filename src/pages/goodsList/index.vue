@@ -3,6 +3,9 @@
     <div class="container" @click="update" @mousedown="update" @scroll="update">
       <div class="header-c">
         <div class="header">
+          <div class="header-r" @click="scanClick()">
+            <img class="item-img" src="/static/images/scan.png">
+          </div>
           <div class="header-m">
             <i class="icon mt-search-o"></i>
             <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name">
@@ -280,41 +283,55 @@ export default {
     scanClick() {
       wx.scanCode({
         success: res => {
-          this.name = "a";
-          this.getGoods();
-          console.log(res);
+          this.getGoods(res.result);
         }
       });
     },
-    getGoods() {
-      wx.showLoading({ title: "加载中...", mask: true });
+    getGoods(barcode) {
       var data = {};
-      data.name = this.name.trim();
+      if (barcode) {
+        data.barcode = barcode;
+      } else {
+        data.name = this.name.trim();
+      }
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
       }
-      getFetch("/goods/" + this.userInfo.shopId, data, false).then(response => {
-        this.list.datas = response.result.list;
-        this.list.page = response.result.nextPage;
-        wx.hideLoading();
+      getFetch("/goods/" + this.userInfo.shopId, data, true).then(response => {
+        if (response.result.list.length>0) {
+          this.list.datas = response.result.list;
+          this.list.page = response.result.nextPage;
+        } 
+        else if (barcode) {
+          var code = barcode
+          wx.showModal({
+            content: "该商品不存在，是否需要创建？",
+            confirmColor: "#FFC24A",
+            success: function(res) {
+              if (res.confirm) {
+                wx.navigateTo({ url: "/pages/goodsManage/main?barcode="+ code});
+              } 
+              else if (res.cancel) {
+              }
+        }
+      });
+        }       
       });
     },
     //滚动条滚到底部或右边的时候触发
     lower(e) {
       if (this.list.page > 0) {
-        wx.showLoading({ title: "加载中...", mask: true });
         var data = {};
         data.name = this.name.trim();
         if (this.pageIndex != undefined) {
           data.status = this.pageIndex;
         }
         data.page = this.list.page;
-        getFetch("/goods/" + this.userInfo.shopId, data, false).then(
+        getFetch("/goods/" + this.userInfo.shopId, data, true).then(
           response => {
             var goodsList = response.result.list;
             this.list.page = response.result.nextPage;
             this.list.datas = [...this.list.datas, ...goodsList];
-            wx.hideLoading();
           }
         );
       }
@@ -381,7 +398,7 @@ export default {
       this.selectSkuAction({ item, index: item.preIndex });
     }
   },
-  onShow(options) {
+  onLoad(options) {
     this.showEdit = false;
     this.getGoods();
   }
