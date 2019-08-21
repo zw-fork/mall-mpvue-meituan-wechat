@@ -57,7 +57,7 @@ const homeData = {
           "second_tag_codes": [],
           "sequence": 200,
           "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
-          "url": "iconshangpin"
+          "url": "iconrenyuanliebiao"
         },
         {
           "brand_type": -1,
@@ -71,7 +71,7 @@ const homeData = {
           "second_tag_codes": [],
           "sequence": 200,
           "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
-          "url": "iconshangpin"
+          "url": "icondianpu1"
         }],
       "super_menu": [
         {
@@ -114,7 +114,7 @@ const homeData = {
           "second_tag_codes": [],
           "sequence": 100,
           "skip_protocol": "channel?category_type=910&category_text=%E7%BE%8E%E9%A3%9F",
-          "url": "icondianpu1"
+          "url": "icondianpuguanli"
         }, {
           "brand_type": -1,
           "code": 101574,
@@ -127,7 +127,7 @@ const homeData = {
           "second_tag_codes": [],
           "sequence": 200,
           "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
-          "url": "iconshangpin"
+          "url": "iconyuangongguanli"
         }, {
           "brand_type": -1,
           "code": 960,
