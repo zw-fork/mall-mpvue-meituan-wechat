@@ -172,7 +172,6 @@ const actions = {
   },
 
   uploadImg({ state, commit }, { goodsModel }) {
-    debugger
     var path = `${API_URL}`
     goodsModel.goodsPrice = goodsModel.min_price
     if (goodsModel.wechat) {
@@ -195,7 +194,7 @@ const actions = {
           wx.navigateBack({ delta: 1 })
         },
         fail: function (res) {
-          debugger
+          
         }
       })
     } else {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="!shopId || shopId == shopInfo.shopId">
+  <div class="container" @click="update" @mousedown="update" v-if="!shopId || shopId == shopInfo.shopId">
     <div class="header-c">
       <div class="header">
         <div class="h-l">
@@ -33,7 +33,7 @@
           @click="shopClick"
         >商家</span>
         <span class="c-m" @click="goHome">首页</span>
-        <div class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
+        <div v-if="!showManage" class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
           <i class="icon mt-search-o"></i>
           <span>搜索商品</span>
         </div>
@@ -70,11 +70,11 @@
             <div class="item-r">
               <div
                 class="div-title"
-                @click.stop="manageGoods($event, index)"
-                v-if="userInfo.role>0"
+                v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId && showManage"
               >
                 <span class="title">{{item.name}}</span>
                 <i
+                @click.stop="manageGoods($event, index)"
                   class="icon iconfont icondian"
                   style="float:right;position:relative;display:inline-block"
                 ></i>
@@ -83,7 +83,7 @@
               <span class="sub-title">已售1234件</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
-                <div class="add-item">
+                <div class="add-item" v-if="!showManage">
                   <div
                     class="add-l"
                     @click.stop="reduceClick(item, index, spus.index)"
@@ -219,6 +219,7 @@ export default {
       selectIndex: undefined,
       shopId: undefined,
       showEdit: false,
+      showManage: false,
       show: false,
       divStyle: "",
       scrollTop: undefined,
@@ -564,7 +565,11 @@ export default {
       wx.navigateTo({
         url: "/pages/searchList/main?shopId=" + this.shopInfo.shopId
       });
-    }
+    },
+     update() {
+      this.showEdit = false;
+      return false;
+    },
   },
   onShow(options) {
     var pages = getCurrentPages();
@@ -589,6 +594,10 @@ export default {
     this.pageIndex = 0;
     var that = this;
     this.shopId = options.shopId;
+    if (!this.shopId) {
+      this.shopId = this.userInfo.shopId;
+      this.showManage = this.shopId ? true: false;
+    }
     var update = false;
     this.showCart = false;
     if (options.update == "true") {
@@ -609,6 +618,9 @@ export default {
       title: this.shopInfo.shopName,
       path: "/pages/index/main?shopId=" + this.shopInfo.shopId
     };
+  },
+  onShow(options) {
+    this.showEdit = false;
   }
 };
 </script>
