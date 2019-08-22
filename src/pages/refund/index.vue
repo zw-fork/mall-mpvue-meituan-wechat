@@ -244,23 +244,6 @@ export default {
     },
     pickClick() {
       this.tabIndex = 1;
-    },
-    protocol() {
-      wx.navigateTo({ url: "/pages/pickProtocol/main" });
-    },
-    openMap() {
-      wx.getLocation({
-        type: "gcj02",
-        success(res) {
-          const latitude = res.latitude;
-          const longitude = res.longitude;
-          wx.openLocation({
-            latitude,
-            longitude,
-            scale: 28
-          });
-        }
-      });
     }
   },
      onLoad(options) {

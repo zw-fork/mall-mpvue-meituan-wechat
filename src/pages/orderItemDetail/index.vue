@@ -48,8 +48,10 @@
       </div>
     </div>
     <div class="item-list">
+      
       <div class="section" @click="headerClick(orderByShopIdDetail, false)">
-        <img :src="path + orderByShopIdDetail.shopInfo.pic_url">
+        <img v-if="orderByShopIdDetail.shopInfo.pic_url" :src="path + orderByShopIdDetail.shopInfo.pic_url">
+        <i v-else style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
         <span>{{orderByShopIdDetail.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
