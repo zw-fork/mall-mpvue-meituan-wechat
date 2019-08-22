@@ -8,7 +8,7 @@
           </div>
           <div class="header-m">
             <i class="icon iconfont iconsearch"></i>
-            <input placeholder="根据手机号搜索人员" placeholder-style="font-size: 24rpx" v-model="name">
+            <input style="width: 90%" placeholder="根据手机号搜索人员" placeholder-style="font-size: 24rpx" v-model="name">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
             <span @click="getGoods()">搜索</span>

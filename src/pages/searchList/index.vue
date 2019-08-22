@@ -4,7 +4,7 @@
       <div class="header">
         <div class="header-m">
           <i class="icon iconfont iconsearch"></i>
-          <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name" />
+          <input style="width: 90%" placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name" />
         </div>
         <div class="header-r" style="margin: 0 10rpx;" @click="getGoods()">
           <span>搜索</span>

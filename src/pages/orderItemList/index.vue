@@ -4,7 +4,7 @@
         <div class="header">
           <div class="header-m">
             <i class="icon iconfont iconsearch"></i>
-            <input placeholder="根据订单号搜索" placeholder-style="font-size: 24rpx" v-model="number">
+            <input style="width: 90%" placeholder="根据订单号搜索" placeholder-style="font-size: 24rpx" v-model="number">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
             <span @click="search()">搜索</span>
@@ -317,7 +317,6 @@ export default {
     display: flex;
     flex-direction: column;
     background-color: white;
-    position: relative;
     .header {
       display: flex;
       align-items: center;
@@ -343,7 +342,7 @@ export default {
     }
     .cate-c {
       display: flex;
-      height: 70rpx;
+      height: 60rpx;
       align-items: center;
       border-bottom: 5rpx solid $spLine-color;
       position: relative;
@@ -371,7 +370,7 @@ export default {
   .list-c {
     display: block;
     position: fixed;
-    top: 100rpx;
+    top: 120rpx;
     bottom: 0rpx;
     width: 100%;
     .item {
