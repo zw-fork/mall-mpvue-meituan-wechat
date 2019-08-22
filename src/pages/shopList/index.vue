@@ -4,7 +4,7 @@
       <div class="header-c">
         <div class="header">
           <div class="header-m">
-            <i class="icon mt-search-o"></i>
+            <i class="icon icon iconfont iconsearch"></i>
             <input placeholder="根据手机号搜索店铺" placeholder-style="font-size: 24rpx" v-model="name">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">

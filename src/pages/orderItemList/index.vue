@@ -3,7 +3,7 @@
     <div class="header-c">
         <div class="header">
           <div class="header-m">
-            <i class="icon mt-search-o"></i>
+            <i class="icon iconfont iconsearch"></i>
             <input placeholder="根据订单号搜索" placeholder-style="font-size: 24rpx" v-model="number">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">

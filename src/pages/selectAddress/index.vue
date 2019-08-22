@@ -7,7 +7,7 @@
       </div>
       <div class="header-r">
         <div class="search-bar">
-          <i class="icon mt-search-o"></i>
+          <i class="icon iconfont iconsearch"></i>
           <input
             placeholder="请输入小区"
             @input="getsuggest"

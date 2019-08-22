@@ -7,7 +7,7 @@
             <img class="item-img" src="/static/images/scan.png">
           </div>
           <div class="header-m">
-            <i class="icon mt-search-o"></i>
+            <i class="icon iconfont iconsearch"></i>
             <input placeholder="根据手机号搜索人员" placeholder-style="font-size: 24rpx" v-model="name">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">

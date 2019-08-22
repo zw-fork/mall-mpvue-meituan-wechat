@@ -34,7 +34,7 @@
         >商家</span>
         <span class="c-m" @click="goHome">首页</span>
         <div v-if="!showManage" class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
-          <i class="icon mt-search-o"></i>
+          <i class="icon iconfont iconsearch"></i>
           <span>搜索商品</span>
         </div>
       </div>
