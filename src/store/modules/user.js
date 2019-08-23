@@ -1,6 +1,6 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
 import { postFetch, getFetch } from '@/network/request/HttpExtension'
-import { API_URL } from '@/constants/hostConfig'
+import { API_URL, APP_ID } from '@/constants/hostConfig'
 import { getUserInfoWechat } from "@/action/action";
 
 const state = {
@@ -40,12 +40,14 @@ const actions = {
     wx.login({
       success: function (res_login) {
         if (res_login.code) {
+          var appid = `${APP_ID}`
           wx.getUserInfo({
             success: function (res) {
               var jsonData = {
                 code: res_login.code,
                 encryptedData: res.encryptedData,
-                iv: res.iv
+                iv: res.iv,
+                appid: appid
               };
               if (shopId) {
                 jsonData.shopId = shopId
