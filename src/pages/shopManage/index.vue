@@ -40,6 +40,15 @@
       >
     </div>
     <div class="name" style="height: 65rpx;">
+      <span>微信号：</span>
+      <input
+        maxlength="30"
+        placeholder="微信号"
+        placeholder-style="font-size: 24rpx"
+        v-model="shop.wechatId"
+      >
+    </div>
+    <div class="name" style="height: 65rpx;">
       <span>起送金额：</span>
       <input
         type="digit"
@@ -61,17 +70,6 @@
       >
       <div class="mid-r" @click="showSinglePicker">元</div>
     </div>
-    <!-- <div class="name" style="height: 65rpx;">
-      <span>配送范围：</span>
-      <input
-        type="digit"
-        maxlength="5"
-        placeholder="例如:1.2"
-        placeholder-style="font-size: 24rpx"
-        v-model="shop.scope"
-      >
-      <div class="mid-r" @click="showSinglePicker">公里</div>
-    </div> -->
     <div class="b-mid" style="height: 65rpx;">
       <span class="mid-l">商店状态:</span>
       <div class="mid-r" @click="showSinglePicker">

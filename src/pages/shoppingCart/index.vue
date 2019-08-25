@@ -114,6 +114,12 @@
           <span>营业时间: 全天</span>
         </div>
       </div>
+      <div class="delivery">
+        <div class="btm">
+          <i class="icon mt-clock-s"></i>
+          <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制微信号</span>
+        </div>
+      </div>
       <div class="delivery" v-if="shopInfo.bulletin">
         <div class="notice">
           <span>{{shopInfo.bulletin}}</span>
@@ -333,6 +339,9 @@ export default {
       "previewItemAction"
     ]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    copy() {
+      wx.setClipboardData({data: this.shopInfo.wechatId});
+    },
     updateGoods(goodsModel) {
       postFetch("/goods/upload2", goodsModel, false).then(response => {
         this.showEdit = false;
