@@ -14,7 +14,7 @@
             <span @click="getGoods()">搜索</span>
           </div>
         </div>
-        <div class="cate-c">
+        <div class="cate-c" v-if="userInfo.role == 3">
           <span
             class="c-l"
             :style="{'font-weight': pageIndex == null  ? 'bold;' : null}"
@@ -35,7 +35,7 @@
           >店员</span>
         </div>
       </div>
-      <div class="list-c">
+      <div class="list-c" :style="top">
         <scroll-view class="list-r" :scroll-y="true" :scroll-top="scrollTop" @scrolltolower="lower">
           <div class="item-list" v-for="(item, index) in list.datas" :key="index">
             <div class="item">
@@ -128,6 +128,12 @@ export default {
     ...mapState("submitOrder", ["orderDetail"]),
     lineStyle() {
       return "bold;";
+    },
+    top() {
+      if (this.userInfo.role != 3) {
+        return "top: 90rpx;";
+      }
+      return "top: 150rpx;";
     },
     path() {
       return `${GOODS_URL_PREFIX}`;
@@ -541,7 +547,6 @@ export default {
   .list-c {
     display: flex;
     position: fixed;
-    top: 150rpx;
     width: 100%;
     bottom: 0rpx;
     .list-l {

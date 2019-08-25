@@ -45,19 +45,6 @@ const homeData = {
           "sequence": 300,
           "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
           "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
-        }, {
-          "brand_type": -1,
-          "code": 101574,
-          "first_tag_codes": [],
-          "gray_switch": 0,
-          "path": "/pages/userList/main",
-          "gray_url": "http://p0.meituan.net/jungle/45ff2f098a20a77122bff8385192f0ec10547.png",
-          "method": 1258576,
-          "name": "人员列表",
-          "second_tag_codes": [],
-          "sequence": 200,
-          "skip_protocol": "channel?category_type=101574&category_text=%E7%BE%8E%E5%9B%A2%E8%B6%85%E5%B8%82",
-          "url": "iconrenyuanliebiao"
         },
         {
           "brand_type": -1,
