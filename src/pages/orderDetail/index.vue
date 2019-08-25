@@ -8,8 +8,11 @@
           <div v-else-if="orderDetail.refundStatus==1">
             <span class="address-info">等待退款</span>
             <p class="address-info1" v-if="orderDetail.refundExplain">退款原因：{{orderDetail.refundExplain}}</p>
-          </div>        
-          <span class="address-info" v-else-if="orderDetail.refundStatus==2 || orderDetail.refundStatus==3">退款成功</span>
+          </div>    
+          <div v-else-if="orderDetail.refundStatus==2 || orderDetail.refundStatus==3">
+            <span class="address-info">退款成功</span>
+            <p class="address-info1" v-if="orderDetail.refundExplain">退款原因：{{orderDetail.refundExplain}}</p>
+          </div>    
           <span class="address-info" v-else-if="orderDetail.deliveryStatus==1">已支付，等待商家配送</span>
           <span class="address-info" v-else-if="orderDetail.deliveryStatus==2">配送中</span>
           <span class="address-info" v-else-if="orderDetail.deliveryStatus==3">已完成</span>

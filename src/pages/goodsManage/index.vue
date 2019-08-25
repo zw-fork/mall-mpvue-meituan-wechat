@@ -46,6 +46,16 @@
         v-model="goods.min_price"
       >
     </div>
+    <div class="name">
+      <span>条形码：</span>
+      <input
+        placeholder="请填写商品条形码(40字内)"
+        maxlength="40"
+        type="number"
+        placeholder-style="font-size: 24rpx"
+        v-model="goods.barcode"
+      >
+    </div>
     <div class="b-mid">
       <div class="mid-l">
         <span>商品分类:</span>
@@ -279,6 +289,7 @@ export default {
       name: "",
       categoryName: "",
       min_price: "",
+      barcode: "",
       picture: undefined
     };
     if (options.barcode) {
@@ -292,6 +303,7 @@ export default {
         this.goods.name = result.goodsName;
         this.goods.min_price = result.price;
         this.goods.picture = result.ssoImg;
+        this.goods.barcode = result.code;
       }
     })
     }

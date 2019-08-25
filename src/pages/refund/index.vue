@@ -173,7 +173,9 @@ export default {
     refund() {
       var refund = {}
       refund.refundStatus = 1
-      refund.refundExplain = this.orderDetail.refundExplain
+      if (this.orderDetail.refundExplain) {
+        refund.refundExplain = this.orderDetail.refundExplain
+      }
       getFetch('/order/updateStatus/' + this.orderDetail.number, refund, false).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];

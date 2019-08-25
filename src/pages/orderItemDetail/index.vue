@@ -211,7 +211,7 @@ export default {
           if (res.confirm) {
             that.refundDataAction({
               orderNo: that.orderByShopIdDetail.number,
-              // refundFee: that.orderByShopIdDetail.realFee * 100
+              refundDesc: "",
               refundFee: that.orderByShopIdDetail.realFee * 100
             });
           } else if (res.cancel) {
