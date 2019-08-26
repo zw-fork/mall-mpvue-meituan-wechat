@@ -60,7 +60,7 @@
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in foodList" :key="index">
+        <div class="item" v-for="(item, index) in foodList" :key="index" @click="editGoods(item.goodsId)">
           <img :src="path + item.picture">
           <div class="item-r">
             <div class="r-t">
@@ -202,6 +202,11 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderByIdAction", "refundDataAction"]),
+    editGoods(goodsId) {
+      wx.navigateTo({
+        url: "/pages/goodsManage/main?id=" + goodsId
+      });
+    },
     copy() {
     wx.setClipboardData({data: this.orderByShopIdDetail.number});
     },
