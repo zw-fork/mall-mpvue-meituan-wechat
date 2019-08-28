@@ -36,7 +36,7 @@
           </div>
           <div
             class="btn"
-            @click="refund"
+            @click="refund(null)"
             v-if="orderByShopIdDetail.adminCanRefund && orderByShopIdDetail.status==2 && userInfo.role==2"
           >
             <span>退款</span>
@@ -60,14 +60,20 @@
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in foodList" :key="index" @click="editGoods(item.goodsId)">
-          <img :src="path + item.picture">
+        <div class="item" v-for="(item, index) in foodList" :key="index">
+          <img :src="path + item.picture" @click="editGoods(item.goodsId)">
           <div class="item-r">
             <div class="r-t">
               <span>{{item.name}}</span>
               <span>￥{{item.totalPrice}}</span>
             </div>
-            <span>x{{item.sequence}}</span>
+            <div class="r-t">
+              <span>x{{item.sequence}}</span>
+              <div class="btn" @click="refund(item.id)" v-if="!item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3">
+                <span>退款</span>
+              </div>
+              <span v-else-if="item.refundTime" @click="refund(item.id)">已退款</span>
+            </div>
           </div>
         </div>
       </div>
@@ -77,6 +83,10 @@
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line>
+        <div class="totle-price" v-if="orderByShopIdDetail.refundFee">
+          <span class="m">已退款</span>
+          <span class="r">￥{{orderByShopIdDetail.refundFee}}</span>
+        </div>
         <div class="totle-price">
           <span class="m">小计</span>
           <span class="r">￥{{realFee}}</span>
@@ -155,7 +165,6 @@
 </template>
 
 <script>
-import sepLine from "@/components/sep-line";
 import { openLocation } from "@/utils/wxapi";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
@@ -197,9 +206,6 @@ export default {
       return "";
     }
   },
-  components: {
-    sepLine
-  },
   methods: {
     ...mapActions("submitOrder", ["getOrderByIdAction", "refundDataAction"]),
     editGoods(goodsId) {
@@ -210,7 +216,7 @@ export default {
     copy() {
     wx.setClipboardData({data: this.orderByShopIdDetail.number});
     },
-    refund() {
+    refund(itemId) {
       var that = this;
       if (this.orderByShopIdDetail.refundStatus == 1) {
                       wx.showModal({
@@ -228,8 +234,12 @@ export default {
         }
       });
       } else {
+        var urlPath = "/pages/refund/main?orderId=" + this.orderByShopIdDetail.number
+        if (itemId) {
+          urlPath += "&itemId=" + itemId
+        }
         wx.navigateTo({
-            url: "/pages/refund/main?orderId=" + this.orderByShopIdDetail.number
+            url: urlPath
         });
       }
     },
@@ -366,10 +376,6 @@ export default {
     padding: 10rpx;
   }
 }
-.bottom-a {
-  display: flex;
-  align-items: center;
-  background-color: white;
   .btn {
     display: flex;
     border: 2rpx solid $blue-color;
@@ -381,6 +387,10 @@ export default {
       margin: 6rpx 10rpx;
     }
   }
+.bottom-a {
+  display: flex;
+  align-items: center;
+  background-color: white;
 }
 .container {
   display: flex;

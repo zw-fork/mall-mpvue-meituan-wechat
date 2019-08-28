@@ -55,7 +55,10 @@
               <span>{{item.name}}</span>
               <span>￥{{item.totalPrice}}</span>
             </div>
-            <span>x{{item.sequence}}</span>
+            <div class="r-t">
+              <span>x{{item.sequence}}</span>
+              <span v-if="item.refundTime">已退款</span>
+            </div>
           </div>
         </div>
       </div>
@@ -70,6 +73,10 @@
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line>
+        <div class="totle-price" v-if="orderDetail.refundFee">
+          <span class="m">已退款</span>
+          <span class="r">￥{{orderDetail.refundFee}}</span>
+        </div>
         <div class="totle-price">
           <span class="m">小计</span>
           <span class="r">￥{{realFee}}</span>

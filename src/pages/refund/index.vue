@@ -5,17 +5,21 @@
         <div class="delivery-time apply-return">
               <div class='list'>
         <div class='item acea-row row-between-wrapper'>
+          <div>退款类型</div>
+          <div class='num'>{{item.totalPrice ? "部分退款" : "全额退款"}}</div>
+        </div>
+        <div class='item acea-row row-between-wrapper'>
           <div>退款金额</div>
-          <div class='num'>￥{{realFee}}</div>
+          <div class='num'>￥{{item.totalPrice? item.totalPrice : realFee}}</div>
         </div>
         <div class='item textarea acea-row row-between'>
           <div>退款原因</div>
-          <textarea v-model="orderDetail.refundExplain" placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
+          <textarea :disabled="item.refundTime || orderDetail.status == 3" v-model="refundExplain" placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
         </div>
     </div>
         </div>
         <div class="bottom-a">
-          <div class="btn"  @click="refund()">
+          <div class="btn"  @click="refund()" v-if="!item.refundTime && orderDetail.status != 3">
             <span>申请退款</span>
           </div>
         </div>
@@ -37,14 +41,17 @@
       </div>
       <div class="line-sp"></div>
       <div class="list">
-        <div class="item" v-for="(item, index) in itemList" :key="index">
-          <img :src="path + item.picture">
-          <div class="item-r">
+        <div class="item" v-for="(itemA, index) in itemList" :key="index">
+          <img :src="path + itemA.picture">
+          <div class="item-r"  :style="{'border': item.id == itemA.id ? '1px solid red' : null}">
             <div class="r-t">
-              <span>{{item.name}}</span>
-              <span>￥{{item.totalPrice}}</span>
+              <span>{{itemA.name}}</span>
+              <span>￥{{itemA.totalPrice}}</span>
             </div>
-            <span>x{{item.sequence}}</span>
+            <div class="r-t">
+              <span>x{{itemA.sequence}}</span>
+              <span v-if="itemA.refundTime">已退款</span>
+            </div>
           </div>
         </div>
       </div>
@@ -59,6 +66,10 @@
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line>
+        <div class="totle-price" v-if="orderDetail.refundFee">
+          <span class="m">已退款</span>
+          <span class="r">￥{{orderDetail.refundFee}}</span>
+        </div>
         <div class="totle-price">
           <span class="m">小计</span>
           <span class="r">￥{{realFee}}</span>
@@ -152,6 +163,8 @@ export default {
       itemList: [],
       tabIndex: 0,
       reason: undefined,
+      item: {},
+      refundExplain: '',
       orderDetail: {}
     };
   },
@@ -173,8 +186,9 @@ export default {
     refund() {
       var refund = {}
       refund.refundStatus = 1
-      if (this.orderDetail.refundExplain) {
-        refund.refundExplain = this.orderDetail.refundExplain
+      refund.refundExplain = this.refundExplain
+      if (this.item.id) {
+        refund.itemId = this.item.id
       }
       getFetch('/order/updateStatus/' + this.orderDetail.number, refund, false).then(response => {
         var pages = getCurrentPages();
@@ -248,10 +262,22 @@ export default {
       this.tabIndex = 1;
     }
   },
-     onLoad(options) {
+  onLoad(options) {
+    this.item = {};
+    this.refundExplain = ''
       getFetch("/order/" + options.orderId, {}, true).then(response => {
         this.orderDetail = response.result
         this.itemList = response.result.itemList
+        if (options.itemId) {
+          for (var index in this.itemList) {
+            if (this.itemList[index].id == options.itemId) {
+              this.item = this.itemList[index]
+              this.refundExplain = this.item.refundExplain
+            }
+          }
+        } else {
+          this.refundExplain = this.orderDetail.refundExplain
+        }
       });
    }
 };
