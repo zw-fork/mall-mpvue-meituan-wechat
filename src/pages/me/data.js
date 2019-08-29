@@ -51,7 +51,7 @@ const homeData = {
           "code": 101574,
           "first_tag_codes": [],
           "gray_switch": 0,
-          "path": "/pages/shoppingCart/main",
+          "path": "/pages/shoppingManage/main",
           "gray_url": "http://p0.meituan.net/jungle/45ff2f098a20a77122bff8385192f0ec10547.png",
           "method": 1258576,
           "name": "店铺展示",

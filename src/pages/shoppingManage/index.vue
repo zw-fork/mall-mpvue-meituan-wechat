@@ -33,13 +33,9 @@
           @click="shopClick"
         >商家</span>
         <span class="c-m" @click="goHome">首页</span>
-        <div class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
-          <i class="icon iconfont iconsearch"></i>
-          <span>搜索商品</span>
-        </div>
       </div>
     </div>
-    <div class="list-c" v-if="pageIndex === 0">
+    <div class="list-c" v-if="pageIndex === 0" >
       <scroll-view class="list-l" :scroll-y="true">
         <div
           class="l-item"
@@ -49,7 +45,6 @@
           @click="categoryClick(item, index)"
         >
           <span>{{item.name}}</span>
-          <text class="count" v-if="item.count > 0">{{item.count}}</text>
         </div>
       </scroll-view>
       <scroll-view
@@ -65,12 +60,12 @@
         <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
           <div class="item">
             <div class="item-l">
-              <img :src="path + item.picture">
+              <img :src="path + item.picture"> 
             </div>
             <div class="item-r">
               <div
                 class="div-title"
-                v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId"
+                v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId && showManage"
               >
                 <span class="title">{{item.name}}</span>
                 <i
@@ -83,19 +78,6 @@
               <span class="sub-title">已售1234件</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
-                <div class="add-item" v-if="!showManage">
-                  <div
-                    class="add-l"
-                    @click.stop="reduceClick(item, index, spus.index)"
-                    v-if="item.sequence > 0"
-                  >
-                    <i class="icon iconfont iconminus-circle"></i>
-                    <span>{{item.sequence}}</span>
-                  </div>
-                  <div class="add-r" @click.stop="addClick(item, index, spus.index)">
-                    <i class="icon iconfont iconplus-circle"></i>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -157,37 +139,6 @@
         </ul>
       </section>
     </div>
-    <div class="footer-c" v-if="pageIndex === 0">
-      <div class="c-m">
-        <div class="l">
-          <span class="price" v-if="totalPrice > 0 || productCount > 0">
-            ￥
-            <span>{{totalPrice}}</span>
-          </span>
-          <div class="m-l">
-            <span class="l-l">另需配送费￥{{shopInfo.support_pay}}</span>
-            <div class="l-m"></div>
-            <span class="l-r" v-if="shopInfo.type != 1">小区内配送</span>
-          </div>
-        </div>
-        <div
-          class="m-r"
-          :style="{'background-color': btnTitle === '去结算' ? '#FF6347' : '#969696'}"
-          @click="orderClick"
-        >
-          <span :style="{color: btnTitle === '去结算' ? '#FFFFFF' : '#ffffff'}">{{btnTitle}}</span>
-        </div>
-      </div>
-      <div class="cart-c">
-        <i
-          mode="widthFix"
-          class="icon iconfont icongouwuche"
-          :style="productCount > 0 ? 'color: #1296db' : 'color: #969696'"
-          @click="toggleCartList()"
-        ></i>
-        <span v-if="productCount > 0">{{productCount}}</span>
-      </div>
-    </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
         <i class="icon iconfont iconedit"></i>
@@ -225,6 +176,7 @@ export default {
       selectIndex: undefined,
       shopId: undefined,
       showEdit: false,
+      showManage: false,
       show: false,
       divStyle: "",
       scrollTop: undefined,
@@ -251,6 +203,12 @@ export default {
     ]),
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
+    bottomStyle() {
+      if (this.showManage) {
+        return "bottom: 0rpx;";
+      }
+      return "bottom: 100rpx;";
+    },
     lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;";
     },
@@ -604,6 +562,7 @@ export default {
     this.shopId = options.shopId;
     if (!this.shopId) {
       this.shopId = this.userInfo.shopId;
+      this.showManage = this.shopId ? true: false;
     }
     var update = false;
     this.showCart = false;
@@ -943,7 +902,7 @@ export default {
     position: fixed;
     top: 200rpx;
     width: 100%;
-    bottom: 100rpx;
+    bottom: 0rpx;
 
     .list-l {
       display: flex;
