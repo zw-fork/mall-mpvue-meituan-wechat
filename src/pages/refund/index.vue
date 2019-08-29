@@ -10,7 +10,7 @@
         </div>
         <div class='item acea-row row-between-wrapper'>
           <div>退款金额</div>
-          <div class='num'>￥{{item.totalPrice? item.totalPrice : realFee}}</div>
+          <div class='num'>￥{{item.totalPrice? item.totalPrice : balance}}</div>
         </div>
         <div class='item textarea acea-row row-between'>
           <div>退款原因</div>
@@ -165,7 +165,9 @@ export default {
       reason: undefined,
       item: {},
       refundExplain: '',
-      orderDetail: {}
+      orderDetail: {
+        shopInfo:{}
+      }
     };
   },
   computed: {
@@ -177,6 +179,10 @@ export default {
     },
     realFee() {
       return this.orderDetail.realFee;
+    },
+    // 可退余额
+    balance() {
+      return parseFloat(this.orderDetail.realFee - this.orderDetail.refundFee).toFixed(2);
     }
   },
   components: {
@@ -186,9 +192,11 @@ export default {
     refund() {
       var refund = {}
       refund.refundStatus = 1
-      refund.refundExplain = this.refundExplain
       if (this.item.id) {
         refund.itemId = this.item.id
+      }
+      if (this.refundExplain) {
+        refund.refundExplain = this.refundExplain
       }
       getFetch('/order/updateStatus/' + this.orderDetail.number, refund, false).then(response => {
         var pages = getCurrentPages();

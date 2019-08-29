@@ -57,7 +57,7 @@
             </div>
             <div class="r-t">
               <span>x{{item.sequence}}</span>
-              <span v-if="item.refundTime">已退款</span>
+              <span @click="refund(item.id)" v-if="item.refundTime && orderDetail.refundFee && orderDetail.refundStatus!=2 && orderDetail.refundStatus!=3">已退款</span>
             </div>
           </div>
         </div>
@@ -191,6 +191,13 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["getOrderByIdAction"]),
+    refund(itemId) {
+      var urlPath = "/pages/refund/main?orderId=" + this.orderDetail.number
+      if (itemId) {
+        urlPath += "&itemId=" + itemId
+      }
+      wx.navigateTo({url: urlPath});
+    },
     copy() {
     wx.setClipboardData({data: this.orderDetail.number});
     },
