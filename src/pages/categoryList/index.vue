@@ -337,6 +337,7 @@ export default {
     }
   },
   onShow(options) {
+    this.showEdit = false;
     this.getGoods();
   }
 };
