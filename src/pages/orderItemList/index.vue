@@ -255,7 +255,7 @@ export default {
   onShow(options) {
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
-    var status = currPage.data.status;
+    var status = currPage.__data__.status;
     if (status) {
       currPage.data = {}
       var data = {
@@ -267,9 +267,15 @@ export default {
         data.deliveryStatus = status.deliveryStatus;
         this.pageIndex = parseInt(status.deliveryStatus);
       }
-      if (status.refundStatus) {
+      if (status.refundStatus == 4) {
         data.refundStatus = status.refundStatus;
         this.pageIndex = 4;
+      }else if (status.refundStatus == -1) {  // 部分退款
+        if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
+          data.deliveryStatus = this.pageIndex;
+        } else if (this.pageIndex == 4) {
+          data.refundStatus = -1;
+        }
       }
       var status = [this.pageIndex];
       this.statusList = status;

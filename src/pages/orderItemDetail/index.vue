@@ -346,9 +346,10 @@ export default {
   onShow(options) {
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
-    if (currPage.data.status) {
+    var data = currPage.data.status
+    if (data) {
        var refund = {};
-       refund.refundStatus = 4
+       refund.refundStatus = data
         var prevPage = pages[pages.length - 2];
         prevPage.setData({
           status: refund

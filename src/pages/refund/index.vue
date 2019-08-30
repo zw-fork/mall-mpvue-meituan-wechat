@@ -201,9 +201,15 @@ export default {
       getFetch('/order/updateStatus/' + this.orderDetail.number, refund, false).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
-        prevPage.setData({
-          status:4
-        });
+        if (this.item.id) {
+          prevPage.setData({
+            status:-1
+          });
+        } else {
+          prevPage.setData({
+            status:4
+          });
+        }
         wx.navigateBack({ delta: 1 });
       })
     },
