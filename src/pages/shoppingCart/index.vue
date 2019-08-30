@@ -68,18 +68,7 @@
               <img :src="path + item.picture">
             </div>
             <div class="item-r">
-              <div
-                class="div-title"
-                v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId"
-              >
-                <span class="title">{{item.name}}</span>
-                <i
-                @click.stop="manageGoods($event, index)"
-                  class="icon iconfont icondian"
-                  style="float:right;position:relative;display:inline-block"
-                ></i>
-              </div>
-              <span class="title" v-else>{{item.name}}</span>
+              <span class="title">{{item.name}}</span>
               <span class="sub-title">已售1234件</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>

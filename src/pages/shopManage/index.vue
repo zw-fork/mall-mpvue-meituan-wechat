@@ -52,7 +52,7 @@
       <span>起送金额：</span>
       <input
         type="digit"
-        maxlength="3"
+        maxlength="4"
         placeholder="例如:1"
         placeholder-style="font-size: 24rpx"
         v-model="shop.min_price"
@@ -63,7 +63,7 @@
       <span>配送费：</span>
       <input
         type="digit"
-        maxlength="3"
+        maxlength="4"
         placeholder="例如:1"
         placeholder-style="font-size: 24rpx"
         v-model="shop.support_pay"
