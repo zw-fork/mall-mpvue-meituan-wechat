@@ -68,7 +68,9 @@
               <img :src="path + item.picture">
             </div>
             <div class="item-r">
-              <span class="title">{{item.name}}</span>
+              <div class="div-title">
+                <span class="title">{{item.name}}</span>
+              </div>
               <span class="sub-title">已售1234件</span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>

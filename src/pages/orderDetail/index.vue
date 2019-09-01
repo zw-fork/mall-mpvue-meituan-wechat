@@ -16,6 +16,7 @@
           <span class="address-info" v-else-if="orderDetail.deliveryStatus==1">已支付，等待商家配送</span>
           <span class="address-info" v-else-if="orderDetail.deliveryStatus==2">配送中</span>
           <span class="address-info" v-else-if="orderDetail.deliveryStatus==3">已完成</span>
+          <span class="address-info" v-else-if="orderDetail.status==4">支付超时取消</span>
           <span class="address-info" v-else>其他</span>
         </div>
         <div class="line-sp"></div>
