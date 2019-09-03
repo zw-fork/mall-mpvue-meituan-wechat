@@ -399,7 +399,7 @@ export default {
       this.selectSkuAction({ item, index: item.preIndex });
     }
   },
-  onLoad(options) {
+  onShow(options) {
     this.showEdit = false;
     this.getGoods();
   }

@@ -81,6 +81,7 @@ export default {
           success: function (res_login) {
             if (res_login.code) {
               var appid = `${APP_ID}`
+              wx.showLoading({ title: "加载中...", mask: true });
               wx.getUserInfo({
                 success: function (res) {
                   var jsonData = {
@@ -94,6 +95,7 @@ export default {
                     that.changeUserInfoMut(response.result)
                     that.showPopup = false;
                     that.$emit('func',false)
+                    wx.hideLoading();
                   })
                 }
               })
