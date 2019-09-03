@@ -51,7 +51,6 @@ export default {
     ...mapState("user", ["userInfo"])
     },
   methods: {
-    ...mapActions("user", ["getUserInfo"]),
     ...mapMutations("user", ["changeUserInfoMut"]),
     getUserInfo: function(e) {
       var that = this;
@@ -110,7 +109,13 @@ export default {
     close() {
       this.show = false
     }
-  }
+  },
+  onShow(options) {
+    if (this.userInfo.id) {
+        this.showPopup = false;
+        this.$emit('func',false)
+    }
+  },
 }
 </script>
 
