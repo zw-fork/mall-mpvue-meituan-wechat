@@ -1,21 +1,6 @@
 <template>
   <div class="container">
     <div class="content">
-      <div class="header-c">
-        <div class="header-l">
-          <i
-            class="icon iconfont iconlocation"
-            :style="{color: '#434343', 'font-size': 38 + 'rpx'}"
-          ></i>
-          <span @click="updateWxAddress">{{address? address : "定位中..."}}</span>
-          <i
-            @click="updateAddress"
-            class="icon iconfont icondingwei"
-            :style="{color: '#434343', 'font-size': 34 + 'rpx'}"
-            style="position:absolute;right:30rpx;"
-          ></i>
-        </div>
-      </div>
       <div class="category-list">
         <scroll-view class="item-list" :scroll-y="true">
           <div
@@ -143,31 +128,8 @@ export default {
     ...mapState("user", ["userInfo"])
   },
   onLoad(options) {
-    this.qqmapsdk = new QQMapWX({
-      key: "2TRBZ-W426X-UEN4V-TVLRM-OP4OT-2XBCL"
-    });
-    var that = this;
-    this.qqmapsdk.reverseGeocoder({
-      success(res) {
-        console.log(res);
-        that.address = res.result.address;
-        that.location = res.result.location;
-        that.userInfo.location = res.result.location;
-        getFetch(
-          "/shop/nearShop",
-          {
-            longitude: res.result.location.lng,
-            latitude: res.result.location.lat,
-            dis: 21.5
-          },
-          false
-        ).then(response => {
-          that.shopList = response.result;
-        });
-      },
-      fail(res) {
-        console.log(`res:`, res);
-      }
+    getFetch("/shop/list", {status: 1}, false).then(response => {
+      this.shopList = response.result;
     });
   },
   onPullDownRefresh: function() {
@@ -389,7 +351,6 @@ export default {
 
     .category-list {
       display: flex;
-      margin-top: 80rpx;
       flex-direction: column;
 
       .filter-bar {
@@ -429,7 +390,7 @@ export default {
       .item-list {
         display: block;
         position: fixed;
-        top: 70rpx;
+        top: 0rpx;
         bottom: 0rpx;
         width: 100%;
         background-color: white;

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <authorize @func="getMsgFormSon" ref="authorize" :show="show"></authorize>
     <div class="header-c">
       <div class="tab-c">
         <div
@@ -84,10 +85,12 @@ import { openLocation } from "@/utils/wxapi";
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 import { jointStyle } from "@/utils/style";
+import authorize from "@/components/authorize";
 
 export default {
   data() {
     return {
+      show: false,
       btnBackgroundColor: undefined,
       order: {},
       itemData: {},
@@ -123,11 +126,20 @@ export default {
     }
   },
   components: {
-    sepLine
+    sepLine,
+    authorize
+  },
+  mounted() {
+    if (this.$refs.authorize) {
+      var p = this.$refs.authorize.getUserInfo();
+    }
   },
   methods: {
     ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
-    ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber"]),
+    ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber", "getUserInfo", "login"]),
+    getMsgFormSon(data) {
+      this.show = data;
+    },
     bindPhoneNumber(e) {
       var target = e.target;
       target.openid = this.userInfo.openid;

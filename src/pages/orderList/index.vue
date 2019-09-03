@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth"></authorize>
     <div class="header-c">
       <div class="cate-c">
         <span
@@ -137,6 +138,7 @@
 import { jointStyle } from "@/utils/style";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { getFetch } from "@/network/request/HttpExtension";
+import authorize from "@/components/authorize";
 
 export default {
   data() {
@@ -145,8 +147,12 @@ export default {
       scrollTop: 0,
       statusList: [],
       left: "40rpx",
+      showAuth: false,
       status: undefined
     };
+  },
+ components: {
+    authorize
   },
   methods: {
     ...mapActions("submitOrder", [
@@ -156,6 +162,9 @@ export default {
       "updateOrderStatusAction"
     ]),
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
+     getMsgFormSon(data) {
+      this.showAuth = data;
+    },   
     updateOrderList(status) {
       this.scrollTop = 0;
       this.pageIndex = status;
@@ -257,6 +266,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$refs.authorize) {
+      var p = this.$refs.authorize.getUserInfo();
+    }
     this.scrollTop = 0;
     this.updateOrderList(-1);
   },

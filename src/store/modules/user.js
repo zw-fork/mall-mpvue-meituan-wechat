@@ -2,6 +2,7 @@
 import { postFetch, getFetch } from '@/network/request/HttpExtension'
 import { API_URL, APP_ID } from '@/constants/hostConfig'
 import { getUserInfoWechat } from "@/action/action";
+import { login } from "@/utils/wxapi";
 
 const state = {
   userInfo: {}
@@ -14,19 +15,37 @@ const mutations = {
 }
 
 const actions = {
-  getUserInfo({ state, commit }, { jsonData }) {
-    getUserInfoWechat(jsonData).then(response => {
-      commit('changeUserInfoMut', response.result)
-      if (jsonData.shopId) {
-        wx.redirectTo({
-          url: '/pages/shoppingCart/main?shopId=' + jsonData.shopId
-        })
-      } else {
-        wx.switchTab({
-          url: '/pages/home/main'
-        })
+  getUserInfo({ state, commit }, {}) {
+    wx.getSetting({
+      success: function(res) {
+        if (res.authSetting["scope.userInfo"]) {
+          wx.login({
+            success: function (res_login) {
+              if (res_login.code) {
+                var appid = `${APP_ID}`
+                wx.getUserInfo({
+                  success: function (res) {
+                    var jsonData = {
+                      code: res_login.code,
+                      encryptedData: res.encryptedData,
+                      iv: res.iv,
+                      appid: appid
+                    };
+                    getUserInfoWechat(jsonData).then(response => {
+                      wx.setStorageSync("sessionId", response.result.token)
+                      response.result.openid = null
+                      commit('changeUserInfoMut', response.result)
+                       
+                    })
+                  }
+                })
+              }
+            }
+          })
+        } else {
+        }
       }
-    })
+    });
   },
   updateDefaultAddress({ state, commit }, { wechat }) {
     var params = { 'wechat': wechat }

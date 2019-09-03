@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/index/main",
     "pages/home/main",
     "pages/shoppingManage/main",
     "pages/asset/main",

@@ -1,5 +1,6 @@
 <template>
   <div class="container" @click="update">
+    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth"></authorize>
     <div class="header-c">
       <img :src="userInfo.avatarUrl" alt @click="updateUser(userInfo)">
       <div class="info-c" @click="visibleItemModal = !visibleItemModal">
@@ -16,8 +17,7 @@
             class="item"
             v-for="(item, index) in orderList"
             :key="index"
-            @click="itemClick(item)"
-          >
+            @click="itemClick(item)">
             <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
             <span class="item-title">{{item.name}}</span>
             <text class="count" v-if="orderCount[index]">{{orderCount[index]}}</text>
@@ -100,12 +100,14 @@
 import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { homeData } from "./data";
 import { getFetch } from "@/network/request/HttpExtension";
+import authorize from "@/components/authorize";
 
 export default {
   data() {
     return {
       visibleItemModal: false,
       orderCount: [],
+      showAuth: false,
       show: false,
       showEdit: false,
       categoryArr: [{ items: [] }, { items: [] }],
@@ -126,10 +128,19 @@ export default {
       ]
     };
   },
+ components: {
+    authorize
+  },
   computed: {
     ...mapState("user", ["userInfo"])
   },
   mounted() {
+    if (this.$refs.authorize) {
+      var p = this.$refs.authorize.getUserInfo();
+      // p.then(function (value) {
+      //   console.log(value);
+      // });
+    }
     var categoryData = homeData.headData.data.primary_filter;
     categoryData.map((item, index) => {
       this.orderList.push(item);
@@ -150,6 +161,9 @@ export default {
   methods: {
     ...mapMutations("user", ["changeUserInfoMut"]),
     ...mapActions("user", ["wxLocation"]),
+    getMsgFormSon(data) {
+      this.showAuth = data;
+    },
       goFeedback() {
          wx.navigateTo({
         url: "/pages/feedback/main"
