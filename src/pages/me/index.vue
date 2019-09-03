@@ -207,7 +207,7 @@ export default {
   },
   onShow(options) {
     if (this.userInfo.shopId) {
-      getFetch("/order/count/" + this.userInfo.shopId, false).then(response => {
+      getFetch("/order/count/" + this.userInfo.shopId, true).then(response => {
         var count = response.result;
         this.orderCount = [];
         this.orderCount.push(count.新订单);
@@ -217,10 +217,8 @@ export default {
     }
   },
   onPullDownRefresh: function() {
-    getFetch("/wechat/getCurrentUser", {}, false).then(response => {
-      this.changeUserInfoMut(response || {});
-      if (this.userInfo.shopId) {
-        getFetch("/order/count/" + this.userInfo.shopId, false).then(
+    if (this.userInfo.shopId) {
+      getFetch("/order/count/" + this.userInfo.shopId, true).then(
           response => {
             var count = response.result;
             this.orderCount = [];
@@ -229,8 +227,7 @@ export default {
             this.orderCount.push(count.退款);
           }
         );
-      }
-    });
+    }
   }
 };
 </script>

@@ -30,9 +30,6 @@ const state = {
 }
 
 const mutations = {
-  changeUserDataMut(state, info) {
-    state.user = info
-  },
   changeOrderDataMut(state, info) {
     state.orderList.datas = info.list
     state.orderList.page = info.nextPage
@@ -65,14 +62,6 @@ const actions = {
       commit('changeUserDataMut', user)
     })
   },
-  getOrderDataAction({ state, commit }, { uid, data }) {
-    wx.showLoading({ title: '加载中...', mask: true })
-    getFetch('/order', data, false).then(response => {
-      var result = response.result || {}
-      commit('changeOrderDataMut', result)
-      wx.hideLoading()
-    })
-  },
   getOrderItemDataAction({ state, commit }, { uid, data }) {
     wx.showLoading({ title: '加载中...', mask: true })
     getFetch('/order', data, false).then(response => {
@@ -81,9 +70,9 @@ const actions = {
       wx.hideLoading()
     })
   },
-  getOrderByIdAction({ state, commit }, { uid, data }) {
+  getOrderByIdAction({ state, commit }, {data }) {
     wx.showLoading({ title: '加载中...', mask: true })
-    getFetch('/order/' + uid + '/' + data.number, data, false).then(response => {
+    getFetch('/order/copy/' + data.number, data, false).then(response => {
       var result = response.result || {}
       commit('changeOrderByIdDataMut', result)
     //  wx.setStorageSync("cartList", result)
@@ -158,14 +147,13 @@ const actions = {
   postOrderDataAction({ state, commit }, { order }) {
     wx.showLoading({ title: '加载中...', mask: true })
     postFetch('/order', order, false).then(response => {
-      var user = response.result || {}
+      // 清空购物车缓存
       this.state.shoppingCart.shopInfo = {}
       state.orderDetail = {
         shopInfo: {}
       }
       var number = response.result.number
-      commit('changeUserDataMut', user)
-      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + number, { shopName: order.shopInfo.wxAddress.name + '-' + order.shopInfo.shopName }, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + number, { shopName: order.shopInfo.wxAddress.name + '-' + order.shopInfo.shopName }, false).then(response => {
         wx.requestPayment({
           timeStamp: response.result.timeStamp,
           nonceStr: response.result.nonceStr,

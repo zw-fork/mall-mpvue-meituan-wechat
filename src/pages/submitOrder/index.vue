@@ -135,7 +135,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("submitOrder", ["postOrderDataAction", "getOrderDataAction"]),
+    ...mapActions("submitOrder", ["postOrderDataAction"]),
     ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber", "getUserInfo", "login"]),
     getMsgFormSon(data) {
       this.show = data;
@@ -195,7 +195,6 @@ export default {
         this.currentOrder.addressInfo = this.currentOrder.shopInfo.addressModel;
         this.currentOrder.realFee = this.realFee;
         this.currentOrder.goodsPrice = this.goodsPrice;
-        this.currentOrder.uid = this.userInfo.openid;
         this.postOrderDataAction({ order: this.currentOrder });
       } else {
         wx.showToast({

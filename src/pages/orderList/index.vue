@@ -156,7 +156,6 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", [
-      "getOrderDataAction",
       "showOrderDetailAction",
       "getOrderByIdAction",
       "updateOrderStatusAction"
@@ -164,6 +163,10 @@ export default {
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
      getMsgFormSon(data) {
       this.showAuth = data;
+      if (!data) {
+        this.scrollTop = 0;
+        this.updateOrderList(-1);
+      }
     },   
     updateOrderList(status) {
       this.scrollTop = 0;
@@ -174,10 +177,12 @@ export default {
       } else if (status == 4) {
         data.refundStatus = -1;
       }
-      this.getOrderDataAction({
-        uid: this.userInfo.openid,
-        data: data
-      });
+      getFetch("/order", data, true).then( response => {
+            var result = response.result || {};
+            this.orderList.datas = result.list;
+            this.orderList.page = result.nextPage;
+          }
+      );
     },
     scroll(e) {
       this.currentScroll = e.target.scrollTop;
@@ -185,8 +190,6 @@ export default {
     lower(e) {
       if (this.orderList.page > 0) {
         this.scrollTop = this.currentScroll;
-        wx.showLoading({ title: "加载中...", mask: true });
-        var openid = this.userInfo.openid;
         var data = {};  
         if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
           data.deliveryStatus = this.pageIndex;
@@ -194,12 +197,11 @@ export default {
           data.refundStatus = -1;
         }
         data.page = this.orderList.page;
-        getFetch("/order", data, false).then(
+        getFetch("/order", data, true).then(
           response => {
             var result = response.result || {};
             this.orderList.datas = [...this.orderList.datas, ...result.list];
             this.orderList.page = result.nextPage;
-            wx.hideLoading();
           }
         );
       }
@@ -220,9 +222,7 @@ export default {
           selectStatus: selectStatus
         });
       } else {
-        var openid = this.userInfo.openid;
         this.getOrderByIdAction({
-          uid: openid,
           data: item
         });
       }
@@ -269,8 +269,6 @@ export default {
     if (this.$refs.authorize) {
       var p = this.$refs.authorize.getUserInfo();
     }
-    this.scrollTop = 0;
-    this.updateOrderList(-1);
   },
   computed: {
     ...mapState("submitOrder", ["orderList"]),

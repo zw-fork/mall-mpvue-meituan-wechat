@@ -2,7 +2,7 @@
   <div class="container">
     <div class="list-c">
       <div v-for="(item, index) in myAddress" :key="index">
-        <div class="item" v-if="shopInfo.wxAddress.name == item.wxAddress.name">
+        <div class="item" v-if="shopInfo.wxAddress && shopInfo.wxAddress.name == item.wxAddress.name">
           <div  class="i-l" @touchstart="showDeleteButton(item)" @touchend="clearLoop(item)">
             <div class="user-info">
               <span class="s-l">{{item.name}}</span>

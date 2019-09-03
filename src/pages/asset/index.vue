@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", [
-      "getOrderDataAction",
       "showOrderDetailAction",
       "getOrderByIdAction",
       "updateOrderStatusAction"

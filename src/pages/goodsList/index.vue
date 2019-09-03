@@ -306,7 +306,7 @@ export default {
         else if (barcode) {
           var code = barcode
           wx.showModal({
-            content: "该商品不存在，是否需要创建？",
+            content: "编号" + code + "商品不存在，是否需要创建？",
             confirmColor: "#FFC24A",
             success: function(res) {
               if (res.confirm) {

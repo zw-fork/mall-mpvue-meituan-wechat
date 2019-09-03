@@ -111,7 +111,7 @@ export default {
     }
   },
   onShow(options) {
-    if (this.userInfo.id) {
+    if (this.userInfo.id && this.showPopup) {
         this.showPopup = false;
         this.$emit('func',false)
     }

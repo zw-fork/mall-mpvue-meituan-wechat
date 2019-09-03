@@ -55,7 +55,6 @@ export default {
       styleA: "background-color: #87CEFA",
       clazzB: "icon mt-unselected-o",
       styleB: "background-color: none;",
-      userInfo: {},
       item: {
         radio: "2",
         gender: 1,
@@ -65,7 +64,8 @@ export default {
   },
   computed: {
     ...mapState("address", ["myAddress"]),
-    ...mapState("shoppingCart", ["shopInfo"])
+    ...mapState("shoppingCart", ["shopInfo"]),
+    ...mapState("user", ["userInfo"])
   },
   methods: {
     ...mapActions("address", ["saveOrUpdateAddress"]),
@@ -94,11 +94,6 @@ export default {
         this.telError = "";
       }
     }
-  },
-  mounted() {
-    getFetch("/wechat/getCurrentUser", {}, false).then(response => {
-      this.userInfo = response || {};
-    });
   }
 };
 </script>

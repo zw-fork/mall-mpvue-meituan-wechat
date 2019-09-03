@@ -294,8 +294,7 @@ export default {
       var update = false;
       if (flag) {
         update = true;
-        var openid = this.userInfo.openid;
-        this.getOrderByIdAction({ uid: openid, data: item });
+        this.getOrderByIdAction({ data: item });
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
