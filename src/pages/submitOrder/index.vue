@@ -7,7 +7,7 @@
           class="left"
           :style="{'background-color': tabIndex === 0 ? '#fff' : '#F8F8F8', 'font-weight': tabIndex === 0 ? 'bold' : ''}"
           @click="deliveryClick"
-        >小区配送</div>
+        >小区配送{{value}}</div>
       </div>
       <div class="delivery" v-if="tabIndex === 0">
         <div class="address-c" @click="addressClick()">
@@ -15,15 +15,15 @@
           <div class="address">
             <span
               class="address-info"
-              v-if="!currentOrder.shopInfo.addressModel"
+              v-if="!currentOrder.shopInfo.addressModel || !currentOrder.shopInfo.addressModel.name"
             >请添加配送地址...</span>
             <span
               class="address-info"
-              v-if="currentOrder.shopInfo.addressModel"
+              v-if="currentOrder.shopInfo.addressModel && currentOrder.shopInfo.addressModel.name"
             >{{currentOrder.shopInfo.wxAddress.name}} {{currentOrder.shopInfo.addressModel.house_number}} </span>
             <span
               class="user-info"
-              v-if="currentOrder.shopInfo.addressModel"
+              v-if="currentOrder.shopInfo.addressModel && currentOrder.shopInfo.addressModel.name"
             >{{currentOrder.shopInfo.addressModel.name}} {{currentOrder.shopInfo.addressModel.phone}}</span>
           </div>
           <i class="icon iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
@@ -91,6 +91,7 @@ export default {
   data() {
     return {
       show: false,
+      value: "",
       btnBackgroundColor: undefined,
       order: {},
       itemData: {},
@@ -139,6 +140,7 @@ export default {
     ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber", "getUserInfo", "login"]),
     getMsgFormSon(data) {
       this.show = data;
+      this.value = "  ";
     },
     bindPhoneNumber(e) {
       var target = e.target;

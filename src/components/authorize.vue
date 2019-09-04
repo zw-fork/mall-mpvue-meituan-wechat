@@ -16,6 +16,7 @@
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { API_URL, APP_ID } from '@/constants/hostConfig'
 import { getUserInfoWechat } from "@/action/action";
+import { getFetch } from "@/network/request/HttpExtension";
 
 export default {
   name: "authorize",
@@ -48,7 +49,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("user", ["userInfo"])
+    ...mapState("user", ["userInfo"]),
+    ...mapState("shoppingCart", ["shopInfo"])
     },
   methods: {
     ...mapMutations("user", ["changeUserInfoMut"]),
@@ -93,9 +95,15 @@ export default {
                   getUserInfoWechat(jsonData).then(response => {
                     wx.setStorageSync("sessionId", response.result.token)
                     that.changeUserInfoMut(response.result)
-                    that.showPopup = false;
-                    that.$emit('func',false)
-                    wx.hideLoading();
+                    if (that.shopInfo) {
+                      getFetch("/address/defaultAddress",
+                      { addressName: that.shopInfo.wxAddress.name }, true).then(response => {
+                        that.showPopup = false;
+                        that.shopInfo.addressModel = response.result || {}
+                        that.$emit('func',false, response.result)
+                        wx.hideLoading();
+                      }); 
+                    }          
                   })
                 }
               })

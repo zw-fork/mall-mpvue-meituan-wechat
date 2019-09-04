@@ -1,7 +1,7 @@
 <template>
   <div class="container" @click="update" @mousedown="update" v-if="!shopId || shopId == shopInfo.shopId">
     <div class="header-c">
-      <div class="header">
+      <div class="header" @click="openLocation">
         <div class="h-l">
           <img
             class="shop-logo"
@@ -9,7 +9,7 @@
           >
         </div>
         <div class="h-r">
-          <span class="r-l" @click="openLocation">地址: {{shopInfo.wxAddress.name}}</span>
+          <span class="r-l" >地址: {{shopInfo.wxAddress.name}}</span>
           <div class="r-t">
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
@@ -793,7 +793,6 @@ export default {
     .header {
       display: flex;
       background-color: white;
-      align-items: center;
       height: 130rpx;
 
       .h-l {

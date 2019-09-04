@@ -40,6 +40,7 @@ const mutations = {
   },
   currentOrderDataMut(state, info) {
     state.currentOrder = info
+    state.currentOrder.shopInfo.addressModel = info.shopInfo.addressModel || {}
   },
   orderDetailDataMut(state, info) {
     state.orderDetail = info

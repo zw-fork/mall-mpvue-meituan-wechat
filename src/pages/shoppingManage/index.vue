@@ -295,7 +295,6 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
-    ...mapActions("submitOrder", ["createOrderDetailAction"]),
     copy() {
       wx.setClipboardData({data: this.shopInfo.wechatId});
     },
@@ -455,7 +454,6 @@ export default {
       var order = {};
       order.shopInfo = this.shopInfo;
       order.itemList = selectedArr;
-      this.createOrderDetailAction({ order });
     },
     categoryClick(item, index) {
       this.tagIndex = index;

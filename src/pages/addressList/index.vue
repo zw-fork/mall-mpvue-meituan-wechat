@@ -43,7 +43,6 @@ export default {
       "getAddressDataAction",
       "deleteUserAddressDataAction"
     ]),
-    ...mapActions("user", ["updateDefaultAddress"]),
     showDeleteButton(item) {
       var that = this;
       this.Loop = setTimeout(function() {
@@ -77,8 +76,8 @@ export default {
         wx.navigateTo({ url: "/pages/addAddress/main" });
       }
     },
-    updateDefaultAddress2(addressId) {
-      this.shopInfo.addressModel = addressId
+    updateDefaultAddress2(addressModel) {
+      this.shopInfo.addressModel = addressModel
       wx.navigateBack({ delta: 1 })
     }
   },
