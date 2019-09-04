@@ -94,7 +94,7 @@ const actions = {
     refund.status = status
     refund.openid = order.uid
     if (order.status == 1 && status == 2) {
-      getFetch('/wxPay/unifiedOrder/' + order.uid + '/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {
         if (response.code == 200) {
           wx.requestPayment({
             timeStamp: response.result.timeStamp,

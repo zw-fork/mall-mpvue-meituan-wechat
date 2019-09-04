@@ -101,10 +101,12 @@ export default {
                       { addressName: that.shopInfo.wxAddress.name }, true).then(response => {
                         that.showPopup = false;
                         that.shopInfo.addressModel = response.result || {}
+                        that.$emit('func',false, that.shopInfo.addressModel)
                       }); 
+                    } else {
+                    that.$emit('func',false, {})
                     }
-                    that.$emit('func',false)
-                    wx.hideLoading();          
+                     wx.hideLoading();          
                   })
                 }
               })

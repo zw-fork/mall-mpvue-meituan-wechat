@@ -86,12 +86,14 @@ import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 import { jointStyle } from "@/utils/style";
 import authorize from "@/components/authorize";
+import { getFetch } from "@/network/request/HttpExtension";
 
 export default {
   data() {
     return {
       show: false,
       value: "",
+      flag: false,
       btnBackgroundColor: undefined,
       order: {},
       itemData: {},
@@ -102,6 +104,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("shoppingCart", ["shopInfo"]),
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["currentOrder"]),
     btnStyle() {
@@ -140,7 +143,7 @@ export default {
     ...mapActions("user", ["updateDefaultAddress", "getPhoneNumber", "getUserInfo", "login"]),
     getMsgFormSon(data) {
       this.show = data;
-      this.value = "  ";
+      this.flag = !this.flag;
     },
     bindPhoneNumber(e) {
       var target = e.target;
@@ -205,6 +208,15 @@ export default {
           duration: 1500
         });
       }
+    }
+  },
+  onShow(options) {
+    if (this.userInfo.id && this.shopInfo.wxAddress) {
+      getFetch("/address/defaultAddress",
+      { addressName: this.shopInfo.wxAddress.name }, true).then(response => {
+        this.shopInfo.addressModel = response.result || {}
+        this.flag = !this.flag;
+    });
     }
   }
 };
