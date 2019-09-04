@@ -299,11 +299,9 @@ export default {
         data.status = this.pageIndex;
       }
       getFetch("/goods/" + this.userInfo.shopId, data, true).then(response => {
-        if (response.result.list.length>0) {
-          this.list.datas = response.result.list;
-          this.list.page = response.result.nextPage;
-        } 
-        else if (barcode) {
+        this.list.datas = response.result.list;
+        this.list.page = response.result.nextPage;
+        if (barcode && response.result.list.length==0) {
           var code = barcode
           wx.showModal({
             content: "编号" + code + "商品不存在，是否需要创建？",
