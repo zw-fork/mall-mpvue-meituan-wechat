@@ -1,10 +1,13 @@
 <template>
   <div class="container" @click="update">
-    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth"></authorize>
+    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth2"></authorize>
     <div class="header-c">
       <img :src="userInfo.avatarUrl" alt @click="updateUser(userInfo)">
-      <div class="info-c" @click="visibleItemModal = !visibleItemModal">
+      <div class="info-c" @click="visibleItemModal = !visibleItemModal" v-if="userInfo.nickname">
         <span class="name">{{userInfo.nickname}}</span>
+      </div>
+      <div class="info-c" v-else-if="showAuth">
+        <span class="name" @click="auth">请授权登录</span>
       </div>
     </div>
     <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
@@ -108,6 +111,7 @@ export default {
       visibleItemModal: false,
       orderCount: [],
       showAuth: false,
+      showAuth2: false,
       show: false,
       showEdit: false,
       categoryArr: [{ items: [] }, { items: [] }],
@@ -161,8 +165,14 @@ export default {
   methods: {
     ...mapMutations("user", ["changeUserInfoMut"]),
     ...mapActions("user", ["wxLocation"]),
+    auth() {
+      this.showAuth2 = this.showAuth;
+    },
     getMsgFormSon(data) {
-      this.showAuth = data;
+      this.showAuth = data || !this.userInfo.nickname;
+      if (!data) {
+        this.showAuth2 = false;
+      }
     },
       goFeedback() {
          wx.navigateTo({

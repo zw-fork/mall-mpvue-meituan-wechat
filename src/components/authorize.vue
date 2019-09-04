@@ -4,8 +4,9 @@
         <img :src='logo_url'/>
         <div class='title'>授权提醒</div>  
         <div class='tip'>请授权微信登录，以便为您提供更好的服务</div>
-        <div class='bottom flex'>
-          <button class='item grant on'  type="primary" open-type="getUserInfo" lang="zh_CN" @getuserinfo="bindGetUserInfo">去授权</button>
+        <div class='bottom flex modalFooter'>
+          <button style="background-color:#333" class='item grant on'  type="primary" lang="zh_CN" @click="closeLogin">取消</button>
+          <button class='item grant on'  type="primary" open-type="getUserInfo" lang="zh_CN" @getuserinfo="bindGetUserInfo">登录</button>
         </div>
     </div>
     <div class='mask' v-if="show" catchtouchmove="true" bindtap='close'></div>
@@ -95,15 +96,15 @@ export default {
                   getUserInfoWechat(jsonData).then(response => {
                     wx.setStorageSync("sessionId", response.result.token)
                     that.changeUserInfoMut(response.result)
-                    if (that.shopInfo) {
+                    if (that.shopInfo && that.shopInfo.wxAddress) {
                       getFetch("/address/defaultAddress",
                       { addressName: that.shopInfo.wxAddress.name }, true).then(response => {
                         that.showPopup = false;
                         that.shopInfo.addressModel = response.result || {}
-                        that.$emit('func',false, response.result)
-                        wx.hideLoading();
                       }); 
-                    }          
+                    }
+                    that.$emit('func',false)
+                    wx.hideLoading();          
                   })
                 }
               })
@@ -118,6 +119,14 @@ export default {
     },
     close() {
       this.show = false
+    },
+    closeLogin() {
+      var page = getCurrentPages();
+      if (page.length==1) {
+        this.$emit('func',false)
+      } else {
+        wx.navigateBack({ delta: 1 })
+      }
     }
   },
   onShow(options) {
@@ -130,7 +139,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.modalFooter {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 80rpx;
+  border-top: 1rpx solid #e5e5e5;
+  font-size: 26rpx;
+  background-color: #f4f4f4;
+  line-height: 80rpx;
+}
 .Popup{
   width:500rpx;
   background-color:#fff;

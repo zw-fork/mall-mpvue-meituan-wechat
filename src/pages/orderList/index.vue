@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth"></authorize>
+    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth2"></authorize>
     <div class="header-c">
       <div class="cate-c">
         <span
@@ -131,6 +131,17 @@
         </div>
       </div>
     </scroll-view>
+    <div class="auth" v-if="showAuth">
+        <div
+            class="item"
+            style="font-size: 30rpx;display: flex;justify-content: center;align-items: center;top:40%"
+          >您还没有登录，请登录后查看订单</div>
+      <div class="bottom-c1" style="justify-content: space-around;">
+              <div class="btn" @click="auth">
+            <span>登录</span>
+      </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -147,6 +158,7 @@ export default {
       scrollTop: 0,
       statusList: [],
       left: "40rpx",
+      showAuth2: false,
       showAuth: false,
       status: undefined
     };
@@ -161,9 +173,13 @@ export default {
       "updateOrderStatusAction"
     ]),
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
+    auth() {
+      this.showAuth2 = this.showAuth;
+    },
      getMsgFormSon(data) {
-      this.showAuth = data;
+      this.showAuth = data || !this.userInfo.nickname;
       if (!data) {
+        this.showAuth2 = false;
         this.scrollTop = 0;
         this.updateOrderList(-1);
       }
@@ -294,6 +310,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+      .bottom-c1 {
+        display: flex;
+        border-top: 2rpx solid $spLine-color;
+        align-items: center;
+		justify-content: flex-end;
+      }
+      .bottom-c {
+        display: flex;
+        margin-left: 30rpx;
+        border-top: 2rpx solid $spLine-color;
+        align-items: center;
+		justify-content: flex-end;
+      }
+        .btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 2rpx solid $mtRed-color;
+          margin: 20rpx;
+          border-radius: 4rpx;
+          justify-content: space-around;
+
+          span {
+            font-size: 28rpx;
+            color: $mtRed-color;
+            margin: 6rpx 10rpx;
+          }
+        }
+.auth {
+  width:600rpx;
+  position:fixed;
+  top:50%;
+  left:50%;
+  margin-left:-300rpx;
+  transform:translateY(-50%);
+}
 .container {
   .header-c {
     display: flex;
@@ -440,29 +492,6 @@ export default {
         color: $textBlack-color;
         font-weight: bold;
         margin-right: 30rpx;
-      }
-
-      .bottom-c {
-        display: flex;
-        margin-left: 30rpx;
-        border-top: 2rpx solid $spLine-color;
-        align-items: center;
-        justify-content: flex-end;
-
-        .btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: 2rpx solid $blue-color;
-          margin: 20rpx;
-          border-radius: 4rpx;
-
-          span {
-            font-size: 28rpx;
-            color: $blue-color;
-            margin: 6rpx 10rpx;
-          }
-        }
       }
     }
   }
