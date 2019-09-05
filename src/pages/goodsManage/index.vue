@@ -227,6 +227,11 @@ export default {
         return;
       }
       wx.showLoading({ title: "加载中...", mask: true });
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2];
+      prevPage.setData({
+            update:true
+      });
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
       this.uploadImg({ goodsModel: this.goods });

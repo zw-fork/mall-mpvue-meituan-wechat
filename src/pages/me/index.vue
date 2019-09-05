@@ -91,7 +91,7 @@
       <image class='user_column_item_image' src='/static/images/customer.png'></image>
       <div class='user_column_item_text'>联系客服</div>
     </div>
-        <div class='user_column_item' @click="itemClick(itemList[0])">
+        <div v-if="userInfo.id" class='user_column_item' @click="itemClick(itemList[0])">
       <image class='user_column_item_image' src='/static/images/code.png'></image>
       <div class='user_column_item_text'>二维码</div>
     </div>

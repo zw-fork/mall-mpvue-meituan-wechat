@@ -75,7 +75,7 @@
                 ></i>
               </div>
               <span class="title" v-else>{{item.name}}</span>
-              <span class="sub-title">已售1234件</span>
+              <span class="sub-title"></span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
               </div>
@@ -536,6 +536,7 @@ export default {
     },
   },
   onShow(options) {
+    this.showEdit = false;
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
@@ -582,9 +583,6 @@ export default {
       title: this.shopInfo.shopName,
       path: "/pages/index/main?shopId=" + this.shopInfo.shopId
     };
-  },
-  onShow(options) {
-    this.showEdit = false;
   }
 };
 </script>

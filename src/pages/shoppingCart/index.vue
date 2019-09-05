@@ -71,7 +71,7 @@
               <div class="div-title">
                 <span class="title">{{item.name}}</span>
               </div>
-              <span class="sub-title">已售1234件</span>
+              <span class="sub-title"></span>
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
                 <div class="add-item" v-if="!showManage">
