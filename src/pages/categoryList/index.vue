@@ -264,7 +264,7 @@ export default {
           data.status = this.pageIndex;
         }
         data.page = this.list.page;
-        getFetch("/goods/" + this.userInfo.shopId, data, false).then(
+        getFetch("/goods/list/" + this.userInfo.shopId, data, false).then(
           response => {
             var goodsList = response.result.list;
             this.list.page = response.result.nextPage;

@@ -303,7 +303,7 @@ export default {
         this.showEdit = false;
         wx.showLoading({ title: "加载中...", mask: true });
         getFetch(
-          "/goods/" + this.shopInfo.shopId,
+          "/goods/list/" + this.shopInfo.shopId,
           { page: 1, categoryId: this.spus.categoryId, status: 1 },
           false
         ).then(response => {
@@ -407,7 +407,7 @@ export default {
       if (this.spus.page > 0) {
         wx.showLoading({ title: "加载中...", mask: true });
         getFetch(
-          "/goods/" + this.shopInfo.shopId,
+          "/goods/list/" + this.shopInfo.shopId,
           { page: this.spus.page, categoryId: this.spus.categoryId, status: 1 },
           false
         ).then(response => {

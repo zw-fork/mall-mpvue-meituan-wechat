@@ -59,7 +59,7 @@ const actions = {
             if (shopInfo.categoryModelList.length <= index) {
               index = 0
             }
-            getFetch('/goods/' + shopId, { page: 1, 'categoryId': shopInfo.categoryModelList[index].categoryId, 'status' : 1 }, false).then(response => {
+            getFetch('/goods/list/' + shopId, { page: 1, 'categoryId': shopInfo.categoryModelList[index].categoryId, 'status' : 1 }, false).then(response => {
               var goods = response.result || {}
               var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId }
               shopInfo.categoryModelList[index].spus = spus
@@ -130,7 +130,7 @@ const actions = {
   getCategoryMenuDataAction({ state, commit }, { index, categoryId }) {
     wx.showLoading({ title: '加载中...', mask: true })
     if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
-      getFetch('/goods/' + state.shopInfo.shopId, { 'categoryId': categoryId, 'status':1 }, false).then(response => {
+      getFetch('/goods/list/' + state.shopInfo.shopId, { 'categoryId': categoryId, 'status':1 }, false).then(response => {
         var spus = {}
         var goods = response.result.list
         spus.title = state.shopInfo.categoryModelList[index].name

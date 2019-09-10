@@ -323,7 +323,7 @@ export default {
       this.categoryArray = categoryArray;
       if (options.id) {
         getFetch(
-          "/goods/" + this.userInfo.shopId,
+          "/goods/list/" + this.userInfo.shopId,
           { goodsId: options.id },
           true
         ).then(response => {

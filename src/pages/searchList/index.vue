@@ -230,7 +230,7 @@
       getGoods() {
         if (this.name && this.name.trim()) {
           wx.showLoading({ title: '加载中...', mask: true })
-          getFetch('/goods/' + this.shopInfo.shopId, { 'name': this.name.trim(), status:1 }, false).then(response => {
+          getFetch('/goods/list/' + this.shopInfo.shopId, { 'name': this.name.trim(), status:1 }, false).then(response => {
             this.list = response.result.list
             for (var index in this.list) {
               var oldGoods = this.cartMap[this.list[index].goodsId]
@@ -248,7 +248,7 @@
       lower(e) {
         if (this.list.page > 0) {
           wx.showLoading({ title: '加载中...', mask: true })
-          getFetch('/goods/' + this.shopInfo.shopId, { 'page': this.list.page, 'name': this.name.trim() }, false).then(response => {
+          getFetch('/goods/list/' + this.shopInfo.shopId, { 'page': this.list.page, 'name': this.name.trim() }, false).then(response => {
             var goodsList = response.result.list
             for (var index in goodsList) {
               var oldGoods = this.cartMap[goodsList[index].goodsId]

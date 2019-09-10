@@ -298,7 +298,7 @@ export default {
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
       }
-      getFetch("/goods/" + this.userInfo.shopId, data, true).then(response => {
+      getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(response => {
         this.list.datas = response.result.list;
         this.list.page = response.result.nextPage;
         if (barcode && response.result.list.length==0) {
@@ -326,7 +326,7 @@ export default {
           data.status = this.pageIndex;
         }
         data.page = this.list.page;
-        getFetch("/goods/" + this.userInfo.shopId, data, true).then(
+        getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(
           response => {
             var goodsList = response.result.list;
             this.list.page = response.result.nextPage;
