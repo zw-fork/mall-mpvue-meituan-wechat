@@ -128,8 +128,13 @@ export default {
     ...mapState("user", ["userInfo"])
   },
   onLoad(options) {
+    if (options.scene) {
+      wx.navigateTo({
+          url: "/pages/shoppingCart/main?shopId=" + options.scene
+      });
+    }
     getFetch("/shop/list", {status: 1}, false).then(response => {
-      this.shopList = response.result;
+        this.shopList = response.result;
     });
   },
   onPullDownRefresh: function() {
