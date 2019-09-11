@@ -168,11 +168,11 @@ export default {
     auth() {
       this.showAuth2 = this.showAuth;
     },
-    getMsgFormSon(data) {
+    getMsgFormSon(data) {      
       this.showAuth = data || !this.userInfo.nickname;
       if (!data) {
         this.showAuth2 = false;
-        if (!this.orderCount.length) {
+        if (this.userInfo.shopId && !this.orderCount.length && this.userInfo.role>0 ) {
           getFetch("/order/count/" + this.userInfo.shopId, true).then(response => {
             var count = response.result;
             this.orderCount = [];
