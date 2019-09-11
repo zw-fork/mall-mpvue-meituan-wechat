@@ -124,11 +124,11 @@ export default {
       superMenuList: [],
       orderList: [],
       itemList: [
-        // {
-        //   title: "二维码",
-        //   icon: "mt-protocol-o",
-        //   path: "/pages/qrcode/main"
-        // }
+      {
+        title: "二维码",
+        icon: "mt-protocol-o",
+        path: "/pages/qrcode/main"
+      }
       ]
     };
   },
@@ -172,6 +172,15 @@ export default {
       this.showAuth = data || !this.userInfo.nickname;
       if (!data) {
         this.showAuth2 = false;
+        if (!this.orderCount.length) {
+          getFetch("/order/count/" + this.userInfo.shopId, true).then(response => {
+            var count = response.result;
+            this.orderCount = [];
+            this.orderCount.push(count.新订单);
+            this.orderCount.push(count.配送中);
+            this.orderCount.push(count.退款);
+          });
+        }
       }
     },
       goFeedback() {
