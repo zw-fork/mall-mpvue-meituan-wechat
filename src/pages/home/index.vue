@@ -133,22 +133,13 @@ export default {
           url: "/pages/shoppingCart/main?shopId=" + options.scene
       });
     }
-    getFetch("/shop/list", {status: 1}, false).then(response => {
+    getFetch("/shop/list", {status: 1}, true).then(response => {
         this.shopList = response.result;
     });
   },
   onPullDownRefresh: function() {
-    getFetch(
-      "/shop/nearShop",
-      {
-        longitude: this.location.lng,
-        latitude: this.location.lat,
-        dis: 21.5
-      },
-      false
-    ).then(response => {
-      wx.hideLoading();
-      that.shopList = response.result;
+    getFetch("/shop/list", {status: 1}, true).then(response => {
+        this.shopList = response.result;
     });
   }
 };
@@ -157,10 +148,6 @@ export default {
 <style lang="scss" scoped>
 .container {
   .content {
-    display: fixed;
-    flex-direction: column;
-    position: relative;
-
     .header-c {
       display: flex;
       align-items: center;

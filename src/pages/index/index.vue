@@ -1,14 +1,5 @@
 <template id="dialog">
   <div class="container">
-    <div class="login-box">
-      <button
-        v-if="isModel"
-        type="primary"
-        open-type="getUserInfo"
-        class="wx-login-btn"
-        @getuserinfo="bindGetUserInfo"
-      >微信授权登录</button>
-    </div>
   </div>
 </template>
 
@@ -47,18 +38,15 @@ export default {
     }
   },
   onLoad(options) {
-    this.shopId = options.shopId;
-    var addWorker = options.addWorker;
-    var that = this;
-    wx.getSetting({
-      success: function(res) {
-        if (res.authSetting["scope.userInfo"]) {
-          that.wxLogin({ shopId: that.shopId, addWorker: addWorker });
-        } else {
-          that.isModel = true;
-        }
-      }
-    });
+    if (options.scene) {
+      wx.redirectTo({
+          url: "/pages/shoppingCart/main?shopId=" + options.scene
+      });
+    } else {
+      wx.switchTab({
+        url: '/pages/home/main'
+      })
+    }
   }
 };
 </script>

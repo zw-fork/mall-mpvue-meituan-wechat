@@ -2,6 +2,7 @@
   "pages": [
     "pages/home/main",
     "pages/shoppingManage/main",
+    "pages/index/main",
     "pages/asset/main",
     "pages/qrcode/main",
     "pages/shoppingCart/main",

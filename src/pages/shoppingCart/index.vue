@@ -594,6 +594,9 @@ export default {
     var that = this;
     this.shopId = options.shopId;
     if (!this.shopId) {
+      this.shopId = options.scene;
+    }
+    if (!this.shopId) {
       this.shopId = this.userInfo.shopId;
     }
     var update = false;
