@@ -31,6 +31,13 @@ export default {
   },
   mounted() {
     this.qrcode();
+  },
+  onLoad(options) {
+    var pages = getCurrentPages();
+    var prevPage = pages[pages.length - 2];
+    prevPage.setData({
+        status: "qrcode"
+    });
   }
 };
 </script>
