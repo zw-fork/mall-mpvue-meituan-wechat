@@ -235,6 +235,9 @@ export default {
               that.shop.wxAddress = {};
             }
             that.shop.wxAddress = res;
+          },
+          fail(res) {
+            console.log(res);
           }
         });
       }
@@ -314,12 +317,11 @@ export default {
       (options.id && this.userInfo.role == 3) ||
       (shopId && this.userInfo.role == 2)
     ) {
-      wx.showLoading({ title: "加载中...", mask: true });
-      var userId = options.id;
+     var userId = options.id;
       if (!userId) {
         userId = this.userInfo.id;
       }
-      getFetch("/shop/myShop/" + userId, {}, false).then(response => {
+      getFetch("/shop/myShop/" + userId, {}, true).then(response => {
         this.shop = response.result || {};
         if (this.shop.shopId) {
           if (this.shop.tel.length > 0) {
@@ -346,7 +348,6 @@ export default {
           };
           this.shop.userid = userId;
         }
-        wx.hideLoading();
       });
     }
   }
