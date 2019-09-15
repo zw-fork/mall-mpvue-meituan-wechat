@@ -55,7 +55,8 @@ export default {
     },
   methods: {
     ...mapMutations("user", ["changeUserInfoMut"]),
-    getUserInfo: function(e) {
+    getUserInfo(shopId) {
+      this.shopId = shopId;
       var that = this;
       if (this.userInfo.id) {
         this.showPopup = false;
@@ -78,7 +79,7 @@ export default {
       }
 
   },
-  login: function(e) {
+  login(){
           var that = this;
             wx.login({
           success: function (res_login) {
@@ -93,6 +94,9 @@ export default {
                     iv: res.iv,
                     appid: appid
                   };
+                  if (that.shopId) {
+                    jsonData.shopId = that.shopId
+                  }
                   getUserInfoWechat(jsonData).then(response => {
                     wx.setStorageSync("sessionId", response.result.token)
                     that.changeUserInfoMut(response.result)
@@ -136,7 +140,7 @@ export default {
         this.showPopup = false;
         this.$emit('func',false)
     }
-  },
+  }
 }
 </script>
 

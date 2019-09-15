@@ -609,7 +609,7 @@ export default {
       if (this.shopId) {
         setTimeout(() => {
           if (this.$refs.authorize) {
-        var p = this.$refs.authorize.getUserInfo();
+        var p = this.$refs.authorize.getUserInfo(this.shopId);
           }
       }, 1000)
       }
