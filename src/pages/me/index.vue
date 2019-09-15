@@ -145,18 +145,22 @@ export default {
       //   console.log(value);
       // });
     }
+    this.orderList = [];
     var categoryData = homeData.headData.data.primary_filter;
     categoryData.map((item, index) => {
       this.orderList.push(item);
     });
+    this.shopMenuList = [];
     var menuData = homeData.headData.data.shop_menu;
     menuData.map((item, index) => {
       this.shopMenuList.push(item);
     });
+    this.goodsMenuList = [];
     var goodsData = homeData.headData.data.goods_menu;
     goodsData.map((item, index) => {
       this.goodsMenuList.push(item);
     });
+    this.superMenuList = [];
     var superData = homeData.headData.data.super_menu;
     superData.map((item, index) => {
       this.superMenuList.push(item);
