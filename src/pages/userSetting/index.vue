@@ -69,6 +69,7 @@ export default {
   },
   methods: {
     ...mapActions("address", ["saveOrUpdateAddress"]),
+    ...mapMutations("user", ["changeUserInfoMut"]),
     saveWx(status) {
       if (status) {
         this.userInfo.status = status;
@@ -94,6 +95,14 @@ export default {
         this.telError = "";
       }
     }
+  },
+  onShow(options) {
+    getFetch("/wechat/getCurrentUser", true).then(
+          response => {
+        var user = response.result || {}
+        this.changeUserInfoMut(user)          
+        }
+    );
   }
 };
 </script>
