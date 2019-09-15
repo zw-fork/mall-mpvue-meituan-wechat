@@ -24,7 +24,7 @@
                 <span class="m-r" v-if="false">距离：{{item.distance}}km</span>
               </div>
               <div class="r-m">
-                <span class="m-l">地址：{{item.wxAddress.name}}</span>
+                <span class="m-l">地址：{{item.building}}</span>
               </div>
             </div>
           </div>

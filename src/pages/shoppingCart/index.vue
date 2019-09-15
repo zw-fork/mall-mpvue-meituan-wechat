@@ -1,5 +1,6 @@
 <template>
   <div class="container" @click="update" @mousedown="update" v-if="!shopId || shopId == shopInfo.shopId">
+    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth2"></authorize>  
     <div class="header-c">
       <div class="header" @click="openLocation">
         <div class="h-l">
@@ -9,7 +10,7 @@
           >
         </div>
         <div class="h-r">
-          <span class="r-l" >地址: {{shopInfo.wxAddress.name}}</span>
+          <span class="r-l" >地址: {{shopInfo.building}}</span>
           <div class="r-t">
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
@@ -96,7 +97,7 @@
     <div class="shop-info" v-else-if="pageIndex === 1">
       <div class="address">
         <i class="icon mt-location-o"></i>
-        <span>{{shopInfo.wxAddress.name}}</span>
+        <span>{{shopInfo.building}}</span>
         <i class="icon mt-phone-o" @click.stop="clickCall()"></i>
       </div>
       <div class="delivery">
@@ -208,6 +209,7 @@ import { _array } from "@/utils/arrayExtension";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 import QQMapWX from "qqmap-wx-jssdk";
+import authorize from "@/components/authorize";
 
 export default {
   data() {
@@ -224,10 +226,15 @@ export default {
       tagIndex: 0,
       pageIndex: 0,
       left: "40rpx",
+      showAuth: false,
+      showAuth2: false,
       stars: [1, 2, 3, 4],
       cartGoodsList1: [],
       phoneList: ["10107888", "22222222"]
     };
+  },
+ components: {
+    authorize
   },
   computed: {
     ...mapState("shoppingCart", [
@@ -331,6 +338,9 @@ export default {
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
     copy() {
       wx.setClipboardData({data: this.shopInfo.wechatId});
+    },
+    getMsgFormSon(data) {     
+      this.showAuth2 = data || !this.userInfo.nickname;
     },
     updateGoods(goodsModel) {
       postFetch("/goods/upload2", goodsModel, false).then(response => {
@@ -571,6 +581,7 @@ export default {
     },
   },
   onShow(options) {
+    this.showEdit = false;
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
@@ -595,6 +606,13 @@ export default {
     this.shopId = options.shopId;
     if (!this.shopId) {
       this.shopId = options.scene;
+      if (this.shopId) {
+        setTimeout(() => {
+          if (this.$refs.authorize) {
+        var p = this.$refs.authorize.getUserInfo();
+          }
+      }, 1000)
+      }
     }
     if (!this.shopId) {
       this.shopId = this.userInfo.shopId;
@@ -619,9 +637,6 @@ export default {
       title: this.shopInfo.shopName,
       path: "/pages/index/main?shopId=" + this.shopInfo.shopId
     };
-  },
-  onShow(options) {
-    this.showEdit = false;
   }
 };
 </script>
