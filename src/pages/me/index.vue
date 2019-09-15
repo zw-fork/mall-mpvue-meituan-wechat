@@ -244,8 +244,7 @@ export default {
             this.orderCount.push(count.退款);
           });
         }
-          }
-    ); 
+      }); 
     } else {
       if (this.userInfo.shopId) {
         getFetch("/order/count/" + this.userInfo.shopId, true).then(response => {
@@ -259,17 +258,19 @@ export default {
     }
   },
   onPullDownRefresh: function() {
-    if (this.userInfo.shopId) {
-      getFetch("/order/count/" + this.userInfo.shopId, true).then(
-          response => {
+      getFetch("/wechat/getCurrentUser", true).then(response => {
+        var user = response.result || {}
+        this.changeUserInfoMut(user)
+        if (user.shopId) {
+          getFetch("/order/count/" + user.shopId, true).then(response => {
             var count = response.result;
             this.orderCount = [];
             this.orderCount.push(count.新订单);
             this.orderCount.push(count.配送中);
             this.orderCount.push(count.退款);
-          }
-        );
-    }
+          });
+        }
+      });
   }
 };
 </script>
