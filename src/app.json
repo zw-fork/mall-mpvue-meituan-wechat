@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/home/main",
-    "pages/legwork/main",
     "pages/shoppingManage/main",
     "pages/index/main",
     "pages/asset/main",
@@ -10,7 +9,6 @@
     "pages/submitOrder/main",
     "pages/me/main",
     "pages/refund/main",
-    "pages/map/main",
     "pages/error/main",
     "pages/statistics/main",
     "pages/expiredRedPacket/main",
