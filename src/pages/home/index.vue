@@ -28,11 +28,6 @@
               </div>
             </div>
           </div>
-          <div
-            v-if="!shopList || shopList.length < 1"
-            class="item"
-            style="display: flex;justify-content: center;align-items: center;top:40%"
-          >当前地址无商铺信息!</div>
         </scroll-view>
       </div>
     </div>

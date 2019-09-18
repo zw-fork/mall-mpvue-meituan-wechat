@@ -55,6 +55,7 @@
         placeholder-style="font-size: 24rpx"
         v-model="goods.barcode"
       >
+      <i @click="scanClick()" class="icon iconfont iconbarcode"></i>
     </div>
     <div class="b-mid">
       <div class="mid-l">
@@ -164,6 +165,13 @@ export default {
   methods: {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
+    scanClick() {
+      wx.scanCode({
+        success: res => {
+          this.goods.barcode = res.result;
+        }
+      });
+    },
     deleteImg() {
       this.goods.picture = "";
       this.goods.wechat = true;
