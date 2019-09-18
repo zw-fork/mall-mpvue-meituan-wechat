@@ -27,6 +27,7 @@
     "lodash": "^4.17.10",
     "minapp-api-promise": "^1.0.2",
     "mpvue": "^2.0.0",
+    "mpvue-calendar": "^2.3.1",
     "mpvue-echarts": "^0.3.1",
     "mpvue-picker": "^2.1.5",
     "mpvue-weui": "^1.0.7",
