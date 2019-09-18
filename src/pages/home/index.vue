@@ -45,6 +45,8 @@ import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { getFetch } from "@/network/request/HttpExtension";
 import QQMapWX from "qqmap-wx-jssdk";
 import { shopStatus } from "@/constants/commonType";
+import { API_URL, APP_ID } from '@/constants/hostConfig'
+import { getUserInfoWechat } from "@/action/action";
 
 export default {
   data() {
@@ -56,6 +58,7 @@ export default {
   },
   methods: {
     ...mapActions("user", ["wxLocation", "wxLogin"]),
+    ...mapMutations("user", ["changeUserInfoMut"]),
 
     categoryClick() {
       wx.navigateTo({ url: "/pages/categoryList/main" });
@@ -85,6 +88,36 @@ export default {
         }
       });
     },
+    login(){
+          var that = this;
+            wx.login({
+          success: function (res_login) {
+            if (res_login.code) {
+              var appid = `${APP_ID}`
+              wx.getUserInfo({
+                success: function (res) {
+                  var jsonData = {
+                    code: res_login.code,
+                    encryptedData: res.encryptedData,
+                    iv: res.iv,
+                    appid: appid
+                  };
+                  if (that.shopId) {
+                    jsonData.shopId = that.shopId
+                  }
+                  getUserInfoWechat(jsonData).then(response => {
+                    wx.setStorageSync("sessionId", response.result.token)
+                    that.changeUserInfoMut(response.result) 
+                    getFetch("/shop/list", {status: 1}, true).then(response => {
+                      that.shopList = response.result;
+                    });
+                  })
+                }
+              })
+            }
+          }
+        })
+  },
     updateAddress() {
       var that = this;
       wx.showLoading({ title: "加载中...", mask: true });
@@ -133,8 +166,17 @@ export default {
           url: "/pages/shoppingCart/main?shopId=" + options.scene
       });
     }
-    getFetch("/shop/list", {status: 1}, true).then(response => {
-        this.shopList = response.result;
+    var that = this;
+    wx.getSetting({
+        success: function(res) {
+          if (res.authSetting["scope.userInfo"]) {
+             var p = that.login();
+          } else {
+            getFetch("/shop/list", {status: 1}, true).then(response => {
+              that.shopList = response.result;
+            });
+          }
+        }
     });
   },
   onPullDownRefresh: function() {
