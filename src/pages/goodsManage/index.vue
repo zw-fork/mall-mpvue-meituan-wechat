@@ -125,32 +125,6 @@ export default {
         }
       ],
       categoryArray: [
-        {
-          label: "住宿费",
-          value: 1
-        },
-        {
-          label: "活动费",
-          value: 2
-        },
-        {
-          label: "通讯费",
-          value: 3
-        },
-        {
-          label: "补助",
-          value: 4
-        }
-      ],
-      statusArray: [
-        {
-          label: "上架",
-          value: 1
-        },
-        {
-          label: "下架",
-          value: 2
-        }
       ],
       pickerValueDefault: [0]
     };
