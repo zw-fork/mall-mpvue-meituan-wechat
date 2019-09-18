@@ -64,7 +64,7 @@
           <span class="title">{{spus.title}}</span>
         </div>
         <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
-          <div class="item">
+          <div class="item" @click="legwork(item.type)">
             <div class="item-l">
               <img :src="path + item.picture">
             </div>
@@ -73,7 +73,7 @@
                 <span class="title">{{item.name}}</span>
               </div>
               <span class="sub-title"></span>
-              <div class="r-t">
+              <div class="r-t" v-if="item.type!=300">
                 <span class="price">￥{{item.min_price}}</span>
                 <div class="add-item" v-if="!showManage">
                   <div
@@ -106,7 +106,7 @@
           <span>营业时间: 全天</span>
         </div>
       </div>
-      <div class="delivery">
+      <div class="delivery" v-if="shopInfo.wechatId">
         <div class="btm">
           <i class="icon mt-clock-s"></i>
           <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制微信号</span>
@@ -336,6 +336,11 @@ export default {
       "previewItemAction"
     ]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    legwork(type) {
+      if (type == 300) {
+      //  wx.navigateTo({ url: '/pages/legwork/main' })
+      }
+    },
     copy() {
       wx.setClipboardData({data: this.shopInfo.wechatId});
     },

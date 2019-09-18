@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/home/main",
+    "pages/legwork/main",
     "pages/shoppingManage/main",
     "pages/index/main",
     "pages/asset/main",
@@ -82,6 +83,8 @@
     "wxfb86227363fd06dc"
   ],
   "usingComponents": {
-    "van-field": "vant-weapp/dist/field/index"
+    "van-field": "vant-weapp/dist/field/index",
+    "van-datetime-picker": "vant-weapp/dist/datetime-picker/index",
+    "van-popup": "vant-weapp/dist/popup/index"
   }
 }

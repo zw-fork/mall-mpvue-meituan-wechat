@@ -53,8 +53,8 @@ export default {
           confirmColor: "#FFC24A",
           success: function(res) {
             if (res.confirm) {
-              var id = item.id
-              that.deleteUserAddressDataAction({ id });
+              var addressId = item.id;
+              that.deleteUserAddressDataAction({ addressId });
             }
           }
         });
