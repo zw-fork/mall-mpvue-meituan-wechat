@@ -96,7 +96,7 @@
           <span>营业时间: 全天</span>
         </div>
       </div>
-      <div class="delivery">
+      <div class="delivery" v-if="shopInfo.wechatId">
         <div class="btm">
           <i class="icon mt-clock-s"></i>
           <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制微信号</span>

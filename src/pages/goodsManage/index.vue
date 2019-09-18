@@ -288,6 +288,7 @@ export default {
     }
   },
   onLoad(options) {
+    this.name = "上架";
     this.goods = {
       statusName: "上架",
       status: 1,
@@ -309,6 +310,9 @@ export default {
         this.goods.min_price = result.price;
         this.goods.picture = result.ssoImg;
         this.goods.barcode = result.code;
+        this.goods.statusName = "上架";
+        this.name = "上架";
+        this.goods.status = 1;
       }
     })
     }
