@@ -280,6 +280,10 @@ export default {
       barcode: "",
       picture: undefined
     };
+    this.goods.picture = "upload/store_wechat/佳乐惠超市/201908240080d.jpg";
+    this.goods.min_price = 3;
+    this.goods.categoryId = 104;
+    this.goods.categoryName = "饮料/水";
     if (options.barcode) {
           getFetch(
       "/barcode/" + options.barcode,
