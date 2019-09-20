@@ -54,33 +54,35 @@
         :scroll-top="scrollTop"
         @scroll="scroll"
       >
-        <div class="section">
-          <span class="title">{{spus.title}}</span>
+      <div v-for="(item, index) in spus.datas" :key="index">
+        <div class="section" v-if="item.goodsList && item.goodsList[0].goodsId">
+          <span class="title">{{item.name}}</span>
         </div>
-        <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
-          <div class="item">
+        <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
+          <div class="item" v-if="goods.goodsId">
             <div class="item-l">
-              <img :src="path + item.picture"> 
+              <img :src="path + goods.picture"> 
             </div>
             <div class="item-r">
               <div
                 class="div-title"
                 v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId && showManage"
               >
-                <span class="title">{{item.name}}</span>
+                <span class="title">{{goods.name}}</span>
                 <i
                 @click.stop="manageGoods($event, index)"
                   class="icon iconfont icondian"
                   style="float:right;position:relative;display:inline-block"
                 ></i>
               </div>
-              <span class="title" v-else>{{item.name}}</span>
+              <span class="title" v-else>{{goods.name}}</span>
               <span class="sub-title"></span>
               <div class="r-t">
-                <span class="price">￥{{item.min_price}}</span>
+                <span class="price">￥{{goods.min_price}}</span>
               </div>
             </div>
           </div>
+        </div>
         </div>
       </scroll-view>
     </div>
