@@ -156,7 +156,6 @@ export default {
       "getCommentDataAction",
       "getCategoryMenuDataAction",
       "addItemAction",
-      "reduceItemAction",
       "closeShoppingCartAction",
       "selectSkuAction",
       "changeSkuDataMut",
@@ -164,7 +163,6 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
-    ...mapActions("submitOrder", ["createOrderDetailAction"]),
     //滚动条滚到底部或右边的时候触发
     lower(e) {
       if (this.list.page > 0) {
@@ -306,10 +304,6 @@ export default {
       item.oldData = true;
       this.addItemAction({ item, index, categoryIndex });
     },
-    reduceClick(item, index, categoryIndex) {
-      item.oldData = true;
-      this.reduceItemAction({ item, index, categoryIndex });
-    },
     closeSku() {
       this.changeSkuModalMut(false);
     },
@@ -325,7 +319,6 @@ export default {
     modalReduce() {
       var skuInfo = this.skuInfo;
       const { item, index } = skuInfo;
-      this.reduceItemAction({ item, index });
       this.changeSkuModalDataAction({ num: -1 });
     },
     closePreview() {
@@ -337,10 +330,6 @@ export default {
     previewAdd() {
       var item = this.previewInfo;
       this.addItemAction({ item, index: item.preIndex });
-    },
-    previewReduce() {
-      var item = this.previewInfo;
-      this.reduceItemAction({ item, index: item.preIndex });
     },
     previewAttr() {
       this.changeItemModalMut(false);

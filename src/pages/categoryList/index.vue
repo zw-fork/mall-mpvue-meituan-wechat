@@ -140,7 +140,6 @@ export default {
       "getCommentDataAction",
       "getCategoryMenuDataAction",
       "addItemAction",
-      "reduceItemAction",
       "closeShoppingCartAction",
       "selectSkuAction",
       "changeSkuDataMut",
@@ -148,7 +147,6 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
-    ...mapActions("submitOrder", ["createOrderDetailAction"]),
     scroll(e) {
       var value = this.currentScroll - e.target.scrollTop;
       if (Math.abs(value) > 0) {
@@ -264,7 +262,7 @@ export default {
           data.status = this.pageIndex;
         }
         data.page = this.list.page;
-        getFetch("/goods/list/" + this.userInfo.shopId, data, false).then(
+        getFetch("/goods/" + this.userInfo.shopId, data, false).then(
           response => {
             var goodsList = response.result.list;
             this.list.page = response.result.nextPage;
@@ -294,10 +292,6 @@ export default {
       item.oldData = true;
       this.addItemAction({ item, index, categoryIndex });
     },
-    reduceClick(item, index, categoryIndex) {
-      item.oldData = true;
-      this.reduceItemAction({ item, index, categoryIndex });
-    },
     closeSku() {
       this.changeSkuModalMut(false);
     },
@@ -313,7 +307,6 @@ export default {
     modalReduce() {
       var skuInfo = this.skuInfo;
       const { item, index } = skuInfo;
-      this.reduceItemAction({ item, index });
       this.changeSkuModalDataAction({ num: -1 });
     },
     closePreview() {
@@ -325,10 +318,6 @@ export default {
     previewAdd() {
       var item = this.previewInfo;
       this.addItemAction({ item, index: item.preIndex });
-    },
-    previewReduce() {
-      var item = this.previewInfo;
-      this.reduceItemAction({ item, index: item.preIndex });
     },
     previewAttr() {
       this.changeItemModalMut(false);

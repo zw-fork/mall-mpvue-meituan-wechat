@@ -109,36 +109,6 @@
       </div>
     </div>
     <div class="screen_cover" v-show="showCart && productCount > 0" @click="toggleCartList"></div>
-    <div class="cart_food_list" v-if="showCart && productCount > 0">
-      <header>
-        <h4>购物车</h4>
-        <div @click="clearCart">
-          <span class="clear_cart">清空</span>
-        </div>
-      </header>
-      <section class="cart_food_details" id="cartFood">
-        <ul>
-          <li v-for="(item, index) in cartGoodsList1" :key="index" class="cart_food_li">
-            <div class="cart_list_num">
-              <p class="ellipsis">{{item.name}}</p>
-            </div>
-            <div class="cart_list_price">
-              <span>¥</span>
-              <span>{{item.min_price}}</span>
-            </div>
-            <section class="cart_list_control">
-              <span @click.stop="reduceClick(item, item.index, item.categoryIndex)">
-                <i class="icon iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
-              </span>
-              <span class="cart_num">{{item.sequence}}</span>
-              <div @click.stop="addClick(item, item.index, item.categoryIndex)">
-                <i class="icon iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
-              </div>
-            </section>
-          </li>
-        </ul>
-      </section>
-    </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
         <i class="icon iconfont iconedit"></i>
@@ -287,7 +257,6 @@ export default {
       "getCommentDataAction",
       "getCategoryMenuDataAction",
       "addItemAction",
-      "reduceItemAction",
       "closeShoppingCartAction",
       "selectSkuAction",
       "changeSkuDataMut",
@@ -477,9 +446,6 @@ export default {
     addClick(item, index, categoryIndex) {
       this.addItemAction({ item, index, categoryIndex });
     },
-    reduceClick(item, index, categoryIndex) {
-      this.reduceItemAction({ item, index, categoryIndex });
-    },
     closeSku() {
       this.changeSkuModalMut(false);
     },
@@ -492,12 +458,6 @@ export default {
       this.addItemAction({ item, index });
       this.changeSkuModalDataAction({ num: 1 });
     },
-    modalReduce() {
-      var skuInfo = this.skuInfo;
-      const { item, index } = skuInfo;
-      this.reduceItemAction({ item, index });
-      this.changeSkuModalDataAction({ num: -1 });
-    },
     closePreview() {
       this.changeItemModalMut(false);
     },
@@ -507,10 +467,6 @@ export default {
     previewAdd() {
       var item = this.previewInfo;
       this.addItemAction({ item, index: item.preIndex });
-    },
-    previewReduce() {
-      var item = this.previewInfo;
-      this.reduceItemAction({ item, index: item.preIndex });
     },
     previewAttr() {
       this.changeItemModalMut(false);

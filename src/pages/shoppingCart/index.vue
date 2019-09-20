@@ -65,13 +65,13 @@
           <span class="title">{{item.name}}</span>
         </div>
         <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
-          <div  class="item">
+          <div  class="item" v-if="goods.goodsId">
             <div class="item-l">
               <img :src="path + goods.picture">
             </div>
             <div class="item-r">
               <div class="div-title">
-                <span class="title">{{goods.name}}{{index2}}</span>
+                <span class="title">{{goods.name}}</span>
               </div>
               <span class="sub-title"></span>
               <div class="r-t" v-if="goods.type!=300">
@@ -527,10 +527,10 @@ export default {
       this.selectSkuAction({ item, index });
     },
     addClick(parentCategoryId, item, index, categoryIndex) {
-      this.addItemAction({parentCategoryId,  item, index, categoryIndex });
+      this.addItemAction({parentCategoryId, item, index, categoryIndex });
     },
     reduceClick(parentCategoryId, item, index, categoryIndex) {
-      this.reduceItemAction({ item, index, categoryIndex });
+      this.reduceItemAction({parentCategoryId, item, index, categoryIndex });
     },
     closeSku() {
       this.changeSkuModalMut(false);
