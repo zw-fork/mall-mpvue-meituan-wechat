@@ -64,20 +64,15 @@ const actions = {
     })
   },
   getOrderItemDataAction({ state, commit }, { uid, data }) {
-    wx.showLoading({ title: '加载中...', mask: true })
-    getFetch('/order', data, false).then(response => {
+    getFetch('/order', data, true).then(response => {
       var result = response.result || {}
       commit('changeOrderItemDataMut', result)
-      wx.hideLoading()
     })
   },
   getOrderByIdAction({ state, commit }, {data }) {
-    wx.showLoading({ title: '加载中...', mask: true })
-    getFetch('/order/copy/' + data.number, data, false).then(response => {
+    getFetch('/order/copy/' + data.number, data, true).then(response => {
       var result = response.result || {}
       commit('changeOrderByIdDataMut', result)
-    //  wx.setStorageSync("cartList", result)
-      wx.hideLoading()
       wx.navigateTo({ url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
     })
   },
