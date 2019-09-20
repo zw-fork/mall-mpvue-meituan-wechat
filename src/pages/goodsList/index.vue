@@ -192,6 +192,7 @@ export default {
       "getCommentDataAction",
       "getCategoryMenuDataAction",
       "addItemAction",
+      "reduceItemAction",
       "closeShoppingCartAction",
       "selectSkuAction",
       "changeSkuDataMut",
@@ -199,6 +200,7 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
+    ...mapActions("submitOrder", ["createOrderDetailAction"]),
     scroll(e) {
       var value = this.currentScroll - e.target.scrollTop;
       if (Math.abs(value) > 0) {
@@ -296,12 +298,10 @@ export default {
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
       }
-      getFetch("/goods/" + this.userInfo.shopId, data, true).then(response => {
-        if (response.result.list.length>0) {
-          this.list.datas = response.result.list;
-          this.list.page = response.result.nextPage;
-        } 
-        else if (barcode) {
+      getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(response => {
+        this.list.datas = response.result.list;
+        this.list.page = response.result.nextPage;
+        if (barcode && response.result.list.length==0) {
           var code = barcode
           wx.showModal({
             content: "编号" + code + "商品不存在，是否需要创建？",
@@ -326,7 +326,7 @@ export default {
           data.status = this.pageIndex;
         }
         data.page = this.list.page;
-        getFetch("/goods/" + this.userInfo.shopId, data, true).then(
+        getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(
           response => {
             var goodsList = response.result.list;
             this.list.page = response.result.nextPage;
@@ -357,6 +357,7 @@ export default {
     },
     reduceClick(item, index, categoryIndex) {
       item.oldData = true;
+      this.reduceItemAction({ item, index, categoryIndex });
     },
     closeSku() {
       this.changeSkuModalMut(false);
@@ -373,6 +374,7 @@ export default {
     modalReduce() {
       var skuInfo = this.skuInfo;
       const { item, index } = skuInfo;
+      this.reduceItemAction({ item, index });
       this.changeSkuModalDataAction({ num: -1 });
     },
     closePreview() {
@@ -387,6 +389,7 @@ export default {
     },
     previewReduce() {
       var item = this.previewInfo;
+      this.reduceItemAction({ item, index: item.preIndex });
     },
     previewAttr() {
       this.changeItemModalMut(false);
