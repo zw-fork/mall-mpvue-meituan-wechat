@@ -18,7 +18,6 @@ const actions = {
     })
   },
   deleteUserAddressDataAction({state, commit}, {addressId}) {
-    debugger
     getFetch('/address/delete/' + addressId, {}, false).then(response => {
       for (var index in state.myAddress) {
         if (addressId == state.myAddress[index].id) {

@@ -59,9 +59,9 @@ const actions = {
             if (shopInfo.categoryModelList.length <= index) {
               index = 0
             }
-            getFetch('/goods/list/' + shopId, { page: 1, 'categoryId': shopInfo.categoryModelList[index].categoryId, 'status' : 1 }, false).then(response => {
+            getFetch('/category/category/' + shopInfo.categoryModelList[index].categoryId, {}, false).then(response => {
               var goods = response.result || {}
-              var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: goods.list, page: goods.nextPage, categoryId: shopInfo.categoryModelList[index].categoryId }
+              var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: goods, categoryId: shopInfo.categoryModelList[index].categoryId }
               shopInfo.categoryModelList[index].spus = spus
               commit('changeShopInfoDataMut', shopInfo)
               var itemList = this.state.submitOrder.orderDetail.itemList
@@ -129,11 +129,12 @@ const actions = {
   },
   getCategoryMenuDataAction({ state, commit }, { index, categoryId }) {
     wx.showLoading({ title: '加载中...', mask: true })
-    if (!state.shopInfo.categoryModelList[index].spus || state.shopInfo.categoryModelList[index].spus.datas.length < 1) {
+    var category = state.shopInfo.categoryModelList[index];
+    if (!category.spus || category.spus.datas.length < 1) {
       getFetch('/goods/list/' + state.shopInfo.shopId, { 'categoryId': categoryId, 'status':1 }, false).then(response => {
         var spus = {}
         var goods = response.result.list
-        spus.title = state.shopInfo.categoryModelList[index].name
+        spus.title = category.name
         spus.page = response.result.nextPage
         spus.categoryId = categoryId
         spus.index = index
@@ -149,17 +150,17 @@ const actions = {
           goods[index1].status = true
           state.cartMap[goods[index1].goodsId] = goods[index1]
         }
-        state.shopInfo.categoryModelList[index].spus = spus
+        category.spus = spus
         commit('changeSpusDataMut', spus)
         wx.hideLoading()
       })
     } else {
-      commit('changeSpusDataMut', state.shopInfo.categoryModelList[index].spus)
+      commit('changeSpusDataMut', category.spus)
       wx.hideLoading()
     }
   },
-  addItemAction({ state, commit }, { item, index, categoryIndex }) {
-    var selectedFood = state.categoryMap[item.categoryId]
+  addItemAction({ state, commit }, {parentCategoryId, item, index, categoryIndex }) {
+    var selectedFood = state.categoryMap[parentCategoryId]
     if (!selectedFood.count) {
       selectedFood.count = 0
     }
@@ -170,10 +171,10 @@ const actions = {
     selectedFood.totalPrice += item.min_price
     var spus = selectedFood.spus
     if (!item.oldData) {
-      spus.datas[index].sequence += 1
-      spus.datas[index].index = index
-      spus.datas[index].categoryIndex = categoryIndex
-      state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
+      spus.datas[categoryIndex].goodsList[index].sequence += 1
+      spus.datas[categoryIndex].goodsList[index].index = index
+      spus.datas[categoryIndex].goodsList[index].categoryIndex = categoryIndex
+      state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] =  spus.datas[categoryIndex].goodsList[index]
     }
     else {
       var goods = state.cartMap[item.goodsId]
@@ -188,17 +189,17 @@ const actions = {
       }
     }
   },
-  reduceItemAction({ state, commit }, { item, index, categoryIndex }) {
-    var selectedFood = state.categoryMap[item.categoryId]
+  reduceItemAction({ state, commit }, {parentCategoryId,  item, index, categoryIndex }) {
+    var selectedFood = state.categoryMap[parentCategoryId]
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
     var spus = selectedFood.spus
     if (!item.oldData) {
-      spus.datas[index].sequence -= 1
-      spus.datas[index].index = index
-      spus.datas[index].categoryIndex = categoryIndex
+      spus.datas[categoryIndex].goodsList[index].sequence -= 1
+      spus.datas[categoryIndex].goodsList[index].index = index
+      spus.datas[categoryIndex].goodsList[index].categoryIndex = categoryIndex
       if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
-      state.cartMap[spus.datas[index].goodsId] = spus.datas[index]
+      state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] = spus.datas[categoryIndex].goodsList[index]
     }
     else {
       var goods = state.cartMap[item.goodsId]

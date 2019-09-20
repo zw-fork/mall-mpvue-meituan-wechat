@@ -60,31 +60,32 @@
         :scroll-top="scrollTop"
         @scroll="scroll"
       >
+      <div v-for="(item, index) in spus.datas" :key="index">
         <div class="section">
-          <span class="title">{{spus.title}}</span>
+          <span class="title">{{item.name}}</span>
         </div>
-        <div class="item-list" v-for="(item, index) in spus.datas" :key="index">
-          <div class="item" @click="legwork(item.type)">
+        <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
+          <div  class="item">
             <div class="item-l">
-              <img :src="path + item.picture">
+              <img :src="path + goods.picture">
             </div>
             <div class="item-r">
               <div class="div-title">
-                <span class="title">{{item.name}}</span>
+                <span class="title">{{goods.name}}{{index2}}</span>
               </div>
               <span class="sub-title"></span>
-              <div class="r-t" v-if="item.type!=300">
-                <span class="price">￥{{item.min_price}}</span>
+              <div class="r-t" v-if="goods.type!=300">
+                <span class="price">￥{{goods.min_price}}</span>
                 <div class="add-item" v-if="!showManage">
                   <div
                     class="add-l"
-                    @click.stop="reduceClick(item, index, spus.index)"
-                    v-if="item.sequence > 0"
+                    @click.stop="reduceClick(spus.datas[0].categoryId ,goods, index2, index)"
+                    v-if="goods.sequence > 0"
                   >
                     <i class="icon iconfont iconminus-circle"></i>
-                    <span>{{item.sequence}}</span>
+                    <span>{{goods.sequence}}</span>
                   </div>
-                  <div class="add-r" @click.stop="addClick(item, index, spus.index)">
+                  <div class="add-r" @click.stop="addClick(spus.datas[0].categoryId ,goods, index2, index)">
                     <i class="icon iconfont iconplus-circle"></i>
                   </div>
                 </div>
@@ -92,6 +93,7 @@
             </div>
           </div>
         </div>
+      </div>
       </scroll-view>
     </div>
     <div class="shop-info" v-else-if="pageIndex === 1">
@@ -137,11 +139,11 @@
               <span>{{item.min_price}}</span>
             </div>
             <section class="cart_list_control">
-              <span @click.stop="reduceClick(item, item.index, item.categoryIndex)">
+              <span @click.stop="reduceClick(spus.datas[0].categoryId ,item, item.index, item.categoryIndex)">
                 <i class="icon iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
               </span>
               <span class="cart_num">{{item.sequence}}</span>
-              <div @click.stop="addClick(item, item.index, item.categoryIndex)">
+              <div @click.stop="addClick(spus.datas[0].categoryId ,item, item.index, item.categoryIndex)">
                 <i class="icon iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
               </div>
             </section>
@@ -524,10 +526,10 @@ export default {
     skuClick(item, index) {
       this.selectSkuAction({ item, index });
     },
-    addClick(item, index, categoryIndex) {
-      this.addItemAction({ item, index, categoryIndex });
+    addClick(parentCategoryId, item, index, categoryIndex) {
+      this.addItemAction({parentCategoryId,  item, index, categoryIndex });
     },
-    reduceClick(item, index, categoryIndex) {
+    reduceClick(parentCategoryId, item, index, categoryIndex) {
       this.reduceItemAction({ item, index, categoryIndex });
     },
     closeSku() {
