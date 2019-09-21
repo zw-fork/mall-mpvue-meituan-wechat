@@ -81,6 +81,7 @@ const actions = {
                       }
                       shopInfo.categoryModelList[index2].totalPrice += itemList[i].currentPrice * itemList[i].sequence
                     } else if (category.childrenCategory.length>0) {
+                      var categoryId = category.categoryId;
                       var categoryList = category.childrenCategory;
                       for (var index3 in categoryList) {
                         category = categoryList[index3];
@@ -90,6 +91,7 @@ const actions = {
                           }
                           shopInfo.categoryModelList[index2].count += itemList[i].sequence
                           itemList[i].categoryIndex = index2
+                          itemList[i].parentCategoryId = categoryId
                           if (!shopInfo.categoryModelList[index2].totalPrice) {
                             shopInfo.categoryModelList[index2].totalPrice = 0
                           }
@@ -114,6 +116,8 @@ const actions = {
                         var goods = spus.datas[index1].goodsList[in1];
                         if (itemList[i].goodsId === goods.goodsId && !goods.sequence) {
                           goods.sequence = itemList[i].sequence
+                          goods.categoryIndex = index
+                          goods.index = parseInt(in1)
                           state.cartMap[goods.goodsId] = goods
                         }
                       }
@@ -195,6 +199,7 @@ const actions = {
     if (!item.oldData) {
       spus.datas[categoryIndex].goodsList[index].sequence += 1
       spus.datas[categoryIndex].goodsList[index].index = index
+      spus.datas[categoryIndex].goodsList[index].parentCategoryId = parentCategoryId
       spus.datas[categoryIndex].goodsList[index].categoryIndex = categoryIndex
       state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] =  spus.datas[categoryIndex].goodsList[index]
     }
@@ -220,6 +225,7 @@ const actions = {
       spus.datas[categoryIndex].goodsList[index].sequence -= 1
       spus.datas[categoryIndex].goodsList[index].index = index
       spus.datas[categoryIndex].goodsList[index].categoryIndex = categoryIndex
+      spus.datas[categoryIndex].goodsList[index].parentCategoryId = parentCategoryId
       if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
       state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] = spus.datas[categoryIndex].goodsList[index]
     }
