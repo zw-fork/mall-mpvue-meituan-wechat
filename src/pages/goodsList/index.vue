@@ -55,7 +55,7 @@
               </div>
               <div class="item-r">
                 <span class="title">{{item.name}}</span>
-                <span class="sub-title">分类：{{item.categoryName}}</span>
+                <span class="sub-title">分类：{{item.categoryName}}{{item.barcode}}</span>
                 <span
                   class="sale-num"
                   v-if="false"
@@ -352,11 +352,9 @@ export default {
       this.selectSkuAction({ item, index });
     },
     addClick(item, index, categoryIndex) {
-      item.oldData = true;
       this.addItemAction({ item, index, categoryIndex });
     },
     reduceClick(item, index, categoryIndex) {
-      item.oldData = true;
       this.reduceItemAction({ item, index, categoryIndex });
     },
     closeSku() {

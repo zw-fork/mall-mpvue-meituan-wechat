@@ -301,7 +301,6 @@ export default {
       this.selectSkuAction({ item, index });
     },
     addClick(item, index, categoryIndex) {
-      item.oldData = true;
       this.addItemAction({ item, index, categoryIndex });
     },
     closeSku() {
