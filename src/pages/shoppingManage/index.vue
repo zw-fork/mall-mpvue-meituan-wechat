@@ -257,7 +257,6 @@ export default {
       "getMenuDataAction",
       "getCommentDataAction",
       "getCategoryMenuDataAction",
-      "addItemAction",
       "closeShoppingCartAction",
       "selectSkuAction",
       "changeSkuDataMut",
@@ -374,11 +373,10 @@ export default {
     //滚动条滚到底部或右边的时候触发
     lower(e) {
       if (this.spus.page > 0) {
-        wx.showLoading({ title: "加载中...", mask: true });
         getFetch(
           "/goods/list/" + this.shopInfo.shopId,
           { page: this.spus.page, categoryId: this.spus.categoryId, status: 1 },
-          false
+          true
         ).then(response => {
           var goods = response.result.list;
           for (var index1 in goods) {
@@ -391,7 +389,6 @@ export default {
           }
           this.spus.datas = [...this.spus.datas, ...goods];
           this.spus.page = response.result.nextPage;
-          wx.hideLoading();
         });
       }
     },
@@ -443,30 +440,17 @@ export default {
     skuClick(item, index) {
       this.selectSkuAction({ item, index });
     },
-    addClick(item, index, categoryIndex) {
-      this.addItemAction({ item, index, categoryIndex });
-    },
     closeSku() {
       this.changeSkuModalMut(false);
     },
     attrClick(itm, idx, setIdx) {
       this.attrSelectAction({ itm, idx, setIdx });
     },
-    modalAdd() {
-      var skuInfo = this.skuInfo;
-      const { item, index } = skuInfo;
-      this.addItemAction({ item, index });
-      this.changeSkuModalDataAction({ num: 1 });
-    },
     closePreview() {
       this.changeItemModalMut(false);
     },
     itemClick(item, index) {
       this.previewItemAction({ item, index });
-    },
-    previewAdd() {
-      var item = this.previewInfo;
-      this.addItemAction({ item, index: item.preIndex });
     },
     previewAttr() {
       this.changeItemModalMut(false);
@@ -496,6 +480,7 @@ export default {
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
+      this.scrollTop = this.currentScroll;
       this.getMenuDataAction({
         shopId: this.shopId,
         index: this.tagIndex,
@@ -504,14 +489,7 @@ export default {
     }
   },
   onLoad(options) {
-    var location = this.userInfo.location;
     var data = {};
-    if (location) {
-      data = {
-        longitude: location.lng,
-        latitude: location.lat
-      };
-    }
     this.pageIndex = 0;
     var that = this;
     this.shopId = options.shopId;
