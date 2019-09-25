@@ -76,7 +76,7 @@
                 ></i>
               </div>
               <span class="title" v-else>{{goods.name}}</span>
-              <span class="sub-title"></span>
+              <span class="sub-title">{{goods.barcode}}</span>
               <div class="r-t"> 
                 <span class="price">￥{{goods.min_price}}</span><span v-if="goods.status==2">已下架</span>
               </div>

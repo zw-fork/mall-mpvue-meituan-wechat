@@ -548,6 +548,11 @@ export default {
         flag: true
       });
     }
+        setTimeout(() => {
+          if (this.shopId && this.$refs.authorize) {
+            var p = this.$refs.authorize.getUserInfo(this.shopId);
+          }
+      }, 1000)
   },
   onLoad(options) {
     var data = {};
@@ -558,13 +563,6 @@ export default {
     this.shopId = options.shopId;
     if (!this.shopId) {
       this.shopId = options.scene;
-      if (this.shopId) {
-        setTimeout(() => {
-          if (this.$refs.authorize) {
-        var p = this.$refs.authorize.getUserInfo(this.shopId);
-          }
-      }, 1000)
-      }
     }
     if (!this.shopId) {
       this.shopId = this.userInfo.shopId;
