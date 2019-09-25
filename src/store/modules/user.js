@@ -219,7 +219,7 @@ const actions = {
         }
       })
     } else {
-      postFetch('/goods/upload2', goodsModel, false).then(response => {
+      postFetch('/goods/upload2', goodsModel, true).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
         prevPage.setData({
