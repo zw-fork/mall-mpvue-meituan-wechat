@@ -270,6 +270,14 @@ export default {
     updateGoods(goodsModel) {
       postFetch("/goods/upload2", goodsModel, true).then(response => {
         this.showEdit = false;
+        if (goodsModel.status==0) {
+                this.scrollTop = this.currentScroll;
+            this.getMenuDataAction({
+              shopId: this.shopId,
+              index: this.tagIndex,
+              flag: true
+            });
+        }
       });
     },
     deleteGoods() {
