@@ -79,13 +79,13 @@
                 <div class="add-item" v-if="!showManage">
                   <div
                     class="add-l"
-                    @click.stop="reduceClick(spus.datas[0].categoryId ,goods, index2, index)"
+                    @click.stop="reduceClick(spus.categoryId ,goods, index2, index)"
                     v-if="goods.sequence > 0"
                   >
                     <i class="icon iconfont iconminus-circle"></i>
                     <span>{{goods.sequence}}</span>
                   </div>
-                  <div class="add-r" @click.stop="addClick(spus.datas[0].categoryId ,goods, index2, index)">
+                  <div class="add-r" @click.stop="addClick(spus.categoryId ,goods, index2, index)">
                     <i class="icon iconfont iconplus-circle"></i>
                   </div>
                 </div>
@@ -139,11 +139,11 @@
               <span>{{item.min_price}}</span>
             </div>
             <section class="cart_list_control">
-              <span @click.stop="reduceClick(spus.datas[0].categoryId ,item, item.index, item.categoryIndex)">
+              <span @click.stop="reduceClick(item.parentCategoryId ,item, item.index, item.categoryIndex)">
                 <i class="icon iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
               </span>
               <span class="cart_num">{{item.sequence}}</span>
-              <div @click.stop="addClick(spus.datas[0].categoryId ,item, item.index, item.categoryIndex)">
+              <div @click.stop="addClick(item.parentCategoryId ,item, item.index, item.categoryIndex)">
                 <i class="icon iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
               </div>
             </section>
@@ -180,24 +180,6 @@
           @click="toggleCartList()"
         ></i>
         <span v-if="productCount > 0">{{productCount}}</span>
-      </div>
-    </div>
-    <div class="editGoods" :style="divStyle" v-if="showEdit">
-      <div @click="editGoods">
-        <i class="icon iconfont iconedit"></i>
-        <span style="color:white;text-align: center;">编辑</span>
-      </div>
-      <div @click="upGoods" v-if="selectGoods.status==2">
-        <i class="icon iconfont iconshangjia1"></i>
-        <span style="color:white;text-align: center;">上架</span>
-      </div>
-      <div @click="downGoods" v-if="selectGoods.status==1">
-        <i class="icon iconfont iconxiajia"></i>
-        <span style="color:white;text-align: center;">下架</span>
-      </div>
-      <div @click="deleteGoods">
-        <i class="icon iconfont icondelete"></i>
-        <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
   </div>
@@ -271,6 +253,7 @@ export default {
             var cartGoods = {};
             cartGoods.index = goods.index;
             cartGoods.goodsId = goods.goodsId;
+            cartGoods.parentCategoryId = goods.parentCategoryId;
             cartGoods.categoryIndex = goods.categoryIndex;
             cartGoods.categoryId = goods.categoryId;
             cartGoods.picture = goods.picture;
@@ -349,30 +332,6 @@ export default {
     getMsgFormSon(data) {     
       this.showAuth2 = data || !this.userInfo.nickname;
     },
-    updateGoods(goodsModel) {
-      postFetch("/goods/upload2", goodsModel, false).then(response => {
-        this.showEdit = false;
-        wx.showLoading({ title: "加载中...", mask: true });
-        getFetch(
-          "/goods/list/" + this.shopInfo.shopId,
-          { page: 1, categoryId: this.spus.categoryId, status: 1 },
-          false
-        ).then(response => {
-          var goods = response.result.list;
-          for (var index1 in goods) {
-            var g = this.cartMap[goods[index1].goodsId];
-            if (g) {
-              goods[index1].sequence = g.sequence;
-              goods[index1].oldData = true;
-              this.cartMap[goods[index1].goodsId] = goods[index1];
-            }
-          }
-          this.spus.datas = goods;
-          this.spus.page = response.result.nextPage;
-          wx.hideLoading();
-        });
-      });
-    },
     deleteGoods() {
       var that = this;
       wx.showModal({
@@ -381,20 +340,6 @@ export default {
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 0;
-            that.updateGoods(that.selectGoods);
-          } else if (res.cancel) {
-          }
-        }
-      });
-    },
-    downGoods() {
-      var that = this;
-      wx.showModal({
-        content: "确定下架当前商品？",
-        confirmColor: "#FFC24A",
-        success: function(res) {
-          if (res.confirm) {
-            that.selectGoods.status = 2;
             that.updateGoods(that.selectGoods);
           } else if (res.cancel) {
           }

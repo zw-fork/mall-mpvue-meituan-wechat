@@ -24,11 +24,11 @@
               <div class="r-t">
                 <span class="price">￥{{item.min_price}}</span>
                 <div class="add-item">
-                  <div class="add-l" @click.stop="reduceClick(item)" v-if="item.sequence > 0">
+                  <div class="add-l" @click.stop="reduceClick(item.parentId, item)" v-if="item.sequence > 0">
                     <i class="icon iconfont iconminus-circle"></i>
                     <span>{{item.sequence}}</span>
                   </div>
-                  <div class="add-r" @click.stop="addClick(item)">
+                  <div class="add-r" @click.stop="addClick(item.parentId, item)">
                     <i class="icon iconfont iconplus-circle"></i>
                   </div>
                 </div>
@@ -57,11 +57,11 @@
               <span>{{item.min_price}}</span>
             </div>
             <section class="cart_list_control">
-              <span @click.stop="reduceClick(item, item.index, item.categoryIndex)">
+              <span @click.stop="reduceClick(item.parentCategoryId,item, item.index, item.categoryIndex)">
                 <i class="icon iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
               </span>
               <span class="cart_num">{{item.sequence}}</span>
-              <div @click.stop="addClick(item, item.index, item.categoryIndex)">
+              <div @click.stop="addClick(item.parentCategoryId, item, item.index, item.categoryIndex)">
                 <i class="icon iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
               </div>
             </section>
@@ -137,6 +137,7 @@
               var cartGoods = {}
               cartGoods.index = goods.index
               cartGoods.goodsId = goods.goodsId
+              cartGoods.parentCategoryId = goods.parentCategoryId;
               cartGoods.categoryIndex = goods.categoryIndex
               cartGoods.categoryId = goods.categoryId
               cartGoods.picture = goods.picture
@@ -157,17 +158,6 @@
           this.shopInfo.categoryModelList.map(item => count += item.count)
         }
         return count
-      },
-      reduceTip() {
-        var content = this.shopInfo.prompt_text
-        var price = 0
-        if (this.shopInfo.categoryModelList) {
-          this.shopInfo.categoryModelList.map(item => price += item.totalPrice)
-        }
-        if (price < this.shopInfo.min_price) {
-          var value = parseFloat(this.shopInfo.min_price - price).toFixed(2)
-          return `还差 ${value}元 就能起送`
-        }
       },
       btnTitle() {
       if (this.shopInfo && this.shopInfo.min_price != null) {
@@ -206,9 +196,7 @@
       scanClick() {
         wx.scanCode({
           success: (res) => {
-            this.name = 'a'
             this.getGoods()
-            console.log(res)
           }
         })
       },
@@ -229,17 +217,17 @@
       },
       getGoods() {
         if (this.name && this.name.trim()) {
-          wx.showLoading({ title: '加载中...', mask: true })
-          getFetch('/goods/list/' + this.shopInfo.shopId, { 'name': this.name.trim(), status:1 }, false).then(response => {
+          getFetch('/goods/list/' + this.shopInfo.shopId, { 'name': this.name.trim(), status:1 }, true).then(response => {
             this.list = response.result.list
             for (var index in this.list) {
+              this.list[index].oldData = true;
               var oldGoods = this.cartMap[this.list[index].goodsId]
               if (oldGoods) {
+                this.list[index].oldData = false;
                 this.list[index] = oldGoods
               }
             }
             this.page = response.result.nextPage
-            wx.hideLoading()
           })
         }
 
@@ -308,14 +296,12 @@
       skuClick(item, index) {
         this.selectSkuAction({ item, index })
       },
-      addClick(item, index, categoryIndex) {
-        item.oldData = true
-        this.addItemAction({ item, index, categoryIndex })
-      },
-      reduceClick(item, index, categoryIndex) {
-        item.oldData = true
-        this.reduceItemAction({ item, index, categoryIndex })
-      },
+      addClick(parentCategoryId, item, index, categoryIndex) {
+      this.addItemAction({parentCategoryId, item, index, categoryIndex });
+    },
+    reduceClick(parentCategoryId, item, index, categoryIndex) {
+      this.reduceItemAction({parentCategoryId, item, index, categoryIndex });
+    },
       closeSku() {
         this.changeSkuModalMut(false)
       },
@@ -353,6 +339,9 @@
         var item = this.previewInfo
         this.selectSkuAction({ item, index: item.preIndex })
       }
+    },
+    onShow(options) {
+      this.list = [];
     },
     onLoad(options)
     {

@@ -70,7 +70,7 @@
               >
                 <span class="title">{{goods.name}}</span>
                 <i
-                @click.stop="manageGoods($event, index)"
+                @click.stop="manageGoods($event, goods)"
                   class="icon iconfont icondian"
                   style="float:right;position:relative;display:inline-block"
                 ></i>
@@ -145,7 +145,6 @@ export default {
   data() {
     return {
       selectGoods: undefined,
-      selectIndex: undefined,
       shopId: undefined,
       showEdit: false,
       showManage: false,
@@ -326,9 +325,8 @@ export default {
         url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId
       });
     },
-    manageGoods(e, index) {
-      this.selectGoods = this.spus.datas[index];
-      this.selectIndex = index;
+    manageGoods(e, goods) {
+      this.selectGoods = goods;
       this.showEdit = true;
       this.divStyle = "top:" + (2 * e.target.y - 50) + "rpx;";
       return false;
