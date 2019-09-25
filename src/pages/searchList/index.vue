@@ -297,9 +297,11 @@
         this.selectSkuAction({ item, index })
       },
       addClick(parentCategoryId, item, index, categoryIndex) {
+      parentCategoryId = parentCategoryId?parentCategoryId:item.categoryId;  
       this.addItemAction({parentCategoryId, item, index, categoryIndex });
     },
     reduceClick(parentCategoryId, item, index, categoryIndex) {
+      parentCategoryId = parentCategoryId?parentCategoryId:item.categoryId;  
       this.reduceItemAction({parentCategoryId, item, index, categoryIndex });
     },
       closeSku() {
@@ -342,6 +344,7 @@
     },
     onShow(options) {
       this.list = [];
+      this.name = '';
     },
     onLoad(options)
     {

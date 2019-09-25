@@ -117,6 +117,7 @@ const actions = {
                         if (itemList[i].goodsId === goods.goodsId && !goods.sequence) {
                           goods.sequence = itemList[i].sequence
                           goods.categoryIndex = index
+                          goods.parentCategoryId = itemList[i].parentCategoryId
                           goods.index = parseInt(in1)
                           state.cartMap[goods.goodsId] = goods
                         }
@@ -197,26 +198,28 @@ const actions = {
     }
     selectedFood.totalPrice += item.min_price
     var spus = selectedFood.spus
-    if (!item.oldData) {
-      spus.datas[categoryIndex].goodsList[index].sequence += 1
-      spus.datas[categoryIndex].goodsList[index].index = index
-      spus.datas[categoryIndex].goodsList[index].parentCategoryId = parentCategoryId
-      spus.datas[categoryIndex].goodsList[index].categoryIndex = categoryIndex
-      state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] =  spus.datas[categoryIndex].goodsList[index]
-    }
-    else {
-      if (spus) {
-        for (var index1 in spus.datas) {
-          var category = spus.datas[index1];
-          if (item.categoryId == category.categoryId) {
-            for (var index2 in category.goodsList) {
-              if (item.goodsId == category.goodsList[index2].goodsId) {
-                category.goodsList[index2].sequence += 1
-              }
+    var selectGoods = null;
+    if (spus) {
+      for (var index1 in spus.datas) {
+        var category = spus.datas[index1];
+        if (item.categoryId == category.categoryId) {
+          for (var index2 in category.goodsList) {
+            var selectGoods2 = category.goodsList[index2]
+            if (item.goodsId == selectGoods2.goodsId) {
+              selectGoods = selectGoods2 
+              selectGoods.sequence += 1
+              break;
             }
           }
         }
       }
+    }
+    if (!item.oldData) {
+      selectGoods.parentCategoryId = parentCategoryId
+      state.cartMap[selectGoods.goodsId] =  selectGoods
+    }
+    else {
+
       var goods = state.cartMap[item.goodsId]
       if (goods) {
         goods.sequence += 1
@@ -236,13 +239,27 @@ const actions = {
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
     var spus = selectedFood.spus
-    if (!item.oldData) {  
-      spus.datas[categoryIndex].goodsList[index].sequence -= 1
-      spus.datas[categoryIndex].goodsList[index].index = index
-      spus.datas[categoryIndex].goodsList[index].categoryIndex = categoryIndex
-      spus.datas[categoryIndex].goodsList[index].parentCategoryId = parentCategoryId
-      if (spus.datas[index].sequence <= 0) spus.datas[index].sequence = 0
-      state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] = spus.datas[categoryIndex].goodsList[index]
+
+    var selectGoods = null;
+    if (spus) {
+      for (var index1 in spus.datas) {
+        var category = spus.datas[index1];
+        if (item.categoryId == category.categoryId) {
+          for (var index2 in category.goodsList) {
+            var selectGoods2 = category.goodsList[index2]
+            if (item.goodsId == selectGoods2.goodsId) {
+              selectGoods = selectGoods2 
+              selectGoods.sequence -= 1
+              if (selectGoods.sequence <= 0) spus.datas[index].sequence = 0
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (!item.oldData) {
+      selectGoods.parentCategoryId = parentCategoryId
+      state.cartMap[selectGoods.goodsId] =  selectGoods
     }
     else {
       if (spus) {
