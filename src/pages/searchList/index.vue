@@ -191,7 +191,7 @@
     },
     methods: {
       ...mapMutations("shoppingCart", ["changeReduceFeeDataMut", "changeSkuModalMut", "changeItemModalMut"]),
-      ...mapActions("shoppingCart", ["getMenuDataAction", "getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
+      ...mapActions("shoppingCart", ["getCommentDataAction", "getCategoryMenuDataAction", "addItemAction", "reduceItemAction", "closeShoppingCartAction", "selectSkuAction", "changeSkuDataMut", "attrSelectAction", "changeSkuModalDataAction", "previewItemAction"]),
       ...mapActions("submitOrder", ["createOrderDetailAction"]),
       scanClick() {
         wx.scanCode({
@@ -345,21 +345,7 @@
     onShow(options) {
       this.list = [];
       this.name = '';
-    },
-    onLoad(options)
-    {
-      var that = this
-      var shopId = options.shopId;
-      var update = false
-      this.showCart = false
-      if (options.update == 'true') {
-        update = true
-      }
-      if (shopId != this.shopInfo.shopId) {
-        this.tagIndex = 0
-      }
-      this.getMenuDataAction({ shopId: shopId, index: this.tagIndex, flag: update })
-    },
+    }
   }
 </script>
 

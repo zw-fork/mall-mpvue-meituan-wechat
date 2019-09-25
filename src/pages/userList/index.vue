@@ -146,10 +146,8 @@ export default {
       "changeItemModalMut"
     ]),
     ...mapActions("shoppingCart", [
-      "getMenuDataAction",
       "getCommentDataAction",
       "getCategoryMenuDataAction",
-      "addItemAction",
       "closeShoppingCartAction",
       "selectSkuAction",
       "changeSkuDataMut",
@@ -304,9 +302,6 @@ export default {
     skuClick(item, index) {
       this.selectSkuAction({ item, index });
     },
-    addClick(item, index, categoryIndex) {
-      this.addItemAction({ item, index, categoryIndex });
-    },
     closeSku() {
       this.changeSkuModalMut(false);
     },
@@ -316,7 +311,6 @@ export default {
     modalAdd() {
       var skuInfo = this.skuInfo;
       const { item, index } = skuInfo;
-      this.addItemAction({ item, index });
       this.changeSkuModalDataAction({ num: 1 });
     },
     modalReduce() {
@@ -329,10 +323,6 @@ export default {
     },
     itemClick(item, index) {
       this.previewItemAction({ item, index });
-    },
-    previewAdd() {
-      var item = this.previewInfo;
-      this.addItemAction({ item, index: item.preIndex });
     },
     previewAttr() {
       this.changeItemModalMut(false);

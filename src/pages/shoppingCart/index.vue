@@ -537,24 +537,22 @@ export default {
   onShow(options) {
     this.showEdit = false;
     var pages = getCurrentPages();
+    var data = {};
+    data.categoryStatus = 1;
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
       this.getMenuDataAction({
         shopId: this.shopId,
+        data: data,
         index: this.tagIndex,
         flag: true
       });
     }
   },
   onLoad(options) {
-    var location = this.userInfo.location;
     var data = {};
-    if (location) {
-      data = {
-        longitude: location.lng,
-        latitude: location.lat
-      };
-    }
+    data.categoryStatus = 1;
+    data.goodsStatus = 1;
     this.pageIndex = 0;
     var that = this;
     this.shopId = options.shopId;

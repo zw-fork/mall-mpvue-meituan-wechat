@@ -44,7 +44,7 @@
           :key="index"
           @click="categoryClick(item, index)"
         >
-          <span>{{item.name}}</span>
+          <span>{{item.name}}</span><span v-if="item.status==2">(隐藏)</span>
         </div>
       </scroll-view>
       <scroll-view
@@ -77,8 +77,8 @@
               </div>
               <span class="title" v-else>{{goods.name}}</span>
               <span class="sub-title"></span>
-              <div class="r-t">
-                <span class="price">￥{{goods.min_price}}</span>
+              <div class="r-t"> 
+                <span class="price">￥{{goods.min_price}}</span><span v-if="goods.status==2">已下架</span>
               </div>
             </div>
           </div>
@@ -268,27 +268,8 @@ export default {
       wx.setClipboardData({data: this.shopInfo.wechatId});
     },
     updateGoods(goodsModel) {
-      postFetch("/goods/upload2", goodsModel, false).then(response => {
+      postFetch("/goods/upload2", goodsModel, true).then(response => {
         this.showEdit = false;
-        wx.showLoading({ title: "加载中...", mask: true });
-        getFetch(
-          "/goods/list/" + this.shopInfo.shopId,
-          { page: 1, categoryId: this.spus.categoryId, status: 1 },
-          false
-        ).then(response => {
-          var goods = response.result.list;
-          for (var index1 in goods) {
-            var g = this.cartMap[goods[index1].goodsId];
-            if (g) {
-              goods[index1].sequence = g.sequence;
-              goods[index1].oldData = true;
-              this.cartMap[goods[index1].goodsId] = goods[index1];
-            }
-          }
-          this.spus.datas = goods;
-          this.spus.page = response.result.nextPage;
-          wx.hideLoading();
-        });
       });
     },
     deleteGoods() {
@@ -299,6 +280,20 @@ export default {
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 0;
+            that.updateGoods(that.selectGoods);
+          } else if (res.cancel) {
+          }
+        }
+      });
+    },
+    upGoods() {
+      var that = this;
+      wx.showModal({
+        content: "确定上架当前商品？",
+        confirmColor: "#FFC24A",
+        success: function(res) {
+          if (res.confirm) {
+            that.selectGoods.status = 1;
             that.updateGoods(that.selectGoods);
           } else if (res.cancel) {
           }
@@ -497,11 +492,7 @@ export default {
       this.shopId = this.userInfo.shopId;
       this.showManage = this.shopId ? true: false;
     }
-    var update = false;
     this.showCart = false;
-    if (options.update == "true") {
-      update = true;
-    }
     if (this.shopId != this.shopInfo.shopId) {
       this.tagIndex = 0;
     }
@@ -509,7 +500,7 @@ export default {
       shopId: this.shopId,
       data: data,
       index: this.tagIndex,
-      flag: update
+      flag: true
     });
   },
   onShareAppMessage: function() {
