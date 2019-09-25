@@ -205,12 +205,14 @@ const actions = {
       state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] =  spus.datas[categoryIndex].goodsList[index]
     }
     else {
-      for (var index1 in spus.datas) {
-        var category = spus.datas[index1];
-        if (item.categoryId == category.categoryId) {
-          for (var index2 in category.goodsList) {
-            if (item.goodsId == category.goodsList[index2].goodsId) {
-              category.goodsList[index2].sequence += 1
+      if (spus) {
+        for (var index1 in spus.datas) {
+          var category = spus.datas[index1];
+          if (item.categoryId == category.categoryId) {
+            for (var index2 in category.goodsList) {
+              if (item.goodsId == category.goodsList[index2].goodsId) {
+                category.goodsList[index2].sequence += 1
+              }
             }
           }
         }
@@ -243,6 +245,7 @@ const actions = {
       state.cartMap[spus.datas[categoryIndex].goodsList[index].goodsId] = spus.datas[categoryIndex].goodsList[index]
     }
     else {
+      if (spus) {
       for (var index1 in spus.datas) {
         var category = spus.datas[index1];
         if (item.categoryId == category.categoryId) {
@@ -253,6 +256,7 @@ const actions = {
           }
         }
       }
+    }
       var goods = state.cartMap[item.goodsId]
       if (goods) {
         goods.sequence -= 1
