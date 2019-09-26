@@ -36,6 +36,7 @@
       </div>
     </div>
     <div class="list-c" v-if="pageIndex === 0" >
+      <div class="list-ll">
       <scroll-view class="list-l" :scroll-y="true">
         <div
           class="l-item"
@@ -47,6 +48,14 @@
           <span>{{item.name}}</span><span v-if="item.status==2">(隐藏)</span>
         </div>
       </scroll-view>
+        </div>
+        <div>
+              <span class="title">11111</span>
+    <span class="title">22222</span>
+    <span class="title">33333</span>
+    <span class="title">44444</span>
+ <div class="list-rr">
+
       <scroll-view
         class="list-r"
         :scroll-y="true"
@@ -85,6 +94,8 @@
         </div>
         </div>
       </scroll-view>
+      </div>
+        </div>
     </div>
     <div class="shop-info" v-else-if="pageIndex === 1">
       <div class="address">
@@ -521,6 +532,164 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list-rr {
+    display: flex;
+    top: 0rpx;
+    bottom: 0rpx;
+    position:relative;
+    .list-r {
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+
+      .section {
+        display: flex;
+        height: 70rpx;
+        align-items: center;
+        margin-left: 20rpx;
+
+        span {
+          font-size: 28rpx;
+          color: $textBlack-color;
+        }
+      }
+
+      .item-list {
+        display: flex;
+        margin: 0 20rpx;
+        flex-direction: column;
+
+        .item {
+          display: flex;
+          margin-bottom: 30rpx;
+
+          .item-l {
+            img {
+              width: 160rpx;
+              height: 160rpx;
+              background-size: cover;
+            }
+          }
+
+          .item-r {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20rpx;
+            justify-content: space-between;
+            flex: 1;
+
+            .title {
+              font-size: 28rpx;
+              color: $textBlack-color;
+              font-weight: bold;
+              overflow: hidden;
+              line-height: 30rpx;
+              height: 30rpx;
+            }
+
+            .sub-title {
+              font-size: 20rpx;
+              color: $textDarkGray-color;
+              line-height: 30rpx;
+              overflow: hidden;
+              height: 30rpx;
+              margin-top: 10rpx;
+            }
+
+            .sale-num {
+              font-size: 20rpx;
+              color: $textDarkGray-color;
+              margin-top: 10rpx;
+            }
+
+            .r-t {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+
+              .price {
+                font-size: 32rpx;
+                color: $mtRed-color;
+                font-weight: bold;
+              }
+
+              .sku {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: $theme-color;
+                padding: 8rpx 12rpx;
+                border-radius: 25rpx;
+                position: relative;
+
+                span {
+                  font-size: 20rpx;
+                  color: $textBlack-color;
+                }
+
+                .count {
+                  width: 30rpx;
+                  height: 30rpx;
+                  background-color: $mtRed-color;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  position: absolute;
+                  color: white;
+                  font-size: 20rpx;
+                  right: 0;
+                  top: -14rpx;
+                  border-radius: 15rpx;
+                }
+              }
+
+              .add-item {
+                display: flex;
+                align-items: center;
+
+                .add-l {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+
+                  i {
+                    font-size: 50rpx;
+                    color: $textGray-color;
+                  }
+
+                  span {
+                    font-size: 32rpx;
+                    color: $textBlack-color;
+                    margin: 0 20rpx;
+                  }
+                }
+
+                .add-r {
+                  i {
+                    color: #ff6347;
+                    font-size: 54rpx;
+                  }
+                }
+              }
+            }
+
+            .tags-c {
+              display: flex;
+              align-items: center;
+              margin-top: 10rpx;
+              flex-wrap: wrap;
+
+              img {
+                width: 60rpx;
+                height: 30rpx;
+                background-size: cover;
+              }
+            }
+          }
+        }
+      }
+    }
+    }
 .editGoods {
   background-color: black;
   display: flex;
@@ -832,11 +1001,14 @@ export default {
     top: 200rpx;
     width: 100%;
     bottom: 0rpx;
-
+    .list-ll {
+          display: flex;
+    top: 200rpx;
+    width: 160rpx;
+    bottom: 0rpx;
     .list-l {
       display: flex;
       flex-direction: column;
-      width: 160rpx;
       background-color: $page-bgcolor;
 
       .l-item {
@@ -886,161 +1058,8 @@ export default {
         }
       }
     }
-
-    .list-r {
-      display: block;
-      flex-direction: column;
-      flex: 1;
-      background-color: white;
-
-      .section {
-        display: flex;
-        height: 70rpx;
-        align-items: center;
-        margin-left: 20rpx;
-
-        span {
-          font-size: 28rpx;
-          color: $textBlack-color;
-        }
-      }
-
-      .item-list {
-        display: flex;
-        margin: 0 20rpx;
-        flex-direction: column;
-
-        .item {
-          display: flex;
-          margin-bottom: 30rpx;
-
-          .item-l {
-            img {
-              width: 160rpx;
-              height: 160rpx;
-              background-size: cover;
-            }
-          }
-
-          .item-r {
-            display: flex;
-            flex-direction: column;
-            margin-left: 20rpx;
-            justify-content: space-between;
-            flex: 1;
-
-            .title {
-              font-size: 28rpx;
-              color: $textBlack-color;
-              font-weight: bold;
-              overflow: hidden;
-              line-height: 30rpx;
-              height: 30rpx;
-            }
-
-            .sub-title {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              line-height: 30rpx;
-              overflow: hidden;
-              height: 30rpx;
-              margin-top: 10rpx;
-            }
-
-            .sale-num {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              margin-top: 10rpx;
-            }
-
-            .r-t {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-
-              .price {
-                font-size: 32rpx;
-                color: $mtRed-color;
-                font-weight: bold;
-              }
-
-              .sku {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: $theme-color;
-                padding: 8rpx 12rpx;
-                border-radius: 25rpx;
-                position: relative;
-
-                span {
-                  font-size: 20rpx;
-                  color: $textBlack-color;
-                }
-
-                .count {
-                  width: 30rpx;
-                  height: 30rpx;
-                  background-color: $mtRed-color;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  position: absolute;
-                  color: white;
-                  font-size: 20rpx;
-                  right: 0;
-                  top: -14rpx;
-                  border-radius: 15rpx;
-                }
-              }
-
-              .add-item {
-                display: flex;
-                align-items: center;
-
-                .add-l {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-
-                  i {
-                    font-size: 50rpx;
-                    color: $textGray-color;
-                  }
-
-                  span {
-                    font-size: 32rpx;
-                    color: $textBlack-color;
-                    margin: 0 20rpx;
-                  }
-                }
-
-                .add-r {
-                  i {
-                    color: #ff6347;
-                    font-size: 54rpx;
-                  }
-                }
-              }
-            }
-
-            .tags-c {
-              display: flex;
-              align-items: center;
-              margin-top: 10rpx;
-              flex-wrap: wrap;
-
-              img {
-                width: 60rpx;
-                height: 30rpx;
-                background-size: cover;
-              }
-            }
-          }
-        }
-      }
     }
-
+    
     ::-webkit-scrollbar {
       width: 0;
       height: 0;
