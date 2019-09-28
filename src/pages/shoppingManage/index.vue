@@ -533,15 +533,14 @@ export default {
 
 <style lang="scss" scoped>
 .list-rr {
-    display: flex;
-    top: 0rpx;
     bottom: 0rpx;
-    position:relative;
+    top:70rpx;
+    position:absolute;
+    display:flex;
     .list-r {
+      background-color: white;
       display: flex;
       flex-direction: column;
-      background-color: white;
-
       .section {
         display: flex;
         height: 70rpx;
