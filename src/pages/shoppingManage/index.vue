@@ -49,11 +49,30 @@
         </div>
       </scroll-view>
         </div>
-        <div>
-              <span class="title">11111</span>
-    <span class="title">22222</span>
-    <span class="title">33333</span>
-    <span class="title">44444</span>
+        <div style="background-color: white;">
+          <div>
+          <div style="width:80%;float: left;">
+          <div class="btn">
+            <span>取消退款</span>
+          </div>
+          <div class="btn">
+            <span>再来一单</span>
+          </div>
+                    <div class="btn">
+            <span>取消退款</span>
+          </div>
+          <div class="btn">
+            <span>再来一单</span>
+          </div>
+                    <div class="btn">
+            <span>取消退款</span>
+          </div>
+          <div class="btn">
+            <span>再来一单</span>
+          </div>
+          </div>
+          <div style="width:20%;float: right;">ddd</div>
+          </div>
  <div class="list-rr">
 
       <scroll-view
@@ -62,13 +81,14 @@
         @scrolltolower="lower"
         :scroll-top="scrollTop"
         @scroll="scroll"
+        :scroll-into-view="id"
       >
       <div v-for="(item, index) in spus.datas" :key="index">
         <div class="section" v-if="item.goodsList && item.goodsList[0].goodsId">
           <span class="title">{{item.name}}</span>
         </div>
         <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
-          <div class="item" v-if="goods.goodsId">
+          <div class="item" v-if="goods.goodsId" :id="'aaa' + goods.goodsId">
             <div class="item-l">
               <img :src="path + goods.picture"> 
             </div>
@@ -161,6 +181,7 @@ export default {
       showManage: false,
       show: false,
       divStyle: "",
+      id:undefined,
       scrollTop: undefined,
       currentScroll: 0,
       showCart: false,
@@ -436,6 +457,8 @@ export default {
       order.itemList = selectedArr;
     },
     categoryClick(item, index) {
+      this.id= undefined;
+      this.id='aaa' + 209;
       this.tagIndex = index;
       this.showEdit = false;
       var categoryId = item.categoryId;
@@ -536,9 +559,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.btn {
+    float: left;
+    display: flex;
+    background-color: $page-bgcolor;
+    margin: 10rpx;
+    border-radius: 4rpx;
+
+    span {
+      font-size: 26rpx;
+      margin: 6rpx 10rpx;
+    }
+  }
+.first{
+	left: 100px;
+	background-color: #0fc;
+	float: left;
+}
 .list-rr {
     bottom: 0rpx;
-    top:70rpx;
+    top:170rpx;
     position:absolute;
     display:flex;
     .list-r {
