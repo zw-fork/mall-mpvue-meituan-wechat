@@ -41,6 +41,7 @@
       </div>
     </div>
     <div class="list-c" v-if="pageIndex === 0">
+      <div class="list-ll">
       <scroll-view class="list-l" :scroll-y="true">
         <div
           class="l-item"
@@ -53,16 +54,33 @@
           <text class="count" v-if="item.count > 0">{{item.count}}</text>
         </div>
       </scroll-view>
+        </div>
+        <div>
+ <div class="list-r1">
+         <div class="category-c">
+        <scroll-view class="l" scroll-x>
+          <view class="tab-item" :class="{active: index === childIndex}" v-for="(item, index) in shopInfo.categoryModelList[tagIndex].childrenCategory" :key="index">
+            <span  @click="changeCategory(item, index)">{{item.name}}</span>
+          </view>
+          <view class="line"></view>
+        </scroll-view>
+        <div class="r">
+          <i class="icon mt-arrow-down-o"></i>
+        </div>
+      </div>
+      </div>
+       <div class="list-rr">
       <scroll-view
         class="list-r"
         :scroll-y="true"
         @scrolltolower="lower"
         :scroll-top="scrollTop"
         @scroll="scroll"
+        :scroll-into-view="id"
       >
       <div v-for="(item, index) in spus.datas" :key="index">
         <div class="section" v-if="item.goodsList && item.goodsList[0].goodsId">
-          <span class="title">{{item.name}}</span>
+          <span :id="'category_' + item.categoryId" class="title">{{item.name}}</span>
         </div>
         <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
           <div  class="item" v-if="goods.goodsId">
@@ -95,6 +113,8 @@
         </div>
       </div>
       </scroll-view>
+            </div>
+      </div>
     </div>
     <div class="shop-info" v-else-if="pageIndex === 1">
       <div class="address">
@@ -198,11 +218,13 @@ import authorize from "@/components/authorize";
 export default {
   data() {
     return {
+      childIndex: 0,
       selectGoods: undefined,
       selectIndex: undefined,
       shopId: undefined,
       showEdit: false,
       show: false,
+      id:undefined,
       divStyle: "",
       scrollTop: undefined,
       currentScroll: 0,
@@ -321,6 +343,10 @@ export default {
       "previewItemAction"
     ]),
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
+    changeCategory(item, index) {
+      this.childIndex = index;
+       this.id='category_' + item.categoryId;
+    },
     legwork(type) {
       if (type == 300) {
       //  wx.navigateTo({ url: '/pages/legwork/main' })
@@ -591,7 +617,307 @@ export default {
 };
 </script>
 
+
+
 <style lang="scss" scoped>
+.list-r1 {
+  display:flex;
+position:absolute;
+    bottom: 0rpx;
+    top:0rpx;
+  height: 70rpx;
+    display:flex;
+    width:100%;
+}
+.main{
+      display: flex;
+    flex-direction: column;
+}
+ .category-c {
+    width:80%;
+left:0rpx;
+top:0rpx;
+      display: flex;
+      height: 70rpx;
+      position: relative;   
+      white-space:nowrap;
+      background-color: #FAFAFA;
+      .l {
+              display: flex;
+      flex-direction: column;
+        line-height: 70rpx;
+        white-space: nowrap;
+        position: relative;
+        	        .active {
+          color: $theme-color;
+          font-weight: bold;
+
+          }
+        .tab-item {
+          transition: all 0.2s;
+          font-size: 24rpx;
+          height: 70rpx;
+          display: inline-block;
+          color: $textDarkGray-color;
+          margin: 0 30rpx;
+        }
+      }
+      .r {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70rpx;
+        height: 70rpx;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: #FAFAFA;
+        flex: 1;
+        i {
+          font-size: 24rpx;
+          color: $textGray-color;
+        }
+      }
+    }
+  .category-c1 {
+    width:80%;
+left:160rpx;
+top:70rpx;
+      display: flex;
+      height: 70rpx;
+      position: relative;   
+      white-space:nowrap;
+      background-color: #FAFAFA;
+      .l {
+              display: flex;
+      flex-direction: column;
+        text-align: center;
+        line-height: 70rpx;
+        white-space: nowrap;
+        position: relative;
+        .tab-item {
+          transition: all 0.2s;
+          font-size: 24rpx;
+          height: 70rpx;
+          display: inline-block;
+          color: $textDarkGray-color;
+          margin: 0 30rpx;
+        }
+        .tab-item:first-child {
+          color: $theme-color;
+          font-weight: bold;
+        }
+        .line {
+          display: block;
+          position: absolute;
+          left: 38rpx;
+          height: 4rpx;
+          background: $theme-color;
+          bottom: 38rpx;
+          transition: left 0.2s;
+          z-index: 99;
+          width: 32rpx;
+        }
+      }
+      .r {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70rpx;
+        height: 70rpx;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: #FAFAFA;
+        flex: 1;
+        i {
+          font-size: 24rpx;
+          color: $textGray-color;
+        }
+      }
+    }
+.btn {
+    float: left;
+    display: flex;
+    background-color: $page-bgcolor;
+    margin: 10rpx;
+    border-radius: 4rpx;
+
+    span {
+      font-size: 26rpx;
+      margin: 6rpx 10rpx;
+    }
+  }
+.first{
+	left: 100px;
+	background-color: #0fc;
+	float: left;
+}
+.list-r1 {
+    bottom: 0rpx;
+    top:0rpx;
+    position:absolute;
+    display:flex;
+}
+.list-rr {
+    bottom: 0rpx;
+    top:70rpx;
+    position:absolute;
+    display:flex;
+    .list-r {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      .section {
+        display: flex;
+        height: 70rpx;
+        align-items: center;
+        margin-left: 20rpx;
+
+        span {
+          font-size: 28rpx;
+          color: $textBlack-color;
+        }
+      }
+
+      .item-list {
+        display: flex;
+        margin: 0 20rpx;
+        flex-direction: column;
+
+        .item {
+          display: flex;
+          margin-bottom: 30rpx;
+
+          .item-l {
+            img {
+              width: 160rpx;
+              height: 160rpx;
+              background-size: cover;
+            }
+          }
+
+          .item-r {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20rpx;
+            justify-content: space-between;
+            flex: 1;
+
+            .title {
+              font-size: 28rpx;
+              color: $textBlack-color;
+              font-weight: bold;
+              overflow: hidden;
+              line-height: 30rpx;
+              height: 30rpx;
+            }
+
+            .sub-title {
+              font-size: 20rpx;
+              color: $textDarkGray-color;
+              line-height: 30rpx;
+              overflow: hidden;
+              height: 30rpx;
+              margin-top: 10rpx;
+            }
+
+            .sale-num {
+              font-size: 20rpx;
+              color: $textDarkGray-color;
+              margin-top: 10rpx;
+            }
+
+            .r-t {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+
+              .price {
+                font-size: 32rpx;
+                color: $mtRed-color;
+                font-weight: bold;
+              }
+
+              .sku {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: $theme-color;
+                padding: 8rpx 12rpx;
+                border-radius: 25rpx;
+                position: relative;
+
+                span {
+                  font-size: 20rpx;
+                  color: $textBlack-color;
+                }
+
+                .count {
+                  width: 30rpx;
+                  height: 30rpx;
+                  background-color: $mtRed-color;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  position: absolute;
+                  color: white;
+                  font-size: 20rpx;
+                  right: 0;
+                  top: -14rpx;
+                  border-radius: 15rpx;
+                }
+              }
+
+              .add-item {
+                display: flex;
+                align-items: center;
+
+                .add-l {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+
+                  i {
+                    font-size: 50rpx;
+                    color: $textGray-color;
+                  }
+
+                  span {
+                    font-size: 32rpx;
+                    color: $textBlack-color;
+                    margin: 0 20rpx;
+                  }
+                }
+
+                .add-r {
+                  i {
+                    color: #ff6347;
+                    font-size: 54rpx;
+                  }
+                }
+              }
+            }
+
+            .tags-c {
+              display: flex;
+              align-items: center;
+              margin-top: 10rpx;
+              flex-wrap: wrap;
+
+              img {
+                width: 60rpx;
+                height: 30rpx;
+                background-size: cover;
+              }
+            }
+          }
+        }
+      }
+    }
+    }
 .editGoods {
   background-color: black;
   display: flex;
@@ -761,6 +1087,7 @@ export default {
     .header {
       display: flex;
       background-color: white;
+      align-items: center;
       height: 130rpx;
 
       .h-l {
@@ -901,12 +1228,15 @@ export default {
     position: fixed;
     top: 200rpx;
     width: 100%;
-    bottom: 100rpx;
-
+    bottom: 0rpx;
+    .list-ll {
+          display: flex;
+    top: 200rpx;
+    width: 160rpx;
+    bottom: 0rpx;
     .list-l {
       display: flex;
       flex-direction: column;
-      width: 160rpx;
       background-color: $page-bgcolor;
 
       .l-item {
@@ -956,161 +1286,8 @@ export default {
         }
       }
     }
-
-    .list-r {
-      display: block;
-      flex-direction: column;
-      flex: 1;
-      background-color: white;
-
-      .section {
-        display: flex;
-        height: 70rpx;
-        align-items: center;
-        margin-left: 20rpx;
-
-        span {
-          font-size: 28rpx;
-          color: $textBlack-color;
-        }
-      }
-
-      .item-list {
-        display: flex;
-        margin: 0 20rpx;
-        flex-direction: column;
-
-        .item {
-          display: flex;
-          margin-bottom: 30rpx;
-
-          .item-l {
-            img {
-              width: 160rpx;
-              height: 160rpx;
-              background-size: cover;
-            }
-          }
-
-          .item-r {
-            display: flex;
-            flex-direction: column;
-            margin-left: 20rpx;
-            justify-content: space-between;
-            flex: 1;
-
-            .title {
-              font-size: 28rpx;
-              color: $textBlack-color;
-              font-weight: bold;
-              overflow: hidden;
-              line-height: 30rpx;
-              height: 30rpx;
-            }
-
-            .sub-title {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              line-height: 30rpx;
-              overflow: hidden;
-              height: 30rpx;
-              margin-top: 10rpx;
-            }
-
-            .sale-num {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              margin-top: 10rpx;
-            }
-
-            .r-t {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-
-              .price {
-                font-size: 32rpx;
-                color: $mtRed-color;
-                font-weight: bold;
-              }
-
-              .sku {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: $theme-color;
-                padding: 8rpx 12rpx;
-                border-radius: 25rpx;
-                position: relative;
-
-                span {
-                  font-size: 20rpx;
-                  color: $textBlack-color;
-                }
-
-                .count {
-                  width: 30rpx;
-                  height: 30rpx;
-                  background-color: $mtRed-color;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  position: absolute;
-                  color: white;
-                  font-size: 20rpx;
-                  right: 0;
-                  top: -14rpx;
-                  border-radius: 15rpx;
-                }
-              }
-
-              .add-item {
-                display: flex;
-                align-items: center;
-
-                .add-l {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-
-                  i {
-                    font-size: 50rpx;
-                    color: $textGray-color;
-                  }
-
-                  span {
-                    font-size: 32rpx;
-                    color: $textBlack-color;
-                    margin: 0 20rpx;
-                  }
-                }
-
-                .add-r {
-                  i {
-                    color: #ff6347;
-                    font-size: 54rpx;
-                  }
-                }
-              }
-            }
-
-            .tags-c {
-              display: flex;
-              align-items: center;
-              margin-top: 10rpx;
-              flex-wrap: wrap;
-
-              img {
-                width: 60rpx;
-                height: 30rpx;
-                background-size: cover;
-              }
-            }
-          }
-        }
-      }
     }
-
+    
     ::-webkit-scrollbar {
       width: 0;
       height: 0;

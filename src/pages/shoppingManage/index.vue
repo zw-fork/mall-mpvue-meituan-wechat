@@ -34,6 +34,14 @@
         >商家</span>
         <span class="c-m" @click="goHome">首页</span>
       </div>
+            <div class="category-c">
+        <scroll-view class="l" scroll-x>
+          <div style="display:inline-block" class="tab-item" v-for="(item, index) in shopInfo.categoryModelList" :key="index">
+            {{item}}
+            </div>
+          <div class="line"></div>
+        </scroll-view>
+      </div>
     </div>
     <div class="list-c" v-if="pageIndex === 0" >
       <div class="list-ll">
@@ -50,29 +58,14 @@
       </scroll-view>
         </div>
         <div style="background-color: white;">
-          <div>
-          <div style="width:80%;float: left;">
-          <div class="btn">
-            <span>取消退款</span>
-          </div>
-          <div class="btn">
-            <span>再来一单</span>
-          </div>
-                    <div class="btn">
-            <span>取消退款</span>
-          </div>
-          <div class="btn">
-            <span>再来一单</span>
-          </div>
-                    <div class="btn">
-            <span>取消退款</span>
-          </div>
-          <div class="btn">
-            <span>再来一单</span>
-          </div>
-          </div>
-          <div style="width:20%;float: right;">ddd</div>
-          </div>
+      <div class="category-c">
+        <scroll-view class="l" scroll-x>
+          <div style="display:inline-block" class="tab-item" v-for="(item, index) in shopInfo.categoryModelList" :key="index">
+            {{item}}
+            </div>
+          <div class="line"></div>
+        </scroll-view>
+      </div>
  <div class="list-rr">
 
       <scroll-view
@@ -559,7 +552,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .category-c {
+      display: flex;
+      height: 70rpx;
+      position: relative;
+      background-color: #FAFAFA;
+      .l {
+        text-align: center;
+        line-height: 70rpx;
+        white-space: nowrap;
+        position: relative;
+        .tab-item {
+          transition: all 0.2s;
+          font-size: 24rpx;
+          height: 70rpx;
+          display: inline-block;
+          color: $textDarkGray-color;
+          margin: 0 30rpx;
+        }
+        .tab-item:first-child {
+          color: $theme-color;
+          font-weight: bold;
+        }
+        .line {
+          display: block;
+          position: absolute;
+          left: 38rpx;
+          height: 4rpx;
+          background: $theme-color;
+          bottom: 38rpx;
+          transition: left 0.2s;
+          z-index: 99;
+          width: 32rpx;
+        }
+      }
+      .r {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70rpx;
+        height: 70rpx;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: #FAFAFA;
+        flex: 1;
+        i {
+          font-size: 24rpx;
+          color: $textGray-color;
+        }
+      }
+    }
 .btn {
     float: left;
     display: flex;
@@ -576,6 +620,12 @@ export default {
 	left: 100px;
 	background-color: #0fc;
 	float: left;
+}
+.list-r1 {
+    bottom: 0rpx;
+    top:0rpx;
+    position:absolute;
+    display:flex;
 }
 .list-rr {
     bottom: 0rpx;
