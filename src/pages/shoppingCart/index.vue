@@ -345,7 +345,7 @@ export default {
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
     changeCategory(item, index) {
       this.childIndex = index;
-       this.id='category_' + item.categoryId;
+      this.id='category_' + item.categoryId;
     },
     legwork(type) {
       if (type == 300) {
@@ -1244,7 +1244,8 @@ top:70rpx;
         width: 160rpx;
         align-items: center;
         justify-content: center;
-        padding: 20rpx;
+        padding-top: 20rpx;
+        padding-bottom: 20rpx;
         box-sizing: border-box;
         position: relative;
 
