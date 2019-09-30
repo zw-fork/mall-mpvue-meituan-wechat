@@ -482,6 +482,12 @@ export default {
       this.tagIndex = index;
       this.showEdit = false;
       var categoryId = item.categoryId;
+      this.childIndex = 0;
+      this.id = undefined;
+      this.scrollTop = undefined;
+      if (this.currentScroll > 0) {
+        this.scrollTop = 0;
+      }
       this.getCategoryMenuDataAction({ categoryId, index });
     },
     menuClick() {
