@@ -59,10 +59,9 @@
  <div class="list-r1">
          <div class="category-c">
         <scroll-view class="l" scroll-x>
-          <view class="tab-item" :class="{active: index === childIndex}" v-for="(item, index) in shopInfo.categoryModelList[tagIndex].childrenCategory" :key="index">
-            <span  @click="changeCategory(item, index)">{{item.name}}</span>
-          </view>
-          <view class="line"></view>
+          <div class="tab-item" :class="{active: index === childIndex}" v-for="(item, index) in spus.datas" :key="index">
+            <span @click="changeCategory(item, index)">{{item.name}}</span>
+          </div>
         </scroll-view>
         <div class="r">
           <i class="icon mt-arrow-down-o"></i>

@@ -61,6 +61,13 @@ const actions = {
             getFetch('/category/category/' + shopInfo.categoryModelList[index].categoryId, data, false).then(response => {
               var go = response.result || {}
               var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: go, categoryId: shopInfo.categoryModelList[index].categoryId }
+              var selectedArr = []
+              for (var i in spus.datas) {
+                if (spus.datas[i].goodsList && spus.datas[i].goodsList[0].goodsId) {
+                  selectedArr.push(spus.datas[i]);
+              }
+            }
+            spus.datas = selectedArr 
               shopInfo.categoryModelList[index].spus = spus
               commit('changeShopInfoDataMut', shopInfo)
               var itemList = this.state.submitOrder.orderDetail.itemList
@@ -153,35 +160,36 @@ const actions = {
   getCommentDataAction({ state, commit }) {
   },
   getCategoryMenuDataAction({ state, commit }, { index, categoryId }) {
-    wx.showLoading({ title: '加载中...', mask: true })
     var category = state.shopInfo.categoryModelList[index];
     if (!category.spus || category.spus.datas.length < 1) {
-      getFetch('/category/category/' + categoryId, {}, false).then(response => {
+      getFetch('/category/category/' + categoryId, {}, true).then(response => {
         var spus = {}
         var categoryList = response.result || {}
         spus.title = category.name
         spus.page = response.result.nextPage
         spus.categoryId = categoryId
-        spus.index = index
-        spus.datas = categoryList
+        spus.index = index       
+        var selectedArr = []
         for (var i in categoryList) {
-          for (var index1 in categoryList[i].goodsList) {
-            var goods = categoryList[i].goodsList[index1];
-            var data = state.cartMap[goods.goodsId]
-            if (data) {
-              goods.sequence = data.sequence
+          if (categoryList[i].goodsList && categoryList[i].goodsList[0].goodsId) {
+            selectedArr.push(categoryList[i]);
+            for (var index1 in categoryList[i].goodsList) {
+              var goods = categoryList[i].goodsList[index1];
+              var data = state.cartMap[goods.goodsId]
+              if (data) {
+                goods.sequence = data.sequence
+              }
+              goods.status = true
+              state.cartMap[goods.goodsId] = goods
             }
-            goods.status = true
-            state.cartMap[goods.goodsId] = goods
           } 
         }
+        spus.datas = selectedArr 
         category.spus = spus
         commit('changeSpusDataMut', spus)
-        wx.hideLoading()
       })
     } else {
       commit('changeSpusDataMut', category.spus)
-      wx.hideLoading()
     }
   },
   addItemAction({ state, commit }, {parentCategoryId, item, index, categoryIndex }) {
