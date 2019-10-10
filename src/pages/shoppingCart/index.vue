@@ -221,7 +221,7 @@ export default {
       childIndex: 0,
       selectGoods: undefined,
       selectIndex: undefined,
-      hightArr: undefined,
+      hightArr: [],
       shopId: undefined,
       showEdit: false,
       show: false,

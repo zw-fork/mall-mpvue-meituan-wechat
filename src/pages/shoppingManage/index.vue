@@ -168,7 +168,7 @@ export default {
   data() {
     return {
       childIndex: 0,
-      hightArr: undefined,
+      hightArr: [],
       selectGoods: undefined,
       shopId: undefined,
       showEdit: false,
@@ -679,7 +679,7 @@ position:absolute;
     width:100%;
 }
 .list-rr {
-    bottom: 100rpx;
+    bottom: 0rpx;
     top:70rpx;
     position:absolute;
     display:flex;
