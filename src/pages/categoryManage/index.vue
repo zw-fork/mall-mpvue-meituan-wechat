@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-if="reFresh">
-        <div class="b-mid">
+        <div class="b-mid" v-if="show">
       <span class="mid-l">所属分类:</span>
       <div class="mid-r" @click="showSinglePicker">
         <span>3333</span>
@@ -26,7 +26,6 @@
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import mpButton from "mpvue-weui/src/button";
 import mpPicker from "mpvue-weui/src/picker";
-//import inputDialog from "@/components/inputDialog";
 import mpUploader from "mpvue-weui/src/uploader";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
@@ -39,6 +38,7 @@ export default {
   },
   data() {
     return {
+      show: false,
       reFresh: true,
       name: undefined,
       category: {},
@@ -87,6 +87,11 @@ export default {
     }
   },
   onLoad(options) {
+    if (options.type==0) {
+      this.show = false;
+    } else if (options.type==1) {
+      this.show = true;
+    }
     if (options.id) {
       getFetch('/category/' + options.id, {}, false).then(response => {
         this.category = response.result

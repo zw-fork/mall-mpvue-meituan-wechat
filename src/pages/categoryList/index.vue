@@ -48,7 +48,7 @@
                 </div>
               </div>
             </div>
-                      <div class="item-list" v-for="(item2, index2) in list.datas" :key="index2">
+                      <div class="item-list" v-for="(item2, index2) in item.childrenCategory" :key="index2">
             <div class="item">
               <div class="item-r">
                 <div class="r-t">
@@ -186,13 +186,9 @@ export default {
     ]),
     onSelect(event) {
     if (event.mp.detail.index===0) {
-    console.log("0");
-    wx.navigateTo({ url: "/pages/categoryManage/main" });
+      wx.navigateTo({ url: "/pages/categoryManage/main?type=0"});
     } else if (event.mp.detail.index===1) {
-    console.log("1");
-
-    }else if (event.mp.detail.index===2) {
-    console.log("2");
+      wx.navigateTo({ url: "/pages/categoryManage/main?type=1"});
     }
     this.showSheet = false;
   },

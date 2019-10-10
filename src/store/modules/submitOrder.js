@@ -77,7 +77,6 @@ const actions = {
     })
   },
   updateOrderStatusAction({ state, commit }, { order, status, selectStatus, refundStatus }) {
-    wx.showLoading({ title: '加载中...', mask: true })
     var data = { 'page': 1, 'status': selectStatus }
     var refund = {};
     if (!selectStatus) {
@@ -89,7 +88,7 @@ const actions = {
     refund.status = status
     refund.openid = order.uid
     if (order.status == 1 && status == 2) {
-      getFetch('/wxPay/unifiedOrder/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + order.number, { shopName: order.shopInfo.communityName + '-' + order.shopInfo.shopName }, true).then(response => {
         if (response.code == 200) {
           wx.requestPayment({
             timeStamp: response.result.timeStamp,
@@ -103,16 +102,14 @@ const actions = {
                 icon: 'success',
                 duration: 3000
               })
-              getFetch('/order/updateStatus/' + order.number, { status: 2 }, false).then(response => {
-                getFetch('/order', {}, false).then(response => {
+              getFetch('/order/updateStatus/' + order.number, { status: 2 }, true).then(response => {
+                getFetch('/order', {}, true).then(response => {
                   var result = response.result || {}
                   commit('changeOrderDataMut', result)
-                  wx.hideLoading()
                 })
               })
             },
             fail(res) {
-              wx.hideLoading()
             }
           })
         } else if (response.code == responseCode.ORDERPAID_ERROR_CODE) {
@@ -121,22 +118,20 @@ const actions = {
             icon: 'none',
             duration: 2000
           })
-          getFetch('/order/updateStatus/' + order.number, { status: 2 }, false).then(response => {
-            getFetch('/order', {}, false).then(response => {
+          getFetch('/order/updateStatus/' + order.number, { status: 2 }, true).then(response => {
+            getFetch('/order', {}, true).then(response => {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
-              wx.hideLoading()
             })
           })
         }
       })
     } else {
-      getFetch('/order/updateStatus/' + order.number, refund, false).then(response => {
-        getFetch('/order', data, false).then(response => {
+      getFetch('/order/updateStatus/' + order.number, refund, true).then(response => {
+        getFetch('/order', data, true).then(response => {
           var result = response.result || {}
           commit('changeOrderDataMut', result)
         })
-        wx.hideLoading()
       })
     }
   },
