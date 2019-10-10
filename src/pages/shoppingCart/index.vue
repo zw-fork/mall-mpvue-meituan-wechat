@@ -59,7 +59,8 @@
  <div class="list-r1">
          <div class="category-c">
         <scroll-view class="l" scroll-x :scroll-into-view="idx">
-          <div class="tab-item" :class="{active: index === childIndex}" v-for="(item, index) in datas" :key="index">
+          <div class="tab-item" :class="{active: index === childIndex}" 
+          v-for="(item, index) in datas" :key="index">
             <span :id="'x_' + index" @click="changeCategory(item, index)">{{item.name}}</span>
           </div>
         </scroll-view>
@@ -225,6 +226,7 @@ export default {
       showEdit: false,
       show: false,
       id:undefined,
+      idx: undefined,
       divStyle: "",
       scrollTop: undefined,
       currentScroll: 0,
@@ -235,8 +237,7 @@ export default {
       showAuth: false,
       showAuth2: false,
       stars: [1, 2, 3, 4],
-      cartGoodsList1: [],
-      phoneList: ["10107888", "22222222"]
+      cartGoodsList1: []
     };
   },
  components: {
@@ -714,64 +715,6 @@ top:0rpx;
           display: inline-block;
           color: $textDarkGray-color;
           margin: 0 30rpx;
-        }
-      }
-      .r {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 70rpx;
-        height: 70rpx;
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background-color: #FAFAFA;
-        flex: 1;
-        i {
-          font-size: 24rpx;
-          color: $textGray-color;
-        }
-      }
-    }
-  .category-c1 {
-    width:80%;
-left:160rpx;
-top:70rpx;
-      display: flex;
-      height: 70rpx;
-      position: relative;   
-      white-space:nowrap;
-      background-color: #FAFAFA;
-      .l {
-              display: flex;
-      flex-direction: column;
-        text-align: center;
-        line-height: 70rpx;
-        white-space: nowrap;
-        position: relative;
-        .tab-item {
-          transition: all 0.2s;
-          font-size: 24rpx;
-          height: 70rpx;
-          display: inline-block;
-          color: $textDarkGray-color;
-          margin: 0 30rpx;
-        }
-        .tab-item:first-child {
-          color: $theme-color;
-          font-weight: bold;
-        }
-        .line {
-          display: block;
-          position: absolute;
-          left: 38rpx;
-          height: 4rpx;
-          background: $theme-color;
-          bottom: 38rpx;
-          transition: left 0.2s;
-          z-index: 99;
-          width: 32rpx;
         }
       }
       .r {

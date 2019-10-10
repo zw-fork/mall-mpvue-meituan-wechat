@@ -34,14 +34,6 @@
         >商家</span>
         <span class="c-m" @click="goHome">首页</span>
       </div>
-            <div class="category-c">
-        <scroll-view class="l" scroll-x>
-          <div style="display:inline-block" class="tab-item" v-for="(item, index) in shopInfo.categoryModelList" :key="index">
-            {{item}}
-            </div>
-          <div class="line"></div>
-        </scroll-view>
-      </div>
     </div>
     <div class="list-c" v-if="pageIndex === 0" >
       <div class="list-ll">
@@ -57,14 +49,21 @@
         </div>
       </scroll-view>
         </div>
-        <div style="background-color: white;">
+        <div>
+
+
+       <div class="list-r1">    
       <div class="category-c">
-        <scroll-view class="l" scroll-x>
-          <div style="display:inline-block" class="tab-item" v-for="(item, index) in shopInfo.categoryModelList" :key="index">
-            {{item}}
+        <scroll-view class="l" scroll-x :scroll-into-view="idx">
+          <div class="tab-item" :class="{active: index === childIndex}" 
+          v-for="(item, index) in datas" :key="index">
+              <span :id="'x_' + index" @click="changeCategory(item, index)">{{item.name}}</span>
             </div>
-          <div class="line"></div>
         </scroll-view>
+        <div class="r">
+          <i class="icon mt-arrow-down-o"></i>
+        </div>
+      </div>
       </div>
  <div class="list-rr">
 
@@ -78,10 +77,10 @@
       >
       <div v-for="(item, index) in spus.datas" :key="index">
         <div class="section" v-if="item.goodsList && item.goodsList[0].goodsId">
-          <span class="title">{{item.name}}</span>
+          <span :id="'y_' + index" class="title">{{item.name}}</span>
         </div>
         <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
-          <div class="item" v-if="goods.goodsId" :id="'aaa' + goods.goodsId">
+          <div class="item" v-if="goods.goodsId">
             <div class="item-l">
               <img :src="path + goods.picture"> 
             </div>
@@ -168,6 +167,8 @@ import QQMapWX from "qqmap-wx-jssdk";
 export default {
   data() {
     return {
+      childIndex: 0,
+      hightArr: undefined,
       selectGoods: undefined,
       shopId: undefined,
       showEdit: false,
@@ -175,6 +176,7 @@ export default {
       show: false,
       divStyle: "",
       id:undefined,
+      idx: undefined,
       scrollTop: undefined,
       currentScroll: 0,
       showCart: false,
@@ -211,6 +213,16 @@ export default {
     path() {
       return `${GOODS_URL_PREFIX}`;
     },
+    datas() {
+       if (this.spus.datas) {
+        var that = this;
+        setTimeout(function(){
+　　　　        that.infoScroll();
+    　　}, 1500);
+    return this.spus.datas;
+       }
+       return undefined;
+     },
     totalPrice() {
       var price = 0;
       if (this.shopInfo.categoryModelList) {
@@ -289,6 +301,28 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
+        changeCategory(item, index) {
+      this.childIndex = index;
+
+      this.id='y_' + index;
+    },
+      infoScroll(){
+    var that = this;
+    var len = that.spus.datas.length;
+    var height = 0;
+    var hightArr = [];
+    for (var i = 0; i < len; i++) { //productList
+      //获取元素所在位置
+      var query = wx.createSelectorQuery();
+      var idView = "#y_" + i;
+      query.select(idView).boundingClientRect();
+      query.exec(function (res) {
+        var top = res[0].top;
+        hightArr.push(top);
+        that.hightArr = hightArr
+      });
+    };
+  },
     copy() {
       wx.setClipboardData({data: this.shopInfo.wechatId});
     },
@@ -396,6 +430,25 @@ export default {
       if (Math.abs(value) > 0) {
         this.currentScroll = e.target.scrollTop;
         this.showEdit = false;
+      }
+      if (this.hightArr.length>0) {
+        var scrollTop = e.target.scrollTop;
+        var scrollArr = this.hightArr;
+        for (var i = 0; i < scrollArr.length; i++) {
+          if (scrollTop >= 0 && scrollTop < scrollArr[1] - scrollArr[0]) {
+            this.childIndex = 0
+            this.idx = 'x_' + this.childIndex;
+            break;
+          } else if (scrollTop >= scrollArr[i] - scrollArr[0] && scrollTop < scrollArr[i + 1] - scrollArr[0]) {
+            this.childIndex = i
+            this.idx = 'x_' + this.childIndex;
+            break;
+          } else if (scrollTop >= scrollArr[scrollArr.length - 1] - scrollArr[0]) {
+            this.childIndex = scrollArr.length - 1
+            this.idx = 'x_' + this.childIndex;
+            break;
+          }
+        }
       }
     },
     //滚动条滚到底部或右边的时候触发
@@ -553,15 +606,25 @@ export default {
 
 <style lang="scss" scoped>
   .category-c {
+    width:80%;
+left:0rpx;
+top:0rpx;
       display: flex;
       height: 70rpx;
-      position: relative;
+      position: relative;   
+      white-space:nowrap;
       background-color: #FAFAFA;
       .l {
-        text-align: center;
+              display: flex;
+      flex-direction: column;
         line-height: 70rpx;
         white-space: nowrap;
         position: relative;
+        	        .active {
+          color: $theme-color;
+          font-weight: bold;
+
+          }
         .tab-item {
           transition: all 0.2s;
           font-size: 24rpx;
@@ -569,21 +632,6 @@ export default {
           display: inline-block;
           color: $textDarkGray-color;
           margin: 0 30rpx;
-        }
-        .tab-item:first-child {
-          color: $theme-color;
-          font-weight: bold;
-        }
-        .line {
-          display: block;
-          position: absolute;
-          left: 38rpx;
-          height: 4rpx;
-          background: $theme-color;
-          bottom: 38rpx;
-          transition: left 0.2s;
-          z-index: 99;
-          width: 32rpx;
         }
       }
       .r {
@@ -622,14 +670,17 @@ export default {
 	float: left;
 }
 .list-r1 {
+  display:flex;
+position:absolute;
     bottom: 0rpx;
     top:0rpx;
-    position:absolute;
+  height: 70rpx;
     display:flex;
+    width:100%;
 }
 .list-rr {
-    bottom: 0rpx;
-    top:170rpx;
+    bottom: 100rpx;
+    top:70rpx;
     position:absolute;
     display:flex;
     .list-r {
