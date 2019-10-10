@@ -21,9 +21,6 @@
             style="text-align:center;width:30%;"
             @click="updateGoodsList(2)"
           >隐藏</span>
-          <span class="c-m" style="text-align:center;width:10%;" @click="addGoods">
-            <i class="icon iconfont iconplus-circle" style="font-size: 40rpx;"></i>
-          </span>
         </div>
       </div>
       <div class="list-c">
@@ -32,7 +29,13 @@
             <div class="item">
               <div class="item-r">
                 <div class="r-t">
-                  <span class="price">{{item.name}}</span>
+                  <div class="left1">
+                    <i class="icon iconfont iconright" style="font-size: 40rpx;"></i>
+                  <span class="price">
+                    
+                    {{item.name}}
+                  </span>
+                  </div>
                   <div class="add-item">
                     <div class="add-r">
                       <img
@@ -45,9 +48,30 @@
                 </div>
               </div>
             </div>
+                      <div class="item-list" v-for="(item2, index2) in list.datas" :key="index2">
+            <div class="item">
+              <div class="item-r">
+                <div class="r-t">
+                  <span class="price">{{item2.name}}</span>
+                  <div class="add-item">
+                    <div class="add-r">
+                      <img
+                        @click.stop="manageGoods($event, item2)"
+                        style="width:40rpx;height:40rpx;"
+                        src="/static/images/point.png"
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           </div>
         </scroll-view>
       </div>
+      <div class="submit-btn" @click="addGoods">
+      <span>添加分类</span>
+    </div>
     </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
@@ -67,6 +91,11 @@
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
+    <van-action-sheet 
+  :show="showSheet" 
+  :actions="actions"
+  @select="onSelect"
+/>
   </div>
 </template>
 
@@ -82,6 +111,12 @@ export default {
   data() {
     return {
       selectGoods: undefined,
+      showSheet:false,
+      actions: [
+      {index:0, name: '添加一级分类', color: '07c160' },
+      {index:1, name: '添加二级分类', color: '07c160' },
+      {index:2, name: '取消', color: '07c160' }
+    ],
       show: false,
       divStyle: "",
       showEdit: false,
@@ -129,6 +164,9 @@ export default {
       return count;
     }
   },
+      onSelect(event) {
+    console.log(event.detail);
+  },
   methods: {
     ...mapMutations("shoppingCart", [
       "changeReduceFeeDataMut",
@@ -146,6 +184,18 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
+    onSelect(event) {
+    if (event.mp.detail.index===0) {
+    console.log("0");
+    wx.navigateTo({ url: "/pages/categoryManage/main" });
+    } else if (event.mp.detail.index===1) {
+    console.log("1");
+
+    }else if (event.mp.detail.index===2) {
+    console.log("2");
+    }
+    this.showSheet = false;
+  },
     scroll(e) {
       var value = this.currentScroll - e.target.scrollTop;
       if (Math.abs(value) > 0) {
@@ -161,7 +211,8 @@ export default {
       this.getGoods();
     },
     addGoods() {
-      wx.navigateTo({ url: "/pages/categoryManage/main" });
+      this.showSheet = true;
+     // 
     },
     updateGoods(goodsModel) {
       postFetch("/category", goodsModel, false).then(
@@ -332,6 +383,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.left1 {
+  margin-left: -20rpx;
+ display: flex;
+}
+              .price {
+                align-items: center;
+                display: flex;
+                font-size: 28rpx;
+                color: $textBlack-color;
+                font-weight: bold;
+              }
 .header-c {
   display: flex;
   flex-direction: column;
@@ -611,7 +673,7 @@ export default {
     position: fixed;
     top: 70rpx;
     width: 100%;
-    bottom: 0rpx;
+    bottom: 90rpx;
     .list-l {
       display: flex;
       flex-direction: column;
@@ -719,11 +781,6 @@ export default {
               display: flex;
               align-items: center;
               justify-content: space-between;
-              .price {
-                font-size: 28rpx;
-                color: $textBlack-color;
-                font-weight: bold;
-              }
               .sku {
                 display: flex;
                 align-items: center;

@@ -58,9 +58,9 @@
         <div>
  <div class="list-r1">
          <div class="category-c">
-        <scroll-view class="l" scroll-x>
-          <div class="tab-item" :class="{active: index === childIndex}" v-for="(item, index) in spus.datas" :key="index">
-            <span @click="changeCategory(item, index)">{{item.name}}</span>
+        <scroll-view class="l" scroll-x :scroll-into-view="idx">
+          <div class="tab-item" :class="{active: index === childIndex}" v-for="(item, index) in datas" :key="index">
+            <span :id="'x_' + index" @click="changeCategory(item, index)">{{item.name}}</span>
           </div>
         </scroll-view>
         <div class="r">
@@ -79,7 +79,7 @@
       >
       <div v-for="(item, index) in spus.datas" :key="index">
         <div class="section" v-if="item.goodsList && item.goodsList[0].goodsId">
-          <span :id="'category_' + item.categoryId" class="title">{{item.name}}</span>
+          <span :id="'y_' + index" class="title">{{item.name}}</span>
         </div>
         <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
           <div  class="item" v-if="goods.goodsId">
@@ -220,6 +220,7 @@ export default {
       childIndex: 0,
       selectGoods: undefined,
       selectIndex: undefined,
+      hightArr: undefined,
       shopId: undefined,
       showEdit: false,
       show: false,
@@ -254,6 +255,16 @@ export default {
     ]),
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
+    datas() {
+       if (this.spus.datas) {
+        var that = this;
+        setTimeout(function(){
+　　　　        that.infoScroll();
+    　　}, 1500);
+    return this.spus.datas;
+       }
+       return undefined;
+     },
     lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;";
     },
@@ -344,8 +355,26 @@ export default {
     ...mapActions("submitOrder", ["createOrderDetailAction"]),
     changeCategory(item, index) {
       this.childIndex = index;
-      this.id='category_' + item.categoryId;
+
+      this.id='y_' + index;
     },
+  infoScroll(){
+    var that = this;
+    var len = that.spus.datas.length;
+    var height = 0;
+    var hightArr = [];
+    for (var i = 0; i < len; i++) { //productList
+      //获取元素所在位置
+      var query = wx.createSelectorQuery();
+      var idView = "#y_" + i;
+      query.select(idView).boundingClientRect();
+      query.exec(function (res) {
+        var top = res[0].top;
+        hightArr.push(top);
+        that.hightArr = hightArr
+      });
+    };
+  },
     legwork(type) {
       if (type == 300) {
       //  wx.navigateTo({ url: '/pages/legwork/main' })
@@ -422,6 +451,25 @@ export default {
         this.currentScroll = e.target.scrollTop;
         this.showEdit = false;
       }
+      if (this.hightArr.length>0) {
+        var scrollTop = e.target.scrollTop;
+        var scrollArr = this.hightArr;
+        for (var i = 0; i < scrollArr.length; i++) {
+          if (scrollTop >= 0 && scrollTop < scrollArr[1] - scrollArr[0]) {
+            this.childIndex = 0
+            this.idx = 'x_' + this.childIndex;
+            break;
+          } else if (scrollTop >= scrollArr[i] - scrollArr[0] && scrollTop < scrollArr[i + 1] - scrollArr[0]) {
+            this.childIndex = i
+            this.idx = 'x_' + this.childIndex;
+            break;
+          } else if (scrollTop >= scrollArr[scrollArr.length - 1] - scrollArr[0]) {
+            this.childIndex = scrollArr.length - 1
+            this.idx = 'x_' + this.childIndex;
+            break;
+          }
+        }
+      }
     },
     //滚动条滚到底部或右边的时候触发
     lower(e) {
@@ -483,6 +531,7 @@ export default {
       var categoryId = item.categoryId;
       this.childIndex = 0;
       this.id = undefined;
+      this.idx = undefined;
       this.scrollTop = undefined;
       if (this.currentScroll > 0) {
         this.scrollTop = 0;
@@ -767,7 +816,7 @@ top:70rpx;
     display:flex;
 }
 .list-rr {
-    bottom: 0rpx;
+    bottom: 100rpx;
     top:70rpx;
     position:absolute;
     display:flex;

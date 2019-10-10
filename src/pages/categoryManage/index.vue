@@ -1,5 +1,12 @@
 <template>
   <div class="container" v-if="reFresh">
+        <div class="b-mid">
+      <span class="mid-l">所属分类:</span>
+      <div class="mid-r" @click="showSinglePicker">
+        <span>3333</span>
+        <i class="icon iconfont iconright"></i>
+      </div>
+    </div>
     <div class="name">
       <span>分类名称：</span>
       <input
@@ -172,7 +179,7 @@ input {
         color: $textGray-color;
       }
       span {
-        font-size: 32rpx;
+        font-size: 28rpx;
         color: $textBlack-color;
         margin-left: 20rpx;
       }
@@ -184,13 +191,13 @@ input {
         color: $theme-color;
       }
       span {
-        font-size: 32rpx;
+        font-size: 28rpx;
         color: $textBlack-color;
         margin-left: 20rpx;
       }
     }
     span {
-      font-size: 32rpx;
+      font-size: 28rpx;
       color: $textBlack-color;
       width: 160rpx;
     }
