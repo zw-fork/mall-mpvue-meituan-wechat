@@ -261,9 +261,15 @@ export default {
       });
     },
     editGoods() {
-      wx.navigateTo({
-        url: "/pages/categoryManage/main?id=" + this.selectGoods.categoryId
-      });
+      if (this.selectGoods.parentId) {
+        wx.navigateTo({
+          url: "/pages/categoryManage/main?type=1&id=" + this.selectGoods.categoryId
+        });
+      }else {
+          wx.navigateTo({   
+          url: "/pages/categoryManage/main?type=0&id=" + this.selectGoods.categoryId
+        });      
+      }
     },
     update() {
       this.showEdit = false;
@@ -285,35 +291,31 @@ export default {
       });
     },
     getGoods() {
-      wx.showLoading({ title: "加载中...", mask: true });
       var data = {};
       data.name = this.name.trim();
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
       }
-      getFetch("/category/list/" + this.userInfo.shopId, data, false).then(
+      getFetch("/category/list/" + this.userInfo.shopId, data, true).then(
         response => {
           this.list.datas = response.result;
-          wx.hideLoading();
         }
       );
     },
     //滚动条滚到底部或右边的时候触发
     lower(e) {
       if (this.list.page > 0) {
-        wx.showLoading({ title: "加载中...", mask: true });
         var data = {};
         data.name = this.name.trim();
         if (this.pageIndex != undefined) {
           data.status = this.pageIndex;
         }
         data.page = this.list.page;
-        getFetch("/goods/" + this.userInfo.shopId, data, false).then(
+        getFetch("/goods/" + this.userInfo.shopId, data, true).then(
           response => {
             var goodsList = response.result.list;
             this.list.page = response.result.nextPage;
             this.list.datas = [...this.list.datas, ...goodsList];
-            wx.hideLoading();
           }
         );
       }
