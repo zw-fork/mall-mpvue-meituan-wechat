@@ -1,38 +1,18 @@
 <template>
-  <div class="container" @click="update" @mousedown="update" v-if="!shopId || shopId == shopInfo.shopId">
+  <div class="container" @click="update" @mousedown="update">
     <div class="header-c">
-      <div class="header">
-        <div class="h-l">
-          <img
-            class="shop-logo"
-            :src="shopInfo.pic_url? (path + shopInfo.pic_url) : '/static/images/shop.png'"
-          >
-        </div>
-        <div class="h-r">
-          <span class="r-l" @click="openLocation">地址: {{shopInfo.wxAddress.name}}</span>
-          <div class="r-t">
-            <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
-            <div class="s-l"></div>
-            <span class="t-m">营业时间: 全天</span>
-            <i class="icon iconfont iconright" style="position:absolute; right:0rpx;"></i>
-          </div>
-          <div class="r-m" v-if="shopInfo.bulletin">
-            <span class="b-r">公告：{{shopInfo.bulletin}}</span>
-          </div>
-        </div>
-      </div>
       <div class="cate-c">
         <span
           class="c-l"
           :style="{'font-weight': pageIndex === 0 ? lineStyle : null}"
           @click="menuClick"
-        >商品</span>
+        >全部</span>
         <span
           class="c-m"
           :style="{'font-weight': pageIndex === 1 ? lineStyle : null}"
           @click="shopClick"
-        >商家</span>
-        <span class="c-m" @click="goHome">首页</span>
+        >在售</span>
+        <span class="c-m" @click="goHome">下架</span>
       </div>
     </div>
     <div class="list-c" v-if="pageIndex === 0" >
@@ -152,6 +132,12 @@
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
+              <div class="modalFooter">
+          <div class="btnCancel" @click="categoryManage">分类管理</div>
+          <div @click="addGoods"
+            class="btnConfirm"
+          >添加商品</div>
+        </div>
   </div>
 </template>
 
@@ -301,6 +287,12 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
+    categoryManage() {
+      wx.navigateTo({ url: "/pages/categoryList/main" });
+    },
+    addGoods() {
+      wx.navigateTo({ url: "/pages/goodsManage/main" });
+    },
         changeCategory(item, index) {
       this.childIndex = index;
 
@@ -383,7 +375,7 @@ export default {
     },
     editGoods() {
       wx.navigateTo({
-        url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId
+        url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId + "&index=" + this.tagIndex + "&childIndex=" + this.childIndex
       });
     },
     manageGoods(e, goods) {
@@ -504,7 +496,6 @@ export default {
     },
     categoryClick(item, index) {
       this.id= undefined;
-      this.id='aaa' + 209;
       this.tagIndex = index;
       this.showEdit = false;
       var categoryId = item.categoryId;
@@ -568,6 +559,7 @@ export default {
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
       this.scrollTop = this.currentScroll;
+      this.tagIndex = currPage.data.index;
       this.getMenuDataAction({
         shopId: this.shopId,
         index: this.tagIndex,
@@ -605,6 +597,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.modalFooter {
+  box-sizing: border-box;
+  display: flex;
+  width:100%;
+  flex-direction: row;
+  height: 80rpx;
+  border-top: 1rpx solid #e5e5e5;
+  font-size: 26rpx;
+  background-color: #f4f4f4;
+  line-height: 80rpx;
+  position: fixed;
+  bottom: 0rpx;
+}
+
+.btnCancel {
+  width: 50%;
+  color: #333;
+  text-align: center;
+  border-right: 1rpx solid #e5e5e5;
+}  
+
+.btnConfirm {
+  width: 50%;
+  color: #333;
+  text-align: center;
+}
   .category-c {
     width:80%;
 left:0rpx;
@@ -1143,9 +1161,9 @@ position:absolute;
   .list-c {
     display: flex;
     position: fixed;
-    top: 200rpx;
+    top: 70rpx;
     width: 100%;
-    bottom: 0rpx;
+    bottom: 80rpx;
     .list-ll {
           display: flex;
     top: 200rpx;

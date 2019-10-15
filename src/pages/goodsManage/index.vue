@@ -86,6 +86,19 @@
       @onCancel="onCancel"
       :pickerValueArray="pickerValueArray"
     ></mpvue-picker>
+
+     <mpvue-picker
+        :mode="mode3"
+        :deepLength="deepLength3"
+        ref="mpvuePicker3"
+        :pickerValueArray="mulLinkageTwoPicker3"
+        :pickerValueDefault="pickerValueDefault3"
+        @onConfirm="onConfirm"></mpvue-picker>
+    <van-action-sheet 
+    :show="showSheet" 
+    :actions="actions"
+    @select="onSelect"
+  />
   </div>
 </template>
  
@@ -107,6 +120,13 @@ export default {
   },
   data() {
     return {
+      showSheet:false,
+      actions: [
+        {index:0, name: '添加一级分类', color: '07c160' },
+        {index:1, name: '添加二级分类', color: '07c160' },
+        {index:2, name: '取消', color: '07c160' }
+      ],
+      deepLength3:2,
       goods: {
         statusName: "上架",
         status: 1,
@@ -126,7 +146,14 @@ export default {
       ],
       categoryArray: [
       ],
-      pickerValueDefault: [0]
+      pickerValueDefault: [0,0],
+      mode3: 'multiLinkageSelector',
+      deepLength3: 2,
+      mulLinkageTwoPicker3: [
+      ],
+      pickerValueDefault3: [0, 0],
+      index: undefined,
+      childIndex: undefined
     };
   },
   computed: {
@@ -139,6 +166,14 @@ export default {
   methods: {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
+    onSelect(event) {
+    if (event.mp.detail.index===0) {
+      wx.navigateTo({ url: "/pages/categoryManage/main?type=0"});
+    } else if (event.mp.detail.index===1) {
+      wx.navigateTo({ url: "/pages/categoryManage/main?type=1"});
+    }
+    this.showSheet = false;
+  },
     scanClick() {
       wx.scanCode({
         success: res => {
@@ -212,33 +247,63 @@ export default {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
       prevPage.setData({
-            update:true
+            update:true,
+            index: this.index,
+            childIndex: this.childIndex
       });
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
       this.uploadImg({ goodsModel: this.goods });
     },
     createCategory() {
-      wx.navigateTo({ url: "/pages/categoryManage/main" });
+      this.showSheet = true;
     },
     updateCategoryClick() {
-      if (this.categoryArray.length > 0) {
-        this.pickerValueArray = this.categoryArray;
-        this.mode = "selector";
+      if (this.pickerValueArray.length > 0) {
+        this.mulLinkageTwoPicker3 = this.pickerValueArray;
         this.type = "category";
-        this.pickerValueDefault = [];
-        this.$refs.mpvuePicker.show();
+        this.pickerValueDefault = [0,0];
+        this.$refs.mpvuePicker3.show();
       }
     },
     showSinglePicker() {
       this.pickerValueArray = this.statusArray;
-      this.mode = "selector";
       this.type = "status";
       this.pickerValueDefault = [];
       this.$refs.mpvuePicker.show();
     },
-    showPicker() {
-      this.$refs.mpvuePicker.show();
+    getCategory() {
+getFetch(
+      "/category/list/" + this.userInfo.shopId,
+      { status: 1 },
+      true
+    ).then(response => {
+      var list = response.result;
+      var mulLinkageTwoPicker3 = [];
+      for (var index in list) {
+        var data = {};
+        data.label = list[index].name;
+        data.value = list[index].categoryId;
+        data.children = [];
+        var children = list[index].childrenCategory;
+        if (children.length>0) {
+          for (var index2 in children) {
+              var child = {};
+              child.label = children[index2].name;
+              child.value = children[index2].categoryId;
+              data.children.push(child);
+          }
+        } else {
+          var child = {};
+          child.label = '';
+          child.value = '';
+          data.children.push(child);
+        }
+        mulLinkageTwoPicker3.push(data);
+      } 
+      this.pickerValueArray = mulLinkageTwoPicker3;
+      this.pickerValueDefault3 =[0, 0]
+    });
     },
     onConfirm(e) {
       if (this.type == "status") {
@@ -246,28 +311,20 @@ export default {
         this.goods.statusName = e.label;
         this.name = e.label;
       } else {
-        this.goods.categoryName = e.label;
+        this.index = e.index[0];
+        this.childIndex = e.index[1];
+        if (e.value[1] == '') {
+        this.goods.categoryName = this.pickerValueArray[e.index[0]].label;
         this.goods.categoryId = e.value[0];
+        } else {
+        this.goods.categoryName = e.label;
+        this.goods.categoryId = e.value[1];
+        }
       }
-    },
-    onChange(e) {
-      console.log("A" + e);
-    },
-    onCancel(e) {
-      console.log("B" + e);
     }
   },
   onShow(options) {
-    var pages = getCurrentPages();
-    var currPage = pages[pages.length - 1];
-    if (currPage.data.categoryId) {
-      this.goods.categoryName = currPage.data.categoryName;
-      this.goods.categoryId = currPage.data.categoryId;
-      var data = {};
-      data.label = this.goods.categoryName;
-      data.value = this.goods.categoryId;
-      this.categoryArray.push(data);
-    }
+    this.getCategory();
   },
   onLoad(options) {
     this.name = "上架";
@@ -279,11 +336,7 @@ export default {
       min_price: "",
       barcode: "",
       picture: undefined
-    };
-  //  this.goods.picture = "upload/store_wechat/佳乐惠超市/201908240080d.jpg";
- //   this.goods.min_price = 3;
-  //  this.goods.categoryId = 111;
-  //  this.goods.categoryName = "八宝粥"; 
+    }; 
     if (options.barcode) {
           getFetch(
       "/barcode/" + options.barcode,
@@ -308,15 +361,33 @@ export default {
       true
     ).then(response => {
       var list = response.result;
-      var categoryArray = [];
+      var mulLinkageTwoPicker3 = [];
       for (var index in list) {
         var data = {};
         data.label = list[index].name;
         data.value = list[index].categoryId;
-        categoryArray.push(data);
-      }
-      this.categoryArray = categoryArray;
+        data.children = [];
+        var children = list[index].childrenCategory;
+        if (children.length>0) {
+          for (var index2 in children) {
+              var child = {};
+              child.label = children[index2].name;
+              child.value = children[index2].categoryId;
+              data.children.push(child);
+          }
+        } else {
+          var child = {};
+          child.label = '';
+          child.value = '';
+          data.children.push(child);
+        }
+        mulLinkageTwoPicker3.push(data);
+      } 
+      this.pickerValueArray = mulLinkageTwoPicker3;
+      this.pickerValueDefault3 =[0, 0]
       if (options.id) {
+        this.index = options.index;
+        this.childIndex = options.childIndex;
         getFetch(
           "/goods/list/" + this.userInfo.shopId,
           { goodsId: options.id },

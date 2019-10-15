@@ -92,10 +92,10 @@
       </div>
     </div>
     <van-action-sheet 
-  :show="showSheet" 
-  :actions="actions"
-  @select="onSelect"
-/>
+    :show="showSheet" 
+    :actions="actions"
+    @select="onSelect"
+    />
   </div>
 </template>
 
