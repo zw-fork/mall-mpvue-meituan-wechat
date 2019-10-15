@@ -5,17 +5,17 @@
         <span
           class="c-l"
           :style="{'font-weight': pageIndex === 0 ? lineStyle : null}"
-          @click="menuClick"
+          @click="shopClick(0)"
         >全部</span>
         <span
           class="c-m"
           :style="{'font-weight': pageIndex === 1 ? lineStyle : null}"
-          @click="shopClick"
+          @click="shopClick(1)"
         >在售</span>
-        <span class="c-m" @click="goHome">下架</span>
+        <span class="c-m" @click="shopClick(2)" :style="{'font-weight': pageIndex === 2 ? lineStyle : null}">下架</span>
       </div>
     </div>
-    <div class="list-c" v-if="pageIndex === 0" >
+    <div class="list-c">
       <div class="list-ll">
       <scroll-view class="list-l" :scroll-y="true">
         <div
@@ -89,30 +89,6 @@
       </div>
         </div>
     </div>
-    <div class="shop-info" v-else-if="pageIndex === 1">
-      <div class="address">
-        <i class="icon mt-location-o"></i>
-        <span>{{shopInfo.wxAddress.name}}</span>
-        <i class="icon mt-phone-o" @click.stop="clickCall()"></i>
-      </div>
-      <div class="delivery">
-        <div class="btm">
-          <i class="icon mt-clock-s"></i>
-          <span>营业时间: 全天</span>
-        </div>
-      </div>
-      <div class="delivery" v-if="shopInfo.wechatId">
-        <div class="btm">
-          <i class="icon mt-clock-s"></i>
-          <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制微信号</span>
-        </div>
-      </div>
-      <div class="delivery" v-if="shopInfo.bulletin">
-        <div class="notice">
-          <span>{{shopInfo.bulletin}}</span>
-        </div>
-      </div>
-    </div>
     <div class="screen_cover" v-show="showCart && productCount > 0" @click="toggleCartList"></div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
@@ -167,6 +143,7 @@ export default {
       currentScroll: 0,
       showCart: false,
       tagIndex: 0,
+      goodsValue: {},
       pageIndex: 0,
       left: "40rpx",
       stars: [1, 2, 3, 4],
@@ -321,15 +298,39 @@ export default {
     updateGoods(goodsModel) {
       postFetch("/goods/upload2", goodsModel, true).then(response => {
         this.showEdit = false;
+        this.updateGoodsValue();
         if (goodsModel.status==0) {
                 this.scrollTop = this.currentScroll;
             this.getMenuDataAction({
               shopId: this.shopId,
               index: this.tagIndex,
+              data: this.goodsValue,
               flag: true
             });
         }
       });
+    },
+    shopClick(value) {
+      this.showEdit = false; 
+      this.pageIndex = value;
+      this.updateGoodsValue();
+      this.getMenuDataAction({
+              shopId: this.shopId,
+              index: this.tagIndex,
+              data: this.goodsValue,
+              flag: true
+      });
+    },
+    updateGoodsValue() {
+      var data = {};
+        if (this.pageIndex == 1) {
+          data.categoryStatus = 1;
+          data.goodsStatus = 1; 
+        } else if (this.pageIndex == 2) {
+          data.categoryStatus = 0;
+          data.goodsStatus = 0;       
+        }
+      this.goodsValue = data;
     },
     deleteGoods() {
       var that = this;
@@ -510,11 +511,6 @@ export default {
       this.left = 40 + "rpx";
       this.pageIndex = 0;
     },
-    shopClick() {
-      this.showEdit = false;
-      this.left = 182 + "rpx";
-      this.pageIndex = 1;
-    },
     skuClick(item, index) {
       this.selectSkuAction({ item, index });
     },
@@ -554,6 +550,14 @@ export default {
     },
   },
   onShow(options) {
+    var data = {};
+    if (this.pageIndex == 1) {
+      data.categoryStatus = 1;
+      data.goodsStatus = 1; 
+    } else if (this.pageIndex == 2) {
+      data.categoryStatus = 0;
+      data.goodsStatus = 0;       
+    }
     this.showEdit = false;
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
@@ -563,12 +567,15 @@ export default {
       this.getMenuDataAction({
         shopId: this.shopId,
         index: this.tagIndex,
+        data: data,
         flag: true
       });
     }
   },
   onLoad(options) {
     var data = {};
+    data.categoryStatus = 1;
+    data.goodsStatus = 1;
     this.pageIndex = 0;
     var that = this;
     this.shopId = options.shopId;

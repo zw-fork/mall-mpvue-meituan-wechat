@@ -58,7 +58,7 @@ const actions = {
             if (shopInfo.categoryModelList.length <= index) {
               index = 0
             }
-            getFetch('/category/category/' + shopInfo.categoryModelList[index].categoryId, data, false).then(response => {
+            getFetch('/category/category/' + shopInfo.categoryModelList[index].categoryId, data, true).then(response => {
               var go = response.result || {}
               var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: go, categoryId: shopInfo.categoryModelList[index].categoryId }
               var selectedArr = []
