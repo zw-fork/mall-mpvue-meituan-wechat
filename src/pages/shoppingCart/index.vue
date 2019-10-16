@@ -1227,7 +1227,7 @@ top:0rpx;
     position: fixed;
     top: 200rpx;
     width: 100%;
-    bottom: 80rpx;
+    bottom: 90rpx;
     .list-ll {
           display: flex;
     top: 200rpx;
