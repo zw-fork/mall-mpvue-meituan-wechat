@@ -13,6 +13,10 @@
           @click="shopClick(1)"
         >在售</span>
         <span class="c-m" @click="shopClick(2)" :style="{'font-weight': pageIndex === 2 ? lineStyle : null}">下架</span>
+        <div class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
+          <i class="icon iconfont iconsearch"></i>
+          <span>搜索商品</span>
+        </div>
       </div>
     </div>
     <div class="list-c">
@@ -541,7 +545,7 @@ export default {
     },
     searchClick() {
       wx.navigateTo({
-        url: "/pages/searchList/main?shopId=" + this.shopInfo.shopId
+        url: "/pages/goodsList/main?shopId=" + this.shopInfo.shopId
       });
     },
      update() {
