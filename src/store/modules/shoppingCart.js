@@ -157,8 +157,6 @@ const actions = {
       })
     }
   },
-  getCommentDataAction({ state, commit }) {
-  },
   getCategoryMenuDataAction({ state, commit }, { index, categoryId,data }) {
     var category = state.shopInfo.categoryModelList[index];
     if (!category.spus || category.spus.datas.length < 1) {
@@ -179,7 +177,6 @@ const actions = {
               if (data) {
                 goods.sequence = data.sequence
               }
-              goods.status = true
               state.cartMap[goods.goodsId] = goods
             }
           } 

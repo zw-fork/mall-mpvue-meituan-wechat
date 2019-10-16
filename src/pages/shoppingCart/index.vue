@@ -69,7 +69,7 @@
         </div>
       </div>
       </div>
-       <div class="category-c">
+       <div class="list-rr">
       <scroll-view
         class="list-r"
         :scroll-y="true"
@@ -94,7 +94,7 @@
               <span class="sub-title"></span>
               <div class="r-t" v-if="goods.type!=300">
                 <span class="price">￥{{goods.min_price}}</span>
-                <div class="add-item">
+                <div class="add-item" v-if="!showManage">
                   <div
                     class="add-l"
                     @click.stop="reduceClick(spus.categoryId ,goods, index2, index)"
@@ -675,7 +675,97 @@ export default {
 
 
 <style lang="scss" scoped>
-.list-r {
+.list-r1 {
+  display:flex;
+position:absolute;
+    bottom: 0rpx;
+    top:0rpx;
+  height: 70rpx;
+    display:flex;
+    width:100%;
+}
+.main{
+      display: flex;
+    flex-direction: column;
+}
+ .category-c {
+    width:80%;
+left:0rpx;
+top:0rpx;
+      display: flex;
+      height: 70rpx;
+      position: relative;   
+      white-space:nowrap;
+      background-color: #FAFAFA;
+      .l {
+              display: flex;
+      flex-direction: column;
+        line-height: 70rpx;
+        white-space: nowrap;
+        position: relative;
+        	        .active {
+          color: $theme-color;
+          font-weight: bold;
+
+          }
+        .tab-item {
+          transition: all 0.2s;
+          font-size: 24rpx;
+          height: 70rpx;
+          display: inline-block;
+          color: $textDarkGray-color;
+          margin: 0 30rpx;
+        }
+      }
+      .r {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70rpx;
+        height: 70rpx;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: #FAFAFA;
+        flex: 1;
+        i {
+          font-size: 24rpx;
+          color: $textGray-color;
+        }
+      }
+    }
+.btn {
+    float: left;
+    display: flex;
+    background-color: $page-bgcolor;
+    margin: 10rpx;
+    border-radius: 4rpx;
+
+    span {
+      font-size: 26rpx;
+      margin: 6rpx 10rpx;
+    }
+  }
+.first{
+	left: 100px;
+	background-color: #0fc;
+	float: left;
+}
+.list-r1 {
+    bottom: 0rpx;
+    top:0rpx;
+    position:absolute;
+    display:flex;
+}
+.list-rr {
+    width: 80%;
+    bottom: 0px;
+    top: 70rpx;
+    display: flex;
+    position: absolute;
+    background-color: #FAFAFA;
+    .list-r {
       background-color: white;
       display: flex;
       flex-direction: column;
@@ -826,97 +916,6 @@ export default {
         }
       }
     }
-.list-r1 {
-  display:flex;
-position:absolute;
-    bottom: 0rpx;
-    top:0rpx;
-  height: 70rpx;
-    display:flex;
-    width:100%;
-}
-.main{
-      display: flex;
-    flex-direction: column;
-}
- .category-c {
-    width:80%;
-left:0rpx;
-top:0rpx;
-      display: flex;
-      height: 70rpx;
-      position: relative;   
-      white-space:nowrap;
-      background-color: #FAFAFA;
-      .l {
-              display: flex;
-      flex-direction: column;
-        line-height: 70rpx;
-        white-space: nowrap;
-        position: relative;
-        	        .active {
-          color: $theme-color;
-          font-weight: bold;
-
-          }
-        .tab-item {
-          transition: all 0.2s;
-          font-size: 24rpx;
-          height: 70rpx;
-          display: inline-block;
-          color: $textDarkGray-color;
-          margin: 0 30rpx;
-        }
-      }
-      .r {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 70rpx;
-        height: 70rpx;
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background-color: #FAFAFA;
-        flex: 1;
-        i {
-          font-size: 24rpx;
-          color: $textGray-color;
-        }
-      }
-    }
-.btn {
-    float: left;
-    display: flex;
-    background-color: $page-bgcolor;
-    margin: 10rpx;
-    border-radius: 4rpx;
-
-    span {
-      font-size: 26rpx;
-      margin: 6rpx 10rpx;
-    }
-  }
-.first{
-	left: 100px;
-	background-color: #0fc;
-	float: left;
-}
-.list-r1 {
-    bottom: 0rpx;
-    top:0rpx;
-    position:absolute;
-    display:flex;
-}
-
-.list-rr {
-width: 80%;
-bottom: 0px;
-top: 0rpx;
-display: flex;
-position: absolute;
-background-color: #FAFAFA; 
     }
 .editGoods {
   background-color: black;

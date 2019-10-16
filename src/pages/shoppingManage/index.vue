@@ -573,7 +573,6 @@ export default {
   },
   onLoad(options) {
     var data = {};
-    data.goodsStatus = 1;
     this.pageIndex = 0;
     var that = this;
     this.shopId = options.shopId;
