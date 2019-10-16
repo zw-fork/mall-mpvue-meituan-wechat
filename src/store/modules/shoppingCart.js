@@ -50,6 +50,7 @@ const actions = {
       state.shopInfo = {}
       state.cartMap = {}
       state.categoryMap = {}
+      commit('changeSpusDataMut', {})
       getFetch('/shop/' + shopId,  data, true).then(response => {
         var shopInfo = response.result || {}
         if (shopInfo.shopId) {
