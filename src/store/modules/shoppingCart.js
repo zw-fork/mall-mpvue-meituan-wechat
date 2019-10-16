@@ -159,10 +159,10 @@ const actions = {
   },
   getCommentDataAction({ state, commit }) {
   },
-  getCategoryMenuDataAction({ state, commit }, { index, categoryId }) {
+  getCategoryMenuDataAction({ state, commit }, { index, categoryId,data }) {
     var category = state.shopInfo.categoryModelList[index];
     if (!category.spus || category.spus.datas.length < 1) {
-      getFetch('/category/category/' + categoryId, {}, true).then(response => {
+      getFetch('/category/category/' + categoryId, data, true).then(response => {
         var spus = {}
         var categoryList = response.result || {}
         spus.title = category.name

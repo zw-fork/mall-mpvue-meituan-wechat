@@ -327,8 +327,7 @@ export default {
           data.categoryStatus = 1;
           data.goodsStatus = 1; 
         } else if (this.pageIndex == 2) {
-          data.categoryStatus = 0;
-          data.goodsStatus = 0;       
+          data.goodsStatus = 2;       
         }
       this.goodsValue = data;
     },
@@ -504,7 +503,8 @@ export default {
       if (this.currentScroll > 0) {
         this.scrollTop = 0;
       }
-      this.getCategoryMenuDataAction({ categoryId, index });
+      var data = this.goodsValue;
+      this.getCategoryMenuDataAction({ categoryId, index, data });
     },
     menuClick() {
       this.showEdit = false;
@@ -555,8 +555,7 @@ export default {
       data.categoryStatus = 1;
       data.goodsStatus = 1; 
     } else if (this.pageIndex == 2) {
-      data.categoryStatus = 0;
-      data.goodsStatus = 0;       
+      data.goodsStatus = 2;       
     }
     this.showEdit = false;
     var pages = getCurrentPages();
@@ -574,7 +573,6 @@ export default {
   },
   onLoad(options) {
     var data = {};
-    data.categoryStatus = 1;
     data.goodsStatus = 1;
     this.pageIndex = 0;
     var that = this;
@@ -704,10 +702,12 @@ position:absolute;
     width:100%;
 }
 .list-rr {
-    bottom: 0rpx;
-    top:70rpx;
-    position:absolute;
-    display:flex;
+width: 80%;
+bottom: 0px;
+top: 70rpx;
+display: flex;
+position: absolute;
+background-color: #FAFAFA; 
     .list-r {
       background-color: white;
       display: flex;

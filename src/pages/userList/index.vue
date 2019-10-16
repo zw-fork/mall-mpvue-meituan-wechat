@@ -147,7 +147,6 @@ export default {
     ]),
     ...mapActions("shoppingCart", [
       "getCommentDataAction",
-      "getCategoryMenuDataAction",
       "closeShoppingCartAction",
       "selectSkuAction",
       "changeSkuDataMut",
@@ -285,11 +284,6 @@ export default {
         this.list.page = response.result.nextPage;
         wx.hideLoading();
       });
-    },
-    categoryClick(item, index) {
-      this.tagIndex = index;
-      var categoryId = item.categoryId;
-      this.getCategoryMenuDataAction({ categoryId, index });
     },
     menuClick() {
       this.left = 40 + "rpx";
