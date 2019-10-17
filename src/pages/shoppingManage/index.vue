@@ -75,7 +75,7 @@
               >
                 <span class="title">{{goods.name}}</span>
                 <i
-                @click.stop="manageGoods($event, goods)"
+                @click.stop="manageGoods($event, goods, index, index2)"
                   class="icon iconfont icondian"
                   style="float:right;position:relative;display:inline-block"
                 ></i>
@@ -150,9 +150,9 @@ export default {
       goodsValue: {},
       pageIndex: 0,
       left: "40rpx",
-      stars: [1, 2, 3, 4],
-      cartGoodsList1: [],
-      phoneList: ["10107888", "22222222"]
+      index: undefined,
+      index2: undefined,
+      cartGoodsList1: []
     };
   },
   computed: {
@@ -357,6 +357,7 @@ export default {
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 1;
+            this.index2 = index2;
             that.updateGoods(that.selectGoods);
           } else if (res.cancel) {
           }
@@ -382,9 +383,11 @@ export default {
         url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId + "&index=" + this.tagIndex + "&childIndex=" + this.childIndex
       });
     },
-    manageGoods(e, goods) {
+    manageGoods(e, goods, index, index2) {
       this.selectGoods = goods;
       this.showEdit = true;
+      this.index = index;
+      this.index2 = index2;
       this.divStyle = "top:" + (2 * e.target.y - 50) + "rpx;";
       return false;
     },
@@ -452,7 +455,7 @@ export default {
       if (this.spus.page > 0) {
         getFetch(
           "/goods/list/" + this.shopInfo.shopId,
-          { page: this.spus.page, categoryId: this.spus.categoryId, status: 1 },
+          { page: this.spus.page, categoryId: this.spus.categoryId, status: 1,categoryStatus:1 },
           true
         ).then(response => {
           var goods = response.result.list;

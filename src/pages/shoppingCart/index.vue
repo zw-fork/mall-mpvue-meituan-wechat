@@ -478,7 +478,7 @@ export default {
         wx.showLoading({ title: "加载中...", mask: true });
         getFetch(
           "/goods/list/" + this.shopInfo.shopId,
-          { page: this.spus.page, categoryId: this.spus.categoryId, status: 1 },
+          { page: this.spus.page, categoryId: this.spus.categoryId, status: 1, categoryStatus:1  },
           false
         ).then(response => {
           var goods = response.result.list;

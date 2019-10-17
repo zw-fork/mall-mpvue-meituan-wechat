@@ -128,10 +128,6 @@ export default {
       name: ""
     };
   },
-  mounted() {
-    this.updateGoodsList(null);
-    this.getGoods();
-  },
   computed: {
     ...mapState("shoppingCart", [
       "cartMap",
@@ -287,6 +283,7 @@ export default {
       });
     },
     getGoods(barcode) {
+      debugger
       var data = {};
       if (barcode) {
         data.barcode = barcode;
@@ -296,6 +293,9 @@ export default {
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
       }
+              if (data.status == 1) {
+          data.categoryStatus = 1;
+        }
       getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(response => {
         this.list.datas = response.result.list;
         this.list.page = response.result.nextPage;
@@ -317,11 +317,15 @@ export default {
     },
     //滚动条滚到底部或右边的时候触发
     lower(e) {
+      debugger
       if (this.list.page > 0) {
         var data = {};
         data.name = this.name.trim();
         if (this.pageIndex != undefined) {
           data.status = this.pageIndex;
+        }
+        if (data.status == 1) {
+          data.categoryStatus = 1;
         }
         data.page = this.list.page;
         getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(
@@ -381,6 +385,7 @@ export default {
     }
   },
   onShow(options) {
+    debugger
     this.showEdit = false;
     this.getGoods();
   }
