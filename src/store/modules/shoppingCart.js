@@ -64,7 +64,7 @@ const actions = {
               var spus = { title: shopInfo.categoryModelList[index].name, index: 0, datas: go, categoryId: shopInfo.categoryModelList[index].categoryId }
               var selectedArr = []
               for (var i in spus.datas) {
-                if (spus.datas[i].goodsList && spus.datas[i].goodsList[0].goodsId) {
+                if ((spus.datas[i].goodsList && spus.datas[i].goodsList[0].goodsId) || spus.datas[i].parentId) {
                   selectedArr.push(spus.datas[i]);
               }
             }

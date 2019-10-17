@@ -9,6 +9,11 @@
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
             <span @click="getGoods()">搜索</span>
+            <i
+              @click="addGoods()"
+              class="icon iconfont iconplus-circle"
+              style="margin-left:20rpx;margin-right:20rpx;font-size: 36rpx;"
+            ></i>
           </div>
         </div>
         <div class="cate-c">
@@ -183,7 +188,7 @@ export default {
       this.getGoods();
     },
     addGoods() {
-      wx.navigateTo({ url: "/pages/goodsManage/main" });
+      wx.navigateTo({ url: "/pages/userList/main" });
     },
     updateGoods(goodsModel) {
       getFetch(

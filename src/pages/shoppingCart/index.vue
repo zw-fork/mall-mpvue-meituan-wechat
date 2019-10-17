@@ -628,11 +628,6 @@ export default {
   },
   onReady(options) {
     this.foreverAuth();
-      //   setTimeout(() => {
-      //     if (this.shopId && this.$refs.authorize) {
-      //       var p = this.$refs.authorize.getUserInfo(this.shopId);
-      //     }
-      // }, 2000)
   },
   onShow(options) {
     this.showEdit = false;
