@@ -34,8 +34,8 @@ const host = {
     envVersion: 'develop'
   },
   prd: {
-    //  API_URL: 'https://digcampus.natapp4.cc/', 
-   //   API_URL: 'http://localhost:7100/', 
+     // API_URL: 'https://digcampus.natapp4.cc/', 
+    //  API_URL: 'http://localhost:7100/',  
     API_URL: 'https://goomi.higgses.com:7110/',  
     XIAMI_URL: 'https://api-m.mtime.cn',
     GOODS_URL_PREFIX: 'https://mall-social.oss-cn-beijing.aliyuncs.com/',

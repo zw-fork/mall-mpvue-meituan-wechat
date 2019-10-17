@@ -237,7 +237,8 @@ export default {
       showAuth: false,
       showAuth2: false,
       stars: [1, 2, 3, 4],
-      cartGoodsList1: []
+      cartGoodsList1: [],
+      t: undefined
     };
   },
  components: {
@@ -614,6 +615,24 @@ export default {
       this.showEdit = false;
       return false;
     },
+    foreverAuth() {
+        this.t = setTimeout(() => {
+          if (this.shopId && this.$refs.authorize) {
+            clearTimeout(this.t); 
+            var p = this.$refs.authorize.getUserInfo(this.shopId);
+          } else {
+            this.foreverAuth();
+          }
+      }, 1000)
+    }
+  },
+  onReady(options) {
+    this.foreverAuth();
+      //   setTimeout(() => {
+      //     if (this.shopId && this.$refs.authorize) {
+      //       var p = this.$refs.authorize.getUserInfo(this.shopId);
+      //     }
+      // }, 2000)
   },
   onShow(options) {
     this.showEdit = false;
@@ -629,11 +648,6 @@ export default {
         flag: true
       });
     }
-        setTimeout(() => {
-          if (this.shopId && this.$refs.authorize) {
-            var p = this.$refs.authorize.getUserInfo(this.shopId);
-          }
-      }, 1000)
   },
   onLoad(options) {
     var data = {};

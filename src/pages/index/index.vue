@@ -6,8 +6,7 @@
 <script>
 import {
   getCityLocation,
-  getOpenidWechat,
-  getUserInfoWechat
+  getOpenidWechat
 } from "@/action/action";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 

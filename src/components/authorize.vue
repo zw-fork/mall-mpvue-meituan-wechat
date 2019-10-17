@@ -37,10 +37,6 @@ export default {
     type: {
       type: Number,
       default: 0
-    },
-    marginTop: {
-      type: String,
-      default: '12rpx'
     }
   },
   data() {
@@ -85,7 +81,6 @@ export default {
           success: function (res_login) {
             if (res_login.code) {
               var appid = `${APP_ID}`
-              wx.showLoading({ title: "加载中...", mask: true });
               wx.getUserInfo({
                 success: function (res) {
                   var jsonData = {
@@ -110,7 +105,6 @@ export default {
                     } else {
                     that.$emit('func',false, {})
                     }
-                     wx.hideLoading();          
                   })
                 }
               })
