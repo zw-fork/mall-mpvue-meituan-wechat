@@ -281,7 +281,8 @@ export default {
     },
       infoScroll(){
     var that = this;
-    var len = that.spus.datas.length;
+    if (that.spus.datas) {
+          var len = that.spus.datas.length;
     var height = 0;
     var hightArr = [];
     for (var i = 0; i < len; i++) { //productList
@@ -290,11 +291,14 @@ export default {
       var idView = "#y_" + i;
       query.select(idView).boundingClientRect();
       query.exec(function (res) {
-        var top = res[0].top;
+        if (res[0]) {
+                  var top = res[0].top;
         hightArr.push(top);
         that.hightArr = hightArr
+        }
       });
     };
+    }
   },
     copy() {
       wx.setClipboardData({data: this.shopInfo.wechatId});

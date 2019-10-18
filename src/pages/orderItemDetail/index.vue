@@ -218,7 +218,7 @@ export default {
     },
     refund(itemId) {
       var that = this;
-      if (this.orderByShopIdDetail.refundStatus == 1) {
+      if (this.orderByShopIdDetail.refundStatus == 1 && !itemId) {
                       wx.showModal({
         content: "确定对当前订单进行退款处理？",
         confirmColor: "#FFC24A",
@@ -280,7 +280,7 @@ export default {
       getFetch(
         "/order/updateStatus/" + this.orderByShopIdDetail.number,
         refund,
-        false
+        true
       ).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];

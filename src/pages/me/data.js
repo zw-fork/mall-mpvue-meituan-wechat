@@ -48,6 +48,20 @@ const homeData = {
         },
         {
           "brand_type": -1,
+          "code": 101578,
+          "first_tag_codes": [],
+          "path": "/pages/categoryList/main",
+          "gray_switch": 0,
+          "gray_url": "http://p1.meituan.net/jungle/12a9834827909fa55f54bce96e67470711250.png",
+          "method": 1258576,
+          "name": "店铺二维码",
+          "second_tag_codes": [],
+          "sequence": 300,
+          "skip_protocol": "channel?category_type=101578&category_text=%E7%94%9F%E9%B2%9C%E6%9E%9C%E8%94%AC",
+          "url": "iconwsdzb_zbgzt_xxzx_newpxb_type"
+        },
+        {
+          "brand_type": -1,
           "code": 101574,
           "first_tag_codes": [],
           "gray_switch": 0,
