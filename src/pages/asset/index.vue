@@ -31,7 +31,7 @@
     <scroll-view class="list-c" :scroll-y="true" @scrolltolower="lower">
       <div v-if="pageIndex === 1">
         <span class="no-data" v-if="!orderList.datas">暂无资金明细~</span>
-        <div class="cashlogs" v-for="(item, index) in orderList.datas" :key="index">
+        <div class="cashlogs" v-for="(item, index) in orderList.datas" :key="index" @click="orderDetail(item)">
           <div class="profile">
             <div class="typeStr">{{item.number}}</div>
             <div class="dateAdd">{{item.paymentTime}}</div>
@@ -85,13 +85,13 @@ export default {
   methods: {
     ...mapActions("submitOrder", [
       "showOrderDetailAction",
+      "showOrderByShopIdDetailAction",
       "getOrderByIdAction",
       "updateOrderStatusAction"
     ]),
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),
     updateList(index) {
       if (this.pageIndex != index) {
-        wx.showLoading({ title: "加载中...", mask: true });
         this.orderList.datas = [];
         this.pageIndex = index;
         this.orderList.page = 1;
@@ -102,6 +102,16 @@ export default {
         }
       }
     },
+    orderDetail(item) {
+      getFetch(
+        "/order/" + item.number,
+        {},
+        true
+      ).then(response => {
+        var result = response.result || {};
+        this.showOrderByShopIdDetailAction({ order: result });
+      });
+    },  
     scroll(e) {
       this.currentScroll = e.target.scrollTop;
     },
@@ -109,38 +119,35 @@ export default {
       getFetch(
         "/order/statistics/" + this.userInfo.shopId,
         { page: this.orderList.page },
-        false
+        true
       ).then(response => {
         var result = response.result || {};
         this.orderList.datas = [...this.orderList.datas, ...result.list];
         this.orderList.page = result.nextPage;
-        wx.hideLoading();
       });
     },
     updateDetail() {
       getFetch(
         "/order/detail/" + this.userInfo.shopId,
         { page: this.orderList.page },
-        false
+        true
       ).then(response => {
         var result = response.result || {};
         this.orderList.datas = [...this.orderList.datas, ...result.list];
         this.orderList.page = result.nextPage;
-        wx.hideLoading();
       });
     },
     totalStatistics() {
       getFetch(
         "/order/totalStatistics/" + this.userInfo.shopId,
         {},
-        false
+        true
       ).then(response => {
         this.total = response.result || {};
       });
     },
     lower(e) {
       if (this.orderList.page > 0) {
-        wx.showLoading({ title: "加载中...", mask: true });
         if (this.pageIndex == 2) {
           this.updateStatistics();
         } else {
@@ -166,15 +173,12 @@ export default {
         });
       }
       this.scrollTop = 0;
-    },
-    orderDetail(item) {
-      this.showOrderDetailAction({ order: item });
     }
   },
   mounted() {
     this.totalStatistics();
     this.scrollTop = 0;
-    getFetch("/order/detail/" + this.userInfo.shopId, {}, false).then(
+    getFetch("/order/detail/" + this.userInfo.shopId, {}, true).then(
       response => {
         var result = response.result || {};
         this.orderList.datas = result.list;
@@ -193,7 +197,6 @@ export default {
     this.totalStatistics();
     this.orderList.datas = [];
     this.orderList.page = 1;
-    wx.showLoading({ title: "加载中...", mask: true });
     if (this.pageIndex == 2) {
       this.updateStatistics();
     } else {
