@@ -84,6 +84,7 @@
     "van-field": "vant-weapp/dist/field/index",
     "van-datetime-picker": "vant-weapp/dist/datetime-picker/index",
     "van-popup": "vant-weapp/dist/popup/index",
+    "van-picker": "vant-weapp/dist/picker/index",
     "van-action-sheet": "vant-weapp/dist/action-sheet/index"
   }
 }
