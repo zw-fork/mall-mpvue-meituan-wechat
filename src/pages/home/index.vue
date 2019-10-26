@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <div class="content">
-      <div class="category-list">
-        <scroll-view class="item-list" :scroll-y="true">
+        <div class="item-list">
           <div
             class="item"
             v-for="(item, index) in shopList"
@@ -28,8 +27,7 @@
               </div>
             </div>
           </div>
-        </scroll-view>
-      </div>
+        </div>
     </div>
   </div>
 </template>
@@ -383,49 +381,10 @@ export default {
       }
     }
 
-    .category-list {
-      display: flex;
-      flex-direction: column;
-
-      .filter-bar {
-        display: flex;
-        align-items: center;
-        padding: 0 20rpx;
-        background-color: white;
-        height: 70rpx;
-        border-top: 2rpx solid $spLine-color;
-        border-bottom: 2rpx solid $spLine-color;
-
-        .item {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex: 1;
-
-          span {
-            font-size: 24rpx;
-            color: $textDarkGray-color;
-          }
-
-          i {
-            font-size: 24rpx;
-            color: $textDarkGray-color;
-            margin-left: 10rpx;
-          }
-        }
-
-        .item:first-child {
-          span {
-            color: $textBlack-color;
-          }
-        }
-      }
 
       .item-list {
         display: block;
         position: fixed;
-        top: 0rpx;
-        bottom: 0rpx;
         width: 100%;
         background-color: white;
 
@@ -622,6 +581,5 @@ export default {
         }
       }
     }
-  }
 }
 </style>
