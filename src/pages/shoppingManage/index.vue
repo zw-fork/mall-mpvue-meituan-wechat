@@ -60,7 +60,7 @@
         :scroll-into-view="id"
       >
       <div v-for="(item, index) in spus.datas" :key="index">
-        <div class="section" v-if="item.goodsList && item.goodsList[0].goodsId">
+        <div class="section">
           <span :id="'y_' + index" class="title">{{item.name}}</span>
         </div>
         <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">

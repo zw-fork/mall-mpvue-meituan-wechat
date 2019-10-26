@@ -178,6 +178,11 @@ export default {
     getFetch("/shop/list", {status: 1}, true).then(response => {
         this.shopList = response.result;
     });
+  },
+  onShareAppMessage: function() {
+    return {
+      path: "/pages/home/main"
+    };
   }
 };
 </script>
