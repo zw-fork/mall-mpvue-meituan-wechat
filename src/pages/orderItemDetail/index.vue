@@ -37,7 +37,7 @@
           <div
             class="btn"
             @click="refund(null)"
-            v-if="orderByShopIdDetail.adminCanRefund && orderByShopIdDetail.status==2 && userInfo.role==2"
+            v-if="orderByShopIdDetail.adminCanRefund && orderByShopIdDetail.status==2"
           >
             <span>退款</span>
           </div>
@@ -69,7 +69,7 @@
             </div>
             <div class="r-t">
               <span>x{{item.sequence}}</span>
-              <div class="btn" @click="refund(item.id)" v-if="!item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3">
+              <div class="btn" @click="refund(item.id)" v-if="orderByShopIdDetail.adminCanRefund && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3">
                 <span>退款</span>
               </div>
               <span v-else-if="item.refundTime" @click="refund(item.id)">已退款</span>
