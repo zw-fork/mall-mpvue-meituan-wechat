@@ -157,14 +157,12 @@ export default {
     //滚动条滚到底部或右边的时候触发
     lower(e) {
       if (this.list.page > 0) {
-        wx.showLoading({ title: "加载中...", mask: true });
         var data = {};
         data.page = this.list.page;
-        getFetch("/wechat/userList", data, false).then(response => {
+        getFetch("/wechat/userList", data, true).then(response => {
           var goodsList = response.result.list;
           this.list.page = response.result.nextPage;
           this.list.datas = [...this.list.datas, ...goodsList];
-          wx.hideLoading();
         });
       }
     },
@@ -185,7 +183,7 @@ export default {
           "/" +
           this.selectGoods.id,
         {},
-        false
+        true
       ).then(response => {
         this.showEdit = false;
         this.updateGoodsList(this.pageIndex);
@@ -270,7 +268,6 @@ export default {
       });
     },
     getGoods() {
-      wx.showLoading({ title: "加载中...", mask: true });
       var data = {};
       data.tel = this.name.trim();
       if (this.pageIndex != undefined) {
@@ -279,10 +276,9 @@ export default {
       if (this.userInfo.role != 3) {
         data.shopId = this.userInfo.shopId;
       }
-      getFetch("/wechat/userList", data, false).then(response => {
+      getFetch("/wechat/userList", data, true).then(response => {
         this.list.datas = response.result.list;
         this.list.page = response.result.nextPage;
-        wx.hideLoading();
       });
     },
     menuClick() {

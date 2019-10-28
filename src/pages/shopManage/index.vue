@@ -166,24 +166,7 @@ export default {
       styleA: "color: #F9D173",
       clazzB: "icon mt-unselected-o",
       styleB: "color: #333",
-      statusArray: [
-        {
-          label: "停服",
-          value: 0
-        },
-        {
-          label: "营业",
-          value: 1
-        },
-        {
-          label: "打烊",
-          value: 2
-        },
-        {
-          label: "停业",
-          value: 3
-        }
-      ],
+      statusArray: [],
       type: undefined,
       img: undefined,
       category: undefined
@@ -313,6 +296,41 @@ export default {
   },
   onLoad(options) {
     var shopId = this.userInfo.shopId;
+    if (this.userInfo.role == 3) {
+      this.statusArray = [
+        {
+          label: "停服",
+          value: 0
+        },
+        {
+          label: "营业",
+          value: 1
+        },
+        {
+          label: "打烊",
+          value: 2
+        },
+        {
+          label: "停业",
+          value: 3
+        }
+      ]
+    } else {
+      this.statusArray = [
+        {
+          label: "营业",
+          value: 1
+        },
+        {
+          label: "打烊",
+          value: 2
+        },
+        {
+          label: "停业",
+          value: 3
+        }
+      ]
+    }
     if (
       (options.id && this.userInfo.role == 3) ||
       (shopId && this.userInfo.role == 2)
