@@ -703,8 +703,9 @@ position:absolute;
 }
  .category-c {
     width:80%;
-left:0rpx;
-top:0rpx;
+    left:0rpx;
+    top:0rpx;
+    padding-left: 10rpx;
       display: flex;
       height: 70rpx;
       position: relative;   

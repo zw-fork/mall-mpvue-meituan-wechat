@@ -605,7 +605,7 @@ export default {
   onShareAppMessage: function() {
     return {
       title: this.shopInfo.shopName,
-      path: "/pages/index/main?shopId=" + this.shopInfo.shopId
+      path: "/pages/shoppingCart/main?shopId=" + this.shopInfo.shopId
     };
   }
 };
@@ -640,8 +640,9 @@ export default {
 }
   .category-c {
     width:80%;
-left:0rpx;
-top:0rpx;
+    left:0rpx;
+    top:0rpx;
+    padding-left: 30rpx;
       display: flex;
       height: 70rpx;
       position: relative;   
