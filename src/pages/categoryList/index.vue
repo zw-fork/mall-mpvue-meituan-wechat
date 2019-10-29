@@ -115,7 +115,8 @@ export default {
       actions: [
       {index:0, name: '添加一级分类', color: '07c160' },
       {index:1, name: '添加二级分类', color: '07c160' },
-      {index:2, name: '取消', color: '07c160' }
+      {index:2, name: '导入系统分类', color: '07c160' },
+      {index:3, name: '取消', color: '07c160' }
     ],
       show: false,
       divStyle: "",
@@ -189,6 +190,14 @@ export default {
       wx.navigateTo({ url: "/pages/categoryManage/main?type=0"});
     } else if (event.mp.detail.index===1) {
       wx.navigateTo({ url: "/pages/categoryManage/main?type=1"});
+    } else if (event.mp.detail.index===2) {
+                getFetch(
+      "/category/system/" + this.userInfo.shopId,
+      { },
+      true
+    ).then(response => {
+      this.list.datas = response.result;
+    });
     }
     this.showSheet = false;
   },

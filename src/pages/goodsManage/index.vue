@@ -272,11 +272,11 @@ export default {
       this.pickerValueDefault = [];
       this.$refs.mpvuePicker.show();
     },
-    getCategory() {
+    getCategory(goodsId, index, childIndex) {
 getFetch(
       "/category/list/" + this.userInfo.shopId,
       { status: 1 },
-      true
+      goodsId != null
     ).then(response => {
       var list = response.result;
       var mulLinkageTwoPicker3 = [];
@@ -302,7 +302,32 @@ getFetch(
         mulLinkageTwoPicker3.push(data);
       } 
       this.pickerValueArray = mulLinkageTwoPicker3;
-      this.pickerValueDefault3 =[0, 0]
+      this.pickerValueDefault3 =[0, 0];
+        if (goodsId) {
+        this.index = index;
+        this.childIndex = childIndex;
+        getFetch(
+          "/goods/list/" + this.userInfo.shopId,
+          { goodsId: goodsId },
+          true
+        ).then(response => {
+          if (response.result.list.length > 0) {
+            this.goods = response.result.list[0];
+            debugger;
+            for (var index in this.categoryArray) {
+              if (this.goods.categoryId == this.categoryArray[index].value) {
+                this.goods.categoryName = this.categoryArray[index].label;
+              }
+            }
+            for (var index in this.statusArray) {
+              if (this.goods.status == this.statusArray[index].value) {
+                this.goods.statusName = this.statusArray[index].label;
+                this.name = this.statusArray[index].label;
+              }
+            }
+          }
+        });
+      }
     });
     },
     onConfirm(e) {
@@ -355,61 +380,7 @@ getFetch(
       }
     })
     }
-    getFetch(
-      "/category/list/" + this.userInfo.shopId,
-      { status: 1 },
-      true
-    ).then(response => {
-      var list = response.result;
-      var mulLinkageTwoPicker3 = [];
-      for (var index in list) {
-        var data = {};
-        data.label = list[index].name;
-        data.value = list[index].categoryId;
-        data.children = [];
-        var children = list[index].childrenCategory;
-        if (children.length>0) {
-          for (var index2 in children) {
-              var child = {};
-              child.label = children[index2].name;
-              child.value = children[index2].categoryId;
-              data.children.push(child);
-          }
-        } else {
-          var child = {};
-          child.label = '';
-          child.value = '';
-          data.children.push(child);
-        }
-        mulLinkageTwoPicker3.push(data);
-      } 
-      this.pickerValueArray = mulLinkageTwoPicker3;
-      this.pickerValueDefault3 =[0, 0]
-      if (options.id) {
-        this.index = options.index;
-        this.childIndex = options.childIndex;
-        getFetch(
-          "/goods/list/" + this.userInfo.shopId,
-          { goodsId: options.id },
-          true
-        ).then(response => {
-          if (response.result.list.length > 0) {
-            this.goods = response.result.list[0];
-            for (var index in this.categoryArray) {
-              if (this.goods.categoryId == this.categoryArray[index].value) {
-                this.goods.categoryName = this.categoryArray[index].label;
-              }
-            }
-            for (var index in this.statusArray) {
-              if (this.goods.status == this.statusArray[index].value) {
-                this.goods.statusName = this.statusArray[index].label;
-                this.name = this.statusArray[index].label;
-              }
-            }
-          }
-        });
-      }
-    });
+    this.getCategory(options.id, options.index, options.childIndex);
   }
 };
 </script>

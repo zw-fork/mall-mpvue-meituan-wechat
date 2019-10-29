@@ -258,7 +258,6 @@ export default {
     scanClick() {
       wx.scanCode({
         success: res => {
-          console.log(res.result);
           getFetch("qrcode/addShop?sessionId=" + res.result, {}, false).then(
             response => {
               this.getGoods();
