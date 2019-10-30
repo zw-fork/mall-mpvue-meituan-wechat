@@ -573,7 +573,7 @@ export default {
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
       this.scrollTop = this.currentScroll;
-      this.tagIndex = currPage.data.index;
+      this.tagIndex = Number(currPage.data.index);
       this.getMenuDataAction({
         shopId: this.shopId,
         index: this.tagIndex,
