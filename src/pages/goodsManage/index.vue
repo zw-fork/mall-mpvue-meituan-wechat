@@ -313,7 +313,6 @@ getFetch(
         ).then(response => {
           if (response.result.list.length > 0) {
             this.goods = response.result.list[0];
-            debugger;
             for (var index in this.categoryArray) {
               if (this.goods.categoryId == this.categoryArray[index].value) {
                 this.goods.categoryName = this.categoryArray[index].label;

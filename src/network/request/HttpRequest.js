@@ -168,6 +168,8 @@ const HttpUtils = {
               var data = res.data
               if (data.code == responseCode.DUPLICATE_KEY_EXCEPTION_CODE) {
                 wx.showToast({ title: '已存在该数据，请修改!', icon: 'none', duration: 4000 })
+              } else if (data.code == 500) {
+                wx.showToast({ title: data.message, icon: 'none', duration: 4000 })
               } else {
                 isSuccess = true
                 resolve(res.data)

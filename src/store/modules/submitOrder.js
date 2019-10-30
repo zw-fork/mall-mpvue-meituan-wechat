@@ -200,7 +200,7 @@ const actions = {
     wx.navigateBack()
   },
   refundDataAction({ state, commit }, { orderNo, refundDesc, refundFee }) {
-    getFetch('/wxPay/refund', { 'orderNo': orderNo, 'refundDesc': refundDesc, 'refundFee': refundFee }, false).then(response => {
+    getFetch('/wxPay/refund', { 'orderNo': orderNo, 'refundDesc': refundDesc, 'refundFee': refundFee }, true).then(response => {
       var result = response.result || {}
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
