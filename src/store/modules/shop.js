@@ -14,17 +14,15 @@ const mutations = {
 
 const actions = {
   getShopListDataAction({ state, commit }, { communityId }) {
-    wx.showLoading({ title: '加载中...', mask: true })
-    getFetch('/shop/list/' + communityId, {}, false).then(response => {
+    getFetch('/shop/list/' + communityId, {}, true).then(response => {
       commit('changeShopListDataMut', response.result.list)
-      wx.hideLoading()
       wx.switchTab({
         url: '/pages/home/main'
       })
     })
   },
   createCategory({ state, commit }, { category }) {
-    postFetch('/category', category, false).then(response => {
+    postFetch('/category', category, true).then(response => {
       return response.result
     })
   },
@@ -33,6 +31,9 @@ const actions = {
     var that = this
     if (shop.wechat && shop.pic_url) {
       var sessionId = wx.getStorageSync('sessionId')
+      console.log(path)
+      console.log(shop.wechat)
+      console.log(shop.pic_url)
       wx.uploadFile({
         url: path + '/shop/upload', //仅为示例，非真实的接口地址
         filePath: shop.pic_url,
