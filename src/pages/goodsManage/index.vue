@@ -304,8 +304,6 @@ getFetch(
       this.pickerValueArray = mulLinkageTwoPicker3;
       this.pickerValueDefault3 =[0, 0];
         if (goodsId) {
-        this.index = index;
-        this.childIndex = childIndex;
         getFetch(
           "/goods/list/" + this.userInfo.shopId,
           { goodsId: goodsId },
@@ -318,7 +316,7 @@ getFetch(
                 this.goods.categoryName = this.categoryArray[index].label;
               }
             }
-            for (var index in this.statusArray) {
+            for (var index in this.statusArray) {  
               if (this.goods.status == this.statusArray[index].value) {
                 this.goods.statusName = this.statusArray[index].label;
                 this.name = this.statusArray[index].label;
@@ -379,7 +377,9 @@ getFetch(
       }
     })
     }
-    this.getCategory(options.id, options.index, options.childIndex);
+    this.index = options.index;
+    this.childIndex = options.childIndex;
+    this.getCategory(options.id, this.index, this.childIndex);
   }
 };
 </script>
