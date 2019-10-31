@@ -31,9 +31,6 @@ const actions = {
     var that = this
     if (shop.wechat && shop.pic_url) {
       var sessionId = wx.getStorageSync('sessionId')
-      console.log(path)
-      console.log(shop.wechat)
-      console.log(shop.pic_url)
       wx.uploadFile({
         url: path + '/shop/upload', //仅为示例，非真实的接口地址
         filePath: shop.pic_url,
@@ -46,6 +43,9 @@ const actions = {
         success: function (res) {
           that.state.shoppingCart.shopInfo = {}
           wx.navigateBack({ delta: 1 })
+        },
+        fail(res) {
+          console.log(`res:`, res);
         }
       })
     } else {
