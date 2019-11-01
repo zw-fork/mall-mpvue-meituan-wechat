@@ -234,6 +234,7 @@ export default {
       tagIndex: 0,
       pageIndex: 0,
       left: "40rpx",
+      reLogin: false,
       showAuth: false,
       showAuth2: false,
       stars: [1, 2, 3, 4],
@@ -623,7 +624,7 @@ export default {
         this.t = setTimeout(() => {
           if (this.shopId && this.$refs.authorize) {
             clearTimeout(this.t); 
-            var p = this.$refs.authorize.getUserInfo(this.shopId);
+            var p = this.$refs.authorize.getUserInfo(this.shopId, this.reLogin);
           } else {
             this.foreverAuth();
           }
@@ -656,6 +657,7 @@ export default {
     var that = this;
     this.shopId = options.shopId;
     if (!this.shopId) {
+      this.reLogin = true;
       this.shopId = options.scene;
     }
     if (!this.shopId) {
@@ -679,7 +681,7 @@ export default {
   onShareAppMessage: function() {
     return {
       title: this.shopInfo.shopName,
-      path: "/pages/shoppingCart/main?shopId=" + this.shopInfo.shopId
+      path: "/pages/shoppingCart/main?scene=" + this.shopInfo.shopId
     };
   }
 };

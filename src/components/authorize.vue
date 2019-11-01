@@ -51,10 +51,10 @@ export default {
     },
   methods: {
     ...mapMutations("user", ["changeUserInfoMut"]),
-    getUserInfo(shopId) {
+    getUserInfo(shopId, reLogin) {
       this.shopId = shopId;
       var that = this;
-      if (this.userInfo.id) {
+      if (this.userInfo.id && !reLogin) {
         this.showPopup = false;
         this.$emit('func',false)        
       } else {
