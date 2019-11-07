@@ -282,7 +282,6 @@ export default {
         });
         return;
       }
-      wx.showLoading({ title: "加载中...", mask: true });
       this.shop.tel = [this.shop.phone];
       this.createShop({ shop: this.shop });
     },

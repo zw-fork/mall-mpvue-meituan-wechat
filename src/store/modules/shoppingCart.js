@@ -87,24 +87,17 @@ const actions = {
                         shopInfo.categoryModelList[index2].totalPrice = 0
                       }
                       shopInfo.categoryModelList[index2].totalPrice += itemList[i].currentPrice * itemList[i].sequence
-                    } else if (category.childrenCategory.length>0) {
-                      var categoryId = category.categoryId;
-                      var categoryList = category.childrenCategory;
-                      for (var index3 in categoryList) {
-                        category = categoryList[index3];
-                        if (itemList[i].categoryId === category.categoryId) {
-                          if (!shopInfo.categoryModelList[index2].count) {
-                            shopInfo.categoryModelList[index2].count = 0
-                          }
-                          shopInfo.categoryModelList[index2].count += itemList[i].sequence
-                          itemList[i].categoryIndex = index2
-                          itemList[i].parentCategoryId = categoryId
-                          if (!shopInfo.categoryModelList[index2].totalPrice) {
-                            shopInfo.categoryModelList[index2].totalPrice = 0
-                          }
-                          shopInfo.categoryModelList[index2].totalPrice += itemList[i].currentPrice * itemList[i].sequence
-                        } 
+                    } else if (itemList[i].parentCategoryId === category.categoryId) {
+                      if (!shopInfo.categoryModelList[index2].count) {
+                        shopInfo.categoryModelList[index2].count = 0
                       }
+                      shopInfo.categoryModelList[index2].count += itemList[i].sequence
+                      itemList[i].categoryIndex = index2
+                      if (!shopInfo.categoryModelList[index2].totalPrice) {
+                        shopInfo.categoryModelList[index2].totalPrice = 0
+                      }
+                      shopInfo.categoryModelList[index2].totalPrice += itemList[i].currentPrice * itemList[i].sequence
+                    
                     }
                   }
                 }
