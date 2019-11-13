@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @click="update" @mousedown="update">
+  <div class="container">
     <div class="header-c">
       <div class="cate-c">
         <span
@@ -12,8 +12,16 @@
           :style="{'font-weight': pageIndex === 1 ? lineStyle : null}"
           @click="shopClick(1)"
         >在售</span>
-        <span class="c-m" @click="shopClick(2)" :style="{'font-weight': pageIndex === 2 ? lineStyle : null}">下架</span>
-        <div class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
+        <span
+          class="c-m"
+          @click="shopClick(2)"
+          :style="{'font-weight': pageIndex === 2 ? lineStyle : null}"
+        >下架</span>
+        <div
+          class="header-r"
+          @click="searchClick"
+          style=" position: absolute;right:10rpx;"
+        >
           <i class="icon iconfont iconsearch"></i>
           <span>搜索商品</span>
         </div>
@@ -21,89 +29,132 @@
     </div>
     <div class="list-c">
       <div class="list-ll">
-      <scroll-view class="list-l" :scroll-y="true">
-        <div
-          class="l-item"
-          :class="{active: index === tagIndex}"
-          v-for="(item, index) in shopInfo.categoryModelList"
-          :key="index"
-          @click="categoryClick(item, index)"
+        <scroll-view
+          class="list-l"
+          :scroll-y="true"
         >
-          <span>{{item.name}}</span><span v-if="item.status==2">(隐藏)</span>
-        </div>
-      </scroll-view>
-        </div>
-        <div>
-
-
-       <div class="list-r1">    
-      <div class="category-c">
-        <scroll-view class="l" scroll-x :scroll-into-view="idx">
-          <div class="tab-item" :class="{active: index === childIndex}" 
-          v-for="(item, index) in datas" :key="index">
-              <span :id="'x_' + index" @click="changeCategory(item, index)">{{item.name}}</span>
-            </div>
+          <div
+            class="l-item"
+            :class="{active: index === tagIndex}"
+            v-for="(item, index) in shopInfo.categoryModelList"
+            :key="index"
+            @click="categoryClick(item, index)"
+          >
+            <span>{{item.name}}</span><span v-if="item.status==2">(隐藏)</span>
+          </div>
         </scroll-view>
-        <div class="r">
-          <i class="icon mt-arrow-down-o"></i>
-        </div>
       </div>
-      </div>
- <div class="list-rr">
+      <div>
 
-      <scroll-view
-        class="list-r"
-        :scroll-y="true"
-        @scrolltolower="lower"
-        :scroll-top="scrollTop"
-        @scroll="scroll"
-        :scroll-into-view="id"
-      >
-      <div v-for="(item, index) in spus.datas" :key="index">
-        <div class="section">
-          <span :id="'y_' + index" class="title">{{item.name}}</span>
-        </div>
-        <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
-          <div class="item" v-if="goods.goodsId">
-            <div class="item-l">
-              <img :src="path + goods.picture"> 
-            </div>
-            <div class="item-r">
+        <div class="list-r1">
+          <div class="category-c">
+            <scroll-view
+              class="l"
+              scroll-x
+              :scroll-into-view="idx"
+            >
               <div
-                class="div-title"
-                v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId && showManage"
+                class="tab-item"
+                :class="{active: index === childIndex}"
+                v-for="(item, index) in datas"
+                :key="index"
               >
-                <span class="title">{{goods.name}}</span>
-                <i
-                @click.stop="manageGoods($event, goods, index, index2)"
-                  class="icon iconfont icondian"
-                  style="float:right;position:relative;display:inline-block"
-                ></i>
+                <span
+                  :id="'x_' + index"
+                  @click="changeCategory(item, index)"
+                >{{item.name}}</span>
               </div>
-              <span class="title" v-else>{{goods.name}}</span>
-              <span class="sub-title">{{goods.barcode}}</span>
-              <div class="r-t"> 
-                <span class="price">￥{{goods.min_price}}</span><span v-if="goods.status==2">已下架</span>
-              </div>
+            </scroll-view>
+            <div class="r">
+              <i class="icon mt-arrow-down-o"></i>
             </div>
           </div>
         </div>
+        <div class="list-rr">
+
+          <scroll-view
+            class="list-r"
+            :scroll-y="true"
+            @scrolltolower="lower"
+            :scroll-top="scrollTop"
+            @scroll="scroll"
+            :scroll-into-view="id"
+          >
+            <div
+              v-for="(item, index) in spus.datas"
+              :key="index"
+            >
+              <div class="section">
+                <span
+                  :id="'y_' + index"
+                  class="title"
+                >{{item.name}}</span>
+              </div>
+              <div
+                class="item-list"
+                v-for="(goods, index2) in item.goodsList"
+                :key="index2"
+              >
+                <div
+                  class="item"
+                  v-if="goods.goodsId"
+                >
+                  <div class="item-l">
+                    <img :src="path + goods.picture">
+                  </div>
+                  <div class="item-r">
+                    <div
+                      class="div-title"
+                      v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId && showManage"
+                    >
+                      <span class="title">{{goods.name}}</span>
+                      <i
+                        @click.stop="manageGoods($event, goods, index, index2)"
+                        class="icon iconfont icondian"
+                        style="float:right;position:relative;display:inline-block"
+                      ></i>
+                    </div>
+                    <span
+                      class="title"
+                      v-else
+                    >{{goods.name}}</span>
+                    <span class="sub-title">{{goods.barcode}}</span>
+                    <div class="r-t">
+                      <span class="price">￥{{goods.min_price}}</span><span v-if="goods.status==2">已下架</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </scroll-view>
         </div>
-      </scroll-view>
       </div>
-        </div>
     </div>
-    <div class="screen_cover" v-show="showCart && productCount > 0" @click="toggleCartList"></div>
-    <div class="editGoods" :style="divStyle" v-if="showEdit">
+    <div
+      class="screen_cover"
+      v-show="showCart && productCount > 0"
+      @click="toggleCartList"
+    ></div>
+    <div
+      class="editGoods"
+      :style="divStyle"
+      v-if="showEdit"
+    >
       <div @click="editGoods">
         <i class="icon iconfont iconedit"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-      <div @click="upGoods" v-if="selectGoods.status==2">
+      <div
+        @click="upGoods"
+        v-if="selectGoods.status==2"
+      >
         <i class="icon iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">上架</span>
       </div>
-      <div @click="downGoods" v-if="selectGoods.status==1">
+      <div
+        @click="downGoods"
+        v-if="selectGoods.status==1"
+      >
         <i class="icon iconfont iconxiajia"></i>
         <span style="color:white;text-align: center;">下架</span>
       </div>
@@ -112,12 +163,16 @@
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>
-              <div class="modalFooter">
-          <div class="btnCancel" @click="categoryManage">分类管理</div>
-          <div @click="addGoods"
-            class="btnConfirm"
-          >添加商品</div>
-        </div>
+    <div class="modalFooter">
+      <div
+        class="btnCancel"
+        @click="categoryManage"
+      >分类管理</div>
+      <div
+        @click="addGoods"
+        class="btnConfirm"
+      >添加商品</div>
+    </div>
   </div>
 </template>
 
@@ -141,7 +196,7 @@ export default {
       showManage: false,
       show: false,
       divStyle: "",
-      id:undefined,
+      id: undefined,
       idx: undefined,
       scrollTop: undefined,
       currentScroll: 0,
@@ -150,8 +205,10 @@ export default {
       goodsValue: {},
       pageIndex: 0,
       left: "40rpx",
+      shopInfo: {},
       index: undefined,
       index2: undefined,
+      spus: {},
       cartGoodsList1: []
     };
   },
@@ -181,15 +238,15 @@ export default {
       return `${GOODS_URL_PREFIX}`;
     },
     datas() {
-       if (this.spus.datas) {
+      if (this.spus.datas) {
         var that = this;
-        setTimeout(function(){
-　　　　        that.infoScroll();
-    　　}, 1500);
-    return this.spus.datas;
-       }
-       return undefined;
-     },
+        setTimeout(function() {
+          that.infoScroll();
+        }, 1500);
+        return this.spus.datas;
+      }
+      return undefined;
+    },
     totalPrice() {
       var price = 0;
       if (this.shopInfo.categoryModelList) {
@@ -258,7 +315,6 @@ export default {
       "changeItemModalMut"
     ]),
     ...mapActions("shoppingCart", [
-      "getMenuDataAction",
       "getCommentDataAction",
       "getCategoryMenuDataAction",
       "closeShoppingCartAction",
@@ -268,75 +324,99 @@ export default {
       "changeSkuModalDataAction",
       "previewItemAction"
     ]),
+    getMenuDataAction(shopId, data, index, categoryId) {
+      getFetch(
+        "/category/category/" +
+          this.shopInfo.categoryModelList[index].categoryId,
+        data,
+        true
+      ).then(response => {
+        var go = response.result || {};
+        var spus = {
+          title: this.shopInfo.categoryModelList[index].name,
+          index: 0,
+          datas: go,
+          categoryId: this.shopInfo.categoryModelList[index].categoryId
+        };
+        var selectedArr = [];
+        for (var i in spus.datas) {
+          if (
+            (spus.datas[i].goodsList && spus.datas[i].goodsList[0].goodsId) ||
+            spus.datas[i].parentId
+          ) {
+            selectedArr.push(spus.datas[i]);
+          }
+        }
+        spus.datas = selectedArr;
+        this.spus = spus;
+        this.shopInfo.categoryModelList[index].spus = spus;
+      });
+    },
     categoryManage() {
       wx.navigateTo({ url: "/pages/categoryList/main" });
     },
     addGoods() {
       wx.navigateTo({ url: "/pages/goodsManage/main" });
     },
-        changeCategory(item, index) {
+    changeCategory(item, index) {
       this.childIndex = index;
 
-      this.id='y_' + index;
+      this.id = "y_" + index;
     },
-      infoScroll(){
-    var that = this;
-    if (that.spus.datas) {
-          var len = that.spus.datas.length;
-    var height = 0;
-    var hightArr = [];
-    for (var i = 0; i < len; i++) { //productList
-      //获取元素所在位置
-      var query = wx.createSelectorQuery();
-      var idView = "#y_" + i;
-      query.select(idView).boundingClientRect();
-      query.exec(function (res) {
-        if (res[0]) {
-                  var top = res[0].top;
-        hightArr.push(top);
-        that.hightArr = hightArr
+    infoScroll() {
+      var that = this;
+      if (that.spus.datas) {
+        var len = that.spus.datas.length;
+        var height = 0;
+        var hightArr = [];
+        for (var i = 0; i < len; i++) {
+          //productList
+          //获取元素所在位置
+          var query = wx.createSelectorQuery();
+          var idView = "#y_" + i;
+          query.select(idView).boundingClientRect();
+          query.exec(function(res) {
+            if (res[0]) {
+              var top = res[0].top;
+              hightArr.push(top);
+              that.hightArr = hightArr;
+            }
+          });
         }
-      });
-    };
-    }
-  },
+      }
+    },
     copy() {
-      wx.setClipboardData({data: this.shopInfo.wechatId});
+      wx.setClipboardData({ data: this.shopInfo.wechatId });
     },
     updateGoods(goodsModel) {
       postFetch("/goods/upload2", goodsModel, true).then(response => {
         this.showEdit = false;
         this.updateGoodsValue();
-        if (goodsModel.status==0) {
-                this.scrollTop = this.currentScroll;
-            this.getMenuDataAction({
-              shopId: this.shopId,
-              index: this.tagIndex,
-              data: this.goodsValue,
-              flag: true
-            });
+        if (goodsModel.status == 0) {
+          this.scrollTop = this.currentScroll;
+          this.getMenuDataAction({
+            shopId: this.shopId,
+            index: this.tagIndex,
+            data: this.goodsValue,
+            flag: true
+          });
         }
       });
     },
     shopClick(value) {
-      this.showEdit = false; 
+      this.showEdit = false;
       this.pageIndex = value;
       this.updateGoodsValue();
-      this.getMenuDataAction({
-              shopId: this.shopId,
-              index: this.tagIndex,
-              data: this.goodsValue,
-              flag: true
-      });
+      this.getShop(this.goodsValue);
     },
     updateGoodsValue() {
       var data = {};
-        if (this.pageIndex == 1) {
-          data.categoryStatus = 1;
-          data.goodsStatus = 1; 
-        } else if (this.pageIndex == 2) {
-          data.goodsStatus = 2;       
-        }
+      if (this.pageIndex == 1) {
+        data.categoryStatus = 1;
+        data.goodsStatus = 1;
+      } else if (this.pageIndex == 2) {
+        data.goodsStatus = 2;
+      }
       this.goodsValue = data;
     },
     deleteGoods() {
@@ -361,7 +441,6 @@ export default {
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 1;
-            this.index2 = index2;
             that.updateGoods(that.selectGoods);
           } else if (res.cancel) {
           }
@@ -383,8 +462,15 @@ export default {
       });
     },
     editGoods() {
+      this.scrollTop = this.currentScroll;
       wx.navigateTo({
-        url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId + "&index=" + this.tagIndex + "&childIndex=" + this.childIndex
+        url:
+          "/pages/goodsManage/main?id=" +
+          this.selectGoods.goodsId +
+          "&index=" +
+          this.tagIndex +
+          "&childIndex=" +
+          this.childIndex
       });
     },
     manageGoods(e, goods, index, index2) {
@@ -434,21 +520,27 @@ export default {
         this.currentScroll = e.target.scrollTop;
         this.showEdit = false;
       }
-      if (this.hightArr.length>0) {
+      if (this.hightArr.length > 0) {
         var scrollTop = e.target.scrollTop;
         var scrollArr = this.hightArr;
         for (var i = 0; i < scrollArr.length; i++) {
           if (scrollTop >= 0 && scrollTop < scrollArr[1] - scrollArr[0]) {
-            this.childIndex = 0
-            this.idx = 'x_' + this.childIndex;
+            this.childIndex = 0;
+            this.idx = "x_" + this.childIndex;
             break;
-          } else if (scrollTop >= scrollArr[i] - scrollArr[0] && scrollTop < scrollArr[i + 1] - scrollArr[0]) {
-            this.childIndex = i
-            this.idx = 'x_' + this.childIndex;
+          } else if (
+            scrollTop >= scrollArr[i] - scrollArr[0] &&
+            scrollTop < scrollArr[i + 1] - scrollArr[0]
+          ) {
+            this.childIndex = i;
+            this.idx = "x_" + this.childIndex;
             break;
-          } else if (scrollTop >= scrollArr[scrollArr.length - 1] - scrollArr[0]) {
-            this.childIndex = scrollArr.length - 1
-            this.idx = 'x_' + this.childIndex;
+          } else if (
+            scrollTop >=
+            scrollArr[scrollArr.length - 1] - scrollArr[0]
+          ) {
+            this.childIndex = scrollArr.length - 1;
+            this.idx = "x_" + this.childIndex;
             break;
           }
         }
@@ -459,7 +551,12 @@ export default {
       if (this.spus.page > 0) {
         getFetch(
           "/goods/list/" + this.shopInfo.shopId,
-          { page: this.spus.page, categoryId: this.spus.categoryId, status: 1,categoryStatus:1 },
+          {
+            page: this.spus.page,
+            categoryId: this.spus.categoryId,
+            status: 1,
+            categoryStatus: 1
+          },
           true
         ).then(response => {
           var goods = response.result.list;
@@ -506,7 +603,7 @@ export default {
       order.itemList = selectedArr;
     },
     categoryClick(item, index) {
-      this.id= undefined;
+      this.id = undefined;
       this.tagIndex = index;
       this.showEdit = false;
       var categoryId = item.categoryId;
@@ -515,7 +612,12 @@ export default {
         this.scrollTop = 0;
       }
       var data = this.goodsValue;
-      this.getCategoryMenuDataAction({ categoryId, index, data });
+      this.getMenuDataAction(
+        this.shopId,
+        data,
+        this.tagIndex,
+        this.shopInfo.categoryModelList[index].categoryId
+      );
     },
     menuClick() {
       this.showEdit = false;
@@ -555,31 +657,48 @@ export default {
         url: "/pages/goodsList/main?shopId=" + this.shopInfo.shopId
       });
     },
-     update() {
+    update() {
       this.showEdit = false;
       return false;
     },
+    getShop(data) {
+      getFetch("/shop/" + this.shopId, data, true).then(response => {
+        this.shopInfo = response.result || {};
+        if (
+          this.shopInfo.categoryModelList.length > 0 &&
+          this.shopInfo.categoryModelList[0].categoryId
+        ) {
+          this.getMenuDataAction(
+            this.shopId,
+            data,
+            this.tagIndex,
+            this.shopInfo.categoryModelList[0].categoryId
+          );
+        }
+      });
+    }
   },
   onShow(options) {
     var data = {};
     if (this.pageIndex == 1) {
       data.categoryStatus = 1;
-      data.goodsStatus = 1; 
+      data.goodsStatus = 1;
     } else if (this.pageIndex == 2) {
-      data.goodsStatus = 2;       
+      data.goodsStatus = 2;
     }
     this.showEdit = false;
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
     if (currPage.data.update) {
+      this.id = "y_" + this.childIndex;
       this.scrollTop = this.currentScroll;
       this.tagIndex = Number(currPage.data.index);
-      this.getMenuDataAction({
-        shopId: this.shopId,
-        index: this.tagIndex,
-        data: data,
-        flag: true
-      });
+      this.getMenuDataAction(
+        this.shopId,
+        data,
+        this.tagIndex,
+        this.shopInfo.categoryModelList[this.tagIndex].categoryId
+      );
     }
   },
   onLoad(options) {
@@ -589,18 +708,13 @@ export default {
     this.shopId = options.shopId;
     if (!this.shopId) {
       this.shopId = this.userInfo.shopId;
-      this.showManage = this.shopId ? true: false;
+      this.showManage = this.shopId ? true : false;
     }
     this.showCart = false;
     if (this.shopId != this.shopInfo.shopId) {
       this.tagIndex = 0;
     }
-    this.getMenuDataAction({
-      shopId: this.shopId,
-      data: data,
-      index: this.tagIndex,
-      flag: true
-    });
+    this.getShop(data);
   },
   onShareAppMessage: function() {
     return {
@@ -615,7 +729,7 @@ export default {
 .modalFooter {
   box-sizing: border-box;
   display: flex;
-  width:100%;
+  width: 100%;
   flex-direction: row;
   height: 80rpx;
   border-top: 1rpx solid #e5e5e5;
@@ -631,246 +745,245 @@ export default {
   color: #333;
   text-align: center;
   border-right: 1rpx solid #e5e5e5;
-}  
+}
 
 .btnConfirm {
   width: 50%;
   color: #333;
   text-align: center;
 }
-  .category-c {
-    width:80%;
-    left:0rpx;
-    top:0rpx;
-    padding-left: 30rpx;
-      display: flex;
-      height: 70rpx;
-      position: relative;   
-      white-space:nowrap;
-      background-color: #FAFAFA;
-      .l {
-              display: flex;
-      flex-direction: column;
-        line-height: 70rpx;
-        white-space: nowrap;
-        position: relative;
-        	        .active {
-          color: $theme-color;
-          font-weight: bold;
-
-          }
-        .tab-item {
-          transition: all 0.2s;
-          font-size: 24rpx;
-          height: 70rpx;
-          display: inline-block;
-          color: $textDarkGray-color;
-          margin: 0 30rpx;
-        }
-      }
-      .r {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 70rpx;
-        height: 70rpx;
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background-color: #FAFAFA;
-        flex: 1;
-        i {
-          font-size: 24rpx;
-          color: $textGray-color;
-        }
-      }
-    }
-.btn {
-    float: left;
+.category-c {
+  width: 80%;
+  left: 0rpx;
+  top: 0rpx;
+  padding-left: 30rpx;
+  display: flex;
+  height: 70rpx;
+  position: relative;
+  white-space: nowrap;
+  background-color: #fafafa;
+  .l {
     display: flex;
-    background-color: $page-bgcolor;
-    margin: 10rpx;
-    border-radius: 4rpx;
-
-    span {
-      font-size: 26rpx;
-      margin: 6rpx 10rpx;
+    flex-direction: column;
+    line-height: 70rpx;
+    white-space: nowrap;
+    position: relative;
+    .active {
+      color: $theme-color;
+      font-weight: bold;
+    }
+    .tab-item {
+      transition: all 0.2s;
+      font-size: 24rpx;
+      height: 70rpx;
+      display: inline-block;
+      color: $textDarkGray-color;
+      margin: 0 30rpx;
     }
   }
-.first{
-	left: 100px;
-	background-color: #0fc;
-	float: left;
+  .r {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70rpx;
+    height: 70rpx;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #fafafa;
+    flex: 1;
+    i {
+      font-size: 24rpx;
+      color: $textGray-color;
+    }
+  }
+}
+.btn {
+  float: left;
+  display: flex;
+  background-color: $page-bgcolor;
+  margin: 10rpx;
+  border-radius: 4rpx;
+
+  span {
+    font-size: 26rpx;
+    margin: 6rpx 10rpx;
+  }
+}
+.first {
+  left: 100px;
+  background-color: #0fc;
+  float: left;
 }
 .list-r1 {
-  display:flex;
-position:absolute;
-    bottom: 0rpx;
-    top:0rpx;
+  display: flex;
+  position: absolute;
+  bottom: 0rpx;
+  top: 0rpx;
   height: 70rpx;
-    display:flex;
-    width:100%;
+  display: flex;
+  width: 100%;
 }
 .list-rr {
-width: 80%;
-bottom: 0px;
-top: 70rpx;
-display: flex;
-position: absolute;
-background-color: #FAFAFA; 
-    .list-r {
-      background-color: white;
+  width: 80%;
+  bottom: 0px;
+  top: 70rpx;
+  display: flex;
+  position: absolute;
+  background-color: #fafafa;
+  .list-r {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    .section {
       display: flex;
-      flex-direction: column;
-      .section {
-        display: flex;
-        height: 70rpx;
-        align-items: center;
-        margin-left: 20rpx;
+      height: 70rpx;
+      align-items: center;
+      margin-left: 20rpx;
 
-        span {
-          font-size: 28rpx;
-          color: $textBlack-color;
-        }
+      span {
+        font-size: 28rpx;
+        color: $textBlack-color;
       }
+    }
 
-      .item-list {
+    .item-list {
+      display: flex;
+      margin: 0 20rpx;
+      flex-direction: column;
+
+      .item {
         display: flex;
-        margin: 0 20rpx;
-        flex-direction: column;
+        margin-bottom: 30rpx;
 
-        .item {
+        .item-l {
+          img {
+            width: 160rpx;
+            height: 160rpx;
+            background-size: cover;
+          }
+        }
+
+        .item-r {
           display: flex;
-          margin-bottom: 30rpx;
+          flex-direction: column;
+          margin-left: 20rpx;
+          justify-content: space-between;
+          flex: 1;
 
-          .item-l {
-            img {
-              width: 160rpx;
-              height: 160rpx;
-              background-size: cover;
-            }
+          .title {
+            font-size: 28rpx;
+            color: $textBlack-color;
+            font-weight: bold;
+            overflow: hidden;
+            line-height: 30rpx;
+            height: 30rpx;
           }
 
-          .item-r {
+          .sub-title {
+            font-size: 20rpx;
+            color: $textDarkGray-color;
+            line-height: 30rpx;
+            overflow: hidden;
+            height: 30rpx;
+            margin-top: 10rpx;
+          }
+
+          .sale-num {
+            font-size: 20rpx;
+            color: $textDarkGray-color;
+            margin-top: 10rpx;
+          }
+
+          .r-t {
             display: flex;
-            flex-direction: column;
-            margin-left: 20rpx;
+            align-items: center;
             justify-content: space-between;
-            flex: 1;
 
-            .title {
-              font-size: 28rpx;
-              color: $textBlack-color;
+            .price {
+              font-size: 32rpx;
+              color: $mtRed-color;
               font-weight: bold;
-              overflow: hidden;
-              line-height: 30rpx;
-              height: 30rpx;
             }
 
-            .sub-title {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              line-height: 30rpx;
-              overflow: hidden;
-              height: 30rpx;
-              margin-top: 10rpx;
-            }
-
-            .sale-num {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              margin-top: 10rpx;
-            }
-
-            .r-t {
+            .sku {
               display: flex;
               align-items: center;
-              justify-content: space-between;
+              justify-content: center;
+              background-color: $theme-color;
+              padding: 8rpx 12rpx;
+              border-radius: 25rpx;
+              position: relative;
 
-              .price {
-                font-size: 32rpx;
-                color: $mtRed-color;
-                font-weight: bold;
+              span {
+                font-size: 20rpx;
+                color: $textBlack-color;
               }
 
-              .sku {
+              .count {
+                width: 30rpx;
+                height: 30rpx;
+                background-color: $mtRed-color;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: $theme-color;
-                padding: 8rpx 12rpx;
-                border-radius: 25rpx;
-                position: relative;
-
-                span {
-                  font-size: 20rpx;
-                  color: $textBlack-color;
-                }
-
-                .count {
-                  width: 30rpx;
-                  height: 30rpx;
-                  background-color: $mtRed-color;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  position: absolute;
-                  color: white;
-                  font-size: 20rpx;
-                  right: 0;
-                  top: -14rpx;
-                  border-radius: 15rpx;
-                }
-              }
-
-              .add-item {
-                display: flex;
-                align-items: center;
-
-                .add-l {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-
-                  i {
-                    font-size: 50rpx;
-                    color: $textGray-color;
-                  }
-
-                  span {
-                    font-size: 32rpx;
-                    color: $textBlack-color;
-                    margin: 0 20rpx;
-                  }
-                }
-
-                .add-r {
-                  i {
-                    color: #ff6347;
-                    font-size: 54rpx;
-                  }
-                }
+                position: absolute;
+                color: white;
+                font-size: 20rpx;
+                right: 0;
+                top: -14rpx;
+                border-radius: 15rpx;
               }
             }
 
-            .tags-c {
+            .add-item {
               display: flex;
               align-items: center;
-              margin-top: 10rpx;
-              flex-wrap: wrap;
 
-              img {
-                width: 60rpx;
-                height: 30rpx;
-                background-size: cover;
+              .add-l {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                i {
+                  font-size: 50rpx;
+                  color: $textGray-color;
+                }
+
+                span {
+                  font-size: 32rpx;
+                  color: $textBlack-color;
+                  margin: 0 20rpx;
+                }
               }
+
+              .add-r {
+                i {
+                  color: #ff6347;
+                  font-size: 54rpx;
+                }
+              }
+            }
+          }
+
+          .tags-c {
+            display: flex;
+            align-items: center;
+            margin-top: 10rpx;
+            flex-wrap: wrap;
+
+            img {
+              width: 60rpx;
+              height: 30rpx;
+              background-size: cover;
             }
           }
         }
       }
     }
-    }
+  }
+}
 .editGoods {
   background-color: black;
   display: flex;
@@ -1183,64 +1296,64 @@ background-color: #FAFAFA;
     width: 100%;
     bottom: 80rpx;
     .list-ll {
-          display: flex;
-    top: 200rpx;
-    width: 160rpx;
-    bottom: 0rpx;
-    .list-l {
       display: flex;
-      flex-direction: column;
-      background-color: $page-bgcolor;
-
-      .l-item {
+      top: 200rpx;
+      width: 160rpx;
+      bottom: 0rpx;
+      .list-l {
         display: flex;
-        width: 160rpx;
-        align-items: center;
-        justify-content: center;
-        padding: 20rpx;
-        box-sizing: border-box;
-        position: relative;
+        flex-direction: column;
+        background-color: $page-bgcolor;
 
-        img {
-          width: 30rpx;
-          height: 30rpx;
-          background-size: cover;
-          border-radius: 15rpx;
-        }
-
-        span {
-          font-size: 24rpx;
-          color: $textDarkGray-color;
-          margin-left: 10rpx;
-        }
-
-        .count {
+        .l-item {
           display: flex;
+          width: 160rpx;
           align-items: center;
           justify-content: center;
-          background-color: $mtRed-color;
-          width: 30rpx;
-          height: 30rpx;
-          border-radius: 15rpx;
-          right: 0;
-          top: 6rpx;
-          position: absolute;
-          font-size: 20rpx;
-          color: white;
+          padding: 20rpx;
+          box-sizing: border-box;
+          position: relative;
+
+          img {
+            width: 30rpx;
+            height: 30rpx;
+            background-size: cover;
+            border-radius: 15rpx;
+          }
+
+          span {
+            font-size: 24rpx;
+            color: $textDarkGray-color;
+            margin-left: 10rpx;
+          }
+
+          .count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $mtRed-color;
+            width: 30rpx;
+            height: 30rpx;
+            border-radius: 15rpx;
+            right: 0;
+            top: 6rpx;
+            position: absolute;
+            font-size: 20rpx;
+            color: white;
+          }
         }
-      }
 
-      .active {
-        background-color: white;
+        .active {
+          background-color: white;
 
-        span {
-          color: #000;
-          font-weight: bold;
+          span {
+            color: #000;
+            font-weight: bold;
+          }
         }
       }
     }
-    }
-    
+
     ::-webkit-scrollbar {
       width: 0;
       height: 0;

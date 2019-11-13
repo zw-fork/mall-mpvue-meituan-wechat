@@ -86,7 +86,7 @@
 
       <div class='user_column'>
     <div class='user_column_item'>
-      <contact-button style="opacity:0;position:absolute;top:20rpx;" type="default-dark" session-from="weapp" size="30">
+      <contact-button style="opacity:0;position:absolute;top:20rpx;" type="default-dark" :session-from="sessionForm" size="30">
       </contact-button>
       <image class='user_column_item_image' src='/static/images/customer.png'></image>
       <div class='user_column_item_text'>联系客服</div>
@@ -108,6 +108,7 @@ import authorize from "@/components/authorize";
 export default {
   data() {
     return {
+      data: {shopId: 12},
       visibleItemModal: false,
       orderCount: [],
       showAuth: false,
@@ -136,7 +137,10 @@ export default {
     authorize
   },
   computed: {
-    ...mapState("user", ["userInfo"])
+    ...mapState("user", ["userInfo"]),
+    sessionForm() {
+      return JSON.stringify({shopId: 12});
+    }
   },
   mounted() {
     if (this.$refs.authorize) {
