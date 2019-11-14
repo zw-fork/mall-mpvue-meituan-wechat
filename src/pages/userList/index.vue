@@ -51,8 +51,9 @@
                 <span class="sub-title" v-else-if="item.role == 2">角色：店主</span>
                 <span class="sub-title" v-else-if="item.role == 3">角色：管理员</span>
                 <span class="sub-title" v-if="item.status==1">未关注公众号，不可接收订单消息</span>
-                <span class="sub-title" v-else-if="item.status==2">同意关注公众号/不同意公众关注号</span>
-                <span class="sub-title" v-else-if="item.status==3">已关注公众号，可接收订单消息</span>
+                <span class="sub-title" v-else-if="item.status==2">公众号发出接收订单申请</span>
+                <span class="sub-title" v-else-if="item.status==3">公众号同意接收订单消息</span>
+                <span class="sub-title" v-else-if="item.status==4">公众号拒绝接收订单消息</span>
                 <div
                   class="r-t"
                   v-if="(item.role == 1 && userInfo.role== 2 ) || (item.id == userInfo.id && userInfo.role== 1) || userInfo.role== 3"
