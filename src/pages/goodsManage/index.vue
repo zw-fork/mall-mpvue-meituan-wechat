@@ -55,26 +55,41 @@
         placeholder-style="font-size: 24rpx"
         v-model="goods.barcode"
       >
-      <i @click="scanClick()" class="icon iconfont iconbarcode"></i>
+      <i
+        @click="scanClick()"
+        class="icon iconfont iconbarcode"
+      ></i>
     </div>
     <div class="b-mid">
       <div class="mid-l">
         <span>商品分类:</span>
-        <i @click="createCategory" class="icon iconfont iconplus-circle"></i>
+        <i
+          @click="createCategory"
+          class="icon iconfont iconplus-circle"
+        ></i>
       </div>
-      <div class="mid-r" @click="updateCategoryClick">
+      <div
+        class="mid-r"
+        @click="updateCategoryClick"
+      >
         <span>{{goods.categoryName}}</span>
         <i class="icon iconfont iconright"></i>
       </div>
     </div>
     <div class="b-mid">
       <span class="mid-l">商品状态:</span>
-      <div class="mid-r" @click="showSinglePicker">
+      <div
+        class="mid-r"
+        @click="showSinglePicker"
+      >
         <span>{{name}}</span>
         <i class="icon iconfont iconright"></i>
       </div>
     </div>
-    <div class="submit-btn" @click="uploadFile">
+    <div
+      class="submit-btn"
+      @click="uploadFile"
+    >
       <span>保存</span>
     </div>
     <mpvue-picker
@@ -87,18 +102,19 @@
       :pickerValueArray="pickerValueArray"
     ></mpvue-picker>
 
-     <mpvue-picker
-        :mode="mode3"
-        :deepLength="deepLength3"
-        ref="mpvuePicker3"
-        :pickerValueArray="mulLinkageTwoPicker3"
-        :pickerValueDefault="pickerValueDefault3"
-        @onConfirm="onConfirm"></mpvue-picker>
-    <van-action-sheet 
-    :show="showSheet" 
-    :actions="actions"
-    @select="onSelect"
-  />
+    <mpvue-picker
+      :mode="mode3"
+      :deepLength="deepLength3"
+      ref="mpvuePicker3"
+      :pickerValueArray="mulLinkageTwoPicker3"
+      :pickerValueDefault="pickerValueDefault3"
+      @onConfirm="onConfirm"
+    ></mpvue-picker>
+    <van-action-sheet
+      :show="showSheet"
+      :actions="actions"
+      @select="onSelect"
+    />
   </div>
 </template>
  
@@ -120,13 +136,13 @@ export default {
   },
   data() {
     return {
-      showSheet:false,
+      showSheet: false,
       actions: [
-        {index:0, name: '添加一级分类', color: '07c160' },
-        {index:1, name: '添加二级分类', color: '07c160' },
-        {index:2, name: '取消', color: '07c160' }
+        { index: 0, name: "添加一级分类", color: "07c160" },
+        { index: 1, name: "添加二级分类", color: "07c160" },
+        { index: 2, name: "取消", color: "07c160" }
       ],
-      deepLength3:2,
+      deepLength3: 2,
       goods: {
         statusName: "上架",
         status: 1,
@@ -144,13 +160,11 @@ export default {
           value: 2
         }
       ],
-      categoryArray: [
-      ],
-      pickerValueDefault: [0,0],
-      mode3: 'multiLinkageSelector',
+      categoryArray: [],
+      pickerValueDefault: [0, 0],
+      mode3: "multiLinkageSelector",
       deepLength3: 2,
-      mulLinkageTwoPicker3: [
-      ],
+      mulLinkageTwoPicker3: [],
       pickerValueDefault3: [0, 0],
       index: undefined,
       childIndex: undefined
@@ -167,13 +181,13 @@ export default {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
     onSelect(event) {
-    if (event.mp.detail.index===0) {
-      wx.navigateTo({ url: "/pages/categoryManage/main?type=0"});
-    } else if (event.mp.detail.index===1) {
-      wx.navigateTo({ url: "/pages/categoryManage/main?type=1"});
-    }
-    this.showSheet = false;
-  },
+      if (event.mp.detail.index === 0) {
+        wx.navigateTo({ url: "/pages/categoryManage/main?type=0" });
+      } else if (event.mp.detail.index === 1) {
+        wx.navigateTo({ url: "/pages/categoryManage/main?type=1" });
+      }
+      this.showSheet = false;
+    },
     scanClick() {
       wx.scanCode({
         success: res => {
@@ -247,9 +261,9 @@ export default {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
       prevPage.setData({
-            update:true,
-            index: this.index,
-            childIndex: this.childIndex
+        update: true,
+        index: this.index,
+        childIndex: this.childIndex
       });
       this.goods.shopId = this.userInfo.shopId;
       this.goods.shopName = this.userInfo.shopName;
@@ -262,7 +276,7 @@ export default {
       if (this.pickerValueArray.length > 0) {
         this.mulLinkageTwoPicker3 = this.pickerValueArray;
         this.type = "category";
-        this.pickerValueDefault = [0,0];
+        this.pickerValueDefault = [0, 0];
         this.$refs.mpvuePicker3.show();
       }
     },
@@ -273,69 +287,75 @@ export default {
       this.$refs.mpvuePicker.show();
     },
     getCategory(goodsId, index, childIndex, shopId) {
-getFetch(
-      "/category/list/" + this.userInfo.shopId,
-      { status: 1 },
-      goodsId != null
-    ).then(response => {
-      var list = response.result;
-      var systemCategoryId = null;
-      var categoryList = [];
-      var mulLinkageTwoPicker3 = [];
-      for (var index in list) {
-        var data = {};
-        data.label = list[index].name;
-        data.value = list[index].categoryId;
-        data.systemCategoryId = list[index].systemCategoryId;
-        data.children = [];
-        var children = list[index].childrenCategory;
-        if (children.length>0) {
-          for (var index2 in children) {
+      getFetch(
+        "/category/list/" + this.userInfo.shopId,
+        { status: 1 },
+        goodsId != null
+      ).then(response => {
+        var list = response.result;
+        var systemCategoryId = null;
+        var categoryList = [];
+        var mulLinkageTwoPicker3 = [];
+        for (var index in list) {
+          var data = {};
+          data.label = list[index].name;
+          data.value = list[index].categoryId;
+          data.systemCategoryId = list[index].systemCategoryId;
+          data.children = [];
+          var children = list[index].childrenCategory;
+          if (children.length > 0) {
+            for (var index2 in children) {
               var child = {};
               child.label = children[index2].name;
               child.value = children[index2].categoryId;
               child.systemCategoryId = children[index2].systemCategoryId;
               data.children.push(child);
               categoryList.push(child);
+            }
+          } else {
+            var child = {};
+            child.label = "";
+            child.value = "";
+            data.children.push(child);
           }
-        } else {
-          var child = {};
-          child.label = '';
-          child.value = '';
-          data.children.push(child);
+          categoryList.push(data);
+          mulLinkageTwoPicker3.push(data);
         }
-        categoryList.push(data);
-        mulLinkageTwoPicker3.push(data);
-      } 
-      this.pickerValueArray = mulLinkageTwoPicker3;
-      this.pickerValueDefault3 =[0, 0];
+        this.pickerValueArray = mulLinkageTwoPicker3;
+        this.pickerValueDefault3 = [0, 0];
         if (goodsId) {
-        getFetch(
-          "/goods/list/" + shopId,
-          { goodsId: goodsId },
-          true
-        ).then(response => {
-          if (response.result.list.length > 0) {
-            this.goods = response.result.list[0];
-            debugger;
-            for (var index in categoryList) {
-              if (this.goods.categoryId == categoryList[index].systemCategoryId) {
-                this.goods.systemGoodsId = this.goods.goodsId;
-                this.goods.goodsId = null;
-                this.goods.categoryId = categoryList[index].value;
-                this.goods.categoryName = categoryList[index].label;
+          getFetch("/goods/list/" + shopId, { goodsId: goodsId }, true).then(
+            response => {
+              if (response.result.list.length > 0) {
+                this.goods = response.result.list[0];
+                if (this.userInfo.shopId != shopId) {
+                  this.goods.systemGoodsId = this.goods.goodsId;
+                  this.goods.goodsId = null;
+                  this.goods.categoryName = '';
+                  for (var index in categoryList) {
+                    if (
+                      this.goods.categoryId ==
+                      categoryList[index].systemCategoryId
+                    ) {
+                      this.goods.categoryId = categoryList[index].value;
+                      this.goods.categoryName = categoryList[index].label;
+                    }
+                  }
+                  if (!this.goods.categoryName) {
+                      this.goods.categoryId = null;
+                  }
+                }
+                for (var index in this.statusArray) {
+                  if (this.goods.status == this.statusArray[index].value) {
+                    this.goods.statusName = this.statusArray[index].label;
+                    this.name = this.statusArray[index].label;
+                  }
+                }
               }
             }
-            for (var index in this.statusArray) {  
-              if (this.goods.status == this.statusArray[index].value) {
-                this.goods.statusName = this.statusArray[index].label;
-                this.name = this.statusArray[index].label;
-              }
-            }
-          }
-        });
-      }
-    });
+          );
+        }
+      });
     },
     onConfirm(e) {
       if (this.type == "status") {
@@ -345,12 +365,12 @@ getFetch(
       } else {
         this.index = e.index[0];
         this.childIndex = e.index[1];
-        if (e.value[1] == '') {
-        this.goods.categoryName = this.pickerValueArray[e.index[0]].label;
-        this.goods.categoryId = e.value[0];
+        if (e.value[1] == "") {
+          this.goods.categoryName = this.pickerValueArray[e.index[0]].label;
+          this.goods.categoryId = e.value[0];
         } else {
-        this.goods.categoryName = e.label;
-        this.goods.categoryId = e.value[1];
+          this.goods.categoryName = e.label;
+          this.goods.categoryId = e.value[1];
         }
       }
     }
@@ -368,29 +388,31 @@ getFetch(
       min_price: "",
       barcode: "",
       picture: undefined
-    }; 
+    };
+    options.barcode = 6935855700390;
     if (options.barcode) {
-          getFetch(
-      "/barcode/" + options.barcode,
-      {},
-      true
-    ).then(response => {
-      var result = response.result
-      if (result) {
-        this.goods.name = result.name;
-        this.goods.min_price = result.min_price;
-        this.goods.picture = result.picture;
-        this.goods.barcode = result.barcode;
-        this.goods.statusName = "上架";
-        this.name = "上架";
-        this.goods.status = 1;
-        this.getCategory(result.goodsId, this.index, this.childIndex, 0);
-      }
-    })
+      getFetch("/barcode/" + options.barcode, {}, true).then(response => {
+        var result = response.result;
+        if (result) {
+          this.goods.name = result.name;
+          this.goods.min_price = result.min_price;
+          this.goods.picture = result.picture;
+          this.goods.barcode = result.barcode;
+          this.goods.statusName = "上架";
+          this.name = "上架";
+          this.goods.status = 1;
+          this.getCategory(result.goodsId, this.index, this.childIndex, 0);
+        }
+      });
     } else {
-    this.index = options.index;
-    this.childIndex = options.childIndex;
-    this.getCategory(options.id, this.index, this.childIndex, this.userInfo.shopId);
+      this.index = options.index;
+      this.childIndex = options.childIndex;
+      this.getCategory(
+        options.id,
+        this.index,
+        this.childIndex,
+        this.userInfo.shopId
+      );
     }
   }
 };

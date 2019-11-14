@@ -1,16 +1,34 @@
 <template>
   <div>
-    <div class="container" @click="update" @mousedown="update" @scroll="update">
+    <div
+      class="container"
+      @click="update"
+      @mousedown="update"
+      @scroll="update"
+    >
       <div class="header-c">
         <div class="header">
-          <div class="header-r" @click="scanClick()">
-            <img class="item-img" src="/static/images/scan.png">
+          <div
+            class="header-r"
+            @click="scanClick()"
+          >
+            <img
+              class="item-img"
+              src="/static/images/scan.png"
+            >
           </div>
           <div class="header-m">
             <i class="icon iconfont iconsearch"></i>
-            <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name">
+            <input
+              placeholder="搜索商品"
+              placeholder-style="font-size: 24rpx"
+              v-model="name"
+            >
           </div>
-          <div class="header-r" style="margin: 0 10rpx;">
+          <div
+            class="header-r"
+            style="margin: 0 10rpx;"
+          >
             <span @click="getGoods()">搜索</span>
             <i
               @click="addGoods()"
@@ -48,7 +66,11 @@
           @scrolltolower="lower"
           @scroll="scroll"
         >
-          <div class="item-list" v-for="(item, index) in list.datas" :key="index">
+          <div
+            class="item-list"
+            v-for="(item, index) in list.datas"
+            :key="index"
+          >
             <div class="item">
               <div class="item-l">
                 <img :src="path + item.picture">
@@ -63,11 +85,18 @@
                 <div class="r-t">
                   <span class="price">￥{{item.min_price}}</span>
                   <div class="add-item">
-                    <div class="add-l" @click.stop="reduceClick(item)" v-if="item.sequence > 0">
+                    <div
+                      class="add-l"
+                      @click.stop="reduceClick(item)"
+                      v-if="item.sequence > 0"
+                    >
                       <i class="icon mt-reduce-o"></i>
                       <span>{{item.sequence}}</span>
                     </div>
-                    <div class="add-r" @click.stop="manageGoods($event, item)">
+                    <div
+                      class="add-r"
+                      @click.stop="manageGoods($event, item)"
+                    >
                       <i class="icon iconfont icondian"></i>
                     </div>
                   </div>
@@ -78,16 +107,26 @@
         </scroll-view>
       </div>
     </div>
-    <div class="editGoods" :style="divStyle" v-if="showEdit">
+    <div
+      class="editGoods"
+      :style="divStyle"
+      v-if="showEdit"
+    >
       <div @click="editGoods">
         <i class="icon iconfont iconedit"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
-      <div @click="upGoods" v-if="selectGoods.status==2">
+      <div
+        @click="upGoods"
+        v-if="selectGoods.status==2"
+      >
         <i class="icon iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">上架</span>
       </div>
-      <div @click="downGoods" v-if="selectGoods.status==1">
+      <div
+        @click="downGoods"
+        v-if="selectGoods.status==1"
+      >
         <i class="icon iconfont iconxiajia"></i>
         <span style="color:white;text-align: center;">下架</span>
       </div>
@@ -283,7 +322,6 @@ export default {
       });
     },
     getGoods(barcode) {
-      debugger
       var data = {};
       if (barcode) {
         data.barcode = barcode;
@@ -293,31 +331,33 @@ export default {
       if (this.pageIndex != undefined) {
         data.status = this.pageIndex;
       }
-              if (data.status == 1) {
-          data.categoryStatus = 1;
-        }
-      getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(response => {
-        this.list.datas = response.result.list;
-        this.list.page = response.result.nextPage;
-        if (barcode && response.result.list.length==0) {
-          var code = barcode
-          wx.showModal({
-            content: "编号" + code + "商品不存在，是否需要创建？",
-            confirmColor: "#FFC24A",
-            success: function(res) {
-              if (res.confirm) {
-                wx.navigateTo({ url: "/pages/goodsManage/main?barcode="+ code});
-              } 
-              else if (res.cancel) {
+      if (data.status == 1) {  
+        data.categoryStatus = 1;
+      }
+      getFetch("/goods/list/" + this.userInfo.shopId, data, true).then(
+        response => {
+          this.list.datas = response.result.list;
+          this.list.page = response.result.nextPage;
+          if (barcode && response.result.list.length == 0) {
+            var code = barcode;
+            wx.showModal({
+              content: "编号" + code + "商品不存在，是否需要创建？",
+              confirmColor: "#FFC24A",
+              success: function(res) {
+                if (res.confirm) {
+                  wx.navigateTo({
+                    url: "/pages/goodsManage/main?barcode=" + code
+                  });
+                } else if (res.cancel) {
+                }
               }
+            });
+          }
         }
-      });
-        }       
-      });
+      );
     },
     //滚动条滚到底部或右边的时候触发
     lower(e) {
-      debugger
       if (this.list.page > 0) {
         var data = {};
         data.name = this.name.trim();
@@ -385,7 +425,6 @@ export default {
     }
   },
   onShow(options) {
-    debugger
     this.showEdit = false;
     this.getGoods();
   }
