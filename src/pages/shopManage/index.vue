@@ -332,7 +332,7 @@ export default {
     }
     if (
       (options.id && this.userInfo.role == 3) ||
-      (shopId && this.userInfo.role == 2)
+      (this.userInfo.role == 2)
     ) {
      var userId = options.id;
       if (!userId) {
@@ -340,7 +340,7 @@ export default {
       }
       getFetch("/shop/myShop/" + userId, {}, true).then(response => {
         this.shop = response.result || {};
-        if (this.shop.shopId) {
+        if (this.shop.shopId != null) {
           if (this.shop.tel.length > 0) {
             this.shop.phone = this.shop.tel[0];
           }

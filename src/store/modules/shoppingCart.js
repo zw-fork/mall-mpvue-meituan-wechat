@@ -53,7 +53,7 @@ const actions = {
       commit('changeSpusDataMut', {})
       getFetch('/shop/' + shopId,  data, true).then(response => {
         var shopInfo = response.result || {}
-        if (shopInfo.shopId) {
+        if (shopInfo.shopId != null) {
           shopInfo.prompt_text = "满35减23;满50减33;满70减43"
           if (shopInfo.categoryModelList.length > 0 && shopInfo.categoryModelList[0].categoryId) {
             if (shopInfo.categoryModelList.length <= index) {

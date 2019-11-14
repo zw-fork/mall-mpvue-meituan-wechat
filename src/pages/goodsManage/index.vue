@@ -272,18 +272,21 @@ export default {
       this.pickerValueDefault = [];
       this.$refs.mpvuePicker.show();
     },
-    getCategory(goodsId, index, childIndex) {
+    getCategory(goodsId, index, childIndex, shopId) {
 getFetch(
       "/category/list/" + this.userInfo.shopId,
       { status: 1 },
       goodsId != null
     ).then(response => {
       var list = response.result;
+      var systemCategoryId = null;
+      var categoryList = [];
       var mulLinkageTwoPicker3 = [];
       for (var index in list) {
         var data = {};
         data.label = list[index].name;
         data.value = list[index].categoryId;
+        data.systemCategoryId = list[index].systemCategoryId;
         data.children = [];
         var children = list[index].childrenCategory;
         if (children.length>0) {
@@ -291,7 +294,9 @@ getFetch(
               var child = {};
               child.label = children[index2].name;
               child.value = children[index2].categoryId;
+              child.systemCategoryId = children[index2].systemCategoryId;
               data.children.push(child);
+              categoryList.push(child);
           }
         } else {
           var child = {};
@@ -299,21 +304,26 @@ getFetch(
           child.value = '';
           data.children.push(child);
         }
+        categoryList.push(data);
         mulLinkageTwoPicker3.push(data);
       } 
       this.pickerValueArray = mulLinkageTwoPicker3;
       this.pickerValueDefault3 =[0, 0];
         if (goodsId) {
         getFetch(
-          "/goods/list/" + this.userInfo.shopId,
+          "/goods/list/" + shopId,
           { goodsId: goodsId },
           true
         ).then(response => {
           if (response.result.list.length > 0) {
             this.goods = response.result.list[0];
-            for (var index in this.categoryArray) {
-              if (this.goods.categoryId == this.categoryArray[index].value) {
-                this.goods.categoryName = this.categoryArray[index].label;
+            debugger;
+            for (var index in categoryList) {
+              if (this.goods.categoryId == categoryList[index].systemCategoryId) {
+                this.goods.systemGoodsId = this.goods.goodsId;
+                this.goods.goodsId = null;
+                this.goods.categoryId = categoryList[index].value;
+                this.goods.categoryName = categoryList[index].label;
               }
             }
             for (var index in this.statusArray) {  
@@ -346,7 +356,7 @@ getFetch(
     }
   },
   onShow(options) {
-    this.getCategory();
+    this.getCategory(null, null, null, this.userInfo.shopId);
   },
   onLoad(options) {
     this.name = "上架";
@@ -367,19 +377,21 @@ getFetch(
     ).then(response => {
       var result = response.result
       if (result) {
-        this.goods.name = result.goodsName;
-        this.goods.min_price = result.price;
-        this.goods.picture = result.ssoImg;
-        this.goods.barcode = result.code;
+        this.goods.name = result.name;
+        this.goods.min_price = result.min_price;
+        this.goods.picture = result.picture;
+        this.goods.barcode = result.barcode;
         this.goods.statusName = "上架";
         this.name = "上架";
         this.goods.status = 1;
+        this.getCategory(result.goodsId, this.index, this.childIndex, 0);
       }
     })
-    }
+    } else {
     this.index = options.index;
     this.childIndex = options.childIndex;
-    this.getCategory(options.id, this.index, this.childIndex);
+    this.getCategory(options.id, this.index, this.childIndex, this.userInfo.shopId);
+    }
   }
 };
 </script>
