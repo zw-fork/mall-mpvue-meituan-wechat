@@ -171,6 +171,9 @@ const HttpUtils = {
               } else if (data.code == 500) {
                 wx.showToast({ title: data.message, icon: 'none', duration: 4000 })
               } else {
+                if (data.code != 200) {
+                  wx.showToast({ title: data.message, icon: 'none', duration: 4000 })   
+                }
                 isSuccess = true
                 resolve(res.data)
               }

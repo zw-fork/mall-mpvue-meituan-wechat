@@ -170,14 +170,12 @@ export default {
     //滚动条滚到底部或右边的时候触发
     lower(e) {
       if (this.list.page > 0) {
-        wx.showLoading({ title: "加载中...", mask: true });
         var data = {};
         data.page = this.list.page;
-        getFetch("/wechat/userList", data, false).then(response => {
+        getFetch("/wechat/userList", data, true).then(response => {
           var goodsList = response.result.list;
           this.list.page = response.result.nextPage;
           this.list.datas = [...this.list.datas, ...goodsList];
-          wx.hideLoading();
         });
       }
     },

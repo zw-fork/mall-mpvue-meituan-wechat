@@ -235,7 +235,6 @@
       //滚动条滚到底部或右边的时候触发
       lower(e) {
         if (this.list.page > 0) {
-          wx.showLoading({ title: '加载中...', mask: true })
           getFetch('/goods/list/' + this.shopInfo.shopId, { 'page': this.list.page, 'name': this.name.trim() }, true).then(response => {
             var goodsList = response.result.list
             for (var index in goodsList) {
@@ -249,7 +248,6 @@
               ...this.list.datas,
               ...goodsList
             ]
-            wx.hideLoading()
           })
         }
       },

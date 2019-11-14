@@ -481,11 +481,10 @@ export default {
     //滚动条滚到底部或右边的时候触发
     lower(e) {
       if (this.spus.page > 0) {
-        wx.showLoading({ title: "加载中...", mask: true });
         getFetch(
           "/goods/list/" + this.shopInfo.shopId,
           { page: this.spus.page, categoryId: this.spus.categoryId, status: 1, categoryStatus:1  },
-          false
+          true
         ).then(response => {
           var goods = response.result.list;
           for (var index1 in goods) {
@@ -498,7 +497,6 @@ export default {
           }
           this.spus.datas = [...this.spus.datas, ...goods];
           this.spus.page = response.result.nextPage;
-          wx.hideLoading();
         });
       }
     },

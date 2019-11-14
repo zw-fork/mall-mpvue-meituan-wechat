@@ -10,7 +10,7 @@
         <span class="name" @click="auth">请授权登录</span>
       </div>
     </div>
-    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
+    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId != null">
       <div class="itemName">
         <span>订单管理</span>
       </div>
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId">
+    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId != null">
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
         <span style="margin-left: 20rpx;">商品管理</span>
       </div>
@@ -239,6 +239,11 @@ export default {
       getFetch("/wechat/getCurrentUser", true).then(response => {
         var user = response.result || {}
         this.changeUserInfoMut(user)
+        if (response.code == 560) {
+          this.showAuth = true;
+          this.$refs.authorize.getUserInfo();
+          return;
+        }
         if (user.shopId) {
           getFetch("/order/count/" + user.shopId, true).then(response => {
             var count = response.result;
@@ -265,6 +270,11 @@ export default {
       getFetch("/wechat/getCurrentUser", true).then(response => {
         var user = response.result || {}
         this.changeUserInfoMut(user)
+        if (response.code == 560) {
+          this.showAuth = true;
+          this.$refs.authorize.getUserInfo();
+          return;
+        }
         if (user.shopId) {
           getFetch("/order/count/" + user.shopId, true).then(response => {
             var count = response.result;

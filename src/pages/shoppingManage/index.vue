@@ -105,7 +105,7 @@
                   <div class="item-r">
                     <div
                       class="div-title"
-                      v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId && showManage"
+                      v-if="userInfo.role>0 && userInfo.shopId==shopInfo.shopId"
                     >
                       <span class="title">{{goods.name}}</span>
                       <i
@@ -193,7 +193,6 @@ export default {
       selectGoods: undefined,
       shopId: undefined,
       showEdit: false,
-      showManage: false,
       show: false,
       divStyle: "",
       id: undefined,
@@ -226,10 +225,7 @@ export default {
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     bottomStyle() {
-      if (this.showManage) {
-        return "bottom: 0rpx;";
-      }
-      return "bottom: 100rpx;";
+      return "bottom: 0rpx;";
     },
     lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;";
@@ -441,7 +437,7 @@ export default {
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 1;
-            that.updateGoods(that.selectGoods);
+             that.updateGoods(that.selectGoods);
           } else if (res.cancel) {
           }
         }
@@ -708,7 +704,6 @@ export default {
     this.shopId = options.shopId;
     if (!this.shopId) {
       this.shopId = this.userInfo.shopId;
-      this.showManage = this.shopId ? true : false;
     }
     this.showCart = false;
     if (this.shopId != this.shopInfo.shopId) {
