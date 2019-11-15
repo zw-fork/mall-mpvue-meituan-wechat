@@ -389,7 +389,6 @@ export default {
       barcode: "",
       picture: undefined
     };
-    options.barcode = 6935855700390;
     if (options.barcode) {
       getFetch("/barcode/" + options.barcode, {}, true).then(response => {
         var result = response.result;
