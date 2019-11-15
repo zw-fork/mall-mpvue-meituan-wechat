@@ -255,7 +255,7 @@ export default {
         }
       }); 
     } else {
-      if (this.userInfo.shopId) {
+      if (this.userInfo.shopId != null) {
         getFetch("/order/count/" + this.userInfo.shopId, true).then(response => {
           var count = response.result;
           this.orderCount = [];
