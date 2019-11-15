@@ -26,6 +26,9 @@ const state = {
   },
   orderByShopIdDetail: {
 
+  },
+  orderCopyDetail: {
+
   }
 }
 
@@ -51,9 +54,9 @@ const mutations = {
   currentOrderRemarkDataMut(state, info) {
     state.currentOrder.remark = info
   },
-  changeOrderByIdDataMut(state, info) {
-    state.orderDetail = info
-  }
+  orderCopyDetailDataMut(state, info) {
+    state.orderCopyDetail = info
+  },
 }
 
 const actions = {
@@ -72,7 +75,7 @@ const actions = {
   getOrderByIdAction({ state, commit }, {data }) {
     getFetch('/order/copy/' + data.number, data, true).then(response => {
       var result = response.result || {}
-      commit('changeOrderByIdDataMut', result)
+      commit('orderCopyDetailDataMut', result)
       wx.navigateTo({ url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
     })
   },
@@ -136,15 +139,15 @@ const actions = {
     }
   },
   postOrderDataAction({ state, commit }, { order }) {
-    wx.showLoading({ title: '加载中...', mask: true })
-    postFetch('/order', order, false).then(response => {
+    postFetch('/order', order, true).then(response => {
       // 清空购物车缓存
       this.state.shoppingCart.shopInfo = {}
-      state.orderDetail = {
+      var orderDetail = {
         shopInfo: {}
       }
+      commit('orderDetailDataMut', orderDetail);
       var number = response.result.number
-      getFetch('/wxPay/unifiedOrder/' + number, { shopName: order.shopInfo.wxAddress.name + '-' + order.shopInfo.shopName }, false).then(response => {
+      getFetch('/wxPay/unifiedOrder/' + number, { shopName: order.shopInfo.wxAddress.name + '-' + order.shopInfo.shopName }, true).then(response => {
         wx.requestPayment({
           timeStamp: response.result.timeStamp,
           nonceStr: response.result.nonceStr,
@@ -157,8 +160,8 @@ const actions = {
               icon: 'success',
               duration: 3000
             })
-            getFetch('/order/updateStatus/' + number, { status: 2 }, false).then(response => {
-              getFetch('/order', {}, false).then(response => {
+            getFetch('/order/updateStatus/' + number, { status: 2 }, true).then(response => {
+              getFetch('/order', {}, true).then(response => {
                 var result = response.result || {}
                 commit('changeOrderDataMut', result)
                 wx.switchTab({ url: '/pages/orderList/main' })
@@ -171,14 +174,13 @@ const actions = {
               icon: 'none',
               duration: 3000
             })
-            getFetch('/order', { 'page': 1 }, false).then(response => {
+            getFetch('/order', { 'page': 1 }, true).then(response => {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
             })
             wx.switchTab({ url: '/pages/orderList/main' })
           }
         })
-        wx.hideLoading()
       })
     })
   },

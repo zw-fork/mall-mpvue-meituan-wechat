@@ -71,7 +71,7 @@ const actions = {
             spus.datas = selectedArr 
               shopInfo.categoryModelList[index].spus = spus
               commit('changeShopInfoDataMut', shopInfo)
-              var itemList = this.state.submitOrder.orderDetail.itemList
+              var itemList = this.state.submitOrder.orderCopyDetail.itemList
               for (var index2 in shopInfo.categoryModelList) {
                 state.categoryMap[shopInfo.categoryModelList[index2].categoryId] = shopInfo.categoryModelList[index2]
                 if (itemList && itemList.length) {

@@ -172,11 +172,6 @@ export default {
   computed: {
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
-    test() {
-      return function(value) {
-        return value + "aaa";
-      };
-    },
     path() {
       return `${GOODS_URL_PREFIX}`;
     },
@@ -216,7 +211,7 @@ export default {
       getFetch(
         "/order/updateStatus/" + this.orderDetail.number,
         refund,
-        false
+        true
       ).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
