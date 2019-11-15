@@ -390,12 +390,12 @@ export default {
         this.updateGoodsValue();
         if (goodsModel.status == 0) {
           this.scrollTop = this.currentScroll;
-          this.getMenuDataAction({
-            shopId: this.shopId,
-            index: this.tagIndex,
-            data: this.goodsValue,
-            flag: true
-          });
+          this.getMenuDataAction(
+            this.shopId,
+            this.goodsValue,
+            this.tagIndex,
+            this.shopInfo.categoryModelList[this.tagIndex].categoryId
+          );
         }
       });
     },
@@ -437,7 +437,7 @@ export default {
         success: function(res) {
           if (res.confirm) {
             that.selectGoods.status = 1;
-             that.updateGoods(that.selectGoods);
+            that.updateGoods(that.selectGoods);
           } else if (res.cancel) {
           }
         }
