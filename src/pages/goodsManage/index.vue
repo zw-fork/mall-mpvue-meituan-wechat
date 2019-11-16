@@ -398,6 +398,7 @@ export default {
           this.goods.picture = result.picture;
           this.goods.barcode = result.barcode;
           this.goods.statusName = "上架";
+          this.goods.wechat = true;
           this.name = "上架";
           this.goods.status = 1;
           this.getCategory(result.goodsId, this.index, this.childIndex, 0);
