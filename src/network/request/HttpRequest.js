@@ -6,7 +6,7 @@
 
 import responseCode from '@/constants/responseCode'
 import {request, login} from '@/utils/wxapi'
-import {API_URL, XIAMIMUSIC} from '@/constants/hostConfig'
+import {API_URL, APP_ID} from '@/constants/hostConfig'
 import {PATH} from '@/constants/pathConfig'
 import {currentHost} from "@/constants/hostConfig"
 import {errorCode} from "@/constants/errorCodeMap"
@@ -151,10 +151,12 @@ const HttpUtils = {
         wx.showNavigationBarLoading()
         isLoading ? wx.showLoading({title: '加载中...', mask: true}) : null
         const beforeRequest = new Date().getTime()
-        var sessionId = wx.getStorageSync('sessionId')
+        var sessionId = wx.getStorageSync('sessionId');
+        var appId = `${APP_ID}`;
         const header1 = {
           'Content-Type': 'application/json',
-          'sessionId': sessionId
+          'sessionId': sessionId,
+          'appid': appId
         }
         wx.request({
           url: url,
