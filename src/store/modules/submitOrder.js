@@ -195,7 +195,7 @@ const actions = {
   createOrderDetailAction({ state, commit }, { order }) {
     order.remark = state.currentOrder.remark
     commit('currentOrderDataMut', order)
-    wx.navigateTo({ url: '/pages/submitOrder/main' })
+    wx.navigateTo({ url: '/pages/subsidy/submitOrder/main' })
   },
   addRemarkDataAction({ state, commit }, { remark }) {
     commit('currentOrderRemarkDataMut', remark)

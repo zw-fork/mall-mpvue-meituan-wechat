@@ -2,19 +2,13 @@
   "pages": [
     "pages/home/main",
     "pages/shoppingManage/main",
-    "pages/index/main",
     "pages/asset/main",
     "pages/qrcode/main",
     "pages/shoppingCart/main",
-    "pages/submitOrder/main",
     "pages/me/main",
     "pages/refund/main",
     "pages/error/main",
     "pages/statistics/main",
-    "pages/expiredRedPacket/main",
-    "pages/expiredCoupon/main",
-    "pages/redPacket/main",
-    "pages/couponList/main",
     "pages/categoryList/main",
     "pages/goodsList/main",
     "pages/userList/main",
@@ -29,12 +23,7 @@
     "pages/shopList/main",
     "pages/goodsManage/main",
     "pages/userSetting/main",
-    "pages/citySearch/main",
-    "pages/citys/main",
     "pages/addressList/main",
-    "pages/protocol/main",
-    "pages/feedback/main",
-    "pages/pickProtocol/main",
     "pages/orderDetail/main",
     "pages/orderItemDetail/main"
   ],
@@ -72,6 +61,14 @@
       "selectedIconPath": "static/images/mine_selected.png"
     }]
   },
+      "subPackages": [
+        {
+          "root": "pages/subsidy/",
+          "pages": [
+            "submitOrder/main"
+          ]
+        }
+      ],
   "permission": {
     "scope.userLocation": {
       "desc": "应用需要获取定位权限"
