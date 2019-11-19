@@ -409,7 +409,7 @@ export default {
     },
     editGoods() {
       wx.navigateTo({
-        url: "/pages/goodsManage/main?id=" + this.selectGoods.goodsId
+        url: "/pages/subsidy/goodsManage/main?id=" + this.selectGoods.goodsId
       });
     },
     manageGoods(e, index) {

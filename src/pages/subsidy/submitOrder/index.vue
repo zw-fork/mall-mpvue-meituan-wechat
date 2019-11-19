@@ -152,11 +152,8 @@ export default {
     },
     addressClick() {
       wx.navigateTo({
-        url: "/pages/addressList/main"
+        url: "/pages/subsidy/addressList/main"
       });
-    },
-    redPacketClick() {
-      wx.navigateTo({ url: "/pages/redPacket/main" });
     },
     couponClick() {
       wx.navigateTo({ url: "/pages/couponList/main" });

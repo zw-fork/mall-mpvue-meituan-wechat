@@ -237,7 +237,7 @@ export default {
       this.uploadImg({ goodsModel: this.goods });
     },
     createCategory() {
-      wx.navigateTo({ url: "/pages/categoryManage/main" });
+      wx.navigateTo({ url: "/pages/subsidy/categoryManage/main" });
     },
     updateCategoryClick() {
       if (this.categoryArray.length > 0) {

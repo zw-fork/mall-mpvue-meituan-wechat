@@ -54,7 +54,7 @@ export default {
     ...mapMutations("user", ["changeUserInfoMut"]),
 
     categoryClick() {
-      wx.navigateTo({ url: "/pages/categoryList/main" });
+      wx.navigateTo({ url: "/pages/subsidy/categoryList/main" });
     },
     addressClick() {
       wx.navigateTo({ url: "/pages/selectAddress/main" });

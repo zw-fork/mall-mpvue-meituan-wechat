@@ -182,9 +182,9 @@ export default {
     ...mapActions("shop", ["createShop"]),
     onSelect(event) {
       if (event.mp.detail.index === 0) {
-        wx.navigateTo({ url: "/pages/categoryManage/main?type=0" });
+        wx.navigateTo({ url: "/pages/subsidy/categoryManage/main?type=0" });
       } else if (event.mp.detail.index === 1) {
-        wx.navigateTo({ url: "/pages/categoryManage/main?type=1" });
+        wx.navigateTo({ url: "/pages/subsidy/categoryManage/main?type=1" });
       }
       this.showSheet = false;
     },

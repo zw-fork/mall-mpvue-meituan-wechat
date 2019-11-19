@@ -349,10 +349,10 @@ export default {
       });
     },
     categoryManage() {
-      wx.navigateTo({ url: "/pages/categoryList/main" });
+      wx.navigateTo({ url: "/pages/subsidy/categoryList/main" });
     },
     addGoods() {
-      wx.navigateTo({ url: "/pages/goodsManage/main" });
+      wx.navigateTo({ url: "/pages/subsidy/goodsManage/main" });
     },
     changeCategory(item, index) {
       this.childIndex = index;
@@ -461,7 +461,7 @@ export default {
       this.scrollTop = this.currentScroll;
       wx.navigateTo({
         url:
-          "/pages/goodsManage/main?id=" +
+          "/pages/subsidy/goodsManage/main?id=" +
           this.selectGoods.goodsId +
           "&index=" +
           this.tagIndex +

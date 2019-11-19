@@ -238,7 +238,7 @@ export default {
       this.shop.tel.splice(index, 1);
     },
     createCategory() {
-      wx.navigateTo({ url: "/pages/categoryManage/main" });
+      wx.navigateTo({ url: "/pages/subsidy/categoryManage/main" });
     },
     onConfirm(e) {
       this.shop.status = e.value[0];

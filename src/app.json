@@ -1,24 +1,18 @@
 {
   "pages": [
     "pages/home/main",
-    "pages/asset/main",
     "pages/qrcode/main",
     "pages/me/main",
     "pages/refund/main",
     "pages/error/main",
-    "pages/statistics/main",
-    "pages/categoryList/main",
     "pages/goodsList/main",
     "pages/selectAddress/main",
     "pages/searchList/main",
     "pages/addAddress/main",
     "pages/orderList/main",
     "pages/remark/main",
-    "pages/categoryManage/main",
     "pages/shopList/main",
-    "pages/goodsManage/main",
     "pages/userSetting/main",
-    "pages/addressList/main",
     "pages/orderDetail/main",
     "pages/orderItemDetail/main"
   ],
@@ -65,6 +59,12 @@
             "orderItemList/main",
             "shoppingManage/main",
             "shopManage/main",
+            "categoryList/main",
+            "addressList/main",
+            "statistics/main",
+            "categoryManage/main",
+            "goodsManage/main",
+            "asset/main",
             "userList/main"
           ]
         }

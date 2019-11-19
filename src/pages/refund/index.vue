@@ -257,7 +257,7 @@ export default {
       }
     },
     addressClick() {
-      wx.navigateTo({ url: "/pages/addressList/main" });
+      wx.navigateTo({ url: "/pages/subsidy/addressList/main" });
     },
     redPacketClick() {
       wx.navigateTo({ url: "/pages/redPacket/main" });

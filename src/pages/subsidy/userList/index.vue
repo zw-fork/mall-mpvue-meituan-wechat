@@ -174,7 +174,7 @@ export default {
       this.getGoods();
     },
     addGoods() {
-      wx.navigateTo({ url: "/pages/goodsManage/main" });
+      wx.navigateTo({ url: "/pages/subsidy/goodsManage/main" });
     },
     updateGoods(goodsModel) {
       getFetch(

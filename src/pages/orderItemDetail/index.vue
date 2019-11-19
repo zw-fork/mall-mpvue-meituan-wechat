@@ -210,7 +210,7 @@ export default {
     ...mapActions("submitOrder", ["getOrderByIdAction", "refundDataAction"]),
     editGoods(goodsId) {
       wx.navigateTo({
-        url: "/pages/goodsManage/main?id=" + goodsId
+        url: "/pages/subsidy/goodsManage/main?id=" + goodsId
       });
     },
     copy() {
@@ -303,7 +303,7 @@ export default {
       }
     },
     addressClick() {
-      wx.navigateTo({ url: "/pages/addressList/main" });
+      wx.navigateTo({ url: "/pages/subsidy/addressList/main" });
     },
     redPacketClick() {
       wx.navigateTo({ url: "/pages/redPacket/main" });
