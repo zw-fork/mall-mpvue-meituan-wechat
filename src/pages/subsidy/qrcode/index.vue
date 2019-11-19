@@ -7,7 +7,7 @@
 </template>
 
  <script>
-const QR = require('../../utils/weapp-qrcode.js')
+const QR = require('../../../utils/weapp-qrcode.js')
 
 export default {
   data() {

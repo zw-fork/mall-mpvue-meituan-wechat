@@ -190,7 +190,7 @@ const actions = {
   },
   showOrderByShopIdDetailAction({ state, commit }, { order }) {
     commit('orderByShopIdDetailDataMut', order)
-    wx.navigateTo({ url: '/pages/orderItemDetail/main' })
+    wx.navigateTo({ url: '/pages/subsidy/orderItemDetail/main' })
   },
   createOrderDetailAction({ state, commit }, { order }) {
     order.remark = state.currentOrder.remark

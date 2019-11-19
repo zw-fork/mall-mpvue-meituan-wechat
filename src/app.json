@@ -1,20 +1,12 @@
 {
   "pages": [
     "pages/home/main",
-    "pages/qrcode/main",
     "pages/me/main",
     "pages/refund/main",
     "pages/error/main",
-    "pages/goodsList/main",
-    "pages/selectAddress/main",
-    "pages/searchList/main",
-    "pages/addAddress/main",
     "pages/orderList/main",
-    "pages/remark/main",
-    "pages/shopList/main",
     "pages/userSetting/main",
-    "pages/orderDetail/main",
-    "pages/orderItemDetail/main"
+    "pages/orderDetail/main"
   ],
   "window": {
     "navigationBarBackgroundColor": "white",
@@ -65,7 +57,15 @@
             "categoryManage/main",
             "goodsManage/main",
             "asset/main",
-            "userList/main"
+            "userList/main",
+            "goodsList/main",
+            "selectAddress/main",
+            "searchList/main",
+            "remark/main",
+            "addAddress/main",
+            "shopList/main",
+            "qrcode/main",
+            "orderItemDetail/main"
           ]
         }
       ],

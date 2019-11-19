@@ -312,7 +312,7 @@ export default {
       wx.navigateTo({ url: "/pages/couponList/main" });
     },
     remarkClick() {
-      wx.navigateTo({ url: "/pages/remark/main" });
+      wx.navigateTo({ url: "/pages/subsidy/remark/main" });
     },
     deliveryClick() {
       this.tabIndex = 0;

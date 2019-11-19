@@ -42,7 +42,6 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { postFetch } from "@/network/request/HttpExtension";
-import QQMapWX from "qqmap-wx-jssdk";
 
 export default {
   data() {
@@ -59,7 +58,7 @@ export default {
   methods: {
     ...mapActions("shop", ["getShopListDataAction"]),
     addAddress() {
-      wx.navigateTo({ url: "/pages/addAddress/main" });
+      wx.navigateTo({ url: "/pages/subsidy/addAddress/main" });
     },
     updateShop(item) {
       getApp().globalData.community = item;
@@ -135,12 +134,6 @@ export default {
         wx.hideLoading();
       });
     }
-  },
-  onShow(options) {
-    (this.communityList = []), (this.addressModel = {});
-    this.qqmapsdk = new QQMapWX({
-      key: "2TRBZ-W426X-UEN4V-TVLRM-OP4OT-2XBCL"
-    });
   }
 };
 </script>

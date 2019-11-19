@@ -650,7 +650,7 @@ export default {
     },
     searchClick() {
       wx.navigateTo({
-        url: "/pages/goodsList/main?shopId=" + this.shopInfo.shopId
+        url: "/pages/subsidy/goodsList/main?shopId=" + this.shopInfo.shopId
       });
     },
     update() {

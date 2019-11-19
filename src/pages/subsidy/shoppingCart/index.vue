@@ -212,7 +212,6 @@ import { formatYMD } from "@/utils/formatTime";
 import { _array } from "@/utils/arrayExtension";
 import { getFetch, postFetch } from "@/network/request/HttpExtension";
 import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
-import QQMapWX from "qqmap-wx-jssdk";
 import authorize from "@/components/authorize";
 
 export default {
@@ -382,11 +381,6 @@ export default {
     };
     }
   },
-    legwork(type) {
-      if (type == 300) {
-      //  wx.navigateTo({ url: '/pages/legwork/main' })
-      }
-    },
     copy() {
       wx.setClipboardData({data: this.shopInfo.wechatId});
     },
@@ -611,7 +605,7 @@ export default {
     },
     searchClick() {
       wx.navigateTo({
-        url: "/pages/searchList/main?shopId=" + this.shopInfo.shopId
+        url: "/pages/subsidy/searchList/main?shopId=" + this.shopInfo.shopId
       });
     },
      update() {

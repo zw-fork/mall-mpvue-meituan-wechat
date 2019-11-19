@@ -226,7 +226,7 @@ export default {
       }
     },
     addressClick() {
-      wx.navigateTo({ url: "/pages/selectAddress/main" });
+      wx.navigateTo({ url: "/pages/subsidy/selectAddress/main" });
     },
     createTel() {
       if (!this.shop.tel) {

@@ -32,7 +32,7 @@
     </div>
     <div class="item-list">
       <div class="section">
-        <img  :src=" currentOrder.shopInfo.pic_url? (path + currentOrder.shopInfo.pic_url) : '/static/images/home_selected.png'">
+        <img  :src="path + currentOrder.shopInfo.pic_url">
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
         <i class="icon iconfont iconright" style="display: inline"></i>
       </div>
@@ -159,7 +159,7 @@ export default {
       wx.navigateTo({ url: "/pages/couponList/main" });
     },
     remarkClick() {
-      wx.navigateTo({ url: "/pages/remark/main" });
+      wx.navigateTo({ url: "/pages/subsidy/remark/main" });
     },
     goShop() {
       var shopId = this.currentOrder.shopInfo.shopId;

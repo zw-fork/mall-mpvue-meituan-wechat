@@ -71,9 +71,9 @@ export default {
     },
     addClick(item) {
       if (item) {
-        wx.navigateTo({ url: "/pages/addAddress/main?id=" + item.id });
+        wx.navigateTo({ url: "/pages/subsidy/addAddress/main?id=" + item.id });
       } else {
-        wx.navigateTo({ url: "/pages/addAddress/main" });
+        wx.navigateTo({ url: "/pages/subsidy/addAddress/main" });
       }
     },
     updateDefaultAddress2(addressModel) {

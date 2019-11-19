@@ -266,16 +266,13 @@ export default {
       }
     },
     addressClick() {
-      wx.navigateTo({ url: "/pages/addressList/main" });
-    },
-    redPacketClick() {
-      wx.navigateTo({ url: "/pages/redPacket/main" });
+      wx.navigateTo({ url: "/pages/subsidy/addressList/main" });
     },
     couponClick() {
       wx.navigateTo({ url: "/pages/couponList/main" });
     },
     remarkClick() {
-      wx.navigateTo({ url: "/pages/remark/main" });
+      wx.navigateTo({ url: "/pages/subsidy/remark/main" });
     },
     deliveryClick() {
       this.tabIndex = 0;
