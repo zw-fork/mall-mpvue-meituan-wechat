@@ -15,7 +15,6 @@
     "pages/searchList/main",
     "pages/addAddress/main",
     "pages/orderList/main",
-    "pages/orderItemList/main",
     "pages/remark/main",
     "pages/categoryManage/main",
     "pages/shopManage/main",
@@ -65,7 +64,8 @@
           "root": "pages/subsidy/",
           "pages": [
             "submitOrder/main",
-            "shoppingCart/main"
+            "shoppingCart/main",
+            "orderItemList/main"
           ]
         }
       ],
