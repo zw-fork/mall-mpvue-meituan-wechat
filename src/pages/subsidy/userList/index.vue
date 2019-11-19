@@ -243,7 +243,7 @@ export default {
       }
       var id = this.selectGoods.id;
       wx.navigateTo({
-        url: "/pages/shopManage/main?id=" + id
+        url: "/pages/subsidy/shopManage/main?id=" + id
       });
     },
     update() {

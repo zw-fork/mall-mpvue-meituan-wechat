@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/home/main",
-    "pages/shoppingManage/main",
     "pages/asset/main",
     "pages/qrcode/main",
     "pages/me/main",
@@ -10,14 +9,12 @@
     "pages/statistics/main",
     "pages/categoryList/main",
     "pages/goodsList/main",
-    "pages/userList/main",
     "pages/selectAddress/main",
     "pages/searchList/main",
     "pages/addAddress/main",
     "pages/orderList/main",
     "pages/remark/main",
     "pages/categoryManage/main",
-    "pages/shopManage/main",
     "pages/shopList/main",
     "pages/goodsManage/main",
     "pages/userSetting/main",
@@ -65,7 +62,10 @@
           "pages": [
             "submitOrder/main",
             "shoppingCart/main",
-            "orderItemList/main"
+            "orderItemList/main",
+            "shoppingManage/main",
+            "shopManage/main",
+            "userList/main"
           ]
         }
       ],

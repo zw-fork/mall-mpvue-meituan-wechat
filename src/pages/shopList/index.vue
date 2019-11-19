@@ -186,7 +186,7 @@ export default {
       this.getGoods();
     },
     addGoods() {
-      wx.navigateTo({ url: "/pages/userList/main" });
+      wx.navigateTo({ url: "/pages/subsidy/userList/main" });
     },
     updateGoods(goodsModel) {
       getFetch(
@@ -247,7 +247,7 @@ export default {
     editGoods() {
       var id = this.selectGoods.id;
       wx.navigateTo({
-        url: "/pages/shopManage/main?id=" + id
+        url: "/pages/subsidy/shopManage/main?id=" + id
       });
     },
     update() {
