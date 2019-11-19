@@ -167,7 +167,7 @@ export default {
     goShop() {
       var shopId = this.currentOrder.shopInfo.shopId;
       wx.navigateTo({
-        url: "/pages/shoppingCart/main?shopId=" + shopId
+        url: "/pages/subsidy/shoppingCart/main?shopId=" + shopId
       });
     },
     deliveryClick() {

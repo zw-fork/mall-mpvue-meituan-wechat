@@ -4,7 +4,6 @@
     "pages/shoppingManage/main",
     "pages/asset/main",
     "pages/qrcode/main",
-    "pages/shoppingCart/main",
     "pages/me/main",
     "pages/refund/main",
     "pages/error/main",
@@ -65,7 +64,8 @@
         {
           "root": "pages/subsidy/",
           "pages": [
-            "submitOrder/main"
+            "submitOrder/main",
+            "shoppingCart/main"
           ]
         }
       ],

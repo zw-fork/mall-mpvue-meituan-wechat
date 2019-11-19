@@ -76,7 +76,7 @@ const actions = {
     getFetch('/order/copy/' + data.number, data, true).then(response => {
       var result = response.result || {}
       commit('orderCopyDetailDataMut', result)
-      wx.navigateTo({ url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
+      wx.navigateTo({ url: '/pages/subsidy/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
     })
   },
   updateOrderStatusAction({ state, commit }, { order, status, selectStatus, refundStatus }) {

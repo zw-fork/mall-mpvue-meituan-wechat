@@ -145,7 +145,7 @@ export default {
     shoppingCartClick(item) {
       if (!item.poster) {
         wx.navigateTo({
-          url: "/pages/shoppingCart/main?shopId=" + item.shopId
+          url: "/pages/subsidy/shoppingCart/main?shopId=" + item.shopId
         });
       }
     }
@@ -156,7 +156,7 @@ export default {
   onLoad(options) {
     if (options.scene) {
       wx.navigateTo({
-          url: "/pages/shoppingCart/main?shopId=" + options.scene
+          url: "/pages/subsidy/shoppingCart/main?shopId=" + options.scene
       });
     }
     var that = this;

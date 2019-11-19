@@ -298,7 +298,7 @@ export default {
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
-          url: "/pages/shoppingCart/main?shopId=" + shopId + "&update=" + update
+          url: "/pages/subsidy/shoppingCart/main?shopId=" + shopId + "&update=" + update
         });
       }
     },

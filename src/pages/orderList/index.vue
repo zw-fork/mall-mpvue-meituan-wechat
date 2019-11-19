@@ -225,7 +225,7 @@ export default {
     intoShop(item) {
       var shopId = item.shopId;
       wx.navigateTo({
-        url: "/pages/shoppingCart/main?shopId=" + shopId + "&update=false"
+        url: "/pages/subsidy/shoppingCart/main?shopId=" + shopId + "&update=false"
       });
     },
     agreeClick(item) {

@@ -679,7 +679,7 @@ export default {
   onShareAppMessage: function() {
     return {
       title: this.shopInfo.shopName,
-      path: "/pages/shoppingCart/main?scene=" + this.shopInfo.shopId
+      path: "/pages/subsidy/shoppingCart/main?scene=" + this.shopInfo.shopId
     };
   }
 };
