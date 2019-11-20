@@ -276,7 +276,7 @@ export default {
         });
       } else {
         wx.navigateTo({
-          url: "/pages/refund/main?orderId=" + item.number
+          url: "/pages/subsidy/refund/main?orderId=" + item.number
         });
       }
     }

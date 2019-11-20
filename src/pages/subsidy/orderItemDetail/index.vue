@@ -234,7 +234,7 @@ export default {
         }
       });
       } else {
-        var urlPath = "/pages/refund/main?orderId=" + this.orderByShopIdDetail.number
+        var urlPath = "/pages/subsidy/refund/main?orderId=" + this.orderByShopIdDetail.number
         if (itemId) {
           urlPath += "&itemId=" + itemId
         }

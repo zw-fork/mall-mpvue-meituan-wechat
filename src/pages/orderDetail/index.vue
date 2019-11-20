@@ -188,7 +188,7 @@ export default {
   methods: {
     ...mapActions("submitOrder", ["getOrderByIdAction"]),
     refund(itemId) {
-      var urlPath = "/pages/refund/main?orderId=" + this.orderDetail.number
+      var urlPath = "/pages/subsidy/refund/main?orderId=" + this.orderDetail.number
       if (itemId) {
         urlPath += "&itemId=" + itemId
       }
