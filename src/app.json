@@ -2,7 +2,6 @@
   "pages": [
     "pages/home/main",
     "pages/me/main",
-    "pages/refund/main",
     "pages/error/main",
     "pages/orderList/main",
     "pages/userSetting/main",
@@ -57,6 +56,7 @@
             "categoryManage/main",
             "goodsManage/main",
             "asset/main",
+            "refund/main",
             "userList/main",
             "goodsList/main",
             "selectAddress/main",
