@@ -180,7 +180,7 @@ const HttpUtils = {
                 resolve(res.data)
               }
             } else if (resCode == responseCode.TOKEN_INVALID) {
-              wx.navigateTo({ url: '/pages/index/main' })
+              wx.navigateTo({ url: '/pages/home/main' })
             } else {
               wx.showToast({ title: '服务器异常', icon: 'none', duration: 4000 })
             }

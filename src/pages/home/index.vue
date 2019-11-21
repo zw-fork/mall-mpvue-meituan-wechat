@@ -36,7 +36,6 @@
 import { queryHomeHeadCategory } from "@/action/action";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { getFetch } from "@/network/request/HttpExtension";
-import QQMapWX from "qqmap-wx-jssdk";
 import { shopStatus } from "@/constants/commonType";
 import { API_URL, APP_ID } from '@/constants/hostConfig'
 import { getUserInfoWechat } from "@/action/action";
@@ -54,10 +53,10 @@ export default {
     ...mapMutations("user", ["changeUserInfoMut"]),
 
     categoryClick() {
-      wx.navigateTo({ url: "/pages/categoryList/main" });
+      wx.navigateTo({ url: "/pages/subsidy/categoryList/main" });
     },
     addressClick() {
-      wx.navigateTo({ url: "/pages/selectAddress/main" });
+      wx.navigateTo({ url: "/pages/subsidy/selectAddress/main" });
     },
     updateWxAddress() {
       var that = this;
@@ -140,12 +139,11 @@ export default {
     },
     searchClick() {
       this.wxLocation();
-      //  wx.navigateTo({url: '/pages/searchList/main'})
     },
     shoppingCartClick(item) {
       if (!item.poster) {
         wx.navigateTo({
-          url: "/pages/shoppingCart/main?shopId=" + item.shopId
+          url: "/pages/subsidy/shoppingCart/main?shopId=" + item.shopId
         });
       }
     }
@@ -156,7 +154,7 @@ export default {
   onLoad(options) {
     if (options.scene) {
       wx.navigateTo({
-          url: "/pages/shoppingCart/main?shopId=" + options.scene
+          url: "/pages/subsidy/shoppingCart/main?shopId=" + options.scene
       });
     }
     var that = this;

@@ -1,42 +1,12 @@
 {
   "pages": [
     "pages/home/main",
-    "pages/shoppingManage/main",
-    "pages/index/main",
-    "pages/asset/main",
-    "pages/qrcode/main",
-    "pages/shoppingCart/main",
-    "pages/submitOrder/main",
     "pages/me/main",
     "pages/refund/main",
     "pages/error/main",
-    "pages/statistics/main",
-    "pages/expiredRedPacket/main",
-    "pages/expiredCoupon/main",
-    "pages/redPacket/main",
-    "pages/couponList/main",
-    "pages/categoryList/main",
-    "pages/goodsList/main",
-    "pages/userList/main",
-    "pages/selectAddress/main",
-    "pages/searchList/main",
-    "pages/addAddress/main",
     "pages/orderList/main",
-    "pages/orderItemList/main",
-    "pages/remark/main",
-    "pages/categoryManage/main",
-    "pages/shopManage/main",
-    "pages/shopList/main",
-    "pages/goodsManage/main",
     "pages/userSetting/main",
-    "pages/citySearch/main",
-    "pages/citys/main",
-    "pages/addressList/main",
-    "pages/protocol/main",
-    "pages/feedback/main",
-    "pages/pickProtocol/main",
-    "pages/orderDetail/main",
-    "pages/orderItemDetail/main"
+    "pages/orderDetail/main"
   ],
   "window": {
     "navigationBarBackgroundColor": "white",
@@ -72,6 +42,33 @@
       "selectedIconPath": "static/images/mine_selected.png"
     }]
   },
+      "subPackages": [
+        {
+          "root": "pages/subsidy/",
+          "pages": [
+            "submitOrder/main",
+            "shoppingCart/main",
+            "orderItemList/main",
+            "shoppingManage/main",
+            "shopManage/main",
+            "categoryList/main",
+            "addressList/main",
+            "statistics/main",
+            "categoryManage/main",
+            "goodsManage/main",
+            "asset/main",
+            "userList/main",
+            "goodsList/main",
+            "selectAddress/main",
+            "searchList/main",
+            "remark/main",
+            "addAddress/main",
+            "shopList/main",
+            "qrcode/main",
+            "orderItemDetail/main"
+          ]
+        }
+      ],
   "permission": {
     "scope.userLocation": {
       "desc": "应用需要获取定位权限"

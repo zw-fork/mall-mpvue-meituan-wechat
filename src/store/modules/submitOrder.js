@@ -76,7 +76,7 @@ const actions = {
     getFetch('/order/copy/' + data.number, data, true).then(response => {
       var result = response.result || {}
       commit('orderCopyDetailDataMut', result)
-      wx.navigateTo({ url: '/pages/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
+      wx.navigateTo({ url: '/pages/subsidy/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
     })
   },
   updateOrderStatusAction({ state, commit }, { order, status, selectStatus, refundStatus }) {
@@ -190,12 +190,12 @@ const actions = {
   },
   showOrderByShopIdDetailAction({ state, commit }, { order }) {
     commit('orderByShopIdDetailDataMut', order)
-    wx.navigateTo({ url: '/pages/orderItemDetail/main' })
+    wx.navigateTo({ url: '/pages/subsidy/orderItemDetail/main' })
   },
   createOrderDetailAction({ state, commit }, { order }) {
     order.remark = state.currentOrder.remark
     commit('currentOrderDataMut', order)
-    wx.navigateTo({ url: '/pages/submitOrder/main' })
+    wx.navigateTo({ url: '/pages/subsidy/submitOrder/main' })
   },
   addRemarkDataAction({ state, commit }, { remark }) {
     commit('currentOrderRemarkDataMut', remark)

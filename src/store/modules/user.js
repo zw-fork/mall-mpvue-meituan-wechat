@@ -77,7 +77,7 @@ const actions = {
                 commit('changeUserInfoMut', response.result)
                 if (jsonData.shopId) {
                   wx.redirectTo({
-                    url: '/pages/shoppingCart/main?shopId=' + jsonData.shopId
+                    url: '/pages/subsidy/shoppingCart/main?shopId=' + jsonData.shopId
                   })
                 } else {
                   wx.switchTab({

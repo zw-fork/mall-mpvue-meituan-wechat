@@ -297,7 +297,7 @@ const actions = {
     var shopInfo = state.shopInfo
     shopInfo.selectedArr = selectedArr
     commit('changeShopInfoDataMut', shopInfo)
-    wx.navigateTo({ url: '/pages/submitOrder/main' })
+    wx.navigateTo({ url: '/pages/subsidy/submitOrder/main' })
   },
   selectSkuAction({ state, commit }, { item, index }) {
     commit('changeSkuModalMut', true)

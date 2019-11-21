@@ -2,33 +2,25 @@
   <div class="container">
     <div class="header-c">
       <div class="delivery">
-        <div class="address-c">
-          <span class="address-info" v-if="orderDetail.status==0">已取消</span>
-          <span class="address-info" v-else-if="orderDetail.status==1">未支付</span>
-          <div v-else-if="orderDetail.refundStatus==1">
-            <span class="address-info">等待退款</span>
-            <p class="address-info1" v-if="orderDetail.refundExplain">退款原因：{{orderDetail.refundExplain}}</p>
-          </div>    
-          <div v-else-if="orderDetail.refundStatus==2 || orderDetail.refundStatus==3">
-            <span class="address-info">退款成功</span>
-            <p class="address-info1" v-if="orderDetail.refundExplain">退款原因：{{orderDetail.refundExplain}}</p>
-          </div>    
-          <span class="address-info" v-else-if="orderDetail.deliveryStatus==1">已支付，等待商家配送</span>
-          <span class="address-info" v-else-if="orderDetail.deliveryStatus==2">配送中</span>
-          <span class="address-info" v-else-if="orderDetail.deliveryStatus==3">已完成</span>
-          <span class="address-info" v-else-if="orderDetail.status==4">支付超时取消</span>
-          <span class="address-info" v-else>其他</span>
+        <div class="delivery-time apply-return">
+              <div class='list'>
+        <div class='item acea-row row-between-wrapper'>
+          <div>退款类型</div>
+          <div class='num'>{{item.totalPrice ? "部分退款" : "全额退款"}}</div>
         </div>
-        <div class="line-sp"></div>
-        <div class="delivery-time">
-          <span class="c-l">{{orderDetail.remark}}</span>
+        <div class='item acea-row row-between-wrapper'>
+          <div>退款金额</div>
+          <div class='num'>￥{{item.totalPrice? item.totalPrice : balance}}</div>
+        </div>
+        <div class='item textarea acea-row row-between'>
+          <div>退款原因</div>
+          <textarea :disabled="item.refundTime || orderDetail.status == 3" v-model="refundExplain" placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
+        </div>
+    </div>
         </div>
         <div class="bottom-a">
-          <div class="btn" v-if="orderDetail.refundStatus==1" @click="updateStatus(null, null, 0)">
-            <span>取消退款</span>
-          </div>
-          <div class="btn" @click="headerClick(orderDetail, true)">
-            <span>再来一单</span>
+          <div class="btn"  @click="refund()" v-if="!item.refundTime && orderDetail.status != 3">
+            <span>申请退款</span>
           </div>
         </div>
         <div class="modalFooter">
@@ -49,16 +41,16 @@
       </div>
       <div class="line-sp"></div>
       <div class="list">
-        <div class="item" v-for="(item, index) in foodList" :key="index">
-          <img :src="path + item.picture">
-          <div class="item-r">
+        <div class="item" v-for="(itemA, index) in itemList" :key="index">
+          <img :src="path + itemA.picture">
+          <div class="item-r"  :style="{'border': item.id == itemA.id ? '1px solid red' : null}">
             <div class="r-t">
-              <span>{{item.name}}</span>
-              <span>￥{{item.totalPrice}}</span>
+              <span>{{itemA.name}}</span>
+              <span>￥{{itemA.totalPrice}}</span>
             </div>
             <div class="r-t">
-              <span>x{{item.sequence}}</span>
-              <span @click="refund(item.id)" v-if="item.refundTime && orderDetail.refundFee && orderDetail.refundStatus!=2 && orderDetail.refundStatus!=3">已退款</span>
+              <span>x{{itemA.sequence}}</span>
+              <span v-if="itemA.refundTime">已退款</span>
             </div>
           </div>
         </div>
@@ -123,17 +115,14 @@
 
     <div class="header-c">
       <div class="delivery order_detail_style">
-        <div class="address-c">
+                <div class="address-c">
           <span>订单信息</span>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
           <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
           <div class="item_right" style="display: inline">
-            <p>
-              {{orderDetail.number}}
-              <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制</span>
-            </p>
+            <p>{{orderDetail.number}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
@@ -148,6 +137,12 @@
           <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
           <div class="item_right" style="display: inline">
             <p>{{orderDetail.createTime}}</p>
+          </div>
+        </div>
+        <div class="item_style">
+          <p class="item_left" style="word-break:keep-all; display: inline">描述：</p>
+          <div class="item_right" style="display: inline">
+            <p>{{orderDetail.remark}}</p>
           </div>
         </div>
       </div>
@@ -165,13 +160,17 @@ import { getFetch, postFetch } from "@/network/request/HttpExtension";
 export default {
   data() {
     return {
-      foodList: [],
-      tabIndex: 0
+      itemList: [],
+      tabIndex: 0,
+      reason: undefined,
+      item: {},
+      refundExplain: '',
+      orderDetail: {
+        shopInfo:{}
+      }
     };
   },
   computed: {
-    ...mapState("user", ["userInfo"]),
-    ...mapState("submitOrder", ["orderDetail"]),
     path() {
       return `${GOODS_URL_PREFIX}`;
     },
@@ -180,46 +179,39 @@ export default {
     },
     realFee() {
       return this.orderDetail.realFee;
+    },
+    // 可退余额
+    balance() {
+      return parseFloat(this.orderDetail.realFee - this.orderDetail.refundFee).toFixed(2);
     }
   },
   components: {
     sepLine
   },
   methods: {
-    ...mapActions("submitOrder", ["getOrderByIdAction"]),
-    refund(itemId) {
-      var urlPath = "/pages/subsidy/refund/main?orderId=" + this.orderDetail.number
-      if (itemId) {
-        urlPath += "&itemId=" + itemId
+    refund() {
+      var refund = {}
+      refund.refundStatus = 1
+      if (this.item.id) {
+        refund.itemId = this.item.id
       }
-      wx.navigateTo({url: urlPath});
-    },
-    copy() {
-    wx.setClipboardData({data: this.orderDetail.number});
-    },
-    updateStatus(status, deliveryStatus, refundStatus) {
-      var refund = {};
-      if (status || status == 0) {
-        refund.status = status;
+      if (this.refundExplain) {
+        refund.refundExplain = this.refundExplain
       }
-      if (deliveryStatus || deliveryStatus == 0) {
-        refund.deliveryStatus = deliveryStatus;
-      }
-      if (refundStatus || refundStatus == 0) {
-        refund.refundStatus = refundStatus;
-      }
-      getFetch(
-        "/order/updateStatus/" + this.orderDetail.number,
-        refund,
-        true
-      ).then(response => {
+      getFetch('/order/updateStatus/' + this.orderDetail.number, refund, true).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
-        prevPage.setData({
-          status: refund
-        });
+        if (this.item.id) {
+          prevPage.setData({
+            status:-1
+          });
+        } else {
+          prevPage.setData({
+            status:4
+          });
+        }
         wx.navigateBack({ delta: 1 });
-      });
+      })
     },
     clickCall() {
       var tel = this.orderDetail.addressInfo.phone;
@@ -256,8 +248,7 @@ export default {
       var update = false;
       if (flag) {
         update = true;
-        var openid = this.userInfo.openid;
-        this.getOrderByIdAction({ uid: openid, data: item });
+        this.getOrderByIdAction({ data: item });
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
@@ -267,6 +258,9 @@ export default {
     },
     addressClick() {
       wx.navigateTo({ url: "/pages/subsidy/addressList/main" });
+    },
+    redPacketClick() {
+      wx.navigateTo({ url: "/pages/redPacket/main" });
     },
     couponClick() {
       wx.navigateTo({ url: "/pages/couponList/main" });
@@ -279,33 +273,73 @@ export default {
     },
     pickClick() {
       this.tabIndex = 1;
-    },
-    protocol() {
-      wx.navigateTo({ url: "/pages/pickProtocol/main" });
-    },
-    openMap() {
-      wx.getLocation({
-        type: "gcj02",
-        success(res) {
-          const latitude = res.latitude;
-          const longitude = res.longitude;
-          wx.openLocation({
-            latitude,
-            longitude,
-            scale: 28
-          });
-        }
-      });
     }
   },
-  mounted() {
-    this.foodList = this.orderDetail.itemList;
-    this.shopInfo = this.orderDetail.shopInfo;
-  }
+  onLoad(options) {
+    this.item = {};
+    this.refundExplain = ''
+      getFetch("/order/" + options.orderId, {}, true).then(response => {
+        this.orderDetail = response.result
+        this.itemList = response.result.itemList
+        if (options.itemId) {
+          for (var index in this.itemList) {
+            if (this.itemList[index].id == options.itemId) {
+              this.item = this.itemList[index]
+              this.refundExplain = this.item.refundExplain
+            }
+          }
+        } else {
+          this.refundExplain = this.orderDetail.refundExplain
+        }
+      });
+   }
 };
 </script>
 
 <style lang="scss" scoped>
+.acea-row.row-between-wrapper{align-items:center;justify-content:space-between;}
+.goodsStyle{margin-top:1rpx;background-color:#fff;padding:22rpx 30rpx;}
+.acea-row{display:flex;flex-wrap:wrap;}
+.acea-row.row-between{justify-content:space-between;}
+.apply-return .list{background-color:#fff;}
+.apply-return .list .item{min-height:90rpx;border-bottom:1rpx solid #eee;font-size:30rpx;color:#333;}
+.apply-return .list .item .num{color:#282828;width:427rpx;text-align:right;}
+.apply-return .list .item .num .picker .reason{width:385rpx;}
+.apply-return .list .item .num .picker .iconfont{color:#666;font-size:30rpx;margin-top:2rpx;}
+.apply-return .list .item.textarea{padding:30rpx 30rpx 30rpx 0;}
+.apply-return .list .item textarea{height:100rpx;font-size:30rpx;}
+.apply-return .list .item .placeholder{color:#bbb;}
+.apply-return .list .item .title{height:95rpx;width:100%;}
+.apply-return .list .item .title .tip{font-size:30rpx;color:#bbb;}
+.apply-return .list .item .upload{padding-bottom:36rpx;}
+.apply-return .list .item .upload .pictrue{margin:22rpx 23rpx 0 0;width:156rpx;height:156rpx;position:relative;font-size:24rpx;color:#bbb;}
+.apply-return .list .item .upload .pictrue:nth-of-type(4n){margin-right:0;}
+.apply-return .list .item .upload .pictrue image{width:100%;height:100%;border-radius:3rpx;}
+.apply-return .list .item .upload .pictrue .icon-guanbi1{position:absolute;font-size:45rpx;top:-10rpx;right:-10rpx;}
+.apply-return .list .item .upload .pictrue .icon-icon25201{color:#bfbfbf;font-size:50rpx;}
+.apply-return .list .item .upload .pictrue:nth-last-child(1){border:1rpx solid #ddd;box-sizing:border-box;}
+.apply-return .returnBnt{font-size:32rpx;color:#fff;width:690rpx;height:86rpx;border-radius:50rpx;text-align:center;line-height:86rpx;margin:43rpx auto;}
+
+.submit-btn1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  background-color: $theme-color;
+  border-top: 2rpx solid $spLine-color;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  color: white;
+  right: 0;
+  i {
+    font-size: 36rpx;
+  }
+  span {
+    font-size: 32rpx;
+  }
+}
+
 .modalFooter {
   box-sizing: border-box;
   display: flex;
@@ -364,6 +398,7 @@ export default {
 .bottom-a {
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: white;
 
   .btn {
@@ -407,12 +442,10 @@ export default {
 }
 
 .container {
-  display: flex;
   flex-direction: column;
   background-color: #f9f9f9;
 
   .header-c {
-    display: flex;
     flex-direction: column;
     margin: 20rpx;
     background-color: white;
@@ -440,26 +473,15 @@ export default {
     }
 
     .delivery {
-      display: flex;
       background-color: white;
       flex-direction: column;
 
       .address-c {
-        display: flex;
+        font-weight: bold;
+        font-size: 36rpx;
         background-color: white;
         padding: 0 20rpx;
         margin: 20rpx;
-
-        .address-info {
-            font-weight: bold;
-            font-size: 36rpx;
-            color: $textBlack-color;
-        }
-
-        .address-info1 {
-            font-size: 28rpx;
-            color: $textBlack-color;
-        }
 
         i {
           font-size: 36rpx;
@@ -468,11 +490,14 @@ export default {
         }
 
         .address {
-          display: flex;
           flex-direction: column;
           justify-content: space-around;
           flex: 1;
 
+          .address-info {
+            font-size: 32rpx;
+            color: $textBlack-color;
+          }
 
           .user-info {
             font-size: 24rpx;
@@ -489,7 +514,6 @@ export default {
       }
 
       .delivery-time {
-        display: flex;
         align-items: center;
         background-color: white;
         padding: 0 20rpx;

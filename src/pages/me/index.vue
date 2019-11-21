@@ -128,7 +128,7 @@ export default {
       {
         title: "二维码",
         icon: "mt-protocol-o",
-        path: "/pages/qrcode/main"
+        path: "/pages/subsidy/qrcode/main"
       }
       ]
     };
