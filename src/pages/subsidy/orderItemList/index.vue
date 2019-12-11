@@ -1,28 +1,36 @@
 <template>
   <div class="container">
     <div class="header-c">
-        <div class="header">
-          <div class="header-m">
-            <i class="icon iconfont iconsearch"></i>
-            <input style="width: 90%" placeholder="根据订单号搜索" placeholder-style="font-size: 24rpx" v-model="number">
-          </div>
-          <div class="header-r" style="margin: 0 10rpx;">
-            <span @click="search()">搜索</span>
-          </div>
+      <div class="header">
+        <div class="header-m">
+          <i class="icon iconfont iconsearch"></i>
+          <input
+            style="width: 90%"
+            placeholder="根据订单号搜索"
+            placeholder-style="font-size: 24rpx"
+            v-model="number"
+          >
+        </div>
+        <div
+          class="header-r"
+          style="margin: 0 10rpx;"
+        >
+          <span @click="search()">搜索</span>
+        </div>
       </div>
       <div class="cate-c">
         <span
           class="c-l"
-          :style="{'color': pageIndex === -1 ? lineStyle : null}"
+          :style="{'color': pageIndex === 5 ? lineStyle : null}"
           style="text-align:center;width:20%;"
-          @click="updateOrderList(-1)"
-        >全部{{pageIndex === -1 ? (total) : ''}}</span>
+          @click="updateOrderList(5)"
+        >全部{{pageIndex === 5 ? (total) : ''}}</span>
         <span
           class="c-m"
-          :style="{'color': pageIndex === 1 ? lineStyle : null}"
+          :style="{'color': pageIndex === 0 ? lineStyle : null}"
           style="text-align:center;width:20%;"
-          @click="updateOrderList(1)"
-        >新订单{{pageIndex === 1 ? total : ''}}</span>
+          @click="updateOrderList(0)"
+        >新订单{{pageIndex === 0 ? total : ''}}</span>
         <span
           class="c-m"
           :style="{'color': pageIndex === 2 ? lineStyle : null}"
@@ -59,9 +67,18 @@
         <div class="shop-info">
           <img :src="item.avatar">
           <div class="order_title">
-            <div class="order-name" style="margin-bottom:-15rpx;">
-              <span class="shop-name" style="display: inline">{{item.addressInfo.name}}</span>
-              <i class="icon iconfont iconright" style="display: inline"></i>
+            <div
+              class="order-name"
+              style="margin-bottom:-15rpx;"
+            >
+              <span
+                class="shop-name"
+                style="display: inline"
+              >{{item.addressInfo.name}}</span>
+              <i
+                class="icon iconfont iconright"
+                style="display: inline"
+              ></i>
             </div>
             <span
               class="order-time"
@@ -81,37 +98,38 @@
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.refundStatus==4 && pageIndex === -1"
+            v-else-if="item.refundStatus==4"
           >退款失败</p>
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.status==1"
+            v-else-if="item.paid==0"
           >待支付</p>
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.status==2 && item.deliveryStatus==1"
-          >已支付</p>
-          <p
-            class="order-status"
-            style="position: absolute;right: 0;"
-            v-else-if="item.status==2 && item.deliveryStatus==2"
+            v-else-if="item.paid==1 && item.status==1"
           >配送中</p>
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.status==0"
+            v-else-if="item.status==4"
           >已取消</p>
           <p
             class="order-status"
             style="position: absolute;right: 0;"
-            v-else-if="item.deliveryStatus==3"
+            v-else-if="item.status==3"
           >已完成</p>
         </div>
         <div class="googs-c">
-          <div class="goods" style="float:left;">
-            <span class="s-l" v-if="item.itemList.length">{{item.itemList[0].name}}</span>
+          <div
+            class="goods"
+            style="float:left;"
+          >
+            <span
+              class="s-l"
+              v-if="item.itemList.length"
+            >{{item.itemList[0].name}}</span>
             <span class="s-m">等{{item.itemList.length}}件商品</span>
             <span class="s-r amount">￥{{item.realFee}}</span>
           </div>
@@ -159,29 +177,24 @@ export default {
       } else if (this.pageIndex == 4) {
         data.refundStatus = -1;
       }
-      data.orderId = this.number
+      data.type = this.pageIndex;
+      data.orderId = this.number;
       this.getOrderItemDataAction(data);
     },
     getOrderItemDataAction(data) {
-      wx.showLoading({ title: "加载中...", mask: true });
-      getFetch("/order", data, false).then(response => {
+      getFetch("/order", data, true).then(response => {
         var result = response.result || {};
         this.orderItemList.datas = result.list;
         this.orderItemList.page = result.nextPage;
         this.total = result.total;
-        wx.hideLoading();
       });
     },
     updateOrderList(status) {
       this.scrollTop = 0;
       this.pageIndex = status;
       var data = { page: 1, shopId: this.userInfo.shopId };
-      if (status == 1 || status == 2 || status == 3) {
-        data.deliveryStatus = status;
-      } else if (status == 4) {
-        data.refundStatus = -1;
-      }
-      this.total = ''
+      data.type = status;
+      this.total = "";
       this.getOrderItemDataAction(data);
     },
     scroll(e) {
@@ -190,17 +203,12 @@ export default {
     lower(e) {
       if (this.orderItemList.page > 0) {
         this.scrollTop = this.currentScroll;
-        wx.showLoading({ title: "加载中...", mask: true });
         var openid = this.userInfo.openid;
         var data = {};
-        if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
-          data.deliveryStatus = this.pageIndex;
-        } else if (this.pageIndex == 4) {
-          data.refundStatus = -1;
-        }
+        data.type = this.pageIndex;
         data.shopId = this.userInfo.shopId;
         data.page = this.orderItemList.page;
-        getFetch("/order", data, false).then(response => {
+        getFetch("/order", data, true).then(response => {
           var result = response.result || {};
           this.orderItemList.datas = [
             ...this.orderItemList.datas,
@@ -208,7 +216,6 @@ export default {
           ];
           this.orderItemList.page = result.nextPage;
           this.total = result.total;
-          wx.hideLoading();
         });
       }
     },
@@ -220,7 +227,11 @@ export default {
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
-          url: "/pages/subsidy/shoppingCart/main?shopId=" + shopId + "&update=" + update
+          url:
+            "/pages/subsidy/shoppingCart/main?shopId=" +
+            shopId +
+            "&update=" +
+            update
         });
       }
     },
@@ -240,9 +251,9 @@ export default {
       page: 1,
       shopId: this.userInfo.shopId
     };
-    if (options.deliveryStatus) {
-      this.pageIndex = parseInt(options.deliveryStatus);
-      data.deliveryStatus = options.deliveryStatus;
+    if (options.type) {
+      this.pageIndex = parseInt(options.type);
+      data.type = options.type;
     } else if (options.refundStatus) {
       data.refundStatus = options.refundStatus;
       this.pageIndex = 4;
@@ -256,7 +267,7 @@ export default {
     var currPage = pages[pages.length - 1];
     var status = currPage.__data__.status;
     if (status) {
-      currPage.data = {}
+      currPage.data = {};
       var data = {
         page: 1,
         shopId: this.userInfo.shopId
@@ -269,7 +280,8 @@ export default {
       if (status.refundStatus == 4) {
         data.refundStatus = status.refundStatus;
         this.pageIndex = 4;
-      }else if (status.refundStatus == -1) {  // 部分退款
+      } else if (status.refundStatus == -1) {
+        // 部分退款
         if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
           data.deliveryStatus = this.pageIndex;
         } else if (this.pageIndex == 4) {
@@ -278,6 +290,7 @@ export default {
       }
       var status = [this.pageIndex];
       this.statusList = status;
+      data.type = this.pageIndex;
       this.getOrderItemDataAction(data);
     }
   },
@@ -289,13 +302,13 @@ export default {
     } else if (this.pageIndex == 4) {
       data.refundStatus = -1;
     }
+    data.type = this.pageIndex;
     this.getOrderItemDataAction(data);
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
 .header-m {
   display: flex;
   align-items: center;

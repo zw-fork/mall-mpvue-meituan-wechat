@@ -3,19 +3,17 @@
     <div class="header-c">
       <div class="delivery">
         <div class="address-c">
-          <span class="address-info" v-if="orderByShopIdDetail.status==0">已取消</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==1">未支付</span>
-          <div v-else-if="orderByShopIdDetail.refundStatus==1">
+          <div v-if="orderByShopIdDetail.refundStatus==1">
             <span class="address-info">等待退款{{goodsStatus}}</span>
             <p class="address-info1" v-if="orderByShopIdDetail.refundExplain">退款原因：{{orderByShopIdDetail.refundExplain}}</p>
           </div>   
           <span class="address-info" v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
           <span
             class="address-info"
-            v-else-if="orderByShopIdDetail.deliveryStatus==1"
+            v-else-if="orderByShopIdDetail.status==0 && orderByShopIdDetail.paid==1"
           >已支付，等待商家配送{{refundStatus}}</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.deliveryStatus==2">配送中{{refundStatus}}</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.deliveryStatus==3">已完成</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.status==1">配送中{{refundStatus}}</span>
+          <span class="address-info" v-else-if="orderByShopIdDetail.status==3">已完成</span>
           <span class="address-info" v-else-if="orderByShopIdDetail.refundStatus==2 || orderByShopIdDetail.refundStatus==3">已退款</span>
           <span class="address-info" v-else>其他</span>
         </div>
@@ -26,18 +24,21 @@
         <div class="bottom-a">
           <div
             class="btn"
-            v-if="orderByShopIdDetail.deliveryStatus==1 "
-            @click="updateStatus(null, 2)"
+            v-if="orderByShopIdDetail.status==0 && orderByShopIdDetail.paid==1"
+            @click="updateStatus(1)"
           >
             <span>配送</span>
           </div>
-          <div class="btn" v-if="orderByShopIdDetail.deliveryStatus==2" @click="updateStatus(null, 3)">
+          <div class="btn" v-if="orderByShopIdDetail.status==1 && orderByShopIdDetail.paid==1" @click="updateStatus(3)">
             <span>完成</span>
+          </div>
+          <div class="btn" v-if="orderByShopIdDetail.status==3 && orderByShopIdDetail.paid==1 && !orderByShopIdDetail.turnover" @click="updateStatus(10)">
+            <span>结算</span>
           </div>
           <div
             class="btn"
             @click="refund(null)"
-            v-if="orderByShopIdDetail.adminCanRefund && orderByShopIdDetail.status==2 && userInfo.role==2"
+            v-if="!orderByShopIdDetail.turnover && userInfo.role==2"
           >
             <span>退款</span>
           </div>
@@ -69,7 +70,7 @@
             </div>
             <div class="r-t">
               <span>x{{item.sequence}}</span>
-              <div class="btn" @click="refund(item.id)" v-if="orderByShopIdDetail.adminCanRefund && userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3">
+              <div class="btn" @click="refund(item.id)" v-if="!orderByShopIdDetail.turnover && orderByShopIdDetail.adminCanRefund && userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3">
                 <span>退款</span>
               </div>
               <span v-else-if="item.refundTime" @click="refund(item.id)">已退款</span>

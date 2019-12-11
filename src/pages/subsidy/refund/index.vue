@@ -14,12 +14,12 @@
         </div>
         <div class='item textarea acea-row row-between'>
           <div>退款原因</div>
-          <textarea :disabled="item.refundTime || orderDetail.status == 3" v-model="refundExplain" placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
+          <textarea :disabled="!orderDetail.status == 0 && !orderDetail.status == 0" v-model="refundExplain" placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
         </div>
     </div>
         </div>
         <div class="bottom-a">
-          <div class="btn"  @click="refund()" v-if="!item.refundTime && orderDetail.status != 3">
+          <div class="btn"  @click="refund()" v-if="orderDetail.status == 0 || orderDetail.status == 1">
             <span>申请退款</span>
           </div>
         </div>

@@ -1,16 +1,40 @@
 <template>
-  <div class="container" @click="update">
-    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth2"></authorize>
+  <div
+    class="container"
+    @click="update"
+  >
+    <authorize
+      @func="getMsgFormSon"
+      ref="authorize"
+      :show="showAuth2"
+    ></authorize>
     <div class="header-c">
-      <img :src="userInfo.avatarUrl" alt @click="updateUser(userInfo)">
-      <div class="info-c" @click="visibleItemModal = !visibleItemModal" v-if="userInfo.nickname">
+      <img
+        :src="userInfo.avatarUrl"
+        alt
+        @click="updateUser(userInfo)"
+      >
+      <div
+        class="info-c"
+        @click="visibleItemModal = !visibleItemModal"
+        v-if="userInfo.nickname"
+      >
         <span class="name">{{userInfo.nickname}}</span>
       </div>
-      <div class="info-c" v-else-if="showAuth">
-        <span class="name" @click="auth">请授权登录</span>
+      <div
+        class="info-c"
+        v-else-if="showAuth"
+      >
+        <span
+          class="name"
+          @click="auth"
+        >请授权登录</span>
       </div>
     </div>
-    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId != null">
+    <div
+      class="order-c"
+      v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId != null"
+    >
       <div class="itemName">
         <span>订单管理</span>
       </div>
@@ -20,33 +44,51 @@
             class="item"
             v-for="(item, index) in orderList"
             :key="index"
-            @click="itemClick(item)">
-            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            @click="itemClick(item)"
+          >
+            <i
+              class="item-img icon iconfont"
+              :class="item.url"
+              style="font-size: 42rpx;"
+            ></i>
             <span class="item-title">{{item.name}}</span>
-            <text class="count" v-if="orderCount[index]">{{orderCount[index]}}</text>
+            <text
+              class="count"
+              v-if="orderCount[index]"
+            >{{orderCount[index]}}</text>
           </div>
         </div>
       </div>
     </div>
-    <div class="order-c" v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId != null">
+    <div
+      class="order-c"
+      v-if="(userInfo.role==1 || userInfo.role==2) && userInfo.shopId != null"
+    >
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
         <span style="margin-left: 20rpx;">商品管理</span>
       </div>
       <div class="category-c">
         <div class="grid-c">
           <div
-            class="item"  
+            class="item"
             v-for="(item, index) in goodsMenuList"
             :key="index"
             @click="itemClick(item)"
           >
-            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            <i
+              class="item-img icon iconfont"
+              :class="item.url"
+              style="font-size: 42rpx;"
+            ></i>
             <span class="item-title">{{item.name}}</span>
           </div>
         </div>
       </div>
     </div>
-    <div class="order-c" v-if="userInfo.role==2">
+    <div
+      class="order-c"
+      v-if="userInfo.role==2"
+    >
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
         <span style="margin-left: 20rpx;">店铺管理</span>
       </div>
@@ -58,13 +100,20 @@
             :key="index"
             @click="itemClick(item)"
           >
-            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            <i
+              class="item-img icon iconfont"
+              :class="item.url"
+              style="font-size: 42rpx;"
+            ></i>
             <span class="item-title">{{item.name}}</span>
           </div>
         </div>
       </div>
     </div>
-    <div class="order-c" v-if="userInfo.role==3">
+    <div
+      class="order-c"
+      v-if="userInfo.role==3"
+    >
       <div style="border-bottom: 2rpx solid;font-size: 28rpx;padding-bottom:10rpx;">
         <span style="margin-left: 20rpx;">超级管理员</span>
       </div>
@@ -76,27 +125,45 @@
             :key="index"
             @click="itemClick(item)"
           >
-            <i class="item-img icon iconfont" :class="item.url" style="font-size: 42rpx;"></i>
+            <i
+              class="item-img icon iconfont"
+              :class="item.url"
+              style="font-size: 42rpx;"
+            ></i>
             <span class="item-title">{{item.name}}</span>
           </div>
         </div>
       </div>
     </div>
 
-
-      <div class='user_column'>
-    <div class='user_column_item'>
-      <contact-button style="opacity:0;position:absolute;top:20rpx;" type="default-dark" :session-from="sessionForm" size="30">
-      </contact-button>
-      <image class='user_column_item_image' src='/static/images/customer.png'></image>
-      <div class='user_column_item_text'>联系客服</div>
-    </div>
-    <div v-if="userInfo.id" class='user_column_item' @click="itemClick(itemList[0])">
-      <image class='user_column_item_image' src='/static/images/code.png'></image>
-      <div class='user_column_item_text'>二维码</div>
+    <div class='user_column'>
+      <div class='user_column_item'>
+        <contact-button
+          style="opacity:0;position:absolute;top:20rpx;"
+          type="default-dark"
+          :session-from="sessionForm"
+          size="30"
+        >
+        </contact-button>
+        <image
+          class='user_column_item_image'
+          src='/static/images/customer.png'
+        ></image>
+        <div class='user_column_item_text'>联系客服</div>
+      </div>
+      <div
+        v-if="userInfo.id"
+        class='user_column_item'
+        @click="itemClick(itemList[0])"
+      >
+        <image
+          class='user_column_item_image'
+          src='/static/images/code.png'
+        ></image>
+        <div class='user_column_item_text'>二维码</div>
+      </div>
     </div>
   </div>
-    </div>
 </template>
 
 <script>
@@ -108,7 +175,7 @@ import authorize from "@/components/authorize";
 export default {
   data() {
     return {
-      data: {shopId: 12},
+      data: { shopId: 12 },
       visibleItemModal: false,
       orderCount: [],
       showAuth: false,
@@ -125,21 +192,21 @@ export default {
       superMenuList: [],
       orderList: [],
       itemList: [
-      {
-        title: "二维码",
-        icon: "mt-protocol-o",
-        path: "/pages/subsidy/qrcode/main"
-      }
+        {
+          title: "二维码",
+          icon: "mt-protocol-o",
+          path: "/pages/subsidy/qrcode/main"
+        }
       ]
     };
   },
- components: {
+  components: {
     authorize
   },
   computed: {
     ...mapState("user", ["userInfo"]),
     sessionForm() {
-      return JSON.stringify({shopId: 12});
+      return JSON.stringify({ shopId: 12 });
     }
   },
   mounted() {
@@ -176,26 +243,33 @@ export default {
     auth() {
       this.showAuth2 = this.showAuth;
     },
-    getMsgFormSon(data) {      
+    getMsgFormSon(data) {
       this.showAuth = data || !this.userInfo.nickname;
       if (!data) {
         this.showAuth2 = false;
-        if (this.userInfo.shopId && !this.orderCount.length && this.userInfo.role>0 ) {
-          getFetch("/order/count/" + this.userInfo.shopId, true).then(response => {
-            var count = response.result;
-            this.orderCount = [];
-            this.orderCount.push(count.新订单);
-            this.orderCount.push(count.配送中);
-            this.orderCount.push(count.退款);
-          });
+        if (
+          this.userInfo.shopId &&
+          !this.orderCount.length &&
+          this.userInfo.role > 0
+        ) {
+          getFetch("/order/count/" + this.userInfo.shopId, true).then(
+            response => {
+              var count = response.result;
+              this.orderCount = [];
+              this.orderCount.push(count.new_count);
+              this.orderCount.push(count.unshipped_count);
+              this.orderCount.push(count.received_count);
+              this.orderCount.push(count.refund_count);
+            }
+          );
         }
       }
     },
-      goFeedback() {
-         wx.navigateTo({
+    goFeedback() {
+      wx.navigateTo({
         url: "/pages/feedback/main"
       });
-  },
+    },
     update() {
       if (!this.show) {
         this.showEdit = false;
@@ -237,8 +311,8 @@ export default {
     var currPage = pages[pages.length - 1];
     if (currPage.data.status == "qrcode") {
       getFetch("/wechat/getCurrentUser", true).then(response => {
-        var user = response.result || {}
-        this.changeUserInfoMut(user)
+        var user = response.result || {};
+        this.changeUserInfoMut(user);
         if (response.code == 560) {
           this.showAuth = true;
           this.$refs.authorize.getUserInfo();
@@ -248,43 +322,48 @@ export default {
           getFetch("/order/count/" + user.shopId, true).then(response => {
             var count = response.result;
             this.orderCount = [];
-            this.orderCount.push(count.新订单);
-            this.orderCount.push(count.配送中);
-            this.orderCount.push(count.退款);
+            this.orderCount.push(count.new_count);
+            this.orderCount.push(count.unshipped_count);
+            this.orderCount.push(count.received_count);
+            this.orderCount.push(count.refund_count);
           });
         }
-      }); 
+      });
     } else {
       if (this.userInfo.shopId != null) {
-        getFetch("/order/count/" + this.userInfo.shopId, true).then(response => {
-          var count = response.result;
-          this.orderCount = [];
-          this.orderCount.push(count.新订单);
-          this.orderCount.push(count.配送中);
-          this.orderCount.push(count.退款);
-        });
+        getFetch("/order/count/" + this.userInfo.shopId, true).then(
+          response => {
+            var count = response.result;
+            this.orderCount = [];
+            this.orderCount.push(count.new_count);
+            this.orderCount.push(count.unshipped_count);
+            this.orderCount.push(count.received_count);
+            this.orderCount.push(count.refund_count);
+          }
+        );
       }
     }
   },
   onPullDownRefresh: function() {
-      getFetch("/wechat/getCurrentUser", true).then(response => {
-        var user = response.result || {}
-        this.changeUserInfoMut(user)
-        if (response.code == 560) {
-          this.showAuth = true;
-          this.$refs.authorize.getUserInfo();
-          return;
-        }
-        if (user.shopId) {
-          getFetch("/order/count/" + user.shopId, true).then(response => {
-            var count = response.result;
-            this.orderCount = [];
-            this.orderCount.push(count.新订单);
-            this.orderCount.push(count.配送中);
-            this.orderCount.push(count.退款);
-          });
-        }
-      });
+    getFetch("/wechat/getCurrentUser", true).then(response => {
+      var user = response.result || {};
+      this.changeUserInfoMut(user);
+      if (response.code == 560) {
+        this.showAuth = true;
+        this.$refs.authorize.getUserInfo();
+        return;
+      }
+      if (user.shopId) {
+        getFetch("/order/count/" + user.shopId, true).then(response => {
+          var count = response.result;
+          this.orderCount = [];
+          this.orderCount.push(count.new_count);
+          this.orderCount.push(count.unshipped_count);
+          this.orderCount.push(count.received_count);
+          this.orderCount.push(count.refund_count);
+        });
+      }
+    });
   }
 };
 </script>
@@ -418,7 +497,7 @@ button::after {
 
         .item {
           padding-bottom: 20rpx;
-          width: 25%;
+          width: 20%;
           background-color: white;
           display: flex;
           flex-direction: column;

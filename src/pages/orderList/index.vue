@@ -5,9 +5,9 @@
       <div class="cate-c">
         <span
           class="c-l"
-          :style="{'color': pageIndex === -1 ? lineStyle : null}"
+          :style="{'color': pageIndex === 5 ? lineStyle : null}"
           style="text-align:center;width:34%;"
-          @click="updateOrderList(-1)"
+          @click="updateOrderList(5)"
         >全部订单</span>
         <span
           class="c-m"
@@ -181,18 +181,14 @@ export default {
       if (!data) {
         this.showAuth2 = false;
         this.scrollTop = 0;
-        this.updateOrderList(-1);
+        this.updateOrderList(5);
       }
     },   
     updateOrderList(status) {
       this.scrollTop = 0;
       this.pageIndex = status;
       var data = { page: 1 };
-      if (status == 1 || status == 2 || status == 3) {
-        data.deliveryStatus = status;
-      } else if (status == 4) {
-        data.refundStatus = -1;
-      }
+      data.type = this.pageIndex;
       getFetch("/order", data, true).then( response => {
             var result = response.result || {};
             this.orderList.datas = result.list;
@@ -212,6 +208,8 @@ export default {
         } else if (this.pageIndex == 4) {
           data.refundStatus = -1;
         }
+              data.type = this.pageIndex;
+
         data.page = this.orderList.page;
         getFetch("/order", data, true).then(
           response => {
@@ -302,8 +300,8 @@ export default {
     var currPage = pages[pages.length - 1];
     if (currPage.data.status) {
       currPage.data.status = null;
-      this.pageIndex == -1
-      this.updateOrderList(-1);
+      this.pageIndex ==5
+      this.updateOrderList(5);
     }
   }
 };
