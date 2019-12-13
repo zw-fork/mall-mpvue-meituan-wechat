@@ -3,28 +3,42 @@
     <div class="header-c">
       <div class="delivery">
         <div class="delivery-time apply-return">
-              <div class='list'>
-        <div class='item acea-row row-between-wrapper'>
-          <div>退款类型</div>
-          <div class='num'>{{item.totalPrice ? "部分退款" : "全额退款"}}</div>
-        </div>
-        <div class='item acea-row row-between-wrapper'>
-          <div>退款金额</div>
-          <div class='num'>￥{{item.totalPrice? item.totalPrice : balance}}</div>
-        </div>
-        <div class='item textarea acea-row row-between'>
-          <div>退款原因</div>
-          <textarea :disabled="!orderDetail.status == 0 && !orderDetail.status == 0" v-model="refundExplain" placeholder='填写退款原因，50字以内' class='num' name="refund_reason_wap_explain" placeholder-class='填写退款信息，50字以内'></textarea>
-        </div>
-    </div>
+          <div class='list'>
+            <div class='item acea-row row-between-wrapper'>
+              <div>退款类型</div>
+              <div class='num'>{{item.productId ? "部分退款" : "全额退款"}}</div>
+            </div>
+            <div class='item acea-row row-between-wrapper'>
+              <div>退款金额</div>
+              <div class='num'>￥{{item.totalPrice? item.totalPrice : balance}}</div>
+            </div>
+            <div class='item textarea acea-row row-between'>
+              <div>退款原因</div>
+              <textarea
+                :disabled="orderDetail.paid != 1"
+                v-model="refundExplain"
+                placeholder='填写退款原因，50字以内'
+                class='num'
+                name="refund_reason_wap_explain"
+                placeholder-class='填写退款信息，50字以内'
+              ></textarea>
+            </div>
+          </div>
         </div>
         <div class="bottom-a">
-          <div class="btn"  @click="refund()" v-if="orderDetail.status == 0 || orderDetail.status == 1">
+          <div
+            class="btn"
+            @click="refund()"
+            v-if="orderDetail.paid == 1"
+          >
             <span>申请退款</span>
           </div>
         </div>
         <div class="modalFooter">
-          <div class="btnCancel" @tap="clickCallShop">联系商家</div>
+          <div
+            class="btnCancel"
+            @tap="clickCallShop"
+          >联系商家</div>
           <div
             class="btnConfirm"
             @click.stop="clickCallDelivery"
@@ -34,22 +48,58 @@
       </div>
     </div>
     <div class="item-list">
-      <div class="section" @click="headerClick(orderDetail, false)">
-        <i style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
+      <div
+        class="section"
+        @click="headerClick(orderDetail, false)"
+      >
+        <i
+          style="font-size:40rpx;color:#d81e06;"
+          class="shop-logo icon iconfont icondianpu2"
+        ></i>
         <span>{{orderDetail.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright" style="display: inline"></i>
+        <i
+          class="icon iconfont iconright"
+          style="display: inline"
+        ></i>
       </div>
       <div class="line-sp"></div>
       <div class="list">
-        <div class="item" v-for="(itemA, index) in itemList" :key="index">
+        <div
+          class="item"
+          v-for="(itemA, index) in itemList"
+          :key="index"
+        >
           <img :src="path + itemA.picture">
-          <div class="item-r"  :style="{'border': item.id == itemA.id ? '1px solid red' : null}">
+          <div
+            class="item-r"
+            :style="{'border': item.id == itemA.id ? '1px solid red' : null}"
+          >
             <div class="r-t">
               <span>{{itemA.name}}</span>
               <span>￥{{itemA.totalPrice}}</span>
             </div>
             <div class="r-t">
               <span>x{{itemA.sequence}}</span>
+              <span v-if="itemA.refundTime">已退款</span>
+            </div>
+          </div>
+        </div>
+                <div
+          class="item"
+          v-for="(itemA, index) in infoList"
+          :key="index"
+        >
+          <img :src="itemA.productInfo.productInfo.image">
+          <div
+            class="item-r"
+            :style="{'border': item.productId == itemA.productId ? '1px solid red' : null}"
+          >
+            <div class="r-t">
+              <span>{{itemA.productInfo.productInfo.store_name}}</span>
+              <span>￥{{itemA.productInfo.productInfo.price}}</span>
+            </div>
+            <div class="r-t">
+              <span>x{{itemA.productInfo.cart_num}}</span>
               <span v-if="itemA.refundTime">已退款</span>
             </div>
           </div>
@@ -66,7 +116,10 @@
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line>
-        <div class="totle-price" v-if="orderDetail.refundFee">
+        <div
+          class="totle-price"
+          v-if="orderDetail.refundFee"
+        >
           <span class="m">已退款</span>
           <span class="r">￥{{orderDetail.refundFee}}</span>
         </div>
@@ -84,29 +137,56 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">送达时间：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >送达时间：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>尽快送达</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all;">送货地址：</p>
-          <div class="item_right" v-if="orderDetail.addressInfo">
+          <p
+            class="item_left"
+            style="word-break:keep-all;"
+          >送货地址：</p>
+          <div
+            class="item_right"
+            v-if="orderDetail.addressInfo"
+          >
             <p>{{orderDetail.addressInfo.address}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all;">顾客姓名：</p>
-          <div class="item_right" v-if="orderDetail.addressInfo">
+          <p
+            class="item_left"
+            style="word-break:keep-all;"
+          >顾客姓名：</p>
+          <div
+            class="item_right"
+            v-if="orderDetail.addressInfo"
+          >
             <p>{{orderDetail.addressInfo.name}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
-        <div class="item_style" @click="clickCall">
-          <p class="item_left" style="word-break:keep-all;">顾客电话：</p>
-          <div class="item_right" v-if="orderDetail.addressInfo">
+        <div
+          class="item_style"
+          @click="clickCall"
+        >
+          <p
+            class="item_left"
+            style="word-break:keep-all;"
+          >顾客电话：</p>
+          <div
+            class="item_right"
+            v-if="orderDetail.addressInfo"
+          >
             <p>{{orderDetail.addressInfo.phone}}</p>
           </div>
         </div>
@@ -115,33 +195,57 @@
 
     <div class="header-c">
       <div class="delivery order_detail_style">
-                <div class="address-c">
+        <div class="address-c">
           <span>订单信息</span>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >订单号：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>{{orderDetail.number}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">支付方式：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >支付方式：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>{{orderDetail.paymentType === 1 ? '在线支付' : '其他'}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >下单时间：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>{{orderDetail.createTime}}</p>
           </div>
         </div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">描述：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >描述：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>{{orderDetail.remark}}</p>
           </div>
         </div>
@@ -161,12 +265,13 @@ export default {
   data() {
     return {
       itemList: [],
+      infoList: [],
       tabIndex: 0,
       reason: undefined,
-      item: {},
-      refundExplain: '',
+      item: undefined,
+      refundExplain: "",
       orderDetail: {
-        shopInfo:{}
+        shopInfo: {}
       }
     };
   },
@@ -182,7 +287,9 @@ export default {
     },
     // 可退余额
     balance() {
-      return parseFloat(this.orderDetail.realFee - this.orderDetail.refundFee).toFixed(2);
+      return parseFloat(
+        this.orderDetail.realFee - this.orderDetail.refundFee
+      ).toFixed(2);
     }
   },
   components: {
@@ -190,28 +297,32 @@ export default {
   },
   methods: {
     refund() {
-      var refund = {}
-      refund.refundStatus = 1
-      if (this.item.id) {
-        refund.itemId = this.item.id
+      var refund = {};
+      refund.refundStatus = 1;
+      if (this.item.productId) {
+        refund.itemId = this.item.productId;
       }
       if (this.refundExplain) {
-        refund.refundExplain = this.refundExplain
+        refund.refundExplain = this.refundExplain;
       }
-      getFetch('/order/updateStatus/' + this.orderDetail.number, refund, true).then(response => {
+      getFetch(
+        "/order/updateStatus/" + this.orderDetail.number,
+        refund,
+        true
+      ).then(response => {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
         if (this.item.id) {
           prevPage.setData({
-            status:-1
+            status: -1
           });
         } else {
           prevPage.setData({
-            status:4
+            status: 4
           });
         }
         wx.navigateBack({ delta: 1 });
-      })
+      });
     },
     clickCall() {
       var tel = this.orderDetail.addressInfo.phone;
@@ -252,7 +363,11 @@ export default {
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
-          url: "/pages/subsidy/shoppingCart/main?shopId=" + shopId + "&update=" + update
+          url:
+            "/pages/subsidy/shoppingCart/main?shopId=" +
+            shopId +
+            "&update=" +
+            update
         });
       }
     },
@@ -277,48 +392,134 @@ export default {
   },
   onLoad(options) {
     this.item = {};
-    this.refundExplain = ''
-      getFetch("/order/" + options.orderId, {}, true).then(response => {
-        this.orderDetail = response.result
-        this.itemList = response.result.itemList
-        if (options.itemId) {
-          for (var index in this.itemList) {
-            if (this.itemList[index].id == options.itemId) {
-              this.item = this.itemList[index]
-              this.refundExplain = this.item.refundExplain
-            }
+    this.refundExplain = "";
+    getFetch("/order/" + options.orderId, {}, true).then(response => {
+      this.orderDetail = response.result;
+      this.itemList = response.result.itemList;
+      this.infoList = response.result.infoList;
+      if (options.itemId) {
+        for (var index in this.itemList) {
+          if (this.itemList[index].id == options.itemId) {
+            this.item = this.itemList[index];
+            this.refundExplain = this.item.refundExplain;
           }
-        } else {
-          this.refundExplain = this.orderDetail.refundExplain
         }
-      });
-   }
+        for (var index in this.infoList) {
+          if (this.infoList[index].productId == options.itemId) {
+            this.item = this.infoList[index];
+        var price = this.item.productInfo.truePrice * this.item.productInfo.cart_num;
+        this.item.totalPrice = parseFloat(price).toFixed(2);
+            this.refundExplain = this.item.refundExplain;
+          }
+        }
+      } else {
+        this.refundExplain = this.orderDetail.refundExplain;
+      }
+    });
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.acea-row.row-between-wrapper{align-items:center;justify-content:space-between;}
-.goodsStyle{margin-top:1rpx;background-color:#fff;padding:22rpx 30rpx;}
-.acea-row{display:flex;flex-wrap:wrap;}
-.acea-row.row-between{justify-content:space-between;}
-.apply-return .list{background-color:#fff;}
-.apply-return .list .item{min-height:90rpx;border-bottom:1rpx solid #eee;font-size:30rpx;color:#333;}
-.apply-return .list .item .num{color:#282828;width:427rpx;text-align:right;}
-.apply-return .list .item .num .picker .reason{width:385rpx;}
-.apply-return .list .item .num .picker .iconfont{color:#666;font-size:30rpx;margin-top:2rpx;}
-.apply-return .list .item.textarea{padding:30rpx 30rpx 30rpx 0;}
-.apply-return .list .item textarea{height:100rpx;font-size:30rpx;}
-.apply-return .list .item .placeholder{color:#bbb;}
-.apply-return .list .item .title{height:95rpx;width:100%;}
-.apply-return .list .item .title .tip{font-size:30rpx;color:#bbb;}
-.apply-return .list .item .upload{padding-bottom:36rpx;}
-.apply-return .list .item .upload .pictrue{margin:22rpx 23rpx 0 0;width:156rpx;height:156rpx;position:relative;font-size:24rpx;color:#bbb;}
-.apply-return .list .item .upload .pictrue:nth-of-type(4n){margin-right:0;}
-.apply-return .list .item .upload .pictrue image{width:100%;height:100%;border-radius:3rpx;}
-.apply-return .list .item .upload .pictrue .icon-guanbi1{position:absolute;font-size:45rpx;top:-10rpx;right:-10rpx;}
-.apply-return .list .item .upload .pictrue .icon-icon25201{color:#bfbfbf;font-size:50rpx;}
-.apply-return .list .item .upload .pictrue:nth-last-child(1){border:1rpx solid #ddd;box-sizing:border-box;}
-.apply-return .returnBnt{font-size:32rpx;color:#fff;width:690rpx;height:86rpx;border-radius:50rpx;text-align:center;line-height:86rpx;margin:43rpx auto;}
+.acea-row.row-between-wrapper {
+  align-items: center;
+  justify-content: space-between;
+}
+.goodsStyle {
+  margin-top: 1rpx;
+  background-color: #fff;
+  padding: 22rpx 30rpx;
+}
+.acea-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.acea-row.row-between {
+  justify-content: space-between;
+}
+.apply-return .list {
+  background-color: #fff;
+}
+.apply-return .list .item {
+  min-height: 90rpx;
+  border-bottom: 1rpx solid #eee;
+  font-size: 30rpx;
+  color: #333;
+}
+.apply-return .list .item .num {
+  color: #282828;
+  width: 427rpx;
+  text-align: right;
+}
+.apply-return .list .item .num .picker .reason {
+  width: 385rpx;
+}
+.apply-return .list .item .num .picker .iconfont {
+  color: #666;
+  font-size: 30rpx;
+  margin-top: 2rpx;
+}
+.apply-return .list .item.textarea {
+  padding: 30rpx 30rpx 30rpx 0;
+}
+.apply-return .list .item textarea {
+  height: 100rpx;
+  font-size: 30rpx;
+}
+.apply-return .list .item .placeholder {
+  color: #bbb;
+}
+.apply-return .list .item .title {
+  height: 95rpx;
+  width: 100%;
+}
+.apply-return .list .item .title .tip {
+  font-size: 30rpx;
+  color: #bbb;
+}
+.apply-return .list .item .upload {
+  padding-bottom: 36rpx;
+}
+.apply-return .list .item .upload .pictrue {
+  margin: 22rpx 23rpx 0 0;
+  width: 156rpx;
+  height: 156rpx;
+  position: relative;
+  font-size: 24rpx;
+  color: #bbb;
+}
+.apply-return .list .item .upload .pictrue:nth-of-type(4n) {
+  margin-right: 0;
+}
+.apply-return .list .item .upload .pictrue image {
+  width: 100%;
+  height: 100%;
+  border-radius: 3rpx;
+}
+.apply-return .list .item .upload .pictrue .icon-guanbi1 {
+  position: absolute;
+  font-size: 45rpx;
+  top: -10rpx;
+  right: -10rpx;
+}
+.apply-return .list .item .upload .pictrue .icon-icon25201 {
+  color: #bfbfbf;
+  font-size: 50rpx;
+}
+.apply-return .list .item .upload .pictrue:nth-last-child(1) {
+  border: 1rpx solid #ddd;
+  box-sizing: border-box;
+}
+.apply-return .returnBnt {
+  font-size: 32rpx;
+  color: #fff;
+  width: 690rpx;
+  height: 86rpx;
+  border-radius: 50rpx;
+  text-align: center;
+  line-height: 86rpx;
+  margin: 43rpx auto;
+}
 
 .submit-btn1 {
   display: flex;

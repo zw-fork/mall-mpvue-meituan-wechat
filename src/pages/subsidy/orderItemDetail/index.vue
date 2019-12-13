@@ -5,17 +5,35 @@
         <div class="address-c">
           <div v-if="orderByShopIdDetail.refundStatus==1">
             <span class="address-info">等待退款{{goodsStatus}}</span>
-            <p class="address-info1" v-if="orderByShopIdDetail.refundExplain">退款原因：{{orderByShopIdDetail.refundExplain}}</p>
-          </div>   
-          <span class="address-info" v-else-if="orderByShopIdDetail.refundStatus==2">退款成功</span>
+            <p
+              class="address-info1"
+              v-if="orderByShopIdDetail.refundExplain"
+            >退款原因：{{orderByShopIdDetail.refundExplain}}</p>
+          </div>
+          <span
+            class="address-info"
+            v-else-if="orderByShopIdDetail.refundStatus==2"
+          >退款成功</span>
           <span
             class="address-info"
             v-else-if="orderByShopIdDetail.status==0 && orderByShopIdDetail.paid==1"
           >已支付，等待商家配送{{refundStatus}}</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==1">配送中{{refundStatus}}</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.status==3">已完成</span>
-          <span class="address-info" v-else-if="orderByShopIdDetail.refundStatus==2 || orderByShopIdDetail.refundStatus==3">已退款</span>
-          <span class="address-info" v-else>其他</span>
+          <span
+            class="address-info"
+            v-else-if="orderByShopIdDetail.status==1"
+          >配送中{{refundStatus}}</span>
+          <span
+            class="address-info"
+            v-else-if="orderByShopIdDetail.status==3"
+          >已完成</span>
+          <span
+            class="address-info"
+            v-else-if="orderByShopIdDetail.refundStatus==2 || orderByShopIdDetail.refundStatus==3"
+          >已退款</span>
+          <span
+            class="address-info"
+            v-else
+          >其他</span>
         </div>
         <div class="line-sp"></div>
         <div class="delivery-time">
@@ -29,10 +47,18 @@
           >
             <span>配送</span>
           </div>
-          <div class="btn" v-if="orderByShopIdDetail.status==1 && orderByShopIdDetail.paid==1" @click="updateStatus(3)">
+          <div
+            class="btn"
+            v-if="orderByShopIdDetail.status==1 && orderByShopIdDetail.paid==1"
+            @click="updateStatus(3)"
+          >
             <span>完成</span>
           </div>
-          <div class="btn" v-if="orderByShopIdDetail.status==3 && orderByShopIdDetail.paid==1 && !orderByShopIdDetail.turnover" @click="updateStatus(10)">
+          <div
+            class="btn"
+            v-if="orderByShopIdDetail.status==3 && orderByShopIdDetail.paid==1 && !orderByShopIdDetail.turnover"
+            @click="updateStatus(10)"
+          >
             <span>结算</span>
           </div>
           <div
@@ -53,16 +79,36 @@
       </div>
     </div>
     <div class="item-list">
-      
-      <div class="section" @click="headerClick(orderByShopIdDetail, false)">
-        <img v-if="orderByShopIdDetail.shopInfo.pic_url" :src="path + orderByShopIdDetail.shopInfo.pic_url">
-        <i v-else style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
+
+      <div
+        class="section"
+        @click="headerClick(orderByShopIdDetail, false)"
+      >
+        <img
+          v-if="orderByShopIdDetail.shopInfo.pic_url"
+          :src="path + orderByShopIdDetail.shopInfo.pic_url"
+        >
+        <i
+          v-else
+          style="font-size:40rpx;color:#d81e06;"
+          class="shop-logo icon iconfont icondianpu2"
+        ></i>
         <span>{{orderByShopIdDetail.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright" style="display: inline"></i>
+        <i
+          class="icon iconfont iconright"
+          style="display: inline"
+        ></i>
       </div>
       <div class="list">
-        <div class="item" v-for="(item, index) in foodList" :key="index">
-          <img :src="path + item.picture" @click="editGoods(item.goodsId)">
+        <div
+          class="item"
+          v-for="(item, index) in foodList"
+          :key="index"
+        >
+          <img
+            :src="path + item.picture"
+            @click="editGoods(item.goodsId)"
+          >
           <div class="item-r">
             <div class="r-t">
               <span>{{item.name}}</span>
@@ -70,10 +116,44 @@
             </div>
             <div class="r-t">
               <span>x{{item.sequence}}</span>
-              <div class="btn" @click="refund(item.id)" v-if="!orderByShopIdDetail.turnover && orderByShopIdDetail.adminCanRefund && userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3">
+              <div
+                class="btn"
+                @click="refund(item.id)"
+                v-if="!orderByShopIdDetail.turnover && orderByShopIdDetail.adminCanRefund && userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
+              >
                 <span>退款</span>
               </div>
-              <span v-else-if="item.refundTime" @click="refund(item.id)">已退款</span>
+              <span
+                v-else-if="item.refundTime"
+                @click="refund(item.id)"
+              >已退款</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="item"
+          v-for="(item, index) in infoList"
+          :key="index"
+        >{{item.productInfo.refundTime}}
+          <img :src="item.productInfo.productInfo.image">
+          <div class="item-r">
+            <div class="r-t">
+              <span>{{item.productInfo.productInfo.store_name}}</span>
+              <span>￥{{item.productInfo.productInfo.price}}</span>
+            </div>
+            <div class="r-t">
+              <span>x{{item.productInfo.cart_num}}</span>
+              <div
+                class="btn"
+                @click="refund(item.productId)"
+                v-if="!orderByShopIdDetail.turnover && orderByShopIdDetail.adminCanRefund && userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
+              >
+                <span>退款</span>
+              </div>
+              <span
+                v-else-if="item.refundTime"
+                @click="refund(item.productId)"
+              >已退款</span>
             </div>
           </div>
         </div>
@@ -84,7 +164,10 @@
           <span>￥{{deliveryFee}}</span>
         </div>
         <sep-line></sep-line>
-        <div class="totle-price" v-if="orderByShopIdDetail.refundFee">
+        <div
+          class="totle-price"
+          v-if="orderByShopIdDetail.refundFee"
+        >
           <span class="m">已退款</span>
           <span class="r">￥{{orderByShopIdDetail.refundFee}}</span>
         </div>
@@ -102,29 +185,56 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">送达时间：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >送达时间：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>尽快送达</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all;">送货地址：</p>
-          <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
+          <p
+            class="item_left"
+            style="word-break:keep-all;"
+          >送货地址：</p>
+          <div
+            class="item_right"
+            v-if="orderByShopIdDetail.addressInfo"
+          >
             <p>{{orderByShopIdDetail.addressInfo.address}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all;">顾客姓名：</p>
-          <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
+          <p
+            class="item_left"
+            style="word-break:keep-all;"
+          >顾客姓名：</p>
+          <div
+            class="item_right"
+            v-if="orderByShopIdDetail.addressInfo"
+          >
             <p>{{orderByShopIdDetail.addressInfo.name}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
-        <div class="item_style" @click="clickCall">
-          <p class="item_left" style="word-break:keep-all;">顾客电话：</p>
-          <div class="item_right" v-if="orderByShopIdDetail.addressInfo">
+        <div
+          class="item_style"
+          @click="clickCall"
+        >
+          <p
+            class="item_left"
+            style="word-break:keep-all;"
+          >顾客电话：</p>
+          <div
+            class="item_right"
+            v-if="orderByShopIdDetail.addressInfo"
+          >
             <p>{{orderByShopIdDetail.addressInfo.phone}}</p>
           </div>
         </div>
@@ -138,25 +248,46 @@
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">订单号：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >订单号：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>
               {{orderByShopIdDetail.number}}
-               <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制</span>
+              <span
+                style="border:2rpx solid;padding:0rpx 10rpx;"
+                @click="copy"
+              >复制</span>
             </p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">支付方式：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >支付方式：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>{{orderByShopIdDetail.paymentType === 1 ? '在线支付' : '其他'}}</p>
           </div>
         </div>
         <div class="line-sp"></div>
         <div class="item_style">
-          <p class="item_left" style="word-break:keep-all; display: inline">下单时间：</p>
-          <div class="item_right" style="display: inline">
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >下单时间：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
             <p>{{orderByShopIdDetail.createTime}}</p>
           </div>
         </div>
@@ -175,6 +306,7 @@ export default {
   data() {
     return {
       foodList: [],
+      infoList: [],
       tabIndex: 0
     };
   },
@@ -215,32 +347,34 @@ export default {
       });
     },
     copy() {
-    wx.setClipboardData({data: this.orderByShopIdDetail.number});
+      wx.setClipboardData({ data: this.orderByShopIdDetail.number });
     },
     refund(itemId) {
       var that = this;
       if (this.orderByShopIdDetail.refundStatus == 1 && !itemId) {
-                      wx.showModal({
-        content: "确定对当前订单进行退款处理？",
-        confirmColor: "#FFC24A",
-        success: function(res) {
-          if (res.confirm) {
-            that.refundDataAction({
-              orderNo: that.orderByShopIdDetail.number,
-              refundDesc: "",
-              refundFee: that.orderByShopIdDetail.realFee * 100
-            });
-          } else if (res.cancel) {
+        wx.showModal({
+          content: "确定对当前订单进行退款处理？",
+          confirmColor: "#FFC24A",
+          success: function(res) {
+            if (res.confirm) {
+              that.refundDataAction({
+                orderNo: that.orderByShopIdDetail.number,
+                refundDesc: "",
+                refundFee: that.orderByShopIdDetail.realFee * 100
+              });
+            } else if (res.cancel) {
+            }
           }
-        }
-      });
+        });
       } else {
-        var urlPath = "/pages/subsidy/refund/main?orderId=" + this.orderByShopIdDetail.number
+        var urlPath =
+          "/pages/subsidy/refund/main?orderId=" +
+          this.orderByShopIdDetail.number;
         if (itemId) {
-          urlPath += "&itemId=" + itemId
+          urlPath += "&itemId=" + itemId;
         }
         wx.navigateTo({
-            url: urlPath
+          url: urlPath
         });
       }
     },
@@ -299,7 +433,11 @@ export default {
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
-          url: "/pages/subsidy/shoppingCart/main?shopId=" + shopId + "&update=" + update
+          url:
+            "/pages/subsidy/shoppingCart/main?shopId=" +
+            shopId +
+            "&update=" +
+            update
         });
       }
     },
@@ -341,20 +479,21 @@ export default {
   },
   mounted() {
     this.foodList = this.orderByShopIdDetail.itemList;
+    this.infoList = this.orderByShopIdDetail.infoList;
     this.shopInfo = this.orderByShopIdDetail.shopInfo;
   },
   onShow(options) {
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
-    var data = currPage.data.status
+    var data = currPage.data.status;
     if (data) {
-       var refund = {};
-       refund.refundStatus = data
-        var prevPage = pages[pages.length - 2];
-        prevPage.setData({
-          status: refund
-        });
-        wx.navigateBack({ delta: 1 });
+      var refund = {};
+      refund.refundStatus = data;
+      var prevPage = pages[pages.length - 2];
+      prevPage.setData({
+        status: refund
+      });
+      wx.navigateBack({ delta: 1 });
     }
   }
 };
@@ -377,17 +516,17 @@ export default {
     padding: 10rpx;
   }
 }
-  .btn {
-    display: flex;
-    border: 2rpx solid $blue-color;
-    margin: 20rpx;
-    border-radius: 4rpx;
-    span {
-      font-size: 26rpx;
-      color: $blue-color;
-      margin: 6rpx 10rpx;
-    }
+.btn {
+  display: flex;
+  border: 2rpx solid $blue-color;
+  margin: 20rpx;
+  border-radius: 4rpx;
+  span {
+    font-size: 26rpx;
+    color: $blue-color;
+    margin: 6rpx 10rpx;
   }
+}
 .bottom-a {
   display: flex;
   align-items: center;
