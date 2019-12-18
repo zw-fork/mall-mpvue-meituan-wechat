@@ -105,7 +105,7 @@ const actions = {
                 icon: 'success',
                 duration: 3000
               })
-              getFetch('/order/updateStatus/' + order.number, { status: 2 }, true).then(response => {
+              getFetch('/order/updateStatus/' + order.number, { }, true).then(response => {
                 getFetch('/order', {}, true).then(response => {
                   var result = response.result || {}
                   commit('changeOrderDataMut', result)
@@ -121,7 +121,7 @@ const actions = {
             icon: 'none',
             duration: 2000
           })
-          getFetch('/order/updateStatus/' + order.number, { status: 2 }, true).then(response => {
+          getFetch('/order/updateStatus/' + order.number, {}, true).then(response => {
             getFetch('/order', {}, true).then(response => {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
@@ -160,7 +160,7 @@ const actions = {
               icon: 'success',
               duration: 3000
             })
-            getFetch('/order/updateStatus/' + number, { status: 2 }, true).then(response => {
+            getFetch('/order/updateStatus/' + number, { }, true).then(response => {
               getFetch('/order', {}, true).then(response => {
                 var result = response.result || {}
                 commit('changeOrderDataMut', result)
