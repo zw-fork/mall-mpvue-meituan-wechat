@@ -148,7 +148,7 @@
         <image
           class='user_column_item_image'
           src='/static/images/customer.png'
-        ></image>
+        />
         <div class='user_column_item_text'>联系客服</div>
       </div>
       <div
@@ -159,7 +159,7 @@
         <image
           class='user_column_item_image'
           src='/static/images/code.png'
-        ></image>
+       />
         <div class='user_column_item_text'>二维码</div>
       </div>
     </div>

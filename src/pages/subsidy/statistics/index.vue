@@ -52,7 +52,7 @@
             class="c-m"
             :style="{'font-weight': pageIndex === 4 ? lineStyle : null}"
             style="text-align:center;width:20%;"
-          >{{item.refund_status}}</span>
+          >{{item.refundStatus}}</span>
         </div>
       </div>
     </scroll-view>

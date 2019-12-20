@@ -37,8 +37,8 @@
             <div class="dateAdd">{{item.paymentTime}}</div>
           </div>
           <div class="amount">          
-            <div class="typeStr">{{item.status==2 ? item.balance : item.realFee}}</div>
-            <div class="dateAdd" style="color: red">{{item.status==2? '' : '已退款'}}</div>
+            <div class="typeStr">{{item.paid==1 ? item.balance : item.realFee}}</div>
+            <div class="dateAdd" style="color: red">{{item.refundStatus==2? '已退款' : ''}}</div>
           </div>
         </div>
       </div>
