@@ -1,4 +1,5 @@
 {
+  "navigationStyle": "default",
   "navigationBarTitleText": "订单统计",
   "enablePullDownRefresh": true
 }

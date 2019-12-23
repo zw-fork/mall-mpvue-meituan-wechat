@@ -1,4 +1,5 @@
 {
     "navigationBarTitleText": "达邻购",
+    "navigationStyle": "default",
     "enablePullDownRefresh": true
 }

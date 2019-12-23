@@ -1,11 +1,7 @@
 {
   "pages": [
     "pages/home/main",
-    "pages/me/main",
-    "pages/error/main",
-    "pages/orderList/main",
-    "pages/userSetting/main",
-    "pages/orderDetail/main"
+    "pages/me/main"
   ],
   "window": {
     "navigationBarBackgroundColor": "white",
@@ -29,12 +25,6 @@
       "selectedIconPath": "static/images/home_selected.png"
     },
     {
-      "pagePath": "pages/orderList/main",
-      "text": "订单",
-      "iconPath": "static/images/order.png",
-      "selectedIconPath": "static/images/order_selected.png"
-    },
-    {
       "pagePath": "pages/me/main",
       "text": "我的",
       "iconPath": "static/images/mine.png",
@@ -45,6 +35,9 @@
         {
           "root": "pages/subsidy/",
           "pages": [
+            "userSetting/main",
+            "orderList/main",
+            "orderDetail/main",
             "submitOrder/main",
             "shoppingCart/main",
             "orderItemList/main",

@@ -82,6 +82,7 @@ export default {
             if (res_login.code) {
               var appid = `${APP_ID}`
               wx.getUserInfo({
+                lang: 'zh_CN',
                 success: function (res) {
                   var jsonData = {
                     code: res_login.code,

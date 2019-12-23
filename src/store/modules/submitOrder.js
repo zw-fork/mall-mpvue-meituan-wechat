@@ -157,14 +157,14 @@ const actions = {
           success(res) {
             wx.showToast({
               title: '支付成功!',
-              icon: 'success',
+              icon: 'success',  
               duration: 3000
             })
             getFetch('/order/updateStatus/' + number, { }, true).then(response => {
               getFetch('/order', {}, true).then(response => {
                 var result = response.result || {}
                 commit('changeOrderDataMut', result)
-                wx.switchTab({ url: '/pages/orderList/main' })
+                wx.switchTab({ url: '/pages/subsidy/orderList/main' })
               })
             })
           },
@@ -178,7 +178,7 @@ const actions = {
               var result = response.result || {}
               commit('changeOrderDataMut', result)
             })
-            wx.switchTab({ url: '/pages/orderList/main' })
+            wx.switchTab({ url: '/pages/subsidy/orderList/main' })
           }
         })
       })
@@ -186,7 +186,7 @@ const actions = {
   },
   showOrderDetailAction({ state, commit }, { order }) {
     commit('orderDetailDataMut', order)
-    wx.navigateTo({ url: '/pages/orderDetail/main' })
+    wx.navigateTo({ url: '/pages/subsidy/orderDetail/main' })
   },
   showOrderByShopIdDetailAction({ state, commit }, { order }) {
     commit('orderByShopIdDetailDataMut', order)
