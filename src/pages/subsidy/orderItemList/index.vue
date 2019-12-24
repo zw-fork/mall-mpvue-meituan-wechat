@@ -160,7 +160,6 @@ export default {
       pageIndex: null,
       scrollTop: undefined,
       left: "40rpx",
-      statusList: [],
       status: undefined,
       total: undefined,
       number: undefined,
@@ -272,31 +271,18 @@ export default {
   onShow(options) {
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
-    var status = currPage.__data__.status;
-    if (status) {
+    var index = currPage.__data__.index;
+    if (index) {
+      debugger;
+      if (index < 10) {
+        this.pageIndex = index;
+      }
       currPage.data = {};
       var data = {
         page: 1,
         shopId: this.userInfo.shopId
       };
       this.scrollTop = 0;
-      if (status.deliveryStatus) {
-        data.deliveryStatus = status.deliveryStatus;
-        this.pageIndex = parseInt(status.deliveryStatus);
-      }
-      if (status.refundStatus == 4) {
-        data.refundStatus = status.refundStatus;
-        this.pageIndex = 4;
-      } else if (status.refundStatus == -1) {
-        // 部分退款
-        if (this.pageIndex == 1 || this.pageIndex == 2 || this.pageIndex == 3) {
-          data.deliveryStatus = this.pageIndex;
-        } else if (this.pageIndex == 4) {
-          data.refundStatus = -1;
-        }
-      }
-      var status = [this.pageIndex];
-      this.statusList = status;
       data.type = this.pageIndex;
       this.getOrderItemDataAction(data);
     }

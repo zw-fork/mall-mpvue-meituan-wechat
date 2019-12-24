@@ -43,7 +43,7 @@
           <div
             class="btn"
             v-if="orderByShopIdDetail.status==0 && orderByShopIdDetail.paid==1"
-            @click="updateStatus(1)"
+            @click="updateStatus(2)"
           >
             <span>配送</span>
           </div>
@@ -403,6 +403,7 @@ export default {
     },
     updateStatus(status, deliveryStatus, refundStatus) {
       var refund = {};
+      var index = status;
       if (status) {
         refund.status = status;
       }
@@ -410,6 +411,7 @@ export default {
         refund.deliveryStatus = deliveryStatus;
       }
       if (refundStatus) {
+        index = refundStatus;
         refund.refundStatus = refundStatus;
       }
       getFetch(
@@ -420,7 +422,7 @@ export default {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
         prevPage.setData({
-          status: refund
+          index: index
         });
         wx.navigateBack({ delta: 1 });
       });
