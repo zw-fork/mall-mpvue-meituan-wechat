@@ -4,7 +4,7 @@
       <span class="mid-l">所属分类:</span>
       <div class="mid-r" @click="updateCategoryClick">
         <span>{{parentCategoryName}}</span>
-        <i class="icon iconfont iconright"></i>
+        <i class="icon my_iconfont iconright"></i>
       </div>
     </div>
     <div class="name">

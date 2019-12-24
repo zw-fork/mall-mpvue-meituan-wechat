@@ -7,14 +7,14 @@
             <img class="item-img" src="/static/images/scan.png">
           </div>
           <div class="header-m">
-            <i class="icon iconfont iconsearch"></i>
+            <i class="icon my_iconfont iconsearch"></i>
             <input placeholder="搜索商品" placeholder-style="font-size: 24rpx" v-model="name">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
             <span @click="getGoods()">搜索</span>
             <i
               @click="addGoods()"
-              class="icon iconfont iconplus-circle"
+              class="icon my_iconfont iconplus-circle"
               style="margin-left:20rpx;margin-right:20rpx;font-size: 36rpx;"
             ></i>
           </div>
@@ -68,7 +68,7 @@
                       <span>{{item.sequence}}</span>
                     </div>
                     <div class="add-r" @click.stop="manageGoods($event, item)">
-                      <i class="icon iconfont icondian"></i>
+                      <i class="icon my_iconfont icondian"></i>
                     </div>
                   </div>
                 </div>
@@ -80,19 +80,19 @@
     </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
-        <i class="icon iconfont iconedit"></i>
+        <i class="icon my_iconfont iconedit"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
       <div @click="upGoods" v-if="selectGoods.status==2">
-        <i class="icon iconfont iconshangjia1"></i>
+        <i class="icon my_iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">上架</span>
       </div>
       <div @click="downGoods" v-if="selectGoods.status==1">
-        <i class="icon iconfont iconxiajia"></i>
+        <i class="icon my_iconfont iconxiajia"></i>
         <span style="color:white;text-align: center;">下架</span>
       </div>
       <div @click="deleteGoods">
-        <i class="icon iconfont icondelete"></i>
+        <i class="icon my_iconfont icondelete"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>

@@ -15,7 +15,7 @@
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
             <span class="t-m">营业时间: 全天</span>
-            <i class="icon iconfont iconright" style="position:absolute; right:0rpx;"></i>
+            <i class="icon my_iconfont iconright" style="position:absolute; right:0rpx;"></i>
           </div>
           <div class="r-m" v-if="shopInfo.bulletin">
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
@@ -35,7 +35,7 @@
         >商家</span>
         <span class="c-m" @click="goHome">首页</span>
         <div class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
-          <i class="icon iconfont iconsearch"></i>
+          <i class="icon my_iconfont iconsearch"></i>
           <span>搜索商品</span>
         </div>
       </div>
@@ -100,11 +100,11 @@
                     @click.stop="reduceClick(spus.categoryId ,goods, index2, index)"
                     v-if="goods.sequence > 0"
                   >
-                    <i class="icon iconfont iconminus-circle"></i>
+                    <i class="icon my_iconfont iconminus-circle"></i>
                     <span>{{goods.sequence}}</span>
                   </div>
                   <div class="add-r" @click.stop="addClick(spus.categoryId ,goods, index2, index)">
-                    <i class="icon iconfont iconplus-circle"></i>
+                    <i class="icon my_iconfont iconplus-circle"></i>
                   </div>
                 </div>
               </div>
@@ -160,11 +160,11 @@
             </div>
             <section class="cart_list_control">
               <span @click.stop="reduceClick(item.parentCategoryId ,item, item.index, item.categoryIndex)">
-                <i class="icon iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
+                <i class="icon my_iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
               </span>
               <span class="cart_num">{{item.sequence}}</span>
               <div @click.stop="addClick(item.parentCategoryId ,item, item.index, item.categoryIndex)">
-                <i class="icon iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
+                <i class="icon my_iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
               </div>
             </section>
           </li>
@@ -195,7 +195,7 @@
       <div class="cart-c">
         <i
           mode="widthFix"
-          class="icon iconfont icongouwuche"
+          class="icon my_iconfont icongouwuche"
           :style="productCount > 0 ? 'color: #1296db' : 'color: #969696'"
           @click="toggleCartList()"
         ></i>

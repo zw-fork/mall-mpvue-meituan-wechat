@@ -33,12 +33,12 @@
       <div class="item" v-for="(item, index) in orderList.datas" :key="index">
         <div class="shop-info">
           <div class="h-l">
-            <i style="font-size:30rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu"></i>
+            <i style="font-size:30rpx;color:#d81e06;" class="shop-logo icon my_iconfont icondianpu"></i>
           </div>
           <div class="order_title" @click="intoShop(item)">
             <div class="order-name" style="margin-bottom:-15rpx;">
               <span class="shop-name" style="display: inline">{{item.shopInfo.shopName}}</span>
-              <i class="icon iconfont iconright" style="display: inline"></i>
+              <i class="icon my_iconfont iconright" style="display: inline"></i>
             </div>
             <span
               class="order-time"

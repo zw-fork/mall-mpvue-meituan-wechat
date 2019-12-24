@@ -9,7 +9,7 @@
             @click="shoppingCartClick(item)"
           >
             <div class="item-l">
-              <i style="font-size:100rpx;color:#d81e06;" class="icon iconfont icondianpu"></i>
+              <i style="font-size:100rpx;color:#d81e06;" class="icon my_iconfont icondianpu"></i>
             </div>
             <div class="item-r">
               <div class="r-t">

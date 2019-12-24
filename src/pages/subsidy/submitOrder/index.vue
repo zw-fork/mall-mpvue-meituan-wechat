@@ -11,7 +11,7 @@
       </div>
       <div class="delivery" v-if="tabIndex === 0">
         <div class="address-c" @click="addressClick()">
-          <i class="icon iconfont iconlocation"></i>
+          <i class="icon my_iconfont iconlocation"></i>
           <div class="address">
             <span
               class="address-info"
@@ -26,7 +26,7 @@
               v-if="currentOrder.shopInfo.addressModel && currentOrder.shopInfo.addressModel.name"
             >{{currentOrder.shopInfo.addressModel.name}} {{currentOrder.shopInfo.addressModel.phone}}</span>
           </div>
-          <i class="icon iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
+          <i class="icon my_iconfont iconright" :style="{fontSize: 32 + 'rpx'}"></i>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
       <div class="section">
         <img v-if="currentOrder.shopInfo.pic_url"  :src="path + currentOrder.shopInfo.pic_url">
         <span @click="goShop">{{currentOrder.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright" style="display: inline"></i>
+        <i class="icon my_iconfont iconright" style="display: inline"></i>
       </div>
       <div class="line-sp"></div>
       <div class="list">
@@ -66,7 +66,7 @@
         <span class="mid-l">备注</span>
         <div class="mid-r">
           <span>{{currentOrder.remark? currentOrder.remark:'请输入商品备注'}}</span>
-          <i class="icon iconfont iconright"></i>
+          <i class="icon my_iconfont iconright"></i>
         </div>
       </div>
     </div>

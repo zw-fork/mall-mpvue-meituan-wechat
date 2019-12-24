@@ -23,7 +23,7 @@
           <i
             style=" display: inline-block;"
             v-if="goods.picture"
-            class="deleteImg icon iconfont iconclose-circle"
+            class="deleteImg icon my_iconfont iconclose-circle"
             @click="deleteImg()"
           ></i>
         </div>
@@ -59,18 +59,18 @@
     <div class="b-mid">
       <div class="mid-l">
         <span>商品分类:</span>
-        <i @click="createCategory" class="icon iconfont iconplus-circle"></i>
+        <i @click="createCategory" class="icon my_iconfont iconplus-circle"></i>
       </div>
       <div class="mid-r" @click="updateCategoryClick">
         <span>{{goods.categoryName}}</span>
-        <i class="icon iconfont iconright"></i>
+        <i class="icon my_iconfont iconright"></i>
       </div>
     </div>
     <div class="b-mid">
       <span class="mid-l">商品状态:</span>
       <div class="mid-r" @click="showSinglePicker">
         <span>{{name}}</span>
-        <i class="icon iconfont iconright"></i>
+        <i class="icon my_iconfont iconright"></i>
       </div>
     </div>
     <div class="submit-btn" @click="uploadFile">

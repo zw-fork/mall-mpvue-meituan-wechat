@@ -43,9 +43,9 @@
     </div>
     <div class="item-list">
       <div class="section" @click="headerClick(orderDetail, false)">
-        <i style="font-size:40rpx;color:#d81e06;" class="shop-logo icon iconfont icondianpu2"></i>
+        <i style="font-size:40rpx;color:#d81e06;" class="shop-logo icon my_iconfont icondianpu2"></i>
         <span>{{orderDetail.shopInfo.shopName}}</span>
-        <i class="icon iconfont iconright" style="display: inline"></i>
+        <i class="icon my_iconfont iconright" style="display: inline"></i>
       </div>
       <div class="line-sp"></div>
       <div class="list">

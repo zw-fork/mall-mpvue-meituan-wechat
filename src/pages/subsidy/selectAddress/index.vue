@@ -2,12 +2,12 @@
   <div class="container">
     <div class="header-c">
       <div class="header-l">
-        <i class="icon iconfont iconlocation" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
+        <i class="icon my_iconfont iconlocation" :style="{color: '#434343', 'font-size': 38 + 'rpx'}"></i>
         <span>成都市</span>
       </div>
       <div class="header-r">
         <div class="search-bar">
-          <i class="icon iconfont iconsearch"></i>
+          <i class="icon my_iconfont iconsearch"></i>
           <input
             placeholder="请输入小区"
             @input="getsuggest"

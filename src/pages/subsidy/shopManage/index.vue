@@ -26,7 +26,7 @@
       <span class="mid-l">店铺地址：</span>
       <div class="mid-r" @click="updateWxAddress">
         <span v-if="shop.wxAddress">{{shop.wxAddress.name}}</span>
-        <i class="icon iconfont iconright"></i>
+        <i class="icon my_iconfont iconright"></i>
       </div>
     </div>
     <div class="name" style="height: 65rpx;">
@@ -74,7 +74,7 @@
       <span class="mid-l">商店状态:</span>
       <div class="mid-r" @click="showSinglePicker">
         <span>{{statusName}}</span>
-        <i class="icon iconfont iconright"></i>
+        <i class="icon my_iconfont iconright"></i>
       </div>
     </div>
     <div class="phone">
@@ -90,7 +90,7 @@
           <i
             style=" display: inline-block;"
             v-if="shop.pic_url"
-            class="deleteImg icon iconfont iconclose-circle"
+            class="deleteImg icon my_iconfont iconclose-circle"
             @click="deleteImg()"
           ></i>
         </div>

@@ -3,7 +3,7 @@
     <div class="header-c">
       <div class="header">
         <div class="header-m">
-          <i class="icon iconfont iconsearch"></i>
+          <i class="icon my_iconfont iconsearch"></i>
           <input
             style="width: 90%"
             placeholder="根据订单号搜索"
@@ -76,7 +76,7 @@
                 style="display: inline"
               >{{item.addressInfo.name}}</span>
               <i
-                class="icon iconfont iconright"
+                class="icon my_iconfont iconright"
                 style="display: inline"
               ></i>
             </div>

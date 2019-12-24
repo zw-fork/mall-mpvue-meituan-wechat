@@ -22,7 +22,7 @@
             @click="updateGoodsList(2)"
           >隐藏</span>
           <span class="c-m" style="text-align:center;width:10%;" @click="addGoods">
-            <i class="icon iconfont iconplus-circle" style="font-size: 40rpx;"></i>
+            <i class="icon my_iconfont iconplus-circle" style="font-size: 40rpx;"></i>
           </span>
         </div>
       </div>
@@ -51,19 +51,19 @@
     </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods">
-        <i class="icon iconfont iconedit"></i>
+        <i class="icon my_iconfont iconedit"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
       <div @click="upGoods" v-if="selectGoods.status==2">
-        <i class="icon iconfont iconshangjia1"></i>
+        <i class="icon my_iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">可见</span>
       </div>
       <div @click="downGoods" v-if="selectGoods.status==1">
-        <i class="icon iconfont iconxiajia"></i>
+        <i class="icon my_iconfont iconxiajia"></i>
         <span style="color:white;text-align: center;">隐藏</span>
       </div>
       <div @click="deleteGoods">
-        <i class="icon iconfont icondelete"></i>
+        <i class="icon my_iconfont icondelete"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>

@@ -3,7 +3,7 @@
     <div class="header-c">
       <div class="header">
         <div class="header-m">
-          <i class="icon iconfont iconsearch"></i>
+          <i class="icon my_iconfont iconsearch"></i>
           <input
             style="width: 90%"
             placeholder="搜索商品"
@@ -52,14 +52,14 @@
                     @click.stop="reduceClick(item.parentId, item)"
                     v-if="item.sequence > 0"
                   >
-                    <i class="icon iconfont iconminus-circle"></i>
+                    <i class="icon my_iconfont iconminus-circle"></i>
                     <span>{{item.sequence}}</span>
                   </div>
                   <div
                     class="add-r"
                     @click.stop="addClick(item.parentId, item)"
                   >
-                    <i class="icon iconfont iconplus-circle"></i>
+                    <i class="icon my_iconfont iconplus-circle"></i>
                   </div>
                 </div>
               </div>
@@ -103,14 +103,14 @@
             <section class="cart_list_control">
               <span @click.stop="reduceClick(item.parentCategoryId,item, item.index, item.categoryIndex)">
                 <i
-                  class="icon iconfont iconminus-circle"
+                  class="icon my_iconfont iconminus-circle"
                   style="color: #ccc;font-size: 48rpx;"
                 ></i>
               </span>
               <span class="cart_num">{{item.sequence}}</span>
               <div @click.stop="addClick(item.parentCategoryId, item, item.index, item.categoryIndex)">
                 <i
-                  class="icon iconfont iconplus-circle"
+                  class="icon my_iconfont iconplus-circle"
                   style="color: #FF6347;font-size: 52rpx;"
                 ></i>
               </div>
@@ -146,7 +146,7 @@
       <div class="cart-c">
         <i
           mode='widthFix'
-          class="icon iconfont icongouwuche"
+          class="icon my_iconfont icongouwuche"
           :style="productCount > 0 ? 'color: #1296db' : 'color: #969696'"
           @click="toggleCartList()"
         ></i>

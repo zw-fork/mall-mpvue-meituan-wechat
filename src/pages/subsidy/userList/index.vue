@@ -7,7 +7,7 @@
             <img class="item-img" src="/static/images/scan.png">
           </div>
           <div class="header-m">
-            <i class="icon iconfont iconsearch"></i>
+            <i class="icon my_iconfont iconsearch"></i>
             <input style="width: 90%" placeholder="根据手机号搜索人员" placeholder-style="font-size: 24rpx" v-model="name">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
@@ -60,7 +60,7 @@
                 >
                   <div class="add-item">
                     <div class="add-r" @click.stop="manageGoods($event, item)">
-                      <i class="icon iconfont icondian"></i>
+                      <i class="icon my_iconfont icondian"></i>
                     </div>
                   </div>
                 </div>
@@ -72,11 +72,11 @@
     </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods" v-if="userInfo.role==3 && selectGoods.role != 1">
-        <i class="icon iconfont iconedit"></i>
+        <i class="icon my_iconfont iconedit"></i>
         <span style="color:white;text-align: center;">店铺</span>
       </div>
       <div @click="upGoods">
-        <i class="icon iconfont iconshangjia1"></i>
+        <i class="icon my_iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>

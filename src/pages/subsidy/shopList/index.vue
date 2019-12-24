@@ -4,14 +4,14 @@
       <div class="header-c">
         <div class="header">
           <div class="header-m">
-            <i class="icon icon iconfont iconsearch"></i>
+            <i class="icon icon my_iconfont iconsearch"></i>
             <input placeholder="根据手机号搜索店铺" placeholder-style="font-size: 24rpx" v-model="name">
           </div>
           <div class="header-r" style="margin: 0 10rpx;">
             <span @click="getGoods()">搜索</span>
             <i
               @click="addGoods()"
-              class="icon iconfont iconplus-circle"
+              class="icon my_iconfont iconplus-circle"
               style="margin-left:20rpx;margin-right:20rpx;font-size: 36rpx;"
             ></i>
           </div>
@@ -58,11 +58,11 @@
     </div>
     <div class="editGoods" :style="divStyle" v-if="showEdit">
       <div @click="editGoods" v-if="userInfo.role==3 && selectGoods.role != 1">
-        <i class="icon iconfont iconedit"></i>
+        <i class="icon my_iconfont iconedit"></i>
         <span style="color:white;text-align: center;">店铺</span>
       </div>
       <div @click="upGoods" v-if="userInfo.role==2">
-        <i class="icon iconfont iconshangjia1"></i>
+        <i class="icon my_iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>

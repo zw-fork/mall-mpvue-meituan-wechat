@@ -54,11 +54,11 @@
       >
         <i
           style="font-size:40rpx;color:#d81e06;"
-          class="shop-logo icon iconfont icondianpu2"
+          class="shop-logo icon my_iconfont icondianpu2"
         ></i>
         <span>{{orderDetail.shopInfo.shopName}}</span>
         <i
-          class="icon iconfont iconright"
+          class="icon my_iconfont iconright"
           style="display: inline"
         ></i>
       </div>

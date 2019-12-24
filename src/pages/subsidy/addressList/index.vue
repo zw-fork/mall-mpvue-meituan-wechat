@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="submit-btn" @click="addClick()">
-      <i class="icon iconfont iconplus-circle"></i>
+      <i class="icon my_iconfont iconplus-circle"></i>
       <span>新增收货地址</span>
     </div>
   </div>

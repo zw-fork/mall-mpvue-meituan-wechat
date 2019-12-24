@@ -22,7 +22,7 @@
           @click="searchClick"
           style=" position: absolute;right:10rpx;"
         >
-          <i class="icon iconfont iconsearch"></i>
+          <i class="icon my_iconfont iconsearch"></i>
           <span>搜索商品</span>
         </div>
       </div>
@@ -110,7 +110,7 @@
                       <span class="title">{{goods.name}}</span>
                       <i
                         @click.stop="manageGoods($event, goods, index, index2)"
-                        class="icon iconfont icondian"
+                        class="icon my_iconfont icondian"
                         style="float:right;position:relative;display:inline-block"
                       ></i>
                     </div>
@@ -141,25 +141,25 @@
       v-if="showEdit"
     >
       <div @click="editGoods">
-        <i class="icon iconfont iconedit"></i>
+        <i class="icon my_iconfont iconedit"></i>
         <span style="color:white;text-align: center;">编辑</span>
       </div>
       <div
         @click="upGoods"
         v-if="selectGoods.status==2"
       >
-        <i class="icon iconfont iconshangjia1"></i>
+        <i class="icon my_iconfont iconshangjia1"></i>
         <span style="color:white;text-align: center;">上架</span>
       </div>
       <div
         @click="downGoods"
         v-if="selectGoods.status==1"
       >
-        <i class="icon iconfont iconxiajia"></i>
+        <i class="icon my_iconfont iconxiajia"></i>
         <span style="color:white;text-align: center;">下架</span>
       </div>
       <div @click="deleteGoods">
-        <i class="icon iconfont icondelete"></i>
+        <i class="icon my_iconfont icondelete"></i>
         <span style="color:white;text-align: center;">删除</span>
       </div>
     </div>

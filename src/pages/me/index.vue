@@ -47,7 +47,7 @@
             @click="itemClick(item)"
           >
             <i
-              class="item-img icon iconfont"
+              class="item-img icon my_iconfont"
               :class="item.url"
               style="font-size: 42rpx;"
             ></i>
@@ -76,7 +76,7 @@
             @click="itemClick(item)"
           >
             <i
-              class="item-img icon iconfont"
+              class="item-img icon my_iconfont"
               :class="item.url"
               style="font-size: 42rpx;"
             ></i>
@@ -101,7 +101,7 @@
             @click="itemClick(item)"
           >
             <i
-              class="item-img icon iconfont"
+              class="item-img icon my_iconfont"
               :class="item.url"
               style="font-size: 42rpx;"
             ></i>
@@ -126,7 +126,7 @@
             @click="itemClick(item)"
           >
             <i
-              class="item-img icon iconfont"
+              class="item-img icon my_iconfont"
               :class="item.url"
               style="font-size: 42rpx;"
             ></i>
