@@ -1,33 +1,39 @@
 <template>
   <div class="container">
     <div class="content">
-        <div class="item-list">
-          <div
-            class="item"
-            v-for="(item, index) in shopList"
-            :key="index"
-            @click="shoppingCartClick(item)"
-          >
-            <div class="item-l">
-              <i style="font-size:100rpx;color:#d81e06;" class="icon my_iconfont icondianpu"></i>
+      <div class="item-list">
+        <div
+          class="item"
+          v-for="(item, index) in shopList"
+          :key="index"
+          @click="shoppingCartClick(item)"
+        >
+          <div class="item-l">
+            <i
+              style="font-size:100rpx;color:#d81e06;"
+              class="icon my_iconfont icondianpu"
+            ></i>
+          </div>
+          <div class="item-r">
+            <div class="r-t">
+              <span class="shop-name">{{item.shopName}}</span>
             </div>
-            <div class="item-r">
-              <div class="r-t">
-                <span class="shop-name">{{item.shopName}}</span>
-              </div>
-              <div class="r-m">
-                <span class="m-l">起送 ¥{{item.min_price}}</span>
-                <div class="m-m"></div>
-                <span class="m-r">营业时间: 全天</span>
-                <div class="m-m"></div>
-                <span class="m-r" v-if="false">距离：{{item.distance}}km</span>
-              </div>
-              <div class="r-m">
-                <span class="m-l">地址：{{item.building}}</span>
-              </div>
+            <div class="r-m">
+              <span class="m-l">起送 ¥{{item.min_price}}</span>
+              <div class="m-m"></div>
+              <span class="m-r">营业时间: 全天</span>
+              <div class="m-m"></div>
+              <span
+                class="m-r"
+                v-if="false"
+              >距离：{{item.distance}}km</span>
+            </div>
+            <div class="r-m">
+              <span class="m-l">地址：{{item.building}}</span>
             </div>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +43,7 @@ import { queryHomeHeadCategory } from "@/action/action";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { getFetch } from "@/network/request/HttpExtension";
 import { shopStatus } from "@/constants/commonType";
-import { API_URL, APP_ID } from '@/constants/hostConfig'
+import { API_URL, APP_ID } from "@/constants/hostConfig";
 import { getUserInfoWechat } from "@/action/action";
 
 export default {
@@ -80,36 +86,43 @@ export default {
         }
       });
     },
-    login(){
-          var that = this;
-            wx.login({
-          success: function (res_login) {
-            if (res_login.code) {
-              var appid = `${APP_ID}`
-              wx.getUserInfo({
-                success: function (res) {
-                  var jsonData = {
-                    code: res_login.code,
-                    encryptedData: res.encryptedData,
-                    iv: res.iv,
-                    appid: appid
-                  };
-                  if (that.shopId) {
-                    jsonData.shopId = that.shopId
-                  }
-                  getUserInfoWechat(jsonData).then(response => {
-                    wx.setStorageSync("sessionId", response.result.token)
-                    that.changeUserInfoMut(response.result) 
-                    getFetch("/shop/list", {status: 1}, true).then(response => {
-                      that.shopList = response.result;
-                    });
-                  })
+    login() {
+      var that = this;
+      wx.login({
+        success: function(res_login) {
+          if (res_login.code) {
+            var appid = `${APP_ID}`;
+            wx.getUserInfo({
+              success: function(res) {
+                var jsonData = {
+                  code: res_login.code,
+                  encryptedData: res.encryptedData,
+                  iv: res.iv,
+                  appid: appid
+                };
+                if (that.shopId) {
+                  jsonData.shopId = that.shopId;
                 }
-              })
-            }
+                getUserInfoWechat(jsonData).then(response => {
+                  if (response.code == 200) {
+                    wx.setStorageSync("sessionId", response.result.token);
+                    that.changeUserInfoMut(response.result);
+                    getFetch("/shop/list", { status: 1 }, true).then(
+                      response => {
+                        that.shopList = response.result;
+                      }
+                    );
+                  } else {
+                    wx.setStorageSync("sessionId", "");
+                    that.login();
+                  }
+                });
+              }
+            });
           }
-        })
-  },
+        }
+      });
+    },
     updateAddress() {
       var that = this;
       wx.showLoading({ title: "加载中...", mask: true });
@@ -154,25 +167,25 @@ export default {
   onLoad(options) {
     if (options.scene) {
       wx.navigateTo({
-          url: "/pages/subsidy/shoppingCart/main?shopId=" + options.scene
+        url: "/pages/subsidy/shoppingCart/main?shopId=" + options.scene
       });
     }
     var that = this;
     wx.getSetting({
-        success: function(res) {
-          if (res.authSetting["scope.userInfo"]) {
-             var p = that.login();
-          } else {
-            getFetch("/shop/list", {status: 1}, true).then(response => {
-              that.shopList = response.result;
-            });
-          }
+      success: function(res) {
+        if (res.authSetting["scope.userInfo"]) {
+          var p = that.login();
+        } else {
+          getFetch("/shop/list", { status: 1 }, true).then(response => {
+            that.shopList = response.result;
+          });
         }
+      }
     });
   },
   onPullDownRefresh: function() {
-    getFetch("/shop/list", {status: 1}, true).then(response => {
-        this.shopList = response.result;
+    getFetch("/shop/list", { status: 1 }, true).then(response => {
+      this.shopList = response.result;
     });
   },
   onShareAppMessage: function() {
@@ -379,199 +392,197 @@ export default {
       }
     }
 
+    .item-list {
+      display: block;
+      position: fixed;
+      width: 100%;
+      background-color: white;
 
-      .item-list {
-        display: block;
-        position: fixed;
-        width: 100%;
+      .header {
+        display: flex;
+        align-items: center;
         background-color: white;
-
-        .header {
-          display: flex;
-          align-items: center;
-          background-color: white;
-          justify-content: space-around;
-
-          .item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8f8f8;
-            flex: 1;
-            margin-left: 20rpx;
-            padding: 10rpx 0;
-
-            span {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-            }
-          }
-
-          .item:last-child {
-            margin-right: 20rpx;
-          }
-        }
+        justify-content: space-around;
 
         .item {
           display: flex;
-          background-color: white;
-          margin: 20rpx;
+          align-items: center;
+          justify-content: center;
+          background-color: #f8f8f8;
+          flex: 1;
+          margin-left: 20rpx;
+          padding: 10rpx 0;
 
-          .item-l {
-            display: flex;
+          span {
+            font-size: 20rpx;
+            color: $textDarkGray-color;
+          }
+        }
+
+        .item:last-child {
+          margin-right: 20rpx;
+        }
+      }
+
+      .item {
+        display: flex;
+        background-color: white;
+        margin: 20rpx;
+
+        .item-l {
+          display: flex;
+          width: 160rpx;
+          height: 160rpx;
+          position: relative;
+
+          img {
             width: 160rpx;
-            height: 160rpx;
-            position: relative;
+            height: 120rpx;
+          }
 
-            img {
-              width: 160rpx;
-              height: 120rpx;
+          .tag {
+            position: absolute;
+            width: 100rpx;
+            height: 60rpx;
+          }
+        }
+
+        .item-r {
+          margin-left: 40rpx;
+          flex-direction: column;
+          flex: 1;
+
+          .r-t {
+            display: flex;
+            flex-direction: column;
+
+            .shop-name {
+              font-size: 30rpx;
+              color: $textBlack-color;
+              font-weight: bold;
             }
 
-            .tag {
-              position: absolute;
-              width: 100rpx;
-              height: 60rpx;
+            .t-c {
+              display: flex;
+              align-items: center;
+              margin-top: 10rpx;
+
+              .c-l {
+                display: flex;
+                flex: 1;
+
+                .l-l {
+                  display: flex;
+
+                  i {
+                    font-size: 24rpx;
+                    color: $theme-color;
+                    margin-right: 10rpx;
+                  }
+                }
+
+                .l-m {
+                  font-size: 24rpx;
+                  color: $textBlack-color;
+                  margin-left: 10rpx;
+                }
+
+                .l-r {
+                  font-size: 24rpx;
+                  color: $textBlack-color;
+                  margin-left: 20rpx;
+                }
+              }
+
+              .c-r {
+                display: flex;
+                align-items: center;
+
+                .r-l {
+                  font-size: 24rpx;
+                  color: $textBlack-color;
+                }
+
+                .r-m {
+                  width: 2rpx;
+                  height: 20rpx;
+                  background-color: $textGray-color;
+                  margin: 0 10rpx;
+                }
+
+                .r-r {
+                  font-size: 24rpx;
+                  color: $textBlack-color;
+                }
+              }
             }
           }
 
-          .item-r {
-            margin-left: 40rpx;
+          .r-m {
+            display: flex;
+            align-items: center;
+            margin-top: 10rpx;
+
+            .m-l {
+              font-size: 24rpx;
+              color: $textBlack-color;
+            }
+
+            .m-m {
+              width: 2rpx;
+              height: 20rpx;
+              margin: 0 10rpx;
+              background-color: $textGray-color;
+            }
+
+            .m-r {
+              font-size: 24rpx;
+              color: $textBlack-color;
+            }
+          }
+
+          .r-b {
+            display: flex;
+            align-items: center;
+            margin-top: 10rpx;
+
+            .b-l {
+              color: #09cfb5;
+              font-size: 20rpx;
+              border: 2rpx solid #09cfb5;
+              text-align: center;
+              padding: 0 8rpx;
+            }
+
+            .b-r {
+              @extend .b-l;
+              margin-left: 10rpx;
+            }
+          }
+
+          .activity-c {
+            display: flex;
             flex-direction: column;
-            flex: 1;
 
-            .r-t {
-              display: flex;
-              flex-direction: column;
-
-              .shop-name {
-                font-size: 30rpx;
-                color: $textBlack-color;
-                font-weight: bold;
-              }
-
-              .t-c {
-                display: flex;
-                align-items: center;
-                margin-top: 10rpx;
-
-                .c-l {
-                  display: flex;
-                  flex: 1;
-
-                  .l-l {
-                    display: flex;
-
-                    i {
-                      font-size: 24rpx;
-                      color: $theme-color;
-                      margin-right: 10rpx;
-                    }
-                  }
-
-                  .l-m {
-                    font-size: 24rpx;
-                    color: $textBlack-color;
-                    margin-left: 10rpx;
-                  }
-
-                  .l-r {
-                    font-size: 24rpx;
-                    color: $textBlack-color;
-                    margin-left: 20rpx;
-                  }
-                }
-
-                .c-r {
-                  display: flex;
-                  align-items: center;
-
-                  .r-l {
-                    font-size: 24rpx;
-                    color: $textBlack-color;
-                  }
-
-                  .r-m {
-                    width: 2rpx;
-                    height: 20rpx;
-                    background-color: $textGray-color;
-                    margin: 0 10rpx;
-                  }
-
-                  .r-r {
-                    font-size: 24rpx;
-                    color: $textBlack-color;
-                  }
-                }
-              }
-            }
-
-            .r-m {
+            .ac-item {
               display: flex;
               align-items: center;
-              margin-top: 10rpx;
+              margin-top: 20rpx;
 
-              .m-l {
-                font-size: 24rpx;
-                color: $textBlack-color;
-              }
-
-              .m-m {
-                width: 2rpx;
-                height: 20rpx;
-                margin: 0 10rpx;
-                background-color: $textGray-color;
-              }
-
-              .m-r {
-                font-size: 24rpx;
-                color: $textBlack-color;
-              }
-            }
-
-            .r-b {
-              display: flex;
-              align-items: center;
-              margin-top: 10rpx;
-
-              .b-l {
-                color: #09cfb5;
-                font-size: 20rpx;
-                border: 2rpx solid #09cfb5;
-                text-align: center;
-                padding: 0 8rpx;
-              }
-
-              .b-r {
-                @extend .b-l;
-                margin-left: 10rpx;
-              }
-            }
-
-            .activity-c {
-              display: flex;
-              flex-direction: column;
-
-              .ac-item {
+              .ac {
                 display: flex;
                 align-items: center;
-                margin-top: 20rpx;
 
-                .ac {
-                  display: flex;
-                  align-items: center;
+                .ac-l {
+                  width: 30rpx;
+                  height: 30rpx;
+                  background-size: cover;
+                }
 
-                  .ac-l {
-                    width: 30rpx;
-                    height: 30rpx;
-                    background-size: cover;
-                  }
-
-                  .ac-r {
-                    color: $textDarkGray-color;
-                    font-size: 20rpx;
-                    margin-left: 10rpx;
-                  }
+                .ac-r {
+                  color: $textDarkGray-color;
+                  font-size: 20rpx;
+                  margin-left: 10rpx;
                 }
               }
             }
@@ -579,5 +590,6 @@ export default {
         }
       }
     }
+  }
 }
 </style>

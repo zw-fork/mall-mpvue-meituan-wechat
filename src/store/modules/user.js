@@ -1,8 +1,6 @@
 /** Created by guangqiang on 2018-09-27 17:32:35 */
 import { postFetch, getFetch } from '@/network/request/HttpExtension'
 import { API_URL, APP_ID } from '@/constants/hostConfig'
-import { getUserInfoWechat } from "@/action/action";
-import { login } from "@/utils/wxapi";
 
 const state = {
   userInfo: {}
@@ -15,80 +13,12 @@ const mutations = {
 }
 
 const actions = {
-  getUserInfo({ state, commit }, {}) {
-    wx.getSetting({
-      success: function(res) {
-        if (res.authSetting["scope.userInfo"]) {
-          wx.login({
-            success: function (res_login) {
-              if (res_login.code) {
-                var appid = `${APP_ID}`
-                wx.getUserInfo({
-                  success: function (res) {
-                    var jsonData = {
-                      code: res_login.code,
-                      encryptedData: res.encryptedData,
-                      iv: res.iv,
-                      appid: appid
-                    };
-                    getUserInfoWechat(jsonData).then(response => {
-                      wx.setStorageSync("sessionId", response.result.token)
-                      response.result.openid = null
-                      commit('changeUserInfoMut', response.result)
-                       
-                    })
-                  }
-                })
-              }
-            }
-          })
-        } else {
-        }
-      }
-    });
-  },
   updateDefaultAddress({ state, commit }, { wechat }) {
     var params = { 'wechat': wechat }
     postFetch('/wechat/updateDefaultAddress', wechat, false).then(response => {
       var user = response.result || {}
       commit('changeUserInfoMut', user)
       wx.navigateBack({ delta: 1 })
-    })
-  },
-  wxLogin({ state, commit }, { shopId, addWorker }) {
-    wx.login({
-      success: function (res_login) {
-        if (res_login.code) {
-          var appid = `${APP_ID}`
-          wx.getUserInfo({
-            success: function (res) {
-              var jsonData = {
-                code: res_login.code,
-                encryptedData: res.encryptedData,
-                iv: res.iv,
-                appid: appid
-              };
-              if (shopId) {
-                jsonData.shopId = shopId
-              }
-              getUserInfoWechat(jsonData).then(response => {
-                wx.setStorageSync("sessionId", response.result.token)
-                response.result.openid = null
-                commit('changeUserInfoMut', response.result)
-                if (jsonData.shopId) {
-                  wx.redirectTo({
-                    url: '/pages/subsidy/shoppingCart/main?shopId=' + jsonData.shopId
-                  })
-                } else {
-                  wx.switchTab({
-                    url: '/pages/home/main'
-                  })
-                }
-              })
-            }
-          })
-        }
-      }
     })
   },
   wxLocation({ state, commit }) { //获取用户的当前设置
