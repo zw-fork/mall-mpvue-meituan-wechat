@@ -273,7 +273,6 @@ export default {
     var currPage = pages[pages.length - 1];
     var index = currPage.__data__.index;
     if (index) {
-      debugger;
       if (index < 10) {
         this.pageIndex = index;
       }
