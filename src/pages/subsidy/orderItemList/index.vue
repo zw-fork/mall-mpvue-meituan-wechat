@@ -172,8 +172,7 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", [
-      "showOrderByShopIdDetailAction",
-      "getOrderByIdAction"
+      "showOrderByShopIdDetailAction"
     ]),
     search() {
       this.scrollTop = 0;
@@ -229,7 +228,13 @@ export default {
       var update = false;
       if (flag) {
         update = true;
-        this.getOrderByIdAction({ orderId: item.number });
+        wx.navigateTo({
+          url:
+            "/pages/subsidy/shoppingCart/main?shopId=" +
+            item.shopId +
+            "&update=true&orderId=" +
+            item.number
+        });
       } else {
         var shopId = item.shopId;
         wx.navigateTo({

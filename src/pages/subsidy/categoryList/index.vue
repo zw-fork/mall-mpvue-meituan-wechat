@@ -136,7 +136,6 @@ export default {
       "changeItemModalMut"
     ]),
     ...mapActions("shoppingCart", [
-      "getMenuDataAction",
       "getCommentDataAction",
       "getCategoryMenuDataAction",
       "addItemAction",

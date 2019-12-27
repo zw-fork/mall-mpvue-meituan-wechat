@@ -84,7 +84,7 @@
             </div>
           </div>
         </div>
-                <div
+        <div
           class="item"
           v-for="(itemA, index) in infoList"
           :key="index"
@@ -359,7 +359,13 @@ export default {
       var update = false;
       if (flag) {
         update = true;
-        this.getOrderByIdAction(item.number);
+        wx.navigateTo({
+          url:
+            "/pages/subsidy/shoppingCart/main?shopId=" +
+            item.shopId +
+            "&update=true&orderId=" +
+            item.number
+        });
       } else {
         var shopId = item.shopId;
         wx.navigateTo({
@@ -407,8 +413,9 @@ export default {
         for (var index in this.infoList) {
           if (this.infoList[index].productId == options.itemId) {
             this.item = this.infoList[index];
-        var price = this.item.productInfo.truePrice * this.item.productInfo.cart_num;
-        this.item.totalPrice = parseFloat(price).toFixed(2);
+            var price =
+              this.item.productInfo.truePrice * this.item.productInfo.cart_num;
+            this.item.totalPrice = parseFloat(price).toFixed(2);
             this.refundExplain = this.item.refundExplain;
           }
         }

@@ -11,7 +11,8 @@ const state = {
   previewInfo: {},
   cartMap: {},
   categoryMap: {},
-  selectGoods: {}
+  selectGoods: {},
+  orderCopyDetail: {}
 }
 
 const mutations = {
@@ -41,6 +42,9 @@ const mutations = {
   },
   changePreviewDataMut(state, info) {
     state.previewInfo = info
+  },
+  orderCopyDetailDataMut(state, info) {
+    state.orderCopyDetail = info
   }
 }
 
@@ -51,7 +55,7 @@ const actions = {
       state.cartMap = {}
       state.categoryMap = {}
       commit('changeSpusDataMut', {})
-      getFetch('/shop/' + shopId,  data, true).then(response => {
+      getFetch('/shop/' + shopId, data, true).then(response => {
         var shopInfo = response.result || {}
         if (shopInfo.shopId != null) {
           shopInfo.prompt_text = "满35减23;满50减33;满70减43"
@@ -66,12 +70,12 @@ const actions = {
               for (var i in spus.datas) {
                 if ((spus.datas[i].goodsList && spus.datas[i].goodsList[0].goodsId) || spus.datas[i].parentId) {
                   selectedArr.push(spus.datas[i]);
+                }
               }
-            }
-            spus.datas = selectedArr 
+              spus.datas = selectedArr
               shopInfo.categoryModelList[index].spus = spus
               commit('changeShopInfoDataMut', shopInfo)
-              var itemList = this.state.submitOrder.orderCopyDetail.itemList
+              var itemList = this.state.shoppingCart.orderCopyDetail.itemList
               for (var index2 in shopInfo.categoryModelList) {
                 state.categoryMap[shopInfo.categoryModelList[index2].categoryId] = shopInfo.categoryModelList[index2]
                 if (itemList && itemList.length) {
@@ -97,12 +101,12 @@ const actions = {
                         shopInfo.categoryModelList[index2].totalPrice = 0
                       }
                       shopInfo.categoryModelList[index2].totalPrice += itemList[i].currentPrice * itemList[i].sequence
-                    
+
                     }
                   }
                 }
               }
-              
+
               for (const i in itemList) {
                 itemList[i].oldData = true
                 itemList[i].index = itemList[i].goodsId
@@ -111,7 +115,7 @@ const actions = {
               for (const index1 in spus.datas) {
                 if (itemList && itemList.length) {
                   for (var i in itemList) {
-                    if (itemList[i].categoryId==spus.datas[index1].categoryId) {
+                    if (itemList[i].categoryId == spus.datas[index1].categoryId) {
                       for (var in1 in spus.datas[index1].goodsList) {
                         var goods = spus.datas[index1].goodsList[in1];
                         if (itemList[i].goodsId === goods.goodsId && !goods.sequence) {
@@ -123,7 +127,7 @@ const actions = {
                         }
                       }
                     }
-               
+
                   }
                 }
               }
@@ -151,7 +155,7 @@ const actions = {
       })
     }
   },
-  getCategoryMenuDataAction({ state, commit }, { index, categoryId,data }) {
+  getCategoryMenuDataAction({ state, commit }, { index, categoryId, data }) {
     var category = state.shopInfo.categoryModelList[index];
     if (!category.spus || category.spus.datas.length < 1) {
       getFetch('/category/category/' + categoryId, data, true).then(response => {
@@ -160,7 +164,7 @@ const actions = {
         spus.title = category.name
         spus.page = response.result.nextPage
         spus.categoryId = categoryId
-        spus.index = index       
+        spus.index = index
         var selectedArr = []
         for (var i in categoryList) {
           if (categoryList[i].goodsList && categoryList[i].goodsList[0].goodsId) {
@@ -173,9 +177,9 @@ const actions = {
               }
               state.cartMap[goods.goodsId] = goods
             }
-          } 
+          }
         }
-        spus.datas = selectedArr 
+        spus.datas = selectedArr
         category.spus = spus
         commit('changeSpusDataMut', spus)
       })
@@ -183,8 +187,8 @@ const actions = {
       commit('changeSpusDataMut', category.spus)
     }
   },
-  addItemAction({ state, commit }, {parentCategoryId, item, index, categoryIndex }) {
-    parentCategoryId = item.parentCategoryId? item.parentCategoryId : parentCategoryId
+  addItemAction({ state, commit }, { parentCategoryId, item, index, categoryIndex }) {
+    parentCategoryId = item.parentCategoryId ? item.parentCategoryId : parentCategoryId
     var selectedFood = state.categoryMap[parentCategoryId]
     if (!selectedFood.count) {
       selectedFood.count = 0
@@ -203,7 +207,7 @@ const actions = {
           for (var index2 in category.goodsList) {
             var selectGoods2 = category.goodsList[index2]
             if (item.goodsId == selectGoods2.goodsId) {
-              selectGoods = selectGoods2 
+              selectGoods = selectGoods2
               selectGoods.sequence += 1
               break;
             }
@@ -213,7 +217,7 @@ const actions = {
     }
     if (!item.oldData) {
       selectGoods.parentCategoryId = parentCategoryId
-      state.cartMap[selectGoods.goodsId] =  selectGoods
+      state.cartMap[selectGoods.goodsId] = selectGoods
     }
     else {
 
@@ -230,8 +234,8 @@ const actions = {
       }
     }
   },
-  reduceItemAction({ state, commit }, {parentCategoryId,  item, index, categoryIndex }) {
-    parentCategoryId = item.parentCategoryId? item.parentCategoryId : parentCategoryId
+  reduceItemAction({ state, commit }, { parentCategoryId, item, index, categoryIndex }) {
+    parentCategoryId = item.parentCategoryId ? item.parentCategoryId : parentCategoryId
     var selectedFood = state.categoryMap[parentCategoryId]
     selectedFood.count = selectedFood.count - 1
     selectedFood.totalPrice = selectedFood.totalPrice - item.min_price
@@ -245,7 +249,7 @@ const actions = {
           for (var index2 in category.goodsList) {
             var selectGoods2 = category.goodsList[index2]
             if (item.goodsId == selectGoods2.goodsId) {
-              selectGoods = selectGoods2 
+              selectGoods = selectGoods2
               selectGoods.sequence -= 1
               if (selectGoods.sequence <= 0) spus.datas[index].sequence = 0
               break;
@@ -256,21 +260,21 @@ const actions = {
     }
     if (!item.oldData) {
       selectGoods.parentCategoryId = parentCategoryId
-      state.cartMap[selectGoods.goodsId] =  selectGoods
+      state.cartMap[selectGoods.goodsId] = selectGoods
     }
     else {
       if (spus) {
-      for (var index1 in spus.datas) {
-        var category = spus.datas[index1];
-        if (item.categoryId == category.categoryId) {
-          for (var index2 in category.goodsList) {
-            if (item.goodsId == category.goodsList[index2].goodsId) {
-              category.goodsList[index2].sequence -= 1
+        for (var index1 in spus.datas) {
+          var category = spus.datas[index1];
+          if (item.categoryId == category.categoryId) {
+            for (var index2 in category.goodsList) {
+              if (item.goodsId == category.goodsList[index2].goodsId) {
+                category.goodsList[index2].sequence -= 1
+              }
             }
           }
         }
       }
-    }
       var goods = state.cartMap[item.goodsId]
       if (goods) {
         goods.sequence -= 1

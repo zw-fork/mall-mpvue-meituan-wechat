@@ -26,9 +26,6 @@ const state = {
   },
   orderByShopIdDetail: {
 
-  },
-  orderCopyDetail: {
-
   }
 }
 
@@ -178,7 +175,7 @@ const actions = {
   },
   showOrderDetailAction({ state, commit }, { order }) {
     commit('orderDetailDataMut', order)
-    wx.navigateTo({ url: '/pages/subsidy/orderDetail/main' })
+    wx.navigateTo({ url: '/pages/orderDetail/main' })
   },
   showOrderByShopIdDetailAction({ state, commit }, { order }) {
     commit('orderByShopIdDetailDataMut', order)

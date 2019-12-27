@@ -1,8 +1,20 @@
 <template>
-  <div class="container" @click="update" @mousedown="update" v-if="!shopId || shopId == shopInfo.shopId">
-    <authorize @func="getMsgFormSon" ref="authorize" :show="showAuth2"></authorize>  
+  <div
+    class="container"
+    @click="update"
+    @mousedown="update"
+    v-if="!shopId || shopId == shopInfo.shopId"
+  >
+    <authorize
+      @func="getMsgFormSon"
+      ref="authorize"
+      :show="showAuth2"
+    ></authorize>
     <div class="header-c">
-      <div class="header" @click="openLocation">
+      <div
+        class="header"
+        @click="openLocation"
+      >
         <div class="h-l">
           <img
             class="shop-logo"
@@ -10,14 +22,20 @@
           >
         </div>
         <div class="h-r">
-          <span class="r-l" >地址: {{shopInfo.building}}</span>
+          <span class="r-l">地址: {{shopInfo.building}}</span>
           <div class="r-t">
             <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
             <div class="s-l"></div>
             <span class="t-m">营业时间: 全天</span>
-            <i class="icon my_iconfont iconright" style="position:absolute; right:0rpx;"></i>
+            <i
+              class="icon my_iconfont iconright"
+              style="position:absolute; right:0rpx;"
+            ></i>
           </div>
-          <div class="r-m" v-if="shopInfo.bulletin">
+          <div
+            class="r-m"
+            v-if="shopInfo.bulletin"
+          >
             <span class="b-r">公告：{{shopInfo.bulletin}}</span>
           </div>
         </div>
@@ -33,94 +51,152 @@
           :style="{'font-weight': pageIndex === 1 ? lineStyle : null}"
           @click="shopClick"
         >商家</span>
-        <span class="c-m" @click="goHome">首页</span>
-        <div class="header-r" @click="searchClick" style=" position: absolute;right:10rpx;">
+        <span
+          class="c-m"
+          @click="goHome"
+        >首页</span>
+        <div
+          class="header-r"
+          @click="searchClick"
+          style=" position: absolute;right:10rpx;"
+        >
           <i class="icon my_iconfont iconsearch"></i>
           <span>搜索商品</span>
         </div>
       </div>
     </div>
-    <div class="list-c" v-if="pageIndex === 0">
+    <div
+      class="list-c"
+      v-if="pageIndex === 0"
+    >
       <div class="list-ll">
-      <scroll-view class="list-l" :scroll-y="true">
-        <div
-          class="l-item"
-          :class="{active: index === tagIndex}"
-          v-for="(item, index) in shopInfo.categoryModelList"
-          :key="index"
-          @click="categoryClick(item, index)"
+        <scroll-view
+          class="list-l"
+          :scroll-y="true"
         >
-          <span>{{item.name}}</span>
-          <text class="count" v-if="item.count > 0">{{item.count}}</text>
-        </div>
-      </scroll-view>
-        </div>
-        <div>
- <div class="list-r1">
-         <div class="category-c">
-        <scroll-view class="l" scroll-x :scroll-into-view="idx">
-          <div class="tab-item" :class="{active: index === childIndex}" 
-          v-for="(item, index) in datas" :key="index">
-            <span :id="'x_' + index" @click="changeCategory(item, index)">{{item.name}}</span>
+          <div
+            class="l-item"
+            :class="{active: index === tagIndex}"
+            v-for="(item, index) in shopInfo.categoryModelList"
+            :key="index"
+            @click="categoryClick(item, index)"
+          >
+            <span>{{item.name}}</span>
+            <text
+              class="count"
+              v-if="item.count > 0"
+            >{{item.count}}</text>
           </div>
         </scroll-view>
-        <div class="r">
-          <i class="icon mt-arrow-down-o"></i>
-        </div>
       </div>
-      </div>
-       <div class="list-rr">
-      <scroll-view
-        class="list-r"
-        :scroll-y="true"
-        @scrolltolower="lower"
-        :scroll-top="scrollTop"
-        @scroll="scroll"
-        :scroll-into-view="id"
-      >
-      <div v-for="(item, index) in spus.datas" :key="index">
-        <div class="section" v-if="item.goodsList && item.goodsList[0].goodsId">
-          <span :id="'y_' + index" class="title">{{item.name}}</span>
-        </div>
-        <div class="item-list" v-for="(goods, index2) in item.goodsList" :key="index2">
-          <div  class="item" v-if="goods.goodsId">
-            <div class="item-l">
-              <img :src="path + goods.picture">
-            </div>
-            <div class="item-r">
-              <div class="div-title">
-                <span class="title">{{goods.name}}</span>
+      <div>
+        <div class="list-r1">
+          <div class="category-c">
+            <scroll-view
+              class="l"
+              scroll-x
+              :scroll-into-view="idx"
+            >
+              <div
+                class="tab-item"
+                :class="{active: index === childIndex}"
+                v-for="(item, index) in datas"
+                :key="index"
+              >
+                <span
+                  :id="'x_' + index"
+                  @click="changeCategory(item, index)"
+                >{{item.name}}</span>
               </div>
-              <span class="sub-title"></span>
-              <div class="r-t" v-if="goods.type!=300">
-                <span class="price">￥{{goods.min_price}}</span>
-                <div class="add-item" v-if="!showManage">
-                  <div
-                    class="add-l"
-                    @click.stop="reduceClick(spus.categoryId ,goods, index2, index)"
-                    v-if="goods.sequence > 0"
-                  >
-                    <i class="icon my_iconfont iconminus-circle"></i>
-                    <span>{{goods.sequence}}</span>
+            </scroll-view>
+            <div class="r">
+              <i class="icon mt-arrow-down-o"></i>
+            </div>
+          </div>
+        </div>
+        <div class="list-rr">
+          <scroll-view
+            class="list-r"
+            :scroll-y="true"
+            @scrolltolower="lower"
+            :scroll-top="scrollTop"
+            @scroll="scroll"
+            :scroll-into-view="id"
+          >
+            <div
+              v-for="(item, index) in spus.datas"
+              :key="index"
+            >
+              <div
+                class="section"
+                v-if="item.goodsList && item.goodsList[0].goodsId"
+              >
+                <span
+                  :id="'y_' + index"
+                  class="title"
+                >{{item.name}}</span>
+              </div>
+              <div
+                class="item-list"
+                v-for="(goods, index2) in item.goodsList"
+                :key="index2"
+              >
+                <div
+                  class="item"
+                  v-if="goods.goodsId"
+                >
+                  <div class="item-l">
+                    <img :src="path + goods.picture">
                   </div>
-                  <div class="add-r" @click.stop="addClick(spus.categoryId ,goods, index2, index)">
-                    <i class="icon my_iconfont iconplus-circle"></i>
+                  <div class="item-r">
+                    <div class="div-title">
+                      <span class="title">{{goods.name}}</span>
+                    </div>
+                    <span class="sub-title"></span>
+                    <div
+                      class="r-t"
+                      v-if="goods.type!=300"
+                    >
+                      <span class="price">￥{{goods.min_price}}</span>
+                      <div
+                        class="add-item"
+                        v-if="!showManage"
+                      >
+                        <div
+                          class="add-l"
+                          @click.stop="reduceClick(spus.categoryId ,goods, index2, index)"
+                          v-if="goods.sequence > 0"
+                        >
+                          <i class="icon my_iconfont iconminus-circle"></i>
+                          <span>{{goods.sequence}}</span>
+                        </div>
+                        <div
+                          class="add-r"
+                          @click.stop="addClick(spus.categoryId ,goods, index2, index)"
+                        >
+                          <i class="icon my_iconfont iconplus-circle"></i>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </scroll-view>
         </div>
       </div>
-      </scroll-view>
-            </div>
-      </div>
     </div>
-    <div class="shop-info" v-else-if="pageIndex === 1">
+    <div
+      class="shop-info"
+      v-else-if="pageIndex === 1"
+    >
       <div class="address">
         <i class="icon mt-location-o"></i>
         <span>{{shopInfo.building}}</span>
-        <i class="icon mt-phone-o" @click.stop="clickCall()"></i>
+        <i
+          class="icon mt-phone-o"
+          @click.stop="clickCall()"
+        ></i>
       </div>
       <div class="delivery">
         <div class="btm">
@@ -128,29 +204,52 @@
           <span>营业时间: 全天</span>
         </div>
       </div>
-      <div class="delivery" v-if="shopInfo.wechatId">
+      <div
+        class="delivery"
+        v-if="shopInfo.wechatId"
+      >
         <div class="btm">
           <i class="icon mt-clock-s"></i>
-          <span style="border:2rpx solid;padding:0rpx 10rpx;" @click="copy">复制微信号</span>
+          <span
+            style="border:2rpx solid;padding:0rpx 10rpx;"
+            @click="copy"
+          >复制微信号</span>
         </div>
       </div>
-      <div class="delivery" v-if="shopInfo.bulletin">
+      <div
+        class="delivery"
+        v-if="shopInfo.bulletin"
+      >
         <div class="notice">
           <span>{{shopInfo.bulletin}}</span>
         </div>
       </div>
     </div>
-    <div class="screen_cover" v-show="showCart && productCount > 0" @click="toggleCartList"></div>
-    <div class="cart_food_list" v-if="showCart && productCount > 0">
+    <div
+      class="screen_cover"
+      v-show="showCart && productCount > 0"
+      @click="toggleCartList"
+    ></div>
+    <div
+      class="cart_food_list"
+      v-if="showCart && productCount > 0"
+    >
       <header>
         <h4>购物车</h4>
         <div @click="clearCart">
           <span class="clear_cart">清空</span>
         </div>
       </header>
-      <section class="cart_food_details" id="cartFood">
+      <section
+        class="cart_food_details"
+        id="cartFood"
+      >
         <ul>
-          <li v-for="(item, index) in cartGoodsList1" :key="index" class="cart_food_li">
+          <li
+            v-for="(item, index) in cartGoodsList1"
+            :key="index"
+            class="cart_food_li"
+          >
             <div class="cart_list_num">
               <p class="ellipsis">{{item.name}}</p>
             </div>
@@ -160,28 +259,43 @@
             </div>
             <section class="cart_list_control">
               <span @click.stop="reduceClick(item.parentCategoryId ,item, item.index, item.categoryIndex)">
-                <i class="icon my_iconfont iconminus-circle" style="color: #ccc;font-size: 48rpx;"></i>
+                <i
+                  class="icon my_iconfont iconminus-circle"
+                  style="color: #ccc;font-size: 48rpx;"
+                ></i>
               </span>
               <span class="cart_num">{{item.sequence}}</span>
               <div @click.stop="addClick(item.parentCategoryId ,item, item.index, item.categoryIndex)">
-                <i class="icon my_iconfont iconplus-circle" style="color: #FF6347;font-size: 52rpx;"></i>
+                <i
+                  class="icon my_iconfont iconplus-circle"
+                  style="color: #FF6347;font-size: 52rpx;"
+                ></i>
               </div>
             </section>
           </li>
         </ul>
       </section>
     </div>
-    <div class="footer-c" v-if="pageIndex === 0">
+    <div
+      class="footer-c"
+      v-if="pageIndex === 0"
+    >
       <div class="c-m">
         <div class="l">
-          <span class="price" v-if="totalPrice > 0 || productCount > 0">
+          <span
+            class="price"
+            v-if="totalPrice > 0 || productCount > 0"
+          >
             ￥
             <span>{{totalPrice}}</span>
           </span>
           <div class="m-l">
             <span class="l-l">另需配送费￥{{shopInfo.support_pay}}</span>
             <div class="l-m"></div>
-            <span class="l-r" v-if="shopInfo.type != 1">小区内配送</span>
+            <span
+              class="l-r"
+              v-if="shopInfo.type != 1"
+            >小区内配送</span>
           </div>
         </div>
         <div
@@ -224,7 +338,7 @@ export default {
       shopId: undefined,
       showEdit: false,
       show: false,
-      id:undefined,
+      id: undefined,
       idx: undefined,
       divStyle: "",
       scrollTop: undefined,
@@ -241,7 +355,7 @@ export default {
       t: undefined
     };
   },
- components: {
+  components: {
     authorize
   },
   computed: {
@@ -258,15 +372,15 @@ export default {
     ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderDetail"]),
     datas() {
-       if (this.spus.datas) {
+      if (this.spus.datas) {
         var that = this;
-        setTimeout(function(){
-　　　　        that.infoScroll();
-    　　}, 1500);
-    return this.spus.datas;
-       }
-       return undefined;
-     },
+        setTimeout(function() {
+          that.infoScroll();
+        }, 1500);
+        return this.spus.datas;
+      }
+      return undefined;
+    },
     lineStyle() {
       return "bold;padding-bottom:2px; border-bottom:2px solid #F00;";
     },
@@ -337,12 +451,13 @@ export default {
   },
   methods: {
     ...mapMutations("shoppingCart", [
-      "changeReduceFeeDataMut",
+      "orderCopyDetailDataMut",
       "changeSkuModalMut",
       "changeItemModalMut"
     ]),
     ...mapActions("shoppingCart", [
       "getMenuDataAction",
+      "getOrderByIdAction",
       "getCommentDataAction",
       "getCategoryMenuDataAction",
       "addItemAction",
@@ -358,33 +473,34 @@ export default {
     changeCategory(item, index) {
       this.childIndex = index;
 
-      this.id='y_' + index;
+      this.id = "y_" + index;
     },
-  infoScroll(){
-    var that = this;
-    if (that.spus.datas) {
-          var len = that.spus.datas.length;
-    var height = 0;
-    var hightArr = [];
-    for (var i = 0; i < len; i++) { //productList
-      //获取元素所在位置
-      var query = wx.createSelectorQuery();
-      var idView = "#y_" + i;
-      query.select(idView).boundingClientRect();
-      query.exec(function (res) {
-        if (res[0]) {
-                  var top = res[0].top;
-        hightArr.push(top);
-        that.hightArr = hightArr
+    infoScroll() {
+      var that = this;
+      if (that.spus.datas) {
+        var len = that.spus.datas.length;
+        var height = 0;
+        var hightArr = [];
+        for (var i = 0; i < len; i++) {
+          //productList
+          //获取元素所在位置
+          var query = wx.createSelectorQuery();
+          var idView = "#y_" + i;
+          query.select(idView).boundingClientRect();
+          query.exec(function(res) {
+            if (res[0]) {
+              var top = res[0].top;
+              hightArr.push(top);
+              that.hightArr = hightArr;
+            }
+          });
         }
-      });
-    };
-    }
-  },
-    copy() {
-      wx.setClipboardData({data: this.shopInfo.wechatId});
+      }
     },
-    getMsgFormSon(data) {     
+    copy() {
+      wx.setClipboardData({ data: this.shopInfo.wechatId });
+    },
+    getMsgFormSon(data) {
       this.showAuth2 = data || !this.userInfo.nickname;
     },
     deleteGoods() {
@@ -452,21 +568,27 @@ export default {
         this.currentScroll = e.target.scrollTop;
         this.showEdit = false;
       }
-      if (this.hightArr.length>0) {
+      if (this.hightArr.length > 0) {
         var scrollTop = e.target.scrollTop;
         var scrollArr = this.hightArr;
         for (var i = 0; i < scrollArr.length; i++) {
           if (scrollTop >= 0 && scrollTop < scrollArr[1] - scrollArr[0]) {
-            this.childIndex = 0
-            this.idx = 'x_' + this.childIndex;
+            this.childIndex = 0;
+            this.idx = "x_" + this.childIndex;
             break;
-          } else if (scrollTop >= scrollArr[i] - scrollArr[0] && scrollTop < scrollArr[i + 1] - scrollArr[0]) {
-            this.childIndex = i
-            this.idx = 'x_' + this.childIndex;
+          } else if (
+            scrollTop >= scrollArr[i] - scrollArr[0] &&
+            scrollTop < scrollArr[i + 1] - scrollArr[0]
+          ) {
+            this.childIndex = i;
+            this.idx = "x_" + this.childIndex;
             break;
-          } else if (scrollTop >= scrollArr[scrollArr.length - 1] - scrollArr[0]) {
-            this.childIndex = scrollArr.length - 1
-            this.idx = 'x_' + this.childIndex;
+          } else if (
+            scrollTop >=
+            scrollArr[scrollArr.length - 1] - scrollArr[0]
+          ) {
+            this.childIndex = scrollArr.length - 1;
+            this.idx = "x_" + this.childIndex;
             break;
           }
         }
@@ -477,7 +599,12 @@ export default {
       if (this.spus.page > 0) {
         getFetch(
           "/goods/list/" + this.shopInfo.shopId,
-          { page: this.spus.page, categoryId: this.spus.categoryId, status: 1, categoryStatus:1  },
+          {
+            page: this.spus.page,
+            categoryId: this.spus.categoryId,
+            status: 1,
+            categoryStatus: 1
+          },
           true
         ).then(response => {
           var goods = response.result.list;
@@ -551,12 +678,12 @@ export default {
       this.selectSkuAction({ item, index });
     },
     addClick(parentCategoryId, item, index, categoryIndex) {
-      parentCategoryId = parentCategoryId?parentCategoryId:item.categoryId;  
-      this.addItemAction({parentCategoryId, item, index, categoryIndex });
+      parentCategoryId = parentCategoryId ? parentCategoryId : item.categoryId;
+      this.addItemAction({ parentCategoryId, item, index, categoryIndex });
     },
     reduceClick(parentCategoryId, item, index, categoryIndex) {
-      parentCategoryId = parentCategoryId?parentCategoryId:item.categoryId;  
-      this.reduceItemAction({parentCategoryId, item, index, categoryIndex });
+      parentCategoryId = parentCategoryId ? parentCategoryId : item.categoryId;
+      this.reduceItemAction({ parentCategoryId, item, index, categoryIndex });
     },
     closeSku() {
       this.changeSkuModalMut(false);
@@ -608,19 +735,22 @@ export default {
         url: "/pages/subsidy/searchList/main?shopId=" + this.shopInfo.shopId
       });
     },
-     update() {
+    update() {
       this.showEdit = false;
       return false;
     },
     foreverAuth() {
-        this.t = setTimeout(() => {
-          if (this.shopId && this.$refs.authorize) {
-            clearTimeout(this.t); 
-            var p = this.$refs.authorize.getUserInfo(this.shopId, this.reLogin);
-          } else {
-            this.foreverAuth();
-          }
-      }, 1000)
+      this.t = setTimeout(() => {
+        if (this.shopId && this.$refs.authorize) {
+          clearTimeout(this.t);
+          var p = this.$refs.authorize.getUserInfo(this.shopId, this.reLogin);
+        } else {
+          this.foreverAuth();
+        }
+      }, 1000);
+    },
+    async getOrderByIdAction(orderId) {
+      getFetch("api/banner/" + id, {}, true);
     }
   },
   onReady(options) {
@@ -647,6 +777,7 @@ export default {
     data.goodsStatus = 1;
     this.pageIndex = 0;
     var that = this;
+    var orderId = null;
     this.shopId = options.shopId;
     if (!this.shopId) {
       this.reLogin = true;
@@ -663,12 +794,26 @@ export default {
     if (this.shopId != this.shopInfo.shopId) {
       this.tagIndex = 0;
     }
-    this.getMenuDataAction({
-      shopId: this.shopId,
-      data: data,
-      index: this.tagIndex,
-      flag: update
-    });
+    if (options.orderId) {
+      orderId = options.orderId;
+      getFetch("/order/copy/" + orderId, {}, true).then(response => {
+        var result = response.result || {};
+        this.orderCopyDetailDataMut(result);
+        this.getMenuDataAction({
+          shopId: this.shopId,
+          data: data,
+          index: this.tagIndex,
+          flag: update
+        });
+      });
+    } else {
+      this.getMenuDataAction({
+        shopId: this.shopId,
+        data: data,
+        index: this.tagIndex,
+        flag: update
+      });
+    }
   },
   onShareAppMessage: function() {
     return {
@@ -683,248 +828,247 @@ export default {
 
 <style lang="scss" scoped>
 .list-r1 {
-  display:flex;
-position:absolute;
-    bottom: 0rpx;
-    top:0rpx;
+  display: flex;
+  position: absolute;
+  bottom: 0rpx;
+  top: 0rpx;
   height: 70rpx;
-    display:flex;
-    width:100%;
+  display: flex;
+  width: 100%;
 }
-.main{
-      display: flex;
-    flex-direction: column;
+.main {
+  display: flex;
+  flex-direction: column;
 }
- .category-c {
-    width:80%;
-    left:0rpx;
-    top:0rpx;
-    padding-left: 10rpx;
-      display: flex;
-      height: 70rpx;
-      position: relative;   
-      white-space:nowrap;
-      background-color: #FAFAFA;
-      .l {
-              display: flex;
-      flex-direction: column;
-        line-height: 70rpx;
-        white-space: nowrap;
-        position: relative;
-        	        .active {
-          color: $theme-color;
-          font-weight: bold;
-
-          }
-        .tab-item {
-          transition: all 0.2s;
-          font-size: 24rpx;
-          height: 70rpx;
-          display: inline-block;
-          color: $textDarkGray-color;
-          margin: 0 30rpx;
-        }
-      }
-      .r {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 70rpx;
-        height: 70rpx;
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background-color: #FAFAFA;
-        flex: 1;
-        i {
-          font-size: 24rpx;
-          color: $textGray-color;
-        }
-      }
-    }
-.btn {
-    float: left;
+.category-c {
+  width: 80%;
+  left: 0rpx;
+  top: 0rpx;
+  padding-left: 10rpx;
+  display: flex;
+  height: 70rpx;
+  position: relative;
+  white-space: nowrap;
+  background-color: #fafafa;
+  .l {
     display: flex;
-    background-color: $page-bgcolor;
-    margin: 10rpx;
-    border-radius: 4rpx;
-
-    span {
-      font-size: 26rpx;
-      margin: 6rpx 10rpx;
+    flex-direction: column;
+    line-height: 70rpx;
+    white-space: nowrap;
+    position: relative;
+    .active {
+      color: $theme-color;
+      font-weight: bold;
+    }
+    .tab-item {
+      transition: all 0.2s;
+      font-size: 24rpx;
+      height: 70rpx;
+      display: inline-block;
+      color: $textDarkGray-color;
+      margin: 0 30rpx;
     }
   }
-.first{
-	left: 100px;
-	background-color: #0fc;
-	float: left;
+  .r {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70rpx;
+    height: 70rpx;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #fafafa;
+    flex: 1;
+    i {
+      font-size: 24rpx;
+      color: $textGray-color;
+    }
+  }
+}
+.btn {
+  float: left;
+  display: flex;
+  background-color: $page-bgcolor;
+  margin: 10rpx;
+  border-radius: 4rpx;
+
+  span {
+    font-size: 26rpx;
+    margin: 6rpx 10rpx;
+  }
+}
+.first {
+  left: 100px;
+  background-color: #0fc;
+  float: left;
 }
 .list-r1 {
-    bottom: 0rpx;
-    top:0rpx;
-    position:absolute;
-    display:flex;
+  bottom: 0rpx;
+  top: 0rpx;
+  position: absolute;
+  display: flex;
 }
 .list-rr {
-    width: 80%;
-    bottom: 0px;
-    top: 70rpx;
+  width: 80%;
+  bottom: 0px;
+  top: 70rpx;
+  display: flex;
+  position: absolute;
+  background-color: #fafafa;
+  .list-r {
+    background-color: white;
     display: flex;
-    position: absolute;
-    background-color: #FAFAFA;
-    .list-r {
-      background-color: white;
+    flex-direction: column;
+    .section {
       display: flex;
-      flex-direction: column;
-      .section {
-        display: flex;
-        height: 70rpx;
-        align-items: center;
-        margin-left: 20rpx;
+      height: 70rpx;
+      align-items: center;
+      margin-left: 20rpx;
 
-        span {
-          font-size: 28rpx;
-          color: $textBlack-color;
-        }
+      span {
+        font-size: 28rpx;
+        color: $textBlack-color;
       }
+    }
 
-      .item-list {
+    .item-list {
+      display: flex;
+      margin: 0 20rpx;
+      flex-direction: column;
+
+      .item {
         display: flex;
-        margin: 0 20rpx;
-        flex-direction: column;
+        margin-bottom: 30rpx;
 
-        .item {
+        .item-l {
+          img {
+            width: 160rpx;
+            height: 160rpx;
+            background-size: cover;
+          }
+        }
+
+        .item-r {
           display: flex;
-          margin-bottom: 30rpx;
+          flex-direction: column;
+          margin-left: 20rpx;
+          justify-content: space-between;
+          flex: 1;
 
-          .item-l {
-            img {
-              width: 160rpx;
-              height: 160rpx;
-              background-size: cover;
-            }
+          .title {
+            font-size: 28rpx;
+            color: $textBlack-color;
+            font-weight: bold;
+            overflow: hidden;
+            line-height: 30rpx;
+            height: 30rpx;
           }
 
-          .item-r {
+          .sub-title {
+            font-size: 20rpx;
+            color: $textDarkGray-color;
+            line-height: 30rpx;
+            overflow: hidden;
+            height: 30rpx;
+            margin-top: 10rpx;
+          }
+
+          .sale-num {
+            font-size: 20rpx;
+            color: $textDarkGray-color;
+            margin-top: 10rpx;
+          }
+
+          .r-t {
             display: flex;
-            flex-direction: column;
-            margin-left: 20rpx;
+            align-items: center;
             justify-content: space-between;
-            flex: 1;
 
-            .title {
-              font-size: 28rpx;
-              color: $textBlack-color;
+            .price {
+              font-size: 32rpx;
+              color: $mtRed-color;
               font-weight: bold;
-              overflow: hidden;
-              line-height: 30rpx;
-              height: 30rpx;
             }
 
-            .sub-title {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              line-height: 30rpx;
-              overflow: hidden;
-              height: 30rpx;
-              margin-top: 10rpx;
-            }
-
-            .sale-num {
-              font-size: 20rpx;
-              color: $textDarkGray-color;
-              margin-top: 10rpx;
-            }
-
-            .r-t {
+            .sku {
               display: flex;
               align-items: center;
-              justify-content: space-between;
+              justify-content: center;
+              background-color: $theme-color;
+              padding: 8rpx 12rpx;
+              border-radius: 25rpx;
+              position: relative;
 
-              .price {
-                font-size: 32rpx;
-                color: $mtRed-color;
-                font-weight: bold;
+              span {
+                font-size: 20rpx;
+                color: $textBlack-color;
               }
 
-              .sku {
+              .count {
+                width: 30rpx;
+                height: 30rpx;
+                background-color: $mtRed-color;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: $theme-color;
-                padding: 8rpx 12rpx;
-                border-radius: 25rpx;
-                position: relative;
-
-                span {
-                  font-size: 20rpx;
-                  color: $textBlack-color;
-                }
-
-                .count {
-                  width: 30rpx;
-                  height: 30rpx;
-                  background-color: $mtRed-color;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  position: absolute;
-                  color: white;
-                  font-size: 20rpx;
-                  right: 0;
-                  top: -14rpx;
-                  border-radius: 15rpx;
-                }
-              }
-
-              .add-item {
-                display: flex;
-                align-items: center;
-
-                .add-l {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-
-                  i {
-                    font-size: 50rpx;
-                    color: $textGray-color;
-                  }
-
-                  span {
-                    font-size: 32rpx;
-                    color: $textBlack-color;
-                    margin: 0 20rpx;
-                  }
-                }
-
-                .add-r {
-                  i {
-                    color: #ff6347;
-                    font-size: 54rpx;
-                  }
-                }
+                position: absolute;
+                color: white;
+                font-size: 20rpx;
+                right: 0;
+                top: -14rpx;
+                border-radius: 15rpx;
               }
             }
 
-            .tags-c {
+            .add-item {
               display: flex;
               align-items: center;
-              margin-top: 10rpx;
-              flex-wrap: wrap;
 
-              img {
-                width: 60rpx;
-                height: 30rpx;
-                background-size: cover;
+              .add-l {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                i {
+                  font-size: 50rpx;
+                  color: $textGray-color;
+                }
+
+                span {
+                  font-size: 32rpx;
+                  color: $textBlack-color;
+                  margin: 0 20rpx;
+                }
               }
+
+              .add-r {
+                i {
+                  color: #ff6347;
+                  font-size: 54rpx;
+                }
+              }
+            }
+          }
+
+          .tags-c {
+            display: flex;
+            align-items: center;
+            margin-top: 10rpx;
+            flex-wrap: wrap;
+
+            img {
+              width: 60rpx;
+              height: 30rpx;
+              background-size: cover;
             }
           }
         }
       }
     }
-    }
+  }
+}
 .editGoods {
   background-color: black;
   display: flex;
@@ -1237,65 +1381,65 @@ position:absolute;
     width: 100%;
     bottom: 90rpx;
     .list-ll {
-          display: flex;
-    top: 200rpx;
-    width: 160rpx;
-    bottom: 0rpx;
-    .list-l {
       display: flex;
-      flex-direction: column;
-      background-color: $page-bgcolor;
-
-      .l-item {
+      top: 200rpx;
+      width: 160rpx;
+      bottom: 0rpx;
+      .list-l {
         display: flex;
-        width: 160rpx;
-        align-items: center;
-        justify-content: center;
-        padding-top: 20rpx;
-        padding-bottom: 20rpx;
-        box-sizing: border-box;
-        position: relative;
+        flex-direction: column;
+        background-color: $page-bgcolor;
 
-        img {
-          width: 30rpx;
-          height: 30rpx;
-          background-size: cover;
-          border-radius: 15rpx;
-        }
-
-        span {
-          font-size: 24rpx;
-          color: $textDarkGray-color;
-          margin-left: 10rpx;
-        }
-
-        .count {
+        .l-item {
           display: flex;
+          width: 160rpx;
           align-items: center;
           justify-content: center;
-          background-color: $mtRed-color;
-          width: 30rpx;
-          height: 30rpx;
-          border-radius: 15rpx;
-          right: 0;
-          top: 6rpx;
-          position: absolute;
-          font-size: 20rpx;
-          color: white;
+          padding-top: 20rpx;
+          padding-bottom: 20rpx;
+          box-sizing: border-box;
+          position: relative;
+
+          img {
+            width: 30rpx;
+            height: 30rpx;
+            background-size: cover;
+            border-radius: 15rpx;
+          }
+
+          span {
+            font-size: 24rpx;
+            color: $textDarkGray-color;
+            margin-left: 10rpx;
+          }
+
+          .count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $mtRed-color;
+            width: 30rpx;
+            height: 30rpx;
+            border-radius: 15rpx;
+            right: 0;
+            top: 6rpx;
+            position: absolute;
+            font-size: 20rpx;
+            color: white;
+          }
         }
-      }
 
-      .active {
-        background-color: white;
+        .active {
+          background-color: white;
 
-        span {
-          color: #000;
-          font-weight: bold;
+          span {
+            color: #000;
+            font-weight: bold;
+          }
         }
       }
     }
-    }
-    
+
     ::-webkit-scrollbar {
       width: 0;
       height: 0;
