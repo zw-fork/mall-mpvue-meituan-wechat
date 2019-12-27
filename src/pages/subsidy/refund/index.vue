@@ -359,7 +359,7 @@ export default {
       var update = false;
       if (flag) {
         update = true;
-        this.getOrderByIdAction({ data: item });
+        this.getOrderByIdAction(item.number);
       } else {
         var shopId = item.shopId;
         wx.navigateTo({

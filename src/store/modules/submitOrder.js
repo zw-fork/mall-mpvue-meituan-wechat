@@ -72,11 +72,11 @@ const actions = {
       commit('changeOrderItemDataMut', result)
     })
   },
-  getOrderByIdAction({ state, commit }, {data }) {
-    getFetch('/order/copy/' + data.number, data, true).then(response => {
+  getOrderByIdAction({ state, commit }, {orderId }) {
+    getFetch('/order/copy/' + orderId, {}, true).then(response => {
       var result = response.result || {}
       commit('orderCopyDetailDataMut', result)
-      wx.navigateTo({ url: '/pages/subsidy/shoppingCart/main?shopId=' + data.shopId + '&update=true' })
+      wx.navigateTo({ url: '/pages/subsidy/shoppingCart/main?shopId=' + result.shopId + '&update=true' })
     })
   },
   updateOrderStatusAction({ state, commit }, { order, status, selectStatus, refundStatus }) {
@@ -161,11 +161,7 @@ const actions = {
               duration: 3000
             })
             getFetch('/order/updateStatus/' + number, { }, true).then(response => {
-              getFetch('/order', {}, true).then(response => {
-                var result = response.result || {}
-                commit('changeOrderDataMut', result)
-                wx.switchTab({ url: '/pages/subsidy/orderList/main' })
-              })
+              wx.navigateTo({ url: '/pages/order_pay_status/index?order_id=' + number + '&msg=支付成功'});
             })
           },
           fail(res) {
@@ -174,11 +170,7 @@ const actions = {
               icon: 'none',
               duration: 3000
             })
-            getFetch('/order', { 'page': 1 }, true).then(response => {
-              var result = response.result || {}
-              commit('changeOrderDataMut', result)
-            })
-            wx.switchTab({ url: '/pages/subsidy/orderList/main' })
+            wx.navigateTo({ url: '/pages/order_pay_status/index?order_id=' + number + '&msg=取消支付&status=2' });
           }
         })
       })

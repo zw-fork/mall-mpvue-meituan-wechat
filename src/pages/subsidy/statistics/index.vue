@@ -81,7 +81,6 @@ export default {
     ...mapActions("submitOrder", [
       "getOrderDataAction",
       "showOrderDetailAction",
-      "getOrderByIdAction",
       "updateOrderStatusAction"
     ]),
     ...mapMutations("submitOrder", ["orderDetailDataMut"]),

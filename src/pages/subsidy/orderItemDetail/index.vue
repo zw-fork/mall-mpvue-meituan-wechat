@@ -43,34 +43,34 @@
           <div
             class="btn"
             v-if="orderByShopIdDetail.status==0 && orderByShopIdDetail.paid==1"
-            @click="updateStatus(2)"
+            @click="updateStatus(2, 1)"
           >
             <span>配送</span>
           </div>
           <div
             class="btn"
             v-if="orderByShopIdDetail.status==1 && orderByShopIdDetail.paid==1"
-            @click="updateStatus(3)"
+            @click="updateStatus(3,3)"
           >
             <span>完成</span>
           </div>
           <div
             class="btn"
             v-if="orderByShopIdDetail.status==3 && orderByShopIdDetail.paid==1 && !orderByShopIdDetail.turnover"
-            @click="updateStatus(10)"
+            @click="updateStatus(3,10)"
           >
             <span>结算</span>
           </div>
           <div
             class="btn"
-            @click="refund(null)"
+            @click="refund(4, 4, 1)"
             v-if="!orderByShopIdDetail.turnover && userInfo.role==2"
           >
             <span>退款</span>
           </div>
           <div
             class="btn"
-            @click="updateStatus(null, null, 4)"
+            @click="updateStatus(4, 4, 2)"
             v-if="orderByShopIdDetail.refundStatus==1"
           >
             <span>拒绝退款</span>
@@ -401,17 +401,13 @@ export default {
         }
       });
     },
-    updateStatus(status, deliveryStatus, refundStatus) {
+    updateStatus(index, status, refundStatus) {
       var refund = {};
-      var index = status;
+      var index = index;
       if (status) {
         refund.status = status;
       }
-      if (deliveryStatus) {
-        refund.deliveryStatus = deliveryStatus;
-      }
       if (refundStatus) {
-        index = refundStatus;
         refund.refundStatus = refundStatus;
       }
       getFetch(
@@ -431,7 +427,7 @@ export default {
       var update = false;
       if (flag) {
         update = true;
-        this.getOrderByIdAction({ data: item });
+        this.getOrderByIdAction({ orderId: item.number });
       } else {
         var shopId = item.shopId;
         wx.navigateTo({

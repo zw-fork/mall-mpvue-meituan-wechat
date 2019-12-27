@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/home/main",
+    "pages/orderList/main",
+    "pages/orderDetail/main",
     "pages/me/main"
   ],
   "window": {
@@ -24,6 +26,12 @@
       "iconPath": "static/images/home.png",
       "selectedIconPath": "static/images/home_selected.png"
     },
+    { 
+      "pagePath": "pages/orderList/main",
+      "text": "订单",
+      "iconPath": "static/images/order.png",
+      "selectedIconPath": "static/images/order_selected.png"
+    },
     {
       "pagePath": "pages/me/main",
       "text": "我的",
@@ -36,8 +44,6 @@
           "root": "pages/subsidy/",
           "pages": [
             "userSetting/main",
-            "orderList/main",
-            "orderDetail/main",
             "submitOrder/main",
             "shoppingCart/main",
             "orderItemList/main",

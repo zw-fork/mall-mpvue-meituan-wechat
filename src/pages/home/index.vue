@@ -156,7 +156,7 @@ export default {
     shoppingCartClick(item) {
       if (!item.poster) {
         wx.navigateTo({
-          url: "/pages/subsidy/shoppingCart/main?shopId=" + item.shopId
+          url: "/pages/index/index?shopId=" + item.shopId
         });
       }
     }
