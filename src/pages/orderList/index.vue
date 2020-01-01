@@ -57,7 +57,7 @@
               <span
                 class="shop-name"
                 style="display: inline"
-              >{{item.shopInfo.shopName}}</span>
+              ></span>
               <i
                 class="icon my_iconfont iconright"
                 style="display: inline"

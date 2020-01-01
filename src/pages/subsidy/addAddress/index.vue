@@ -111,6 +111,7 @@ export default {
     }
   },
   onLoad(options) {
+    debugger;
     var id = options.id;
     if (id) {
       var addr = this.myAddress;
@@ -125,7 +126,7 @@ export default {
         gender: 1
       };
     }
-    if (this.shopInfo && this.userInfo.addressModel) {
+    if (this.shopInfo) {
       this.item.wxAddress = {}
        this.item.wxAddress = this.shopInfo.wxAddress;
     }
