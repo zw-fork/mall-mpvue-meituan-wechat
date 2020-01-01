@@ -109,7 +109,12 @@ export default {
                     that.changeUserInfoMut(response.result);
                     getFetch("/shop/list", { status: 1 }, true).then(
                       response => {
-                        that.shopList = response.result;
+                        if (response.code == 200) {
+                          that.shopList = response.result;
+                        } else {
+                          wx.setStorageSync("sessionId", "");
+                          that.login();
+                        }
                       }
                     );
                   } else {
@@ -182,6 +187,22 @@ export default {
         }
       }
     });
+  },
+  onShow(options) {
+    if (options && options.update) {
+      var that = this;
+      wx.getSetting({
+        success: function(res) {
+          if (res.authSetting["scope.userInfo"]) {
+            var p = that.login();
+          } else {
+            getFetch("/shop/list", { status: 1 }, true).then(response => {
+              that.shopList = response.result;
+            });
+          }
+        }
+      });
+    }
   },
   onPullDownRefresh: function() {
     getFetch("/shop/list", { status: 1 }, true).then(response => {

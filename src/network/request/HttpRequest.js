@@ -5,14 +5,14 @@
 /** 封装的基于Fetch网络请求工具类 **/
 
 import responseCode from '@/constants/responseCode'
-import {request, login} from '@/utils/wxapi'
-import {API_URL, APP_ID} from '@/constants/hostConfig'
-import {PATH} from '@/constants/pathConfig'
-import {currentHost} from "@/constants/hostConfig"
-import {errorCode} from "@/constants/errorCodeMap"
-import {timestampToCommonDate} from "@/utils/formatTime"
-import {_array} from "@/utils/arrayExtension"
-import {getStorage} from '@/utils/wxapi'
+import { request, login } from '@/utils/wxapi'
+import { API_URL, APP_ID } from '@/constants/hostConfig'
+import { PATH } from '@/constants/pathConfig'
+import { currentHost } from "@/constants/hostConfig"
+import { errorCode } from "@/constants/errorCodeMap"
+import { timestampToCommonDate } from "@/utils/formatTime"
+import { _array } from "@/utils/arrayExtension"
+import { getStorage } from '@/utils/wxapi'
 
 /**
  * fetch 网络请求的header，可自定义header 内容
@@ -48,7 +48,7 @@ const handleUrl = url => params => {
  * @returns {Promise.<*>}
  */
 const timeoutFetch = (original_fetch, timeout = 30000) => {
-  let timeoutBlock = () => {}
+  let timeoutBlock = () => { }
   let timeout_promise = new Promise((resolve, reject) => {
     timeoutBlock = () => {
       // 请求超时处理
@@ -81,7 +81,7 @@ async function handleLogin(callback) {
       console.log('已过期')
       let params = {
         url: `${API_URL}${PATH.REFRESH_TOKEN}`,
-        data: {refreshToken: refreshToken},
+        data: { refreshToken: refreshToken },
         method: 'POST'
       }
       const refreshTokenInfo = await request(params)
@@ -89,7 +89,7 @@ async function handleLogin(callback) {
         const wxLoginInfo = await login()
         let param = {
           url: `${API_URL}${PATH.LOGIN}?trace=true`,
-          data: {appId: currentHost.appId, jsCode: wxLoginInfo.code},
+          data: { appId: currentHost.appId, jsCode: wxLoginInfo.code },
           method: 'POST'
         }
         const qbLoginInfo = await request(param)
@@ -107,7 +107,7 @@ async function handleLogin(callback) {
     const wxLoginInfo = await login()
     let params = {
       url: `${API_URL}${PATH.LOGIN}?trace=true`,
-      data: {appId: currentHost.appId, jsCode: wxLoginInfo.code},
+      data: { appId: currentHost.appId, jsCode: wxLoginInfo.code },
       method: 'POST'
     }
     const qbLoginInfo = await request(params)
@@ -132,7 +132,7 @@ const networkLog = (url, params, res, beforeRequest, isSuccess) => {
       networkArr = []
     }
     var time = timestampToCommonDate(new Date().getTime())
-    networkArr = _array.unshift(networkArr, {url, params, res, time, route, timeDif, networkType, isSuccess})
+    networkArr = _array.unshift(networkArr, { url, params, res, time, route, timeDif, networkType, isSuccess })
     wx.setStorageSync('networkArr', networkArr)
   }
 }
@@ -149,7 +149,7 @@ const HttpUtils = {
     const fetchCallback = () => {
       let promise = timeoutFetch(new Promise((resolve, reject) => {
         wx.showNavigationBarLoading()
-        isLoading ? wx.showLoading({title: '加载中...', mask: true}) : null
+        isLoading ? wx.showLoading({ title: '加载中...', mask: true }) : null
         const beforeRequest = new Date().getTime()
         var sessionId = wx.getStorageSync('sessionId');
         var appId = `${APP_ID}`;
@@ -172,15 +172,16 @@ const HttpUtils = {
                 wx.showToast({ title: '已存在该数据，请修改!', icon: 'none', duration: 4000 })
               } else if (data.code == 500) {
                 wx.showToast({ title: data.message, icon: 'none', duration: 4000 })
-              } else {
+              } else if (data.code == responseCode.TOKEN_INVALID) {
+                wx.switchTab({ url: '/pages/home/main?update=true' });
+              }
+              else {
                 if (data.code != 200) {
-                  wx.showToast({ title: data.message, icon: 'none', duration: 4000 })   
+                  wx.showToast({ title: data.message, icon: 'none', duration: 4000 })
                 }
                 isSuccess = true
                 resolve(res.data)
               }
-            } else if (resCode == responseCode.TOKEN_INVALID) {
-              wx.navigateTo({ url: '/pages/home/main' })
             } else {
               wx.showToast({ title: '服务器异常', icon: 'none', duration: 4000 })
             }
