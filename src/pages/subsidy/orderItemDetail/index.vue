@@ -70,7 +70,7 @@
           </div>
           <div
             class="btn"
-            @click="updateStatus(4, 4, 2)"
+            @click="updateStatus(4, 4, -1)"
             v-if="orderByShopIdDetail.refundStatus==1"
           >
             <span>拒绝退款</span>
