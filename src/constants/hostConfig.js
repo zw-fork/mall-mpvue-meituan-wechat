@@ -42,7 +42,7 @@ const host = {
     // GOODS_URL_PREFIX: 'http://39.106.34.223:7200/',
     MSITE_URL: 'https://api.douban.com',
     VENILOG_URL: 'https://api.douban.com',
-    APP_ID: 'wxcb1df190a9dfc676',
+    APP_ID: 'wxb6bd94caccb1be12',
     envVersion: 'trial'
   }
 }

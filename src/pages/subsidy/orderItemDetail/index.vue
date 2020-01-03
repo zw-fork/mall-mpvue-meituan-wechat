@@ -63,7 +63,7 @@
           </div>
           <div
             class="btn"
-            @click="refund(4, 4, 1)"
+            @click="refund(null)"
             v-if="!orderByShopIdDetail.turnover && userInfo.role==2"
           >
             <span>退款</span>
@@ -351,6 +351,7 @@ export default {
     },
     refund(itemId) {
       var that = this;
+      debugger;
       if (this.orderByShopIdDetail.refundStatus == 1 && !itemId) {
         wx.showModal({
           content: "确定对当前订单进行退款处理？",

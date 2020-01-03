@@ -10,7 +10,7 @@
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wxcb1df190a9dfc676",
+	"appid": "wxb6bd94caccb1be12",
 	"projectname": "mall-mpvue-meituan-wechat",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
