@@ -338,7 +338,7 @@ export default {
       if (!userId) {
         userId = this.userInfo.id;
       }
-      getFetch("/shop/myShop/" + userId, {}, true).then(response => {
+      getFetch("/shop/myShop", {}, true).then(response => {
         this.shop = response.result || {};
         if (this.shop.shopId != null) {
           if (this.shop.tel.length > 0) {
