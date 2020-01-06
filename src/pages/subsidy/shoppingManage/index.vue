@@ -660,6 +660,7 @@ export default {
     getShop(data) {
       getFetch("/shop/" + this.shopId, data, true).then(response => {
         this.shopInfo = response.result || {};
+        wx.setNavigationBarTitle({title: this.shopInfo.shopName});
         if (
           this.shopInfo.categoryModelList.length > 0 &&
           this.shopInfo.categoryModelList[0].categoryId
