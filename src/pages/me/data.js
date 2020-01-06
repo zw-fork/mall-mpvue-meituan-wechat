@@ -110,7 +110,7 @@ const homeData = {
         "gray_url": "/static/images/待付款.png",
         "method": 1258576,
         "name": "新订单",
-        "path": "/pages/subsidy/orderItemList/main?type=0",
+        "path": "/pages/subsidy/orderList/main?type=0",
         "second_tag_codes": [],
         "sequence": 100,
         "skip_protocol": "channel?category_type=910&category_text=%E7%BE%8E%E9%A3%9F",

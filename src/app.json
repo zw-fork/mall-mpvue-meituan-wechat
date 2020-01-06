@@ -6,7 +6,7 @@
     "pages/me/main"
   ],
   "window": {
-    "navigationBarBackgroundColor": "white",
+    "navigationBarBackgroundColor": "#e93323",
     "navigationBarTitleText": "达邻购",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "dark",
@@ -46,6 +46,7 @@
             "userSetting/main",
             "submitOrder/main",
             "shoppingCart/main",
+            "orderList/main",
             "orderItemList/main",
             "shoppingManage/main",
             "shopManage/main",
