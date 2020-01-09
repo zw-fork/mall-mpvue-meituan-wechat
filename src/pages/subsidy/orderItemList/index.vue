@@ -164,6 +164,7 @@ export default {
       status: undefined,
       total: undefined,
       number: undefined,
+      userInfo: undefined,
       orderItemList: {
         page: 1,
         type: -1,
@@ -251,12 +252,12 @@ export default {
     }
   },
   computed: {
-    ...mapState("user", ["userInfo"]),
     lineStyle() {
       return "#FFA500;";
     }
   },
   onLoad(options) {
+    this.userInfo = getApp().globalData.userInfo;
     this.scrollTop = 0;
     var data = {
       page: 1,
@@ -304,6 +305,7 @@ export default {
       data.refundStatus = -1;
     }
     data.type = this.pageIndex;
+    data.orderType = this.orderType;
     this.getOrderItemDataAction(data);
   }
 };
