@@ -641,7 +641,7 @@ export default {
         this.userInfo.addressModel = this.shopInfo.addressModel;
       }
       wx.switchTab({
-        url: "/pages/home/main"
+        url: "/pages/index/index"
       });
     },
     searchClick() {
