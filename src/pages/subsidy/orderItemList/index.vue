@@ -159,6 +159,7 @@ export default {
     return {
       pageIndex: null,
       scrollTop: undefined,
+      orderType: null,
       left: "40rpx",
       status: undefined,
       total: undefined,
@@ -171,9 +172,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("submitOrder", [
-      "showOrderByShopIdDetailAction"
-    ]),
+    ...mapActions("submitOrder", ["showOrderByShopIdDetailAction"]),
     search() {
       this.scrollTop = 0;
       var data = { page: 1, shopId: this.userInfo.shopId };
@@ -199,6 +198,7 @@ export default {
       this.pageIndex = status;
       var data = { page: 1, shopId: this.userInfo.shopId };
       data.type = status;
+      data.orderType = this.orderType;
       this.total = "";
       this.getOrderItemDataAction(data);
     },
@@ -262,6 +262,8 @@ export default {
       page: 1,
       shopId: this.userInfo.shopId
     };
+    data.orderType = options.orderType;
+    this.orderType = data.orderType;
     if (options.type) {
       this.pageIndex = parseInt(options.type);
       data.type = options.type;
@@ -286,8 +288,10 @@ export default {
         page: 1,
         shopId: this.userInfo.shopId
       };
+      data.orderType = options.orderType;
       this.scrollTop = 0;
       data.type = this.pageIndex;
+      this.orderType = data.orderType;
       this.getOrderItemDataAction(data);
     }
   },
