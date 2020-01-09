@@ -173,14 +173,8 @@ const HttpUtils = {
               } else if (data.code == 500) {
                 wx.showToast({ title: data.message, icon: 'none', duration: 4000 })
               } else if (data.code == responseCode.TOKEN_INVALID) {
-                var pages = getCurrentPages();
-                if (pages[0].route == 'pages/home/main') {
-                  var data = {};
-                  data.update = true;
-                  pages[0].onLoad();
-                }else {
-                  wx.switchTab({ url: '/pages/home/main?update=true' });
-                }
+                wx.setStorageSync("sessionId", "");
+                wx.switchTab({ url: '/pages/index/index' });
               }
               else {
                 if (data.code != 200) {
