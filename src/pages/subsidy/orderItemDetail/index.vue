@@ -119,7 +119,7 @@
               <div
                 class="btn"
                 @click="refund(item.id)"
-                v-if="userInfo.role==2 && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
+                v-if="userInfo.role==2 && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3 && !item.refundTime"
               >
                 <span>退款</span>
               </div>
@@ -146,7 +146,7 @@
               <div
                 class="btn"
                 @click="refund(item.productId)"
-                v-if="userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
+                v-if="userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3 && !item.refundTime"
               >
                 <span>退款</span>
               </div>
@@ -307,11 +307,11 @@ export default {
     return {
       foodList: [],
       infoList: [],
-      tabIndex: 0
+      tabIndex: 0,
+      userInfo: {}
     };
   },
   computed: {
-    ...mapState("user", ["userInfo"]),
     ...mapState("submitOrder", ["orderByShopIdDetail"]),
     path() {
       return `${GOODS_URL_PREFIX}`;
@@ -487,6 +487,7 @@ export default {
     this.shopInfo = this.orderByShopIdDetail.shopInfo;
   },
   onShow(options) {
+    this.userInfo = getApp().globalData.userInfo;
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
     var data = currPage.data.status;
