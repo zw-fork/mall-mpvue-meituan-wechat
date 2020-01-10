@@ -265,6 +265,31 @@
             </p>
           </div>
         </div>
+        <div
+          class="item_style"
+          v-if="orderByShopIdDetail.type==1"
+        >
+          <p
+            class="item_left"
+            style="word-break:keep-all; display: inline"
+          >物流单号：</p>
+          <div
+            class="item_right"
+            style="display: inline"
+          >
+            <p>
+              {{orderByShopIdDetail.deliveryId}}
+              <span
+                style="border:2rpx solid;padding:0rpx 10rpx;"
+                @click="copyDeliveryId"
+              >复制</span>
+              <span
+                style="margin:20rpx;border:2rpx solid;padding:0rpx 10rpx;"
+                @click="eject"
+              >修改</span>
+            </p>
+          </div>
+        </div>
         <div class="line-sp"></div>
         <div class="item_style">
           <p
@@ -293,6 +318,35 @@
         </div>
       </div>
     </div>
+    <view
+      class="modalDlg"
+      catchtouchmove='preventTouchMove'
+      v-if='showModal'
+    >
+      <view class='windowRow'>
+        <text class='userTitle'>物流单号
+        </text>
+        <view
+          class='back'
+          @click='back'
+        >
+          返回
+        </view>
+      </view>
+      <view class='wishName'>
+        <input
+          v-model="deliveryId"
+          placeholder='请输入物流单号'
+          class='wish_put'
+        />
+      </view>
+      <view class='wishbnt'>
+        <button
+          class='wishbnt_bt'
+          @click='ok'
+        >确定</button>
+      </view>
+    </view>
   </div>
 </template>
 
@@ -305,9 +359,11 @@ import { GOODS_URL_PREFIX } from "@/constants/hostConfig";
 export default {
   data() {
     return {
+      showModal: false,
       foodList: [],
       infoList: [],
       tabIndex: 0,
+      deliveryId: null,
       userInfo: {}
     };
   },
@@ -341,10 +397,40 @@ export default {
   },
   methods: {
     ...mapActions("submitOrder", ["refundDataAction"]),
+    copyDeliveryId() {
+      wx.setClipboardData({ data: this.orderByShopIdDetail.deliveryId });
+    },
     editGoods(goodsId) {
       wx.navigateTo({
         url: "/pages/subsidy/goodsManage/main?id=" + goodsId
       });
+    },
+    ok() {
+      if (this.deliveryId) {
+        this.showModal = false;
+        getFetch(
+          "/order/deliveryId/" +
+            this.orderByShopIdDetail.number +
+            "/" +
+            this.deliveryId,
+          {},
+          true
+        ).then(response => {
+          this.orderByShopIdDetail.deliveryId = response.result;
+        });
+      } else {
+        wx.showToast({
+          title: "请输入物流单号!",
+          icon: "none",
+          duration: 2000
+        });
+      }
+    },
+    eject() {
+      this.showModal = true;
+    },
+    back() {
+      this.showModal = false;
     },
     copy() {
       wx.setClipboardData({ data: this.orderByShopIdDetail.number });
@@ -487,6 +573,7 @@ export default {
     this.shopInfo = this.orderByShopIdDetail.shopInfo;
   },
   onShow(options) {
+    this.showModal = false;
     this.userInfo = getApp().globalData.userInfo;
     var pages = getCurrentPages();
     var currPage = pages[pages.length - 1];
@@ -1097,5 +1184,87 @@ export default {
       }
     }
   }
+}
+.body {
+}
+
+.body button {
+  height: 100rpx;
+}
+
+.model {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 999;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+}
+
+.modalDlg {
+  width: 70%;
+  position: fixed;
+  top: 350rpx;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.windowRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 110rpx;
+  width: 100%;
+}
+
+.back {
+  text-align: center;
+  color: red;
+  font-size: 30rpx;
+  margin: 30rpx;
+}
+
+.userTitle {
+  font-size: 30rpx;
+  color: #666;
+  margin: 30rpx;
+}
+
+.wishName {
+  width: 100%;
+  justify-content: center;
+  flex-direction: row;
+  display: flex;
+  margin-bottom: 30rpx;
+}
+
+.wish_put {
+  width: 80%;
+  border: 1px solid;
+  border-radius: 10rpx;
+  padding-left: 10rpx;
+}
+
+.wishbnt {
+  width: 100%;
+  font-size: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.wishbnt_bt {
+  width: 50%;
+  background-color: red;
+  color: #fbf1e8;
+  font-size: 30rpx;
+  border: 0;
 }
 </style>
