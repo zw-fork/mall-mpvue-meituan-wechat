@@ -298,9 +298,10 @@ export default {
   methods: {
     refund() {
       var refund = {};
-      refund.refundStatus = 1;
       if (this.item.productId) {
         refund.itemId = this.item.productId;
+      } else {
+          refund.refundStatus = 2;
       }
       if (this.refundExplain) {
         refund.refundExplain = this.refundExplain;

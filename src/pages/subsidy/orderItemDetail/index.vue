@@ -54,17 +54,17 @@
           >
             <span>完成</span>
           </div>
-          <div
+          <!-- <div
             class="btn"
             v-if="orderByShopIdDetail.status==3 && orderByShopIdDetail.paid==1 && !orderByShopIdDetail.turnover"
             @click="updateStatus(3,10)"
           >
             <span>结算</span>
-          </div>
+          </div> -->
           <div
             class="btn"
             @click="refund(null)"
-            v-if="!orderByShopIdDetail.turnover && userInfo.role==2"
+            v-if="userInfo.role==2"
           >
             <span>退款</span>
           </div>
@@ -119,7 +119,7 @@
               <div
                 class="btn"
                 @click="refund(item.id)"
-                v-if="!orderByShopIdDetail.turnover && orderByShopIdDetail.adminCanRefund && userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
+                v-if="userInfo.role==2 && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
               >
                 <span>退款</span>
               </div>
@@ -146,7 +146,7 @@
               <div
                 class="btn"
                 @click="refund(item.productId)"
-                v-if="!orderByShopIdDetail.turnover && orderByShopIdDetail.adminCanRefund && userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
+                v-if="userInfo.role==2 && !item.refundTime && orderByShopIdDetail.refundStatus!=2 && orderByShopIdDetail.refundStatus!=3"
               >
                 <span>退款</span>
               </div>
@@ -351,7 +351,6 @@ export default {
     },
     refund(itemId) {
       var that = this;
-      debugger;
       if (this.orderByShopIdDetail.refundStatus == 1 && !itemId) {
         wx.showModal({
           content: "确定对当前订单进行退款处理？",
