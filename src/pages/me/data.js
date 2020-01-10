@@ -133,7 +133,7 @@ const homeData = {
         "code": 101574,
         "first_tag_codes": [],
         "gray_switch": 0,
-        "path": "/pages/subsidy/orderItemList/main?type=2&orderType=1",
+        "path": "/pages/subsidy/orderItemList/main?type=2&orderType=2",
         "gray_url": "http://p0.meituan.net/jungle/45ff2f098a20a77122bff8385192f0ec10547.png",
         "method": 1258576,
         "name": "配送中",

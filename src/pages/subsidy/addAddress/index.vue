@@ -111,7 +111,6 @@ export default {
     }
   },
   onLoad(options) {
-    debugger;
     var id = options.id;
     if (id) {
       var addr = this.myAddress;
