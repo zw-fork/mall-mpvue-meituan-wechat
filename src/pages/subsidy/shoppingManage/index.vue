@@ -205,6 +205,7 @@ export default {
       pageIndex: 0,
       left: "40rpx",
       shopInfo: {},
+      userInfo:{},
       index: undefined,
       index2: undefined,
       spus: {},
@@ -217,13 +218,8 @@ export default {
       "shopInfo",
       "spus",
       "commentInfo",
-      "visibleSkuModal",
-      "visibleItemModal",
-      "skuInfo",
       "previewInfo"
     ]),
-    ...mapState("user", ["userInfo"]),
-    ...mapState("submitOrder", ["orderDetail"]),
     bottomStyle() {
       return "bottom: 0rpx;";
     },
@@ -645,7 +641,7 @@ export default {
         this.userInfo.addressModel = this.shopInfo.addressModel;
       }
       wx.switchTab({
-        url: "/pages/home/main"
+        url: "/pages/index/index"
       });
     },
     searchClick() {
@@ -702,6 +698,7 @@ export default {
     var data = {};
     this.pageIndex = 0;
     var that = this;
+    this.userInfo = getApp().globalData.userInfo;
     this.shopId = options.shopId;
     if (!this.shopId) {
       this.shopId = this.userInfo.shopId;

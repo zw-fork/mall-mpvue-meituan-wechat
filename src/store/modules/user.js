@@ -8,6 +8,7 @@ const state = {
 
 const mutations = {
   changeUserInfoMut(state, info) {
+    getApp().globalData.userInfo = info;
     state.userInfo = info
   }
 }

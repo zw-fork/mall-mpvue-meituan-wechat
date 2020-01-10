@@ -32,7 +32,7 @@
     <div class="name" style="height: 65rpx;">
       <span>门牌号：</span>
       <input
-        :disabled="userInfo.role != 3"
+        :disabled="true"
         maxlength="30"
         placeholder="详细地址,如:1单元1楼1号"
         placeholder-style="font-size: 24rpx"
@@ -169,12 +169,11 @@ export default {
       statusArray: [],
       type: undefined,
       img: undefined,
+      userInfo:{},
       category: undefined
     };
   },
   computed: {
-    ...mapState("address", ["myAddress"]),
-    ...mapState("user", ["userInfo"]),
     path() {
       return `${GOODS_URL_PREFIX}`;
     }
@@ -183,7 +182,6 @@ export default {
     ...mapActions("user", ["uploadImg"]),
     ...mapActions("shop", ["createShop"]),
     ...mapActions("user", ["wxLocation"]),
-    ...mapMutations("user", ["changeUserInfoMut"]),
     deleteImg() {
       this.shop.pic_url = "";
       this.shop.wechat = true;
@@ -224,9 +222,6 @@ export default {
           }
         });
       }
-    },
-    addressClick() {
-      wx.navigateTo({ url: "/pages/subsidy/selectAddress/main" });
     },
     createTel() {
       if (!this.shop.tel) {
@@ -294,6 +289,7 @@ export default {
     }
   },
   onLoad(options) {
+    this.userInfo = getApp().globalData.userInfo
     var shopId = this.userInfo.shopId;
     if (this.userInfo.role == 3) {
       this.statusArray = [
