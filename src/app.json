@@ -1,16 +1,17 @@
 {
   "pages": [
+    "pages/shoppingCart/main",
     "pages/home/main",
     "pages/orderList/main",
     "pages/orderDetail/main",
     "pages/me/main"
-  ],
+  ],  
   "window": {
     "navigationBarBackgroundColor": "#e93323",
     "navigationBarTitleText": "达邻购",
     "navigationBarTextStyle": "black",
     "backgroundTextStyle": "dark",
-    "enablePullDownRefresh": false,
+    "enablePullDownRefresh": false,   
     "onReachBottomDistance": 50
   },
   "tabBar": {
@@ -21,7 +22,7 @@
     "borderStyle": "black",
     "list": [
     {
-      "pagePath": "pages/home/main",
+      "pagePath": "pages/shoppingCart/main",
       "text": "首页",
       "iconPath": "static/images/home.png",
       "selectedIconPath": "static/images/home_selected.png"
@@ -45,7 +46,6 @@
           "pages": [
             "userSetting/main",
             "submitOrder/main",
-            "shoppingCart/main",
             "orderList/main",
             "orderItemList/main",
             "shoppingManage/main",

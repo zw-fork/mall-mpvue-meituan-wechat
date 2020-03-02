@@ -11,35 +11,6 @@
       :show="showAuth2"
     ></authorize>
     <div class="header-c">
-      <div
-        class="header"
-        @click="openLocation"
-      >
-        <div class="h-l">
-          <img
-            class="shop-logo"
-            :src="shopInfo.pic_url? (path + shopInfo.pic_url) : '/static/images/shop.png'"
-          >
-        </div>
-        <div class="h-r">
-          <span class="r-l">地址: {{shopInfo.building}}</span>
-          <div class="r-t">
-            <span class="t-l">起送 ¥{{shopInfo.min_price}}</span>
-            <div class="s-l"></div>
-            <span class="t-m">营业时间: 全天</span>
-            <i
-              class="icon my_iconfont iconright"
-              style="position:absolute; right:0rpx;"
-            ></i>
-          </div>
-          <div
-            class="r-m"
-            v-if="shopInfo.bulletin"
-          >
-            <span class="b-r">公告：{{shopInfo.bulletin}}</span>
-          </div>
-        </div>
-      </div>
       <div class="cate-c">
         <span
           class="c-l"
@@ -191,8 +162,7 @@
       v-else-if="pageIndex === 1"
     >
       <div class="address">
-        <i class="icon mt-location-o"></i>
-        <span>{{shopInfo.building}}</span>
+        <span>地址：{{shopInfo.building}}</span>
         <i
           class="icon mt-phone-o"
           @click.stop="clickCall()"
@@ -200,8 +170,12 @@
       </div>
       <div class="delivery">
         <div class="btm">
-          <i class="icon mt-clock-s"></i>
           <span>营业时间: 全天</span>
+        </div>
+      </div>
+            <div class="delivery">
+        <div class="btm">
+          <span>起送: ¥{{shopInfo.min_price}}</span>
         </div>
       </div>
       <div
@@ -209,7 +183,7 @@
         v-if="shopInfo.wechatId"
       >
         <div class="btm">
-          <i class="icon mt-clock-s"></i>
+          <span>微信号：</span>
           <span
             style="border:2rpx solid;padding:0rpx 10rpx;"
             @click="copy"
@@ -771,19 +745,30 @@ export default {
       });
     }
   },
+  onPullDownRefresh: function() {
+     var data = {};
+    data.categoryStatus = 1;
+      this.getMenuDataAction({
+        shopId: this.shopId,
+        data: data,
+        index: this.tagIndex,
+        flag: true
+      });
+  },
   onLoad(options) {
     var data = {};
     data.categoryStatus = 1;
     data.goodsStatus = 1;
     this.pageIndex = 0;
     var that = this;
-    var orderId = null;
+    var orderId = null;   
     this.shopId = options.shopId;
-    if (!this.shopId) {
+    this.shopId = 0;
+    if (this.shopId == null) {
       this.reLogin = true;
       this.shopId = options.scene;
     }
-    if (!this.shopId) {
+    if (this.shopId == null) {
       this.shopId = this.userInfo.shopId;
     }
     var update = false;
@@ -1377,7 +1362,7 @@ export default {
   .list-c {
     display: flex;
     position: fixed;
-    top: 200rpx;
+    top: 70rpx;
     width: 100%;
     bottom: 90rpx;
     .list-ll {
@@ -1743,7 +1728,7 @@ export default {
   .shop-info {
     display: flex;
     position: fixed;
-    top: 220rpx;
+    top: 70rpx;
     flex-direction: column;
     width: 100%;
     height: 100%;
